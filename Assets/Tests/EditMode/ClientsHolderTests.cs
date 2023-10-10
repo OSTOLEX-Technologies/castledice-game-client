@@ -10,8 +10,8 @@ namespace Tests.EditMode
         [Test]
         public void AddClient_ShouldThrowInvalidOperationException_IfClientWithGivenTypeAlreadyAdded()
         {
-            var firstClient = new Client();
-            var secondClient = new Client();
+            var firstClient = new ClientWrapper(new Client());
+            var secondClient = new ClientWrapper(new Client());
             ClientsHolder.AddClient(ClientType.GameServerClient, firstClient);
             
             Assert.Throws<InvalidOperationException>(() => ClientsHolder.AddClient(ClientType.GameServerClient, secondClient));
@@ -27,7 +27,7 @@ namespace Tests.EditMode
         [Test]
         public void GetClient_ShouldReturnClient_IfClientForThisTypeWasAdded()
         {
-            var client = new Client();
+            var client = new ClientWrapper(new Client());
             ClientsHolder.AddClient(ClientType.GameServerClient, client);
             
             Assert.AreSame(client, ClientsHolder.GetClient(ClientType.GameServerClient));
@@ -43,7 +43,7 @@ namespace Tests.EditMode
         [Test]
         public void RemoveClient_ShouldRemoveClient_IfClientWithGivenTypeWasAdded()
         {
-            ClientsHolder.AddClient(ClientType.GameServerClient, new Client());
+            ClientsHolder.AddClient(ClientType.GameServerClient, new ClientWrapper(new Client()));
             
             ClientsHolder.RemoveClient(ClientType.GameServerClient);
             
