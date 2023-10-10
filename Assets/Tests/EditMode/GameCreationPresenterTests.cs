@@ -175,6 +175,7 @@ public class GameCreationPresenterTests
         
         presenterMock.Verify(p => p.CancelGame(), Times.Once);
     }
+    
     public class GameCreationPresenterBuilder
     {
         public GameSearcher GameSearcher { get; set; } = new GameSearcherMock();

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using castledice_game_data_logic;
+using castledice_game_data_logic.Content;
 using castledice_game_logic;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
@@ -16,22 +17,35 @@ namespace Tests
     {
         public static GameStartData GetGameStartData()
         {
-            var data = new GameStartData()
+            var boardLength = 10;
+            var boardWidth = 10;
+            var cellType = CellType.Square;
+            var cellsPresence = GetValuesMatrix(10, 10, true);
+            var playerIds = new List<int>() { 1, 2 };
+            var firstCastle = new CastleData((0, 0), 1, 1, 3, 3, playerIds[0]);
+            var secondCastle = new CastleData((9, 9), 1, 1, 3, 3, playerIds[1]);
+            var generatedContent = new List<ContentData>() { firstCastle, secondCastle };
+            var playerDecks = new List<PlayerDeckData>()
             {
-                CellType = CellType.Square,
-                CellsPresence = new[,]
-                {
-                    {true, true, true},
-                    {true, true, true},
-                    {true, true, true}
-                },
-                KnightHealth = 2,
-                KnightPlaceCost = 1,
-                PlayersIds = new List<int>(){1, 2}
+                new(playerIds[0], new List<PlacementType> { PlacementType.Knight }),
+                new (playerIds[1], new List<PlacementType> { PlacementType.Knight })
             };
-            data.Decks.Add(new PlayerDeckData(){PlayerId = 1, AvailablePlacements = { PlacementType.Knight }});
-            data.Decks.Add(new PlayerDeckData(){PlayerId = 2, AvailablePlacements = { PlacementType.Knight }});
+            var data = new GameStartData(boardLength, boardWidth, cellType, cellsPresence, generatedContent, 2, 1, playerIds, playerDecks);
             return data;
+        }
+        
+        public static T[,] GetValuesMatrix<T>(int length, int width, T value)
+        {
+            var matrix = new T[length, width];
+            for (int i = 0; i < length; i++)
+            {
+                for (int j = 0; j < width; j++)
+                {
+                    matrix[i, j] = value;
+                }
+            }
+
+            return matrix;
         }
 
         public static Game GetGame()
