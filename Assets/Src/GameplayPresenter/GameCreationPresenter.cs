@@ -60,7 +60,7 @@ namespace Src.GameplayPresenter
             _view.ShowCancelationMessage(MessagesStrings.GameSearchCancelationMessage);
             
             var accessToken = _playerDataProvider.GetAccessToken();
-            var canceled = await _gameSearcher.CancelGameSearch(accessToken);
+            var canceled = await _gameSearcher.CancelGameSearchAsync(accessToken);
             if (!canceled)
             {
                 _view.HideCancelationMessage();

@@ -31,7 +31,7 @@ namespace Tests.Mocks
             return _isCanceled ? CancelResult : SuccessResult;
         }
 
-        public override async Task<bool> CancelGameSearch(string playerToken)
+        public override async Task<bool> CancelGameSearchAsync(string playerToken)
         {
             await Task.Delay(CancelTimeMilliseconds);
             _isCanceled = CanBeCanceled;
