@@ -1,0 +1,84 @@
+{
+  "runtimeTarget": {
+    "name": ".NETStandard,Version=v2.1/",
+    "signature": ""
+  },
+  "compilationOptions": {},
+  "targets": {
+    ".NETStandard,Version=v2.1": {},
+    ".NETStandard,Version=v2.1/": {
+      "castledice-riptide-message-extensions/1.0.0": {
+        "dependencies": {
+          "RiptideNetworking.Riptide": "2.0.0",
+          "casltedice-events-logic": "1.0.0.0",
+          "castledice-game-data-logic": "1.0.0.0",
+          "castledice-game-logic": "1.0.0.0"
+        },
+        "runtime": {
+          "castledice-riptide-message-extensions.dll": {}
+        }
+      },
+      "RiptideNetworking.Riptide/2.0.0": {
+        "runtime": {
+          "lib/netstandard2.0/RiptideNetworking.dll": {
+            "assemblyVersion": "2.0.0.0",
+            "fileVersion": "2.0.0.0"
+          }
+        }
+      },
+      "casltedice-events-logic/1.0.0.0": {
+        "runtime": {
+          "casltedice-events-logic.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "castledice-game-data-logic/1.0.0.0": {
+        "runtime": {
+          "castledice-game-data-logic.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      },
+      "castledice-game-logic/1.0.0.0": {
+        "runtime": {
+          "castledice-game-logic.dll": {
+            "assemblyVersion": "1.0.0.0",
+            "fileVersion": "1.0.0.0"
+          }
+        }
+      }
+    }
+  },
+  "libraries": {
+    "castledice-riptide-message-extensions/1.0.0": {
+      "type": "project",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "RiptideNetworking.Riptide/2.0.0": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-xk5JdlK7A4m+aE8fclcLkjX4+NrZJVZ0woNx/PCUgkDbcYlE9d8PUzWg1KMy2+CgO29zu4jgCqlW9knI327V9Q==",
+      "path": "riptidenetworking.riptide/2.0.0",
+      "hashPath": "riptidenetworking.riptide.2.0.0.nupkg.sha512"
+    },
+    "casltedice-events-logic/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "castledice-game-data-logic/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    },
+    "castledice-game-logic/1.0.0.0": {
+      "type": "reference",
+      "serviceable": false,
+      "sha512": ""
+    }
+  }
+}
