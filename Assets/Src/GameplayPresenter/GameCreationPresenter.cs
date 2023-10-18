@@ -8,16 +8,16 @@ namespace Src.GameplayPresenter
     public class GameCreationPresenter
     {
         private readonly GameSearcher _gameSearcher;
-        private readonly GameInitializer _gameInitializer;
+        private readonly GameCreator _gameCreator;
         private readonly PlayerDataProvider _playerDataProvider;
         private readonly GameHolder _gameHolder;
         private readonly GameCreationView _view;
         private bool _gameCreationInProcess;
 
-        public GameCreationPresenter(GameSearcher gameSearcher, GameInitializer gameInitializer, PlayerDataProvider playerDataProvider, GameHolder gameHolder, GameCreationView view)
+        public GameCreationPresenter(GameSearcher gameSearcher, GameCreator gameCreator, PlayerDataProvider playerDataProvider, GameHolder gameHolder, GameCreationView view)
         {
             _gameSearcher = gameSearcher;
-            _gameInitializer = gameInitializer;
+            _gameCreator = gameCreator;
             _playerDataProvider = playerDataProvider;
             _gameHolder = gameHolder;
             _view = view;
@@ -48,7 +48,7 @@ namespace Src.GameplayPresenter
             else if (gameSearchResult.Status == GameSearchResult.ResultStatus.Success)
             {
                 var gameStartData = gameSearchResult.GameStartData;
-                var game = _gameInitializer.InitializeGame(gameStartData);
+                var game = _gameCreator.CreateGame(gameStartData);
                 _gameHolder.Game = game;
             }
         }

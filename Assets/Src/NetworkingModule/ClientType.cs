@@ -2,7 +2,6 @@
 {
     public enum ClientType
     {
-        MatchMakerClient,
         GameServerClient
     }
 }

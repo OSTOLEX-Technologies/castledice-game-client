@@ -44,12 +44,12 @@ public class GameCreationPresenterTests
     {
         var expectedGame = GetGame();
         var gameHolder = new Mock<GameHolder>().Object;
-        var gameInitializerMock = new Mock<GameInitializer>();
-        gameInitializerMock.Setup(g => g.InitializeGame(It.IsAny<GameStartData>())).Returns(expectedGame);
+        var gameCreatorMock = new Mock<GameCreator>();
+        gameCreatorMock.Setup(g => g.CreateGame(It.IsAny<GameStartData>())).Returns(expectedGame);
         var presenter = new GameCreationPresenterBuilder
         {
             GameHolder = gameHolder,
-            GameInitializer = gameInitializerMock.Object,
+            GameCreator = gameCreatorMock.Object,
             PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
         }.Build();
 
@@ -156,7 +156,7 @@ public class GameCreationPresenterTests
     public async Task CreateGame_ShouldBeCalled_IfChooseCreateGameOnViewIsCalled()
     {
         var viewMock = new Mock<GameCreationView>();
-        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<GameInitializer>(), GetPlayerDataProvider(isAuthorized: true), GetMockObject<GameHolder>(), viewMock.Object);
+        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<GameCreator>(), GetPlayerDataProvider(isAuthorized: true), GetMockObject<GameHolder>(), viewMock.Object);
         var testObject = presenterMock.Object;
         
         viewMock.Object.ChooseCreateGame();
@@ -168,7 +168,7 @@ public class GameCreationPresenterTests
     public async Task CancelGame_ShouldBeCalled_IfChooseCancelGameOnViewIsCalled()
     {
         var viewMock = new Mock<GameCreationView>();
-        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<GameInitializer>(), GetPlayerDataProvider(isAuthorized: true), GetMockObject<GameHolder>(), viewMock.Object);
+        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<GameCreator>(), GetPlayerDataProvider(isAuthorized: true), GetMockObject<GameHolder>(), viewMock.Object);
         var testObject = presenterMock.Object;
         
         viewMock.Object.ChooseCancelGame();
@@ -179,14 +179,14 @@ public class GameCreationPresenterTests
     public class GameCreationPresenterBuilder
     {
         public GameSearcher GameSearcher { get; set; } = new GameSearcherMock();
-        public GameInitializer GameInitializer { get; set; } = GetMockObject<GameInitializer>();
+        public GameCreator GameCreator { get; set; } = GetMockObject<GameCreator>();
         public PlayerDataProvider PlayerDataProvider { get; set; } = GetMockObject<PlayerDataProvider>();
         public GameHolder GameHolder { get; set; } = GetMockObject<GameHolder>();
         public GameCreationView GameCreationView { get; set; } = GetMockObject<GameCreationView>();
 
         public GameCreationPresenter Build()
         {
-            return new GameCreationPresenter(GameSearcher, GameInitializer, PlayerDataProvider, GameHolder,
+            return new GameCreationPresenter(GameSearcher, GameCreator, PlayerDataProvider, GameHolder,
                 GameCreationView);
         }
     }
