@@ -77,3 +77,4 @@ crashlytics-build.properties
 **/.idea/**/contentModel.xml
 **/.idea/**/modules.xml
 .idea
+.idea/.idea.castledice-client/.idea/sonarlint/
