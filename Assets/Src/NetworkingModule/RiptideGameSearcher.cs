@@ -4,6 +4,7 @@ using casltedice_events_logic.ServerToClient;
 using castledice_riptide_dto_adapters.Extensions;
 using Riptide;
 using Src.GameplayPresenter;
+using Src.GameplayPresenter.GameCreation;
 
 namespace Src.NetworkingModule
 {

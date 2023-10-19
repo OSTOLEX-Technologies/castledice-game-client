@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Src.GameplayPresenter
+namespace Src.GameplayPresenter.GameCreation
 {
     public interface IGameSearcher
     {

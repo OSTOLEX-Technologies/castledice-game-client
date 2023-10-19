@@ -5,7 +5,7 @@ using castledice_game_logic;
 using Src.Constants;
 using Src.GameplayView;
 
-namespace Src.GameplayPresenter
+namespace Src.GameplayPresenter.GameCreation
 {
     public class GameCreationPresenter
     {
