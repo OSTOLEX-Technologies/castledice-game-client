@@ -1,5 +1,7 @@
 using System;
 using System.Threading.Tasks;
+using castledice_game_data_logic;
+using castledice_game_logic;
 using Src.Constants;
 using Src.GameplayView;
 
@@ -10,16 +12,14 @@ namespace Src.GameplayPresenter
         private readonly IGameSearcher _gameSearcher;
         private readonly IGameCreator _gameCreator;
         private readonly IPlayerDataProvider _playerDataProvider;
-        private readonly GameHolder _gameHolder;
         private readonly GameCreationView _view;
         private bool _gameCreationInProcess;
 
-        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, GameHolder gameHolder, GameCreationView view)
+        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, GameCreationView view)
         {
             _gameSearcher = gameSearcher;
             _gameCreator = gameCreator;
             _playerDataProvider = playerDataProvider;
-            _gameHolder = gameHolder;
             _view = view;
             view.CancelCreationChosen += OnCancelGame;
             view.CreateGameChosen += OnCreateGame;
@@ -49,7 +49,8 @@ namespace Src.GameplayPresenter
             {
                 var gameStartData = gameSearchResult.GameStartData;
                 var game = _gameCreator.CreateGame(gameStartData);
-                _gameHolder.Game = game;
+                Singleton<Game>.Register(game);
+                Singleton<GameStartData>.Register(gameStartData);
             }
         }
 
