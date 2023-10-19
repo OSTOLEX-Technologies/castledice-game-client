@@ -7,7 +7,7 @@ using Src.GameplayPresenter;
 
 namespace Src.NetworkingModule
 {
-    public class RiptideGameSearcher : GameSearcher, IGameCreationDTOAccepter
+    public class RiptideGameSearcher : IGameSearcher, IGameCreationDTOAccepter
     {
         private readonly TaskCompletionSource<GameSearchResult> _searchGameResponseTcs = new();
         private readonly TaskCompletionSource<bool> _cancelGameResponseTcs = new();
@@ -18,7 +18,7 @@ namespace Src.NetworkingModule
             _messageSender = messageSender;
         }
 
-        public override async Task<GameSearchResult> SearchGameAsync(string playerToken)
+        public async Task<GameSearchResult> SearchGameAsync(string playerToken)
         {
             var requestGameDTO = new RequestGameDTO(playerToken);
             var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.RequestGame);
@@ -27,7 +27,7 @@ namespace Src.NetworkingModule
             return await _searchGameResponseTcs.Task;
         }
 
-        public override async Task<bool> CancelGameSearchAsync(string playerToken)
+        public async Task<bool> CancelGameSearchAsync(string playerToken)
         {
             var cancleGameDTO = new CancelGameDTO(playerToken);
             var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.CancelGame);

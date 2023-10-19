@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 
 namespace Tests.Mocks
 {
-    public class GameSearcherMock : GameSearcher
+    public class GameSearcherMock : IGameSearcher
     {
         public GameSearchResult SuccessResult { get; set; } = new()
         {
@@ -25,13 +25,13 @@ namespace Tests.Mocks
 
         private bool _isCanceled;
 
-        public override async Task<GameSearchResult> SearchGameAsync(string playerToken)
+        public async Task<GameSearchResult> SearchGameAsync(string playerToken)
         {
             await Task.Delay(SearchTimeMilliseconds);
             return _isCanceled ? CancelResult : SuccessResult;
         }
 
-        public override async Task<bool> CancelGameSearchAsync(string playerToken)
+        public async Task<bool> CancelGameSearchAsync(string playerToken)
         {
             await Task.Delay(CancelTimeMilliseconds);
             _isCanceled = CanBeCanceled;

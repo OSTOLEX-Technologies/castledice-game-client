@@ -3,8 +3,8 @@ using castledice_game_logic;
 
 namespace Src.GameplayPresenter
 {
-    public abstract class GameCreator
+    public interface IGameCreator
     {
-        public abstract Game CreateGame(GameStartData gameData);
+        Game CreateGame(GameStartData gameData);
     }
 }

@@ -7,14 +7,14 @@ namespace Src.GameplayPresenter
 {
     public class GameCreationPresenter
     {
-        private readonly GameSearcher _gameSearcher;
-        private readonly GameCreator _gameCreator;
-        private readonly PlayerDataProvider _playerDataProvider;
+        private readonly IGameSearcher _gameSearcher;
+        private readonly IGameCreator _gameCreator;
+        private readonly IPlayerDataProvider _playerDataProvider;
         private readonly GameHolder _gameHolder;
         private readonly GameCreationView _view;
         private bool _gameCreationInProcess;
 
-        public GameCreationPresenter(GameSearcher gameSearcher, GameCreator gameCreator, PlayerDataProvider playerDataProvider, GameHolder gameHolder, GameCreationView view)
+        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, GameHolder gameHolder, GameCreationView view)
         {
             _gameSearcher = gameSearcher;
             _gameCreator = gameCreator;
