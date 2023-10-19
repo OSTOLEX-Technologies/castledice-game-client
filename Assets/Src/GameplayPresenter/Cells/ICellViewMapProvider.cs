@@ -1,6 +1,6 @@
 ﻿using castledice_game_data_logic;
 
-namespace Src.GameplayPresenter.CellsView
+namespace Src.GameplayPresenter.Cells
 {
     public interface ICellViewMapProvider
     {

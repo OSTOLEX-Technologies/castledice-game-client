@@ -1,4 +1,4 @@
-﻿namespace Src.GameplayPresenter.CellsView
+﻿namespace Src.GameplayPresenter.Cells
 {
     public sealed class CellViewData
     {
