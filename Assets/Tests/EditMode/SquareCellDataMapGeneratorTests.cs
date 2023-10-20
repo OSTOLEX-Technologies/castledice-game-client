@@ -55,7 +55,7 @@ namespace Tests.EditMode
 
         private static SquareCellData MiddleCell()
         {
-            return new SquareCellData(VerticalOrientationType.Middle, HorizontalOrientationType.Middle, SquareCellBorderType.NoBorder);
+            return new SquareCellData(VerticalOrientationType.Middle, HorizontalOrientationType.Middle, SquareCellBorderType.None);
         }
 
         private static SquareCellData UpperLeftCorner()

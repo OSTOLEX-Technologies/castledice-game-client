@@ -4,6 +4,6 @@
     {
         Corner,
         OneBorder,
-        NoBorder
+        None
     }
 }

@@ -93,7 +93,7 @@ namespace Tests.EditMode
             var rightBorder = new SquareCellData(VerticalOrientationType.Middle, HorizontalOrientationType.Right,
                 SquareCellBorderType.OneBorder);
             var middleCell = new SquareCellData(VerticalOrientationType.Middle, HorizontalOrientationType.Middle,   
-                SquareCellBorderType.NoBorder);
+                SquareCellBorderType.None);
             provider.Setup(p => p.GetAssetIds(upperLeftCorner)).Returns(new List<int>(new[] {1}));
             provider.Setup(p => p.GetAssetIds(upperRightCorner)).Returns(new List<int>(new[] {2}));
             provider.Setup(p => p.GetAssetIds(lowerLeftCorner)).Returns(new List<int>(new[] {3}));

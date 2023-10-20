@@ -66,7 +66,7 @@ namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
             }
             if(cellIsMiddle)
             {
-                return SquareCellBorderType.NoBorder;
+                return SquareCellBorderType.None;
             }
             return SquareCellBorderType.OneBorder;
         }
