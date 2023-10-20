@@ -13,10 +13,50 @@ using static Tests.ObjectCreationUtility;
 
 public class GameCreationPresenterTests
 {
+    private class TestGameCreationView : IGameCreationView
+    {
+        public void ShowCreationProcessScreen()
+        {
+        }
+
+        public void HideCreationProcessScreen()
+        {
+        }
+
+        public void ShowCancelationMessage(string message)
+        {
+        }
+
+        public void HideCancelationMessage()
+        {
+        }
+
+        public void ShowNonAuthorizedMessage(string message)
+        {
+        }
+
+        public void HideNonAuthorizedMessage()
+        {
+        }
+
+        public void ChooseCreateGame()
+        {
+            CreateGameChosen?.Invoke(this, EventArgs.Empty);
+        }
+
+        public void ChooseCancelGame()
+        {
+            CancelCreationChosen?.Invoke(this, EventArgs.Empty);
+        }
+
+        public event EventHandler CancelCreationChosen;
+        public event EventHandler CreateGameChosen;
+    }
+    
     [Test]
     public void CreateGame_ShouldCallShowCreationProcessScreen_BeforeGameFound()
     {
-        var viewMock = new Mock<GameCreationView>();
+        var viewMock = new Mock<IGameCreationView>();
         var presenter = new GameCreationPresenterBuilder
         {
             GameCreationView = viewMock.Object,
@@ -31,7 +71,7 @@ public class GameCreationPresenterTests
     [Test]
     public void CreateGame_ShouldCallShowNonAuthorizedMessage_IfPlayerIsNotAuthorized()
     {
-        var viewMock = new Mock<GameCreationView>();
+        var viewMock = new Mock<IGameCreationView>();
         var presenter = new GameCreationPresenterBuilder
         {
             GameCreationView = viewMock.Object,
@@ -86,7 +126,7 @@ public class GameCreationPresenterTests
     [Test]
     public async Task CreateGame_ShouldHideLoadingScreenAndCancelingMessage_IfGameCreationIsCanceled()
     {
-        var viewMock = new Mock<GameCreationView>();
+        var viewMock = new Mock<IGameCreationView>();
         var gameSearcher = new GameSearcherMock
         {
             CancelTimeMilliseconds = 0,
@@ -112,7 +152,7 @@ public class GameCreationPresenterTests
     [Test]
     public void CancelGame_ShouldCallShowCancelationMessage_IfGameCreationInProcess()
     {
-        var viewMock = new Mock<GameCreationView>();
+        var viewMock = new Mock<IGameCreationView>();
         var gameSearcher = new GameSearcherMock
         {
             SearchTimeMilliseconds = 100,
@@ -135,7 +175,7 @@ public class GameCreationPresenterTests
     [Test]
     public void CancelGame_ShouldNotCallShowCancelationMessage_IfGameCreationIsNotInProcess()
     {
-        var viewMock = new Mock<GameCreationView>();
+        var viewMock = new Mock<IGameCreationView>();
         var gameSearcher = new GameSearcherMock
         {
             SearchTimeMilliseconds = 100,
@@ -158,7 +198,7 @@ public class GameCreationPresenterTests
     //This case assumes that game creation process is going.
     public async Task CancelGame_ShouldHideCancelationMessage_IfCancelationIsNotSuccessful()
     {
-        var viewMock = new Mock<GameCreationView>();
+        var viewMock = new Mock<IGameCreationView>();
         var gameSearcher = new GameSearcherMock
         {
             SearchTimeMilliseconds = 100,
@@ -180,11 +220,11 @@ public class GameCreationPresenterTests
     [Test]
     public async Task CreateGame_ShouldBeCalled_IfChooseCreateGameOnViewIsCalled()
     {
-        var viewMock = new Mock<GameCreationView>();
-        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), viewMock.Object);
+        var view = new TestGameCreationView();
+        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), view);
         var testObject = presenterMock.Object;
         
-        viewMock.Object.ChooseCreateGame();
+        view.ChooseCreateGame();
         
         presenterMock.Verify(p => p.CreateGame(), Times.Once);
     }
@@ -192,11 +232,11 @@ public class GameCreationPresenterTests
     [Test]
     public async Task CancelGame_ShouldBeCalled_IfChooseCancelGameOnViewIsCalled()
     {
-        var viewMock = new Mock<GameCreationView>();
-        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), viewMock.Object);
+        var viewMock = new TestGameCreationView();
+        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), viewMock);
         var testObject = presenterMock.Object;
         
-        viewMock.Object.ChooseCancelGame();
+        viewMock.ChooseCancelGame();
         
         presenterMock.Verify(p => p.CancelGame(), Times.Once);
     }
@@ -221,7 +261,7 @@ public class GameCreationPresenterTests
         public IGameSearcher GameSearcher { get; set; } = new GameSearcherMock();
         public IGameCreator GameCreator { get; set; } = GetMockObject<IGameCreator>();
         public IPlayerDataProvider PlayerDataProvider { get; set; } = GetMockObject<IPlayerDataProvider>();
-        public GameCreationView GameCreationView { get; set; } = GetMockObject<GameCreationView>();
+        public IGameCreationView GameCreationView { get; set; } = GetMockObject<IGameCreationView>();
 
         public GameCreationPresenter Build()
         {

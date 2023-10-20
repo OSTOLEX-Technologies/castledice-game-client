@@ -6,6 +6,7 @@ using NUnit.Framework;
 using Src;
 using Src.GameplayPresenter.Cells;
 using Src.GameplayView;
+using Src.GameplayView.Cells;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode
@@ -36,7 +37,7 @@ namespace Tests.EditMode
             var cellViewMap = new CellViewData[0, 0];
             var mapProviderMock = new Mock<ICellViewMapProvider>();
             mapProviderMock.Setup(mp => mp.GetCellViewMap(It.IsAny<GameStartData>())).Returns(cellViewMap);
-            var cellsViewMock = new Mock<CellsView>();
+            var cellsViewMock = new Mock<ICellsView>();
             Singleton<GameStartData>.Register(GetGameStartData());
             var cellPresenter = new CellsPresenterBuilder
             {
@@ -54,7 +55,7 @@ namespace Tests.EditMode
         {
             var gameStartData = GetGameStartData(cellType: cellType);
             var mapProviderMock = new Mock<ICellViewMapProvider>();
-            var cellsViewMock = new Mock<CellsView>();
+            var cellsViewMock = new Mock<ICellsView>();
             Singleton<GameStartData>.Register(gameStartData);
             var cellPresenter = new CellsPresenterBuilder
             {
@@ -83,7 +84,7 @@ namespace Tests.EditMode
         public class CellsPresenterBuilder
         {
             public ICellViewMapProvider CellViewMapProvider { get; set; } = new Mock<ICellViewMapProvider>().Object;
-            public CellsView CellsView { get; set; } = new Mock<CellsView>().Object;
+            public ICellsView CellsView { get; set; } = new Mock<ICellsView>().Object;
 
             public CellsPresenter Build()
             {
