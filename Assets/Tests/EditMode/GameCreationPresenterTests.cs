@@ -1,8 +1,12 @@
+using System;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
+using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
+using Src;
 using Src.GameplayPresenter;
+using Src.GameplayPresenter.GameCreation;
 using Src.GameplayView;
 using Tests.Mocks;
 using static Tests.ObjectCreationUtility;
@@ -40,22 +44,43 @@ public class GameCreationPresenterTests
     }
 
     [Test]
-    public async Task CreateGame_ShouldPutGameInstanceIntoGameHolder_IfSearchIsSuccessful()
+    public async Task CreateGame_ShouldRegisterGameInstance_IntoSingleton()
     {
         var expectedGame = GetGame();
-        var gameHolder = new Mock<GameHolder>().Object;
-        var gameCreatorMock = new Mock<GameCreator>();
+        var gameCreatorMock = new Mock<IGameCreator>();
         gameCreatorMock.Setup(g => g.CreateGame(It.IsAny<GameStartData>())).Returns(expectedGame);
         var presenter = new GameCreationPresenterBuilder
         {
-            GameHolder = gameHolder,
             GameCreator = gameCreatorMock.Object,
             PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
         }.Build();
 
         await presenter.CreateGame();
+        var actualGame = Singleton<Game>.Instance;
+            
+        Assert.AreSame(expectedGame, actualGame);
+    }
 
-        Assert.AreSame(expectedGame, gameHolder.Game);
+    [Test]
+    public async Task CreateGame_ShouldRegisterGameStartData_IntoSingleton()
+    {
+        var expectedGameStartData = GetGameStartData();
+        var gameSearcherMock = new Mock<IGameSearcher>();
+        gameSearcherMock.Setup(g => g.SearchGameAsync(It.IsAny<string>())).ReturnsAsync(new GameSearchResult
+        {
+            Status = GameSearchResult.ResultStatus.Success,
+            GameStartData = expectedGameStartData
+        });
+        var presenter = new GameCreationPresenterBuilder
+        {
+            GameSearcher = gameSearcherMock.Object,
+            PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+        }.Build();
+        
+        await presenter.CreateGame();
+        var actualGameStartData = Singleton<GameStartData>.Instance;
+        
+        Assert.AreSame(expectedGameStartData, actualGameStartData);
     }
 
     [Test]
@@ -156,7 +181,7 @@ public class GameCreationPresenterTests
     public async Task CreateGame_ShouldBeCalled_IfChooseCreateGameOnViewIsCalled()
     {
         var viewMock = new Mock<GameCreationView>();
-        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<GameCreator>(), GetPlayerDataProvider(isAuthorized: true), GetMockObject<GameHolder>(), viewMock.Object);
+        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), viewMock.Object);
         var testObject = presenterMock.Object;
         
         viewMock.Object.ChooseCreateGame();
@@ -168,7 +193,7 @@ public class GameCreationPresenterTests
     public async Task CancelGame_ShouldBeCalled_IfChooseCancelGameOnViewIsCalled()
     {
         var viewMock = new Mock<GameCreationView>();
-        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<GameCreator>(), GetPlayerDataProvider(isAuthorized: true), GetMockObject<GameHolder>(), viewMock.Object);
+        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), viewMock.Object);
         var testObject = presenterMock.Object;
         
         viewMock.Object.ChooseCancelGame();
@@ -176,25 +201,39 @@ public class GameCreationPresenterTests
         presenterMock.Verify(p => p.CancelGame(), Times.Once);
     }
     
+    
+    [TearDown]
+    public void UnregisterSingletons()
+    {
+        try
+        {
+            Singleton<Game>.Unregister();
+            Singleton<GameStartData>.Unregister();
+        }
+        catch (Exception e)
+        {
+            // ignored
+        }
+    }
+    
     public class GameCreationPresenterBuilder
     {
-        public GameSearcher GameSearcher { get; set; } = new GameSearcherMock();
-        public GameCreator GameCreator { get; set; } = GetMockObject<GameCreator>();
-        public PlayerDataProvider PlayerDataProvider { get; set; } = GetMockObject<PlayerDataProvider>();
-        public GameHolder GameHolder { get; set; } = GetMockObject<GameHolder>();
+        public IGameSearcher GameSearcher { get; set; } = new GameSearcherMock();
+        public IGameCreator GameCreator { get; set; } = GetMockObject<IGameCreator>();
+        public IPlayerDataProvider PlayerDataProvider { get; set; } = GetMockObject<IPlayerDataProvider>();
         public GameCreationView GameCreationView { get; set; } = GetMockObject<GameCreationView>();
 
         public GameCreationPresenter Build()
         {
-            return new GameCreationPresenter(GameSearcher, GameCreator, PlayerDataProvider, GameHolder,
+            return new GameCreationPresenter(GameSearcher, GameCreator, PlayerDataProvider,
                 GameCreationView);
         }
     }
 
-    public static PlayerDataProvider GetPlayerDataProvider(int id = 1, string accessToken = "sometoken",
+    public static IPlayerDataProvider GetPlayerDataProvider(int id = 1, string accessToken = "sometoken",
         bool isAuthorized = true)
     {
-        var mock = new Mock<PlayerDataProvider>();
+        var mock = new Mock<IPlayerDataProvider>();
         mock.Setup(p => p.GetId()).Returns(id);
         mock.Setup(p => p.GetAccessToken()).Returns(accessToken);
         mock.Setup(p => p.IsAuthorized()).Returns(isAuthorized);

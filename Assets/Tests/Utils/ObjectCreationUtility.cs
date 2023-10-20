@@ -16,11 +16,10 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
-        public static GameStartData GetGameStartData()
+        public static GameStartData GetGameStartData(CellType cellType = CellType.Square)
         {
             var boardLength = 10;
             var boardWidth = 10;
-            var cellType = CellType.Square;
             var cellsPresence = GetValuesMatrix(10, 10, true);
             var playerIds = new List<int>() { 1, 2 };
             var firstCastle = new CastleData((0, 0), 1, 1, 3, 3, playerIds[0]);

@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Riptide;
 using Src.GameplayPresenter;
+using Src.GameplayPresenter.GameCreation;
 using Src.NetworkingModule;
 using static Tests.ObjectCreationUtility;
 

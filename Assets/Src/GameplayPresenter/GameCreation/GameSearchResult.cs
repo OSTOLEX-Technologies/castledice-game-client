@@ -1,7 +1,7 @@
 ﻿using castledice_game_data_logic;
 using JetBrains.Annotations;
 
-namespace Src.GameplayPresenter
+namespace Src.GameplayPresenter.GameCreation
 {
     public class GameSearchResult
     {
