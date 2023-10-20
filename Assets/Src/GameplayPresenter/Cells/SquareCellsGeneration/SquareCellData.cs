@@ -1,11 +1,10 @@
 ﻿using System;
 
-namespace Src.GameplayPresenter.Cells
+namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
 {
     public sealed class SquareCellData
     {
         public VerticalOrientationType VerticalOrientationType { get; }
-        
         public HorizontalOrientationType HorizontalOrientationType { get; }
         public SquareCellBorderType BorderType { get; }
 

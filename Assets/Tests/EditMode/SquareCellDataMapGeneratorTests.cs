@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Src.GameplayPresenter.Cells;
+using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 
 namespace Tests.EditMode
 {
@@ -11,7 +12,13 @@ namespace Tests.EditMode
             SquareCellData[,] expectedSquareCellDataMap)
         {
             var actualSquareCellDataMap = SquareCellDataMapGenerator.GetSquareCellDataMap(cellsPresenceMatrix);
-            Assert.AreEqual(expectedSquareCellDataMap, actualSquareCellDataMap);
+            for (int i = 0; i < actualSquareCellDataMap.GetLength(0); i++)
+            {
+                for (int j = 0; j < actualSquareCellDataMap.GetLength(1); j++)
+                {
+                    Assert.AreEqual(expectedSquareCellDataMap[i, j], actualSquareCellDataMap[i, j]);
+                }
+            }
         }
 
         public static object[] GetSquareCellDataMapTestCases =
@@ -120,6 +127,15 @@ namespace Tests.EditMode
                     { false, true, false }, 
                     { true, true, true }, 
                     { false, true, false }
+                }
+            },
+            new object[]
+            {
+                new[,]
+                {
+                    { false, true, true }, 
+                    { true, true, true }, 
+                    { false, true, true }
                 }
             },
             new object[]

@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace Src.GameplayPresenter.Cells
+namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
 {
     public interface ISquareCellAssetIdProvider
     {

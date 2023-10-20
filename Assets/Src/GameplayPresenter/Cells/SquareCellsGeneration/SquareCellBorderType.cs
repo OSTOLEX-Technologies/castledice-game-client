@@ -1,4 +1,4 @@
-﻿namespace Src.GameplayPresenter.Cells
+﻿namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
 {
     public enum SquareCellBorderType
     {
