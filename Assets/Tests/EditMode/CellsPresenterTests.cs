@@ -1,11 +1,8 @@
-﻿using System;
-using castledice_game_data_logic;
+﻿using castledice_game_data_logic;
 using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
-using Src;
 using Src.GameplayPresenter.Cells;
-using Src.GameplayView;
 using Src.GameplayView.Cells;
 using static Tests.ObjectCreationUtility;
 
@@ -13,18 +10,18 @@ namespace Tests.EditMode
 {
     public class CellsPresenterTests
     {
-        private static CellType[] CellTypes = new CellType[] { CellType.Square , CellType.Triangle};
+        private static CellType[] CellTypes = { CellType.Square , CellType.Triangle};
         
         [Test]
-        public void GenerateCells_ShouldPutGameStartDataFromSingleton_ToGivenCellViewMapProvider()
+        public void GenerateCells_ShouldPutGivenGameStartData_ToGivenCellViewMapProvider()
         {
             var gameStartData = GetGameStartData();
             var mapProviderMock = new Mock<ICellViewMapProvider>();
             var cellPresenter = new CellsPresenterBuilder
             {
-                CellViewMapProvider = mapProviderMock.Object
+                CellViewMapProvider = mapProviderMock.Object,
+                GameStartData = gameStartData
             }.Build();
-            Singleton<GameStartData>.Register(gameStartData);
 
             cellPresenter.GenerateCells();
             
@@ -38,7 +35,6 @@ namespace Tests.EditMode
             var mapProviderMock = new Mock<ICellViewMapProvider>();
             mapProviderMock.Setup(mp => mp.GetCellViewMap(It.IsAny<GameStartData>())).Returns(cellViewMap);
             var cellsViewMock = new Mock<ICellsView>();
-            Singleton<GameStartData>.Register(GetGameStartData());
             var cellPresenter = new CellsPresenterBuilder
             {
                 CellViewMapProvider = mapProviderMock.Object,
@@ -56,11 +52,11 @@ namespace Tests.EditMode
             var gameStartData = GetGameStartData(cellType: cellType);
             var mapProviderMock = new Mock<ICellViewMapProvider>();
             var cellsViewMock = new Mock<ICellsView>();
-            Singleton<GameStartData>.Register(gameStartData);
             var cellPresenter = new CellsPresenterBuilder
             {
                 CellViewMapProvider = mapProviderMock.Object,
-                CellsView = cellsViewMock.Object
+                CellsView = cellsViewMock.Object,
+                GameStartData = gameStartData
             }.Build();
 
             cellPresenter.GenerateCells();
@@ -68,27 +64,16 @@ namespace Tests.EditMode
             cellsViewMock.Verify(cv => cv.GenerateCells(cellType, It.IsAny<CellViewData[,]>()), Times.Once);
         }
 
-        [TearDown]
-        public void UnregisterSingletons()
-        {
-            try
-            {
-                Singleton<GameStartData>.Unregister();
-            }
-            catch (Exception e)
-            {
-                // ignored
-            }
-        }
-
         public class CellsPresenterBuilder
         {
             public ICellViewMapProvider CellViewMapProvider { get; set; } = new Mock<ICellViewMapProvider>().Object;
             public ICellsView CellsView { get; set; } = new Mock<ICellsView>().Object;
+            
+            public GameStartData GameStartData { get; set; } = GetGameStartData();
 
             public CellsPresenter Build()
             {
-                return new CellsPresenter(CellViewMapProvider, CellsView);
+                return new CellsPresenter(CellViewMapProvider, CellsView, GameStartData);
             }
         }
     }
