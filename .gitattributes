@@ -55,7 +55,6 @@
 
 search/*.meta linguist-generated=true
 search/*.lighting linguist-generated=true
-search/*.lighting linguist-generated=true
 search/*.prefab linguist-generated=true
 search/*.asset linguist-generated=true
 
