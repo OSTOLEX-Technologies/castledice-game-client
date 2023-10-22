@@ -13,6 +13,7 @@ namespace Tests.EditMode
         public void GenerateGrid_ShouldPassGivenCellType_ToGivenGridGeneratorsFactory([ValueSource(nameof(CellTypes))]CellType cellType)
         {
             var factoryMock = new Mock<IGridGeneratorsFactory>();
+            factoryMock.Setup(f => f.GetGridGenerator(It.IsAny<CellType>())).Returns(new Mock<IGridGenerator>().Object);
             var view = new GridView(factoryMock.Object);
             
             view.GenerateGrid(cellType, new bool[0, 0]);

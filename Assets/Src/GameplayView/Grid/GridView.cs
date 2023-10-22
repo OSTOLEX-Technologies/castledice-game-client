@@ -13,7 +13,8 @@ namespace Src.GameplayView.Grid
 
         public void GenerateGrid(CellType cellType, bool[,] cellsPresenceMatrix)
         {
-            throw new System.NotImplementedException();
+            var generator = _gridGeneratorsFactory.GetGridGenerator(cellType);
+            generator.GenerateGrid(cellsPresenceMatrix);
         }
     }
 }
