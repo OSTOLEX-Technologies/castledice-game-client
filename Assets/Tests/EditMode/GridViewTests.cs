@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView.Grid;
+using Src.GameplayView.Grid.GridGeneration;
 
 namespace Tests.EditMode
 {

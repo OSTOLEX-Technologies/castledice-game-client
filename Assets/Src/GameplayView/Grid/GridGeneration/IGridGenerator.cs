@@ -1,4 +1,4 @@
-﻿namespace Src.GameplayView.Grid
+﻿namespace Src.GameplayView.Grid.GridGeneration
 {
     public interface IGridGenerator
     {
