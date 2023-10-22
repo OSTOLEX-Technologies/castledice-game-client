@@ -1,4 +1,6 @@
-﻿namespace Src.GameplayPresenter.Cells
+﻿using System;
+
+namespace Src.GameplayPresenter.Cells
 {
     public sealed class CellViewData
     {
@@ -9,6 +11,21 @@
         {
             AssetId = assetId;
             IsNull = isNull;
+        }
+
+        private bool Equals(CellViewData other)
+        {
+            return AssetId == other.AssetId && IsNull == other.IsNull;
+        }
+
+        public override bool Equals(object obj)
+        {
+            return ReferenceEquals(this, obj) || obj is CellViewData other && Equals(other);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(AssetId, IsNull);
         }
     }
 }

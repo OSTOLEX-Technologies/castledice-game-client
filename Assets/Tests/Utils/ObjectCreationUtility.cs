@@ -18,9 +18,14 @@ namespace Tests
     {
         public static GameStartData GetGameStartData(CellType cellType = CellType.Square)
         {
+            var cellsPresence = GetValuesMatrix(10, 10, true);
+            return GetGameStartData(cellsPresence, cellType);
+        }
+        
+        public static GameStartData GetGameStartData(bool[,] cellsPresence, CellType cellType = CellType.Square)
+        {
             var boardLength = 10;
             var boardWidth = 10;
-            var cellsPresence = GetValuesMatrix(10, 10, true);
             var playerIds = new List<int>() { 1, 2 };
             var firstCastle = new CastleData((0, 0), 1, 1, 3, 3, playerIds[0]);
             var secondCastle = new CastleData((9, 9), 1, 1, 3, 3, playerIds[1]);

@@ -12,10 +12,10 @@ namespace Src.GameplayPresenter.GameCreation
         private readonly IGameSearcher _gameSearcher;
         private readonly IGameCreator _gameCreator;
         private readonly IPlayerDataProvider _playerDataProvider;
-        private readonly GameCreationView _view;
+        private readonly IGameCreationView _view;
         private bool _gameCreationInProcess;
 
-        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, GameCreationView view)
+        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, IGameCreationView view)
         {
             _gameSearcher = gameSearcher;
             _gameCreator = gameCreator;
