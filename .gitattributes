@@ -53,10 +53,10 @@
 *.unity linguist-generated
 *.aar filter=lfs diff=lfs merge=lfs -text
 
-search/*.meta linguist-generated=true
-search/*.lighting linguist-generated=true
-search/*.gltf linguist-generated=true
-search/*.prefab linguist-generated=true
-search/*.asset linguist-generated=true
+*.meta linguist-generated=true
+*.lighting linguist-generated=true
+*.gltf linguist-generated=true
+*.prefab linguist-generated=true
+*.asset linguist-generated=true
 
 
