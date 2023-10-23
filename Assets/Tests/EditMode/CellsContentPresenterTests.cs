@@ -67,6 +67,20 @@ namespace Tests.EditMode
             viewMock.Verify(view => view.UpdateViewForContent(content), Times.Never);
         }
 
+        [Test]
+        public void Presenter_ShouldCallAddViewForContent_IfContentAlreadyExistsOnBoard()
+        {
+            var viewMock = new Mock<ICellsContentView>();
+            var content = GetCellContent();
+            var board = GetFullNByNBoard(10);
+            var position = new Vector2Int(0, 0);
+            board[position].AddContent(content);
+            
+            var presenter = new CellsContentPresenter(viewMock.Object, board);
+            
+            viewMock.Verify(view => view.AddViewForContent(position, content), Times.Once);
+        }
+
         private class ContentStub : Content
         {
             public override void Update()

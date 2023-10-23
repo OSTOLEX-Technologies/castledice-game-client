@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentCreation
 {
+    [CreateAssetMenu(fileName = "PlayerContentViewPrefabsConfig", menuName = "Configs/PlayerContentViewPrefabsConfig", order = 1)]
     public class UnityPlayerContentViewPrefabsConfig : ScriptableObject, IPlayerContentViewPrefabsConfig
     {
         [SerializeField] private KnightView redKnightPrefab;

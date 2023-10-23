@@ -20,6 +20,7 @@ namespace Src.GameplayPresenter.CellsContent
                 foreach (var content in cell.GetContent())
                 {
                     content.StateModified += OnContentStateModified;
+                    _view.AddViewForContent(cell.Position, content);
                 }
             }
         }
