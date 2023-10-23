@@ -5,9 +5,9 @@ namespace Src.GameplayView.Grid.GridGeneration
 {
     public class GridGeneratorsFactory : IGridGeneratorsFactory
     {
-        private readonly UnitySquareGridGenerator _squareGridGenerator;
+        private readonly SquareGridGenerator _squareGridGenerator;
 
-        public GridGeneratorsFactory(UnitySquareGridGenerator squareGridGenerator)
+        public GridGeneratorsFactory(SquareGridGenerator squareGridGenerator)
         {
             _squareGridGenerator = squareGridGenerator;
         }

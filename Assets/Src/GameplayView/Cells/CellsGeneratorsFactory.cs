@@ -4,13 +4,13 @@ using UnityEngine;
 
 namespace Src.GameplayView.Cells
 {
-    public class UnityCellsGeneratorsFactory : MonoBehaviour, ICellsGeneratorsFactory
+    public class CellsGeneratorsFactory : ICellsGeneratorsFactory
     {
-        private UnitySquareCellsGenerator3D _unitySquareCellsGenerator3D;
+        private readonly SquareCellsGenerator3D _squareCellsGenerator3D;
 
-        public void Init(UnitySquareCellsGenerator3D squareCellsGenerator)
+        public CellsGeneratorsFactory(SquareCellsGenerator3D squareCellsGenerator)
         {
-            _unitySquareCellsGenerator3D = squareCellsGenerator;
+            _squareCellsGenerator3D = squareCellsGenerator;
         }
         
         public ICellsGenerator GetGenerator(CellType cellType)
@@ -18,7 +18,7 @@ namespace Src.GameplayView.Cells
             switch (cellType)
             {
                 case CellType.Square:
-                    return _unitySquareCellsGenerator3D;
+                    return _squareCellsGenerator3D;
                 default:
                     throw new ArgumentException("Unfamiliar cell type: " + nameof(cellType));
             }

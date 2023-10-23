@@ -8,16 +8,15 @@ using UnityEngine;
 public class BoardGenerationSceneInitializer : MonoBehaviour
 {
     [SerializeField] private GameObjectsGrid grid;
-    [SerializeField] private UnitySquareGridGenerator gridGenerator;
+    [SerializeField] private SquareGridGenerator gridGenerator;
     [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
-    [SerializeField] private SquareCellAssetsConfig assetsConfig;
-    [SerializeField] private UnitySquareCellsGenerator3D generator;
+    [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
+    [SerializeField] private SquareCellsGenerator3D generator;
 
     [ContextMenu("GenerateGrid")]
 
     public void GenerateGrid()
     {
-        gridGenerator.Init(grid, gridGenerationConfig);
         gridGenerator.GenerateGrid(GetGameStartData().CellsPresence);
     }
     
@@ -27,7 +26,6 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
         
         var cellViewMapGenerator = new SquareCellViewMapGenerator(assetsConfig);
         var cellViewMap = cellViewMapGenerator.GetCellViewMap(GetGameStartData());
-        generator.Init(assetsConfig, grid);
         generator.GenerateCells(cellViewMap);
     }
 }

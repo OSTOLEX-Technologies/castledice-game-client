@@ -17,9 +17,7 @@ namespace Tests.PlayMode
         {
             var gridMock = new Mock<IGameObjectsGrid>();
             var configMock = new Mock<ISquareGridGenerationConfig>();
-            var gameObject = new GameObject();
-            var generator = gameObject.AddComponent<UnitySquareGridGenerator>();
-            generator.Init(gridMock.Object, configMock.Object);
+            var generator = new SquareGridGenerator(gridMock.Object, configMock.Object);
 
             generator.GenerateGrid(cellsPresenceMatrix);
 
@@ -92,9 +90,7 @@ namespace Tests.PlayMode
             ISquareGridGenerationConfig config, Vector3[,] expectedPositions)
         {
             var grid = new TestGrid(cellsPresenceMatrix.GetLength(0), cellsPresenceMatrix.GetLength(1));
-            var gameObject = new GameObject();
-            var generator = gameObject.AddComponent<UnitySquareGridGenerator>();
-            generator.Init(grid, config);
+            var generator = new SquareGridGenerator(grid, config);
 
             generator.GenerateGrid(cellsPresenceMatrix);
 
