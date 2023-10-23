@@ -2,6 +2,7 @@
 
 namespace Src.GameplayView.Grid.GridGeneration
 {
+    [CreateAssetMenu(fileName = "UnitySquareGridGenerationConfig", menuName = "Configs/UnitySquareGridGenerationConfig", order = 1)]
     public class UnitySquareGridGenerationConfig : ScriptableObject, ISquareGridGenerationConfig
     {
         [SerializeField] private float cellLength;
