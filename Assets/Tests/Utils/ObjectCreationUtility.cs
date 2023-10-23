@@ -11,6 +11,7 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
+using Tests.Mocks;
 
 namespace Tests
 {
@@ -99,6 +100,24 @@ namespace Tests
             var game = new Game(players, boardConfig, unitsConfig, placementListProvider);
 
             return game;
+        }
+        
+        public static Board GetFullNByNBoard(int size)
+        {
+            var board = new Board(CellType.Square);
+            for (int i = 0; i < size; i++)
+            {
+                for (int j = 0; j < size; j++)
+                {
+                    board.AddCell(i, j);
+                }
+            }
+            return board;
+        }
+        
+        public static Content GetCellContent()
+        {
+            return new ObstacleMock();
         }
     }
 }
