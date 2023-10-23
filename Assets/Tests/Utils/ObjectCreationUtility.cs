@@ -12,6 +12,8 @@ using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
 using Tests.Mocks;
+using CastleGO = castledice_game_logic.GameObjects.Castle;
+
 
 namespace Tests
 {
@@ -118,6 +120,21 @@ namespace Tests
         public static Content GetCellContent()
         {
             return new ObstacleMock();
+        }
+        
+        public static CastleGO GetCastle()
+        {
+            return new CastleGO(new Player(new PlayerActionPoints(), 0), 1, 2, 3);
+        }
+        
+        public static Knight GetKnight()
+        {
+            return new Knight(new Player(new PlayerActionPoints(), 0), 1, 2);
+        }
+        
+        public static Tree GetTree()
+        {
+            return new Tree(1, false);
         }
     }
 }
