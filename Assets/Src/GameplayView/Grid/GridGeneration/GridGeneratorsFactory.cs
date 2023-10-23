@@ -5,7 +5,7 @@ namespace Src.GameplayView.Grid.GridGeneration
 {
     public class GridGeneratorsFactory : IGridGeneratorsFactory
     {
-        private UnitySquareGridGenerator _squareGridGenerator;
+        private readonly UnitySquareGridGenerator _squareGridGenerator;
 
         public GridGeneratorsFactory(UnitySquareGridGenerator squareGridGenerator)
         {

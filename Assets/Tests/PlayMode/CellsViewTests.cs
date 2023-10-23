@@ -7,7 +7,7 @@ using UnityEngine;
 
 namespace Tests.PlayMode
 {
-    public class UnityCellsViewTests
+    public class CellsViewTests
     {
         public static CellType[] CellTypes = { CellType.Square, CellType.Triangle };
         
@@ -17,12 +17,10 @@ namespace Tests.PlayMode
             var cellsGeneratorsFactoryMock = new Mock<ICellsGeneratorsFactory>();
             var cellsGeneratorMock = new Mock<ICellsGenerator>();
             cellsGeneratorsFactoryMock.Setup(factory => factory.GetGenerator(It.IsAny<CellType>())).Returns(cellsGeneratorMock.Object);
-            var gameObject = new GameObject();
-            var unityCellsView = gameObject.AddComponent<UnityCellsView>();
-            unityCellsView.Init(cellsGeneratorsFactoryMock.Object);
+            var cellsView = new CellsView(cellsGeneratorsFactoryMock.Object);
             var cellViewMap = new CellViewData[0, 0];
             
-            unityCellsView.GenerateCells(cellType, cellViewMap);
+            cellsView.GenerateCells(cellType, cellViewMap);
             
             cellsGeneratorsFactoryMock.Verify(factory => factory.GetGenerator(cellType), Times.Once);
         }
@@ -33,12 +31,10 @@ namespace Tests.PlayMode
             var cellsGeneratorsFactoryMock = new Mock<ICellsGeneratorsFactory>();
             var cellsGeneratorMock = new Mock<ICellsGenerator>();
             cellsGeneratorsFactoryMock.Setup(factory => factory.GetGenerator(It.IsAny<CellType>())).Returns(cellsGeneratorMock.Object);
-            var gameObject = new GameObject();
-            var unityCellsView = gameObject.AddComponent<UnityCellsView>();
-            unityCellsView.Init(cellsGeneratorsFactoryMock.Object);
+            var cellsView = new CellsView(cellsGeneratorsFactoryMock.Object);
             var cellViewMap = new CellViewData[0, 0];
             
-            unityCellsView.GenerateCells(CellType.Square, cellViewMap);
+            cellsView.GenerateCells(CellType.Square, cellViewMap);
             
             cellsGeneratorMock.Verify(generator => generator.GenerateCells(cellViewMap), Times.Once);
         }
