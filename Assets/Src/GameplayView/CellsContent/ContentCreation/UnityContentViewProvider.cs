@@ -23,7 +23,7 @@ namespace Src.GameplayView.CellsContent.ContentCreation
 
         public ContentView VisitTree(Tree tree)
         {
-            var prefab = _commonContentViewPrefabProvider.GetTreePrefab();
+            var prefab = _commonContentViewPrefabProvider.TreePrefab;
             var treeView = Instantiate(prefab, Vector3.zero, Quaternion.identity);
             treeView.Init(tree);
             return treeView;

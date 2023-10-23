@@ -18,7 +18,7 @@ namespace Tests.PlayMode
         {
             var commonPrefabProviderMock = new Mock<ICommonContentViewPrefabProvider>();
             var playerPrefabProviderMock = new Mock<IPlayerContentViewPrefabProvider>();
-            commonPrefabProviderMock.Setup(c => c.GetTreePrefab()).Returns(GetTreeView());
+            commonPrefabProviderMock.Setup(c => c.TreePrefab).Returns(GetTreeView());
             playerPrefabProviderMock.Setup(p => p.GetKnightPrefab(It.IsAny<Player>())).Returns(GetKnightView());
             playerPrefabProviderMock.Setup(p => p.GetCastlePrefab(It.IsAny<Player>())).Returns(GetCastleView());
             var go = new GameObject();

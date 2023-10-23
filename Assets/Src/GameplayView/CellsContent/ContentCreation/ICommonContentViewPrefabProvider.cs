@@ -4,6 +4,6 @@ namespace Src.GameplayView.CellsContent.ContentCreation
 {
     public interface ICommonContentViewPrefabProvider
     {
-        TreeView GetTreePrefab();
+        TreeView TreePrefab { get; }
     }
 }

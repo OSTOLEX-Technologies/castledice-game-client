@@ -136,5 +136,10 @@ namespace Tests
         {
             return new Tree(1, false);
         }
+
+        public static Player GetPlayer()
+        {
+            return new Player(new PlayerActionPoints(), 0);
+        }
     }
 }
