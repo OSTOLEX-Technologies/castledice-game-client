@@ -31,10 +31,9 @@ namespace Tests.EditMode
             var board = GetFullNByNBoard(10);
             var presenter = new CellsContentPresenter(viewMock.Object, board);
             var contentToRemove = GetCellContent();
-            var removePosition = new Vector2Int(1, 3);
             
-            board[removePosition].AddContent(contentToRemove);
-            board[removePosition].RemoveContent(contentToRemove);
+            board[(0, 0)].AddContent(contentToRemove);
+            board[(0, 0)].RemoveContent(contentToRemove);
             
             viewMock.Verify(view => view.RemoveViewForContent(contentToRemove), Times.Once);
         }
@@ -46,9 +45,8 @@ namespace Tests.EditMode
             var board = GetFullNByNBoard(10);
             var presenter = new CellsContentPresenter(viewMock.Object, board);
             var content = new ContentStub();
-            var position = new Vector2Int(1, 3);
             
-            board[position].AddContent(content);
+            board[(0, 0)].AddContent(content);
             content.ModifyState();
             
             viewMock.Verify(view => view.UpdateViewForContent(content), Times.Once);
@@ -61,10 +59,9 @@ namespace Tests.EditMode
             var board = GetFullNByNBoard(10);
             var presenter = new CellsContentPresenter(viewMock.Object, board);
             var content = new ContentStub();
-            var position = new Vector2Int(1, 3);
             
-            board[position].AddContent(content);
-            board[position].RemoveContent(content);
+            board[(0, 0)].AddContent(content);
+            board[(0, 0)].RemoveContent(content);
             content.ModifyState();
             
             viewMock.Verify(view => view.UpdateViewForContent(content), Times.Never);
