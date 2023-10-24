@@ -11,7 +11,7 @@ namespace Tests.EditMode
         [Test]
         public void GetGridGenerator_ShouldReturnGivenUnitySquareGridGenerator_IfCellTypeIsSquare()
         {
-            var squareGridGenerator = new SquareGridGenerator(new Mock<IGameObjectsGrid>().Object, new Mock<ISquareGridGenerationConfig>().Object);
+            var squareGridGenerator = new SquareGridGenerator(new Mock<IGrid>().Object, new Mock<ISquareGridGenerationConfig>().Object);
             var factory = new GridGeneratorsFactory(squareGridGenerator);
             
             var generator = factory.GetGridGenerator(CellType.Square);

@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Linq;
 using NUnit.Framework;
 using Src.GameplayView.Grid;
@@ -33,7 +34,7 @@ namespace Tests.PlayMode
             
             grid.AddCell(gamePosition, new Vector3());
             
-            Assert.Throws<System.InvalidOperationException>(() => grid.AddCell(gamePosition, new Vector3()));
+            Assert.Throws<InvalidOperationException>(() => grid.AddCell(gamePosition, new Vector3()));
         }
 
         [Test]
@@ -53,7 +54,7 @@ namespace Tests.PlayMode
             var grid = new GameObject().AddComponent<UnityGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
-            Assert.Throws<System.InvalidOperationException>(() => grid.GetCell(gamePosition));
+            Assert.Throws<InvalidOperationException>(() => grid.GetCell(gamePosition));
         }
         
         [Test]

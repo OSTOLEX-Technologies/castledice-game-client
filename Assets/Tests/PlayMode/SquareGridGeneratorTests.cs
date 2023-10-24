@@ -7,15 +7,15 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.PlayMode
 {
-    public class UnitySquareGridGeneratorTests
+    public class SquareGridGeneratorTests
     {
         private const float TOLERANCE = 0.01f;
 
         [TestCaseSource(nameof(AppropriateGridPositionsCases))]
-        public void GenerateGrid_ShouldAddParentObjects_ToAppropriatePositionsOnGrid(bool[,] cellsPresenceMatrix,
+        public void GenerateGrid_ShouldAddCells_ToAppropriateGamePositionsOnGrid(bool[,] cellsPresenceMatrix,
             Vector2Int[] expectedPositions)
         {
-            var gridMock = new Mock<IGameObjectsGrid>();
+            var gridMock = new Mock<IGrid>();
             var configMock = new Mock<ISquareGridGenerationConfig>();
             var generator = new SquareGridGenerator(gridMock.Object, configMock.Object);
 
@@ -23,7 +23,7 @@ namespace Tests.PlayMode
 
             foreach (var expectedPosition in expectedPositions)
             {
-                gridMock.Verify(grid => grid.AddParent(expectedPosition, It.IsAny<GameObject>()));
+                gridMock.Verify(grid => grid.AddCell(expectedPosition, It.IsAny<Vector3>()));
             }
         }
 
@@ -86,29 +86,17 @@ namespace Tests.PlayMode
         };
 
         [TestCaseSource(nameof(AppropriateScenePositionsCases))]
-        public void GenerateGrid_ShouldCreateGameObjects_OnAppropriatePositionsOnScene(bool[,] cellsPresenceMatrix,
-            ISquareGridGenerationConfig config, Vector3[,] expectedPositions)
+        public void GenerateGrid_ShouldAddCells_OnAppropriateScenePositionsOnGrid(bool[,] cellsPresenceMatrix,
+            ISquareGridGenerationConfig config, Vector3[] expectedPositions)
         {
-            var grid = new TestGrid(cellsPresenceMatrix.GetLength(0), cellsPresenceMatrix.GetLength(1));
-            var generator = new SquareGridGenerator(grid, config);
+            var gridMock = new Mock<IGrid>();
+            var generator = new SquareGridGenerator(gridMock.Object, config);
 
             generator.GenerateGrid(cellsPresenceMatrix);
 
-            for (int i = 0; i < cellsPresenceMatrix.GetLength(0); i++)
+            foreach (var position in expectedPositions)
             {
-                for (int j = 0; j < cellsPresenceMatrix.GetLength(1); j++)
-                {
-                    if (!cellsPresenceMatrix[i, j])
-                    {
-                        continue;
-                    }
-
-                    var actualPosition = grid.GameObjects[i, j].transform.position;
-
-                    Assert.That(actualPosition.x, Is.EqualTo(expectedPositions[i, j].x).Within(TOLERANCE));
-                    Assert.That(actualPosition.y, Is.EqualTo(expectedPositions[i, j].y).Within(TOLERANCE));
-                    Assert.That(actualPosition.z, Is.EqualTo(expectedPositions[i, j].z).Within(TOLERANCE));
-                }
+                gridMock.Verify(g => g.AddCell(It.IsAny<Vector2Int>(), position), Times.Once);
             }
         }
 
@@ -127,10 +115,10 @@ namespace Tests.PlayMode
                     CellWidth = 1f,
                     StartPosition = new Vector3(0, 0, 0)
                 },
-                new Vector3[,]
+                new Vector3[]
                 {
-                    {new (0, 0, 0), new (1, 0, 0)},
-                    {new (0, 0, 1), new (1, 0, 1)}
+                    new(0, 0, 0), new(1, 0, 0),
+                    new(0, 0, 1), new(1, 0, 1)
                 }
             },
             new object[]
@@ -146,54 +134,19 @@ namespace Tests.PlayMode
                     CellWidth = 2f,
                     StartPosition = new Vector3(1, 0, 1)
                 },
-                new Vector3[,]
+                new Vector3[]
                 {
-                    {new (1, 0, 1), new (3, 0, 1)},
-                    {new (1, 0, 3), new (3, 0, 3)}
+                     new(1, 0, 1), new(3, 0, 1),
+                     new(1, 0, 3), new(3, 0, 3) 
                 }
             }
         };
 
-    private class TestGrid : IGameObjectsGrid
+        public class TestSquareGenerationConfig : ISquareGridGenerationConfig
         {
-            public GameObject[,] GameObjects;
-            
-            public TestGrid(int length, int width)
-            {
-                GameObjects = new GameObject[length, width];
-            }
-            
-            public void AddParent(Vector2Int position, GameObject parent)
-            {
-                GameObjects[position.X, position.Y] = parent;
-            }
-
-            public GameObject GetParent(Vector2Int position)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public bool RemoveParent(Vector2Int position)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public void AddChild(Vector2Int position, GameObject child)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public bool RemoveChild(Vector2Int position, GameObject child)
-            {
-                throw new System.NotImplementedException();
-            }
+            public float CellLength { get; set; }
+            public float CellWidth { get; set; }
+            public Vector3 StartPosition { get; set; }
         }
-    }
-
-    public class TestSquareGenerationConfig : ISquareGridGenerationConfig
-    {
-        public float CellLength { get; set; }
-        public float CellWidth { get; set; }
-        public Vector3 StartPosition { get; set; }
     }
 }
