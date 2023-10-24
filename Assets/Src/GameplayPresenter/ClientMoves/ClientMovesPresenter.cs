@@ -29,7 +29,9 @@ namespace Src.GameplayPresenter.ClientMoves
 
         public void ShowMovesForPosition(Vector2Int position)
         {
-            
+            var playerId = _playerDataProvider.GetId();
+            var moves = _possibleMovesListProvider.GetPossibleMoves(position, playerId);
+            _view.ShowMovesList(moves);
         }
 
         private async void OnMovePicked(object sender, AbstractMove move)

@@ -66,7 +66,7 @@ namespace Tests.EditMode
             viewMock.Verify(v => v.ShowMovesList(movesList), Times.Once);
         }
 
-        public class ClientMovesPresenterBuilder
+        private class ClientMovesPresenterBuilder
         {
             public IPlayerDataProvider PlayerDataProvider { get; set; } = GetPlayerDataProvider();
             public IServerMoveApplier ServerMoveApplier { get; set; } = new Mock<IServerMoveApplier>().Object;
