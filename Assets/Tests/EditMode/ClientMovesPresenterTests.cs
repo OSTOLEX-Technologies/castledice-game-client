@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
@@ -117,6 +118,32 @@ namespace Tests.EditMode
             
             localMoveApplierMock.Verify(l => l.ApplyMove(move), Times.Never);
         }
+        
+        [Test]
+        public void ShowMovesForPosition_ShouldBeCalled_IfPositionClickedEventIsInvoked()
+        {
+            var viewStub = new ClientMovesViewStub();
+            var position = new Vector2Int(0, 0);
+            var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), new Mock<IServerMoveApplier>().Object, GetPossibleMovesListProvider(), new Mock<ILocalMoveApplier>().Object, viewStub);
+            var presenter = presenterMock.Object;
+            
+            viewStub.ClickOnPosition(position);
+            
+            presenterMock.Verify(p => p.ShowMovesForPosition(position), Times.Once);
+        }
+        
+        [Test]
+        public void MakeMove_ShouldBeCalled_IfMovePickedEventIsInvoked()
+        {
+            var viewStub = new ClientMovesViewStub();
+            var move = GetMove();
+            var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), new Mock<IServerMoveApplier>().Object, GetPossibleMovesListProvider(), new Mock<ILocalMoveApplier>().Object, viewStub);
+            var presenter = presenterMock.Object;
+            
+            viewStub.PickMove(move);
+            
+            presenterMock.Verify(p => p.MakeMove(move), Times.Once);
+        }
 
         private class ClientMovesPresenterBuilder
         {
@@ -130,6 +157,27 @@ namespace Tests.EditMode
             {
                 return new ClientMovesPresenter(PlayerDataProvider, ServerMoveApplier, PossibleMovesListProvider, LocalMoveApplier, View);
             }
+        }
+
+        public class ClientMovesViewStub : IClientMovesView
+        {
+            public void ShowMovesList(List<AbstractMove> moves)
+            {
+                
+            }
+
+            public void ClickOnPosition(Vector2Int position)
+            {
+                PositionClicked?.Invoke(this, position);
+            }
+
+            public void PickMove(AbstractMove move)
+            {
+                MovePicked?.Invoke(this, move);
+            }
+
+            public event EventHandler<Vector2Int> PositionClicked;
+            public event EventHandler<AbstractMove> MovePicked;
         }
     }
 }
