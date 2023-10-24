@@ -30,6 +30,8 @@ namespace Tests.EditMode
             {
                 DestroyViewCalled = true;
             }
+
+            public override Content Content { get; }
         }
         
         [Test]
