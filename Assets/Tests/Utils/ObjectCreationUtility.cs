@@ -11,6 +11,10 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.Math;
+using castledice_game_logic.MovesLogic;
+using Moq;
+using Src.GameplayPresenter;
+using Src.GameplayPresenter.ClientMoves;
 using Tests.Mocks;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
@@ -140,6 +144,22 @@ namespace Tests
         public static Player GetPlayer()
         {
             return new Player(new PlayerActionPoints(), 0);
+        }
+
+        public static IPlayerDataProvider GetPlayerDataProvider(bool authorized = true, string token = "token", int id = 1)
+        {
+            var mock = new Mock<IPlayerDataProvider>();
+            mock.Setup(x => x.IsAuthorized()).Returns(authorized);
+            mock.Setup(x => x.GetAccessToken()).Returns(token);
+            mock.Setup(x => x.GetId()).Returns(id);
+            return mock.Object;
+        }
+        
+        public static IPossibleMovesListProvider GetPossibleMovesListProvider()
+        {
+            var mock = new Mock<IPossibleMovesListProvider>();
+            mock.Setup(x => x.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(new List<AbstractMove>());
+            return mock.Object;
         }
     }
 }
