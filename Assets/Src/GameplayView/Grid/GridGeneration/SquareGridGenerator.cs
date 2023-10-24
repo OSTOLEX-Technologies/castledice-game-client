@@ -2,12 +2,12 @@
 
 namespace Src.GameplayView.Grid.GridGeneration
 {
-    public class UnitySquareGridGenerator : MonoBehaviour, IGridGenerator
+    public class SquareGridGenerator : IGridGenerator
     {
-        private IGameObjectsGrid _grid;
-        private ISquareGridGenerationConfig _config;
+        private readonly IGameObjectsGrid _grid;
+        private readonly ISquareGridGenerationConfig _config;
 
-        public void Init(IGameObjectsGrid grid, ISquareGridGenerationConfig config)
+        public SquareGridGenerator(IGameObjectsGrid grid, ISquareGridGenerationConfig config)
         {
             _grid = grid;
             _config = config;

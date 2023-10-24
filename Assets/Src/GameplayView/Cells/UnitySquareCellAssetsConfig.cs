@@ -7,7 +7,7 @@ using UnityEngine;
 namespace Src.GameplayView.Cells
 {
     [CreateAssetMenu(fileName = "SquareCellAssetsConfig", menuName = "Configs/SquareCellAssetsConfig", order = 0)]
-    public class SquareCellAssetsConfig : ScriptableObject, ISquareCellAssetIdProvider
+    public class UnitySquareCellAssetsConfig : ScriptableObject, ISquareCellAssetIdProvider
     {
         [SerializeField] private List<GameObject> upperLeftCornerCells = new();
         [SerializeField] private List<GameObject> upperRightCornerCells = new();

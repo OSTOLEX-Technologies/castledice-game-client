@@ -1,14 +1,13 @@
 ﻿using castledice_game_logic;
 using Src.GameplayPresenter.Cells;
-using UnityEngine;
 
 namespace Src.GameplayView.Cells
 {
-    public class UnityCellsView : MonoBehaviour, ICellsView
+    public class CellsView : ICellsView
     {
-        private ICellsGeneratorsFactory _cellsGeneratorsFactory;
+        private readonly ICellsGeneratorsFactory _cellsGeneratorsFactory;
 
-        public void Init(ICellsGeneratorsFactory cellsGeneratorsFactory)
+        public CellsView(ICellsGeneratorsFactory cellsGeneratorsFactory)
         {
             _cellsGeneratorsFactory = cellsGeneratorsFactory;
         }
