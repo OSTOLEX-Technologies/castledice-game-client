@@ -6,9 +6,11 @@ namespace Src.GameplayView.Grid
 {
     public class UnityGridCell : MonoBehaviour, IGridCell
     {
+        private readonly List<GameObject> _children = new();
+        
         public IEnumerator<GameObject> GetEnumerator()
         {
-            throw new System.NotImplementedException();
+            return _children.GetEnumerator();
         }
 
         IEnumerator IEnumerable.GetEnumerator()
@@ -18,12 +20,18 @@ namespace Src.GameplayView.Grid
 
         public void AddChild(GameObject child)
         {
-            throw new System.NotImplementedException();
+            _children.Add(child);
+            var parentTransform = transform;
+            child.transform.parent = parentTransform;
+            child.transform.position = parentTransform.position;
         }
 
         public bool RemoveChild(GameObject child)
         {
-            throw new System.NotImplementedException();
+            if (!_children.Contains(child)) return false;
+            _children.Remove(child);
+            Destroy(child);
+            return true;
         }
     }
 }

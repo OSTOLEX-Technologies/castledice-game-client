@@ -99,5 +99,46 @@ namespace Tests.PlayMode
             
             Assert.True(child == null);
         }
+
+        [UnityTest]
+        public IEnumerator RemoveChild_ShouldNotDestroyChildGameObject_IfItWasNotAddedBefore()
+        {
+            var gameObject = new GameObject();
+            var cell = gameObject.AddComponent<UnityGridCell>();
+            var child = new GameObject();
+            
+            cell.RemoveChild(child);
+            yield return null;
+            
+            Assert.True(child is not null);
+        }
+        
+        [Test]
+        public void GetEnumerator_ShouldReturnAllChildren()
+        {
+            var gameObject = new GameObject();
+            var cell = gameObject.AddComponent<UnityGridCell>();
+            var child1 = new GameObject();
+            var child2 = new GameObject();
+            cell.AddChild(child1);
+            cell.AddChild(child2);
+
+            var result = cell.ToList();
+
+            Assert.AreEqual(2, result.Count);
+            Assert.Contains(child1, result);
+            Assert.Contains(child2, result);
+        }
+        
+        [Test]
+        public void GetEnumerator_ShouldReturnEmptyList_IfNoChildren()
+        {
+            var gameObject = new GameObject();
+            var cell = gameObject.AddComponent<UnityGridCell>();
+
+            var result = cell.ToList();
+
+            Assert.AreEqual(0, result.Count);
+        }
     }
 }
