@@ -219,7 +219,7 @@ public class GameCreationPresenterTests
     }
 
     [Test]
-    public async Task CreateGame_ShouldBeCalled_IfChooseCreateGameOnViewIsCalled()
+    public void CreateGame_ShouldBeCalled_IfChooseCreateGameOnViewIsCalled()
     {
         var view = new TestGameCreationView();
         var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), view);
@@ -231,13 +231,13 @@ public class GameCreationPresenterTests
     }
 
     [Test]
-    public async Task CancelGame_ShouldBeCalled_IfChooseCancelGameOnViewIsCalled()
+    public void CancelGame_ShouldBeCalled_IfChooseCancelGameOnViewIsCalled()
     {
-        var viewMock = new TestGameCreationView();
-        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), viewMock);
+        var view = new TestGameCreationView();
+        var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), view);
         var testObject = presenterMock.Object;
         
-        viewMock.ChooseCancelGame();
+        view.ChooseCancelGame();
         
         presenterMock.Verify(p => p.CancelGame(), Times.Once);
     }
@@ -254,6 +254,28 @@ public class GameCreationPresenterTests
         catch (Exception e)
         {
             // ignored
+        }
+    }
+
+    public class GameCreationPresenterMock : GameCreationPresenter
+    {
+        public bool CancelGameCalled { get; private set; }
+        public bool CreateGameCalled { get; private set; }
+        
+        public GameCreationPresenterMock(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, IGameCreationView view) : base(gameSearcher, gameCreator, playerDataProvider, view)
+        {
+        }
+
+        public override Task CancelGame()
+        {
+            CancelGameCalled = true;
+            return Task.CompletedTask;
+        }
+        
+        public override Task CreateGame()
+        {
+            CreateGameCalled = true;
+            return Task.CompletedTask;
         }
     }
     
