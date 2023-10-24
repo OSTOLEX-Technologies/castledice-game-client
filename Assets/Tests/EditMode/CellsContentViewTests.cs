@@ -4,6 +4,7 @@ using NUnit.Framework;
 using Src.GameplayView.CellsContent;
 using Src.GameplayView.Grid;
 using UnityEngine;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode
@@ -37,7 +38,9 @@ namespace Tests.EditMode
         [Test]
         public void AddViewForContent_ShouldThrowInvalidOperationException_IfViewForContentAlreadyExists()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             contentViewProviderMock.Setup(p => p.GetContentView(It.IsAny<Content>()))
                 .Returns(GetContentView());
@@ -52,7 +55,9 @@ namespace Tests.EditMode
         [Test]
         public void AddViewForContent_ShouldCallGetViewForContent_OnGivenContentViewProvider()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             contentViewProviderMock.Setup(p => p.GetContentView(It.IsAny<Content>()))
                 .Returns(GetContentView());
@@ -67,7 +72,9 @@ namespace Tests.EditMode
         [Test]
         public void AddViewForContent_ShouldAddViewForContent_ToTheGivenGrid()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             var contentView = GetContentView();
             contentViewProviderMock.Setup(p => p.GetContentView(It.IsAny<Content>()))
@@ -78,13 +85,16 @@ namespace Tests.EditMode
             
             view.AddViewForContent(position, content);
             
-            girdMock.Verify(grid => grid.AddChild(position, contentView.gameObject), Times.Once);
+            girdMock.Verify(grid => grid.GetCell(position), Times.Once);
+            gridCellMock.Verify(cell => cell.AddChild(contentView.gameObject), Times.Once);
         }
 
         [Test]
         public void AddViewForContent_ShouldCallStartView_OnCreatedContentView()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             var contentView = GetContentView();
             contentViewProviderMock.Setup(p => p.GetContentView(It.IsAny<Content>()))
@@ -100,7 +110,9 @@ namespace Tests.EditMode
         [Test]
         public void RemoveViewForContent_ShouldThrowInvalidOperationException_IfViewForContentDoesNotExist()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             var view = new CellsContentView(girdMock.Object, contentViewProviderMock.Object);
             var content = GetCellContent();
@@ -111,7 +123,9 @@ namespace Tests.EditMode
         [Test]
         public void RemoveViewForContent_ShouldCallDestroyView_IfViewForContentExists()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             var contentView = GetContentView();
             contentViewProviderMock.Setup(p => p.GetContentView(It.IsAny<Content>()))
@@ -128,7 +142,9 @@ namespace Tests.EditMode
         [Test]
         public void UpdateViewForContent_ShouldThrowInvalidOperationException_IfViewForContentDoesNotExist()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             var view = new CellsContentView(girdMock.Object, contentViewProviderMock.Object);
             var content = GetCellContent();
@@ -139,7 +155,9 @@ namespace Tests.EditMode
         [Test]
         public void UpdateViewForContent_ShouldCallUpdateView_IfViewForContentExists()
         {
-            var girdMock = new Mock<IGameObjectsGrid>();
+            var girdMock = new Mock<IGrid>();
+            var gridCellMock = new Mock<IGridCell>();
+            girdMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
             var contentViewProviderMock = new Mock<IContentViewProvider>();
             var contentView = GetContentView();
             contentViewProviderMock.Setup(p => p.GetContentView(It.IsAny<Content>()))
