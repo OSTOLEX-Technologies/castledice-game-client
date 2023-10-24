@@ -31,8 +31,8 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
         contentViewProvider.Init(playerPrefabProvider, commonContentConfig);
         cellsFactory.Init(assetsConfig);
         _gridGenerator = new SquareGridGenerator(grid, gridGenerationConfig);
-        // _generator = new SquareCellsGenerator3D(cellsFactory, grid);
-        // _view = new CellsContentView(grid, contentViewProvider);
+        _generator = new SquareCellsGenerator3D(cellsFactory, grid);
+        _view = new CellsContentView(grid, contentViewProvider);
     }
 
     [ContextMenu("GenerateGrid")]
