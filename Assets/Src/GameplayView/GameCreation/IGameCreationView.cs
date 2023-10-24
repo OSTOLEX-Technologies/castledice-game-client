@@ -1,7 +1,7 @@
 ﻿using System;
 using JetBrains.Annotations;
 
-namespace Src.GameplayView
+namespace Src.GameplayView.GameCreation
 {
     public interface IGameCreationView
     {

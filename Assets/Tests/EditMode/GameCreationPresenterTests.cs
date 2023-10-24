@@ -8,6 +8,7 @@ using Src;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayView;
+using Src.GameplayView.GameCreation;
 using Tests.Mocks;
 using static Tests.ObjectCreationUtility;
 
