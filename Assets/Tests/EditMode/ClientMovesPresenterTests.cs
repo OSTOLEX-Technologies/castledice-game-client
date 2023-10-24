@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Threading.Tasks;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Moq;
@@ -64,6 +65,57 @@ namespace Tests.EditMode
             presenter.ShowMovesForPosition((1, 1));
             
             viewMock.Verify(v => v.ShowMovesList(movesList), Times.Once);
+        }
+        
+        [Test]
+        public async Task MakeMove_ShouldPassGivenMove_ToGivenServerMoveApplier()
+        {
+            var move = GetMove();
+            var serverMoveApplierMock = new Mock<IServerMoveApplier>();
+            var presenter = new ClientMovesPresenterBuilder
+            {
+                ServerMoveApplier = serverMoveApplierMock.Object
+            }.Build();
+            
+            await presenter.MakeMove(move);
+            
+            serverMoveApplierMock.Verify(s => s.ApplyMoveAsync(move), Times.Once);
+        }
+
+        [Test]
+        public async Task MakeMove_ShouldPassGivenMoveToGivenLocalMoveApplier_IfMoveApplicationResultIsApplied()
+        {
+            var move = GetMove();
+            var serverMoveApplierMock = new Mock<IServerMoveApplier>();
+            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<AbstractMove>())).ReturnsAsync(MoveApplicationResult.Applied);
+            var localMoveApplierMock = new Mock<ILocalMoveApplier>();
+            var presenter = new ClientMovesPresenterBuilder
+            {
+                ServerMoveApplier = serverMoveApplierMock.Object,
+                LocalMoveApplier = localMoveApplierMock.Object
+            }.Build();
+            
+            await presenter.MakeMove(move);
+            
+            localMoveApplierMock.Verify(l => l.ApplyMove(move), Times.Once);
+        }
+        
+        [Test]
+        public async Task MakeMove_ShouldNotPassGivenMoveToGivenLocalMoveApplier_IfMoveApplicationResultIsRejected()
+        {
+            var move = GetMove();
+            var serverMoveApplierMock = new Mock<IServerMoveApplier>();
+            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<AbstractMove>())).ReturnsAsync(MoveApplicationResult.Rejected);
+            var localMoveApplierMock = new Mock<ILocalMoveApplier>();
+            var presenter = new ClientMovesPresenterBuilder
+            {
+                ServerMoveApplier = serverMoveApplierMock.Object,
+                LocalMoveApplier = localMoveApplierMock.Object
+            }.Build();
+            
+            await presenter.MakeMove(move);
+            
+            localMoveApplierMock.Verify(l => l.ApplyMove(move), Times.Never);
         }
 
         private class ClientMovesPresenterBuilder

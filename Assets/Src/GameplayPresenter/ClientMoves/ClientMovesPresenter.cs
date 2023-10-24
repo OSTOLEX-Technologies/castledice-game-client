@@ -24,7 +24,11 @@ namespace Src.GameplayPresenter.ClientMoves
 
         public virtual async Task MakeMove(AbstractMove move)
         {
-            
+            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(move);
+            if (applicationResult == MoveApplicationResult.Applied)
+            {
+                _localMoveApplier.ApplyMove(move);
+            }
         }
 
         public void ShowMovesForPosition(Vector2Int position)

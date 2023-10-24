@@ -161,5 +161,11 @@ namespace Tests
             mock.Setup(x => x.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(new List<AbstractMove>());
             return mock.Object;
         }
+
+        public static AbstractMove GetMove()
+        {
+            var mock = new Mock<AbstractMove>(GetPlayer(), new Vector2Int(0, 0));
+            return mock.Object;
+        }
     }
 }
