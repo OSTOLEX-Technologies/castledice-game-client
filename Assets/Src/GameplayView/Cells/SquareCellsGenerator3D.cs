@@ -6,9 +6,9 @@ namespace Src.GameplayView.Cells
     public class SquareCellsGenerator3D : ICellsGenerator
     {
         private readonly ISquareCellsFactory _cellsFactory;
-        private readonly IGameObjectsGrid _grid;
+        private readonly IGrid _grid;
 
-        public SquareCellsGenerator3D(ISquareCellsFactory factory, IGameObjectsGrid grid)
+        public SquareCellsGenerator3D(ISquareCellsFactory factory, IGrid grid)
         {
             _cellsFactory = factory;
             _grid = grid;
@@ -23,7 +23,7 @@ namespace Src.GameplayView.Cells
                     var cellData = cellsViewMap[i, j];
                     if (cellData.IsNull) continue;
                     var cell = _cellsFactory.GetSquareCell(cellData.AssetId);
-                    _grid.AddChild((i, j), cell);
+                    _grid.GetCell((i, j)).AddChild(cell);
                 }
             }
         }
