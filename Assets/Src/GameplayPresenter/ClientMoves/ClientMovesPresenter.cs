@@ -20,6 +20,8 @@ namespace Src.GameplayPresenter.ClientMoves
             _possibleMovesListProvider = possibleMovesListProvider;
             _localMoveApplier = localMoveApplier;
             _view = view;
+            _view.MovePicked += OnMovePicked;
+            _view.PositionClicked += OnPositionClicked;
         }
 
         public virtual async Task MakeMove(AbstractMove move)
@@ -31,7 +33,7 @@ namespace Src.GameplayPresenter.ClientMoves
             }
         }
 
-        public void ShowMovesForPosition(Vector2Int position)
+        public virtual void ShowMovesForPosition(Vector2Int position)
         {
             var playerId = _playerDataProvider.GetId();
             var moves = _possibleMovesListProvider.GetPossibleMoves(position, playerId);
@@ -40,12 +42,12 @@ namespace Src.GameplayPresenter.ClientMoves
 
         private async void OnMovePicked(object sender, AbstractMove move)
         {
-            
+            await MakeMove(move);
         }
         
         private void OnPositionClicked(object sender, Vector2Int position)
         {
-            
+            ShowMovesForPosition(position);
         }
     }
 }
