@@ -29,6 +29,7 @@ namespace Src.GameplayView.ClientMoves
         
         public void ShowMovesList(List<AbstractMove> moves)
         {
+            //TODO: In the future there must be logic for demonstrating list of moves to the player.
             if (moves.Count > 0)
             {
                 MovePicked?.Invoke(this, moves[0]);
