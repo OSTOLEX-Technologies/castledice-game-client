@@ -1,12 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayView.Grid
 {
     public class UnityGridCell : MonoBehaviour, IGridCell
     {
+        public Vector2Int Position { get; private set; }
+
         private readonly List<GameObject> _children = new();
+        
+        public void Init(Vector2Int position)
+        {
+            Position = position;
+        }
         
         public IEnumerator<GameObject> GetEnumerator()
         {
@@ -17,6 +25,7 @@ namespace Src.GameplayView.Grid
         {
             return GetEnumerator();
         }
+
 
         public void AddChild(GameObject child)
         {

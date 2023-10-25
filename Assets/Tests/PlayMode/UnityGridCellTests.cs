@@ -4,11 +4,25 @@ using NUnit.Framework;
 using Src.GameplayView.Grid;
 using UnityEngine;
 using UnityEngine.TestTools;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.PlayMode
 {
     public class UnityGridCellTests
     {
+        public static Vector2Int[] Positions = { (0, 0), (1, 0), (2, 0), (0, 1), (1, 1) };
+        
+        [Test]
+        public void PositionProperty_ShouldReturnPosition_GivenInInit([ValueSource(nameof(Positions))]Vector2Int position)
+        {
+            var gameObject = new GameObject();
+            var cell = gameObject.AddComponent<UnityGridCell>();
+            
+            cell.Init(position);
+            
+            Assert.AreEqual(position, cell.Position);
+        }
+        
         [Test]
         public void Contains_ShouldReturnTrueForGameObject_IfAddChildWasCalled()
         {

@@ -12,6 +12,18 @@ namespace Tests.PlayMode
     public class UnityGridTests
     {
         public static Vector3[] ScenePositions = { new (1, 2, 3), new (4, 5, 6), new (0.2f, 3, 2.5f)};
+        public static Vector2Int[] GamePositions = { (0, 0), (1, 0), (2, 0), (0, 1), (1, 1) };
+        
+        [Test]
+        public void AddCell_ShouldCreateUnityGridCell_WithGivenGamePosition([ValueSource(nameof(GamePositions))]Vector2Int gamePosition)
+        {
+            var grid = new GameObject().AddComponent<UnityGrid>();
+            
+            grid.AddCell(gamePosition, new Vector3());
+            var cell = grid.GetCell(gamePosition);
+            
+            Assert.AreEqual(gamePosition, cell.Position);
+        }
         
         [UnityTest]
         public IEnumerator AddCell_ShouldCreateUnityGridCell_OnGivenScenePosition([ValueSource(nameof(ScenePositions))]Vector3 scenePosition)

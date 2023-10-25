@@ -27,6 +27,7 @@ namespace Src.GameplayView.Grid
                 throw new InvalidOperationException("Cell already exists on given game position " + gamePosition);
             }
             var cell = new GameObject().AddComponent<UnityGridCell>();
+            cell.Init(gamePosition);
             cell.transform.position = scenePosition;
             _cells.Add(gamePosition, cell);
         }
