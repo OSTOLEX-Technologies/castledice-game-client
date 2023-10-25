@@ -6,6 +6,6 @@ namespace Src.GameplayView.ClickDetection
 {
     public interface ICellClickDetector
     {
-        [CanBeNull] event EventHandler<Vector2Int> Clicked; 
+        event EventHandler<Vector2Int> Clicked; 
     }
 }
