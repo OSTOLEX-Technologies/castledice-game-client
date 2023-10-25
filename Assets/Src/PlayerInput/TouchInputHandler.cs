@@ -6,8 +6,8 @@ namespace Src.PlayerInput
     public class TouchInputHandler : ITouchInputHandler
     {
         private Vector2 _currentTouchPosition;
-        private IRayProvider _rayProvider;
-        private IRaycaster _raycaster;
+        private readonly IRayProvider _rayProvider;
+        private readonly IRaycaster _raycaster;
 
         public TouchInputHandler(IRayProvider rayProvider, IRaycaster raycaster)
         {
