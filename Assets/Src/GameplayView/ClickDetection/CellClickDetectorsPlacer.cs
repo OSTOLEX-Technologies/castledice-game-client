@@ -16,7 +16,16 @@ namespace Src.GameplayView.ClickDetection
 
         public List<ICellClickDetector> PlaceDetectors()
         {
-            throw new System.NotImplementedException();
+            var detectors = new List<ICellClickDetector>();
+            foreach (var cell in _grid)
+            {
+                var position = cell.Position;
+                var detector = _detectorsFactory.GetDetector(position);
+                cell.AddChild(detector.gameObject);
+                detectors.Add(detector);
+            }
+
+            return detectors;
         } 
     }
 }

@@ -83,7 +83,9 @@ namespace Tests.EditMode
         public void PlaceDetectors_ShouldCallGetDetectorOnGivenFactory_ForEveryPositionOnGrid([ValueSource(nameof(PositionsArrays))]Vector2Int[] positions)
         {
             var factoryMock = new Mock<IUnityCellClickDetectorsFactory>();
-            factoryMock.Setup(f => f.GetDetector(It.IsAny<Vector2Int>())).Returns(new UnityCellClickDetector());
+            var gameObject = new GameObject();
+            var detector = gameObject.AddComponent<UnityCellClickDetector>();
+            factoryMock.Setup(f => f.GetDetector(It.IsAny<Vector2Int>())).Returns(detector);
             var grid = new GridForTests();
             foreach (var position in positions)
             {
