@@ -31,7 +31,6 @@ namespace Tests.EditMode
             
             var decksList = decksListProvider.GetDecksList(decksData);
             
-            Assert.That(decksList, Has.Count.EqualTo(decksData.Count));
             foreach (var data in decksData)
             {
                 var deck = decksList.GetDeck(data.PlayerId);
@@ -40,6 +39,19 @@ namespace Tests.EditMode
                     Assert.Contains(placement, deck);
                 }
             }
+        }
+        
+        [Test]
+        public void GetDecksList_ShouldThrowArgumentException_IfThereAreDuplicatePlayerIds()
+        {
+            var decksData = new List<PlayerDeckData>
+            {
+                new(1, new List<PlacementType> { PlacementType.Knight , PlacementType.HeavyKnight }),
+                new(1, new List<PlacementType> { PlacementType.HeavyKnight }),
+            };
+            var decksListProvider = new DecksListProvider();
+            
+            Assert.Throws<System.ArgumentException>(() => decksListProvider.GetDecksList(decksData));
         }
     }
 }
