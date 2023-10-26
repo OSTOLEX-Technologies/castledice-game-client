@@ -21,8 +21,8 @@ namespace Src.GameplayPresenter.GameCreation
         public Game CreateGame(GameStartData gameData)
         {
             var players = _playersListProvider.GetPlayersList(gameData.PlayersIds);
-            var boardConfig = _boardConfigProvider.GetBoardConfig(gameData.CellType, gameData.CellsPresence, gameData.GeneratedContent);
-            var placeablesConfig = _placeablesConfigProvider.GetPlaceablesConfig(gameData.PlaceablesConfig);
+            var boardConfig = _boardConfigProvider.GetBoardConfig(gameData.BoardData, players);
+            var placeablesConfig = _placeablesConfigProvider.GetPlaceablesConfig(gameData.PlaceablesConfigData);
             var decks = _decksListProvider.GetDecksList(gameData.Decks);
             return new Game(players, boardConfig, placeablesConfig, decks);
         }
