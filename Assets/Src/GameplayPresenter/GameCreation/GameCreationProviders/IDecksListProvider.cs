@@ -2,7 +2,7 @@
 using castledice_game_data_logic;
 using castledice_game_logic.GameObjects;
 
-namespace Src.GameplayPresenter.GameCreation
+namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
     public interface IDecksListProvider
     {

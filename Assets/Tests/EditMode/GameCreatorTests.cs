@@ -8,6 +8,7 @@ using castledice_game_logic.GameObjects.Configs;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation;
+using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode

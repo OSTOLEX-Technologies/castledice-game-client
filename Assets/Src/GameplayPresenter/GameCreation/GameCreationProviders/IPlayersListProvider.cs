@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using castledice_game_logic;
 
-namespace Src.GameplayPresenter.GameCreation
+namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
     public interface IPlayersListProvider
     {
