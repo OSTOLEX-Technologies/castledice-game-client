@@ -9,15 +9,15 @@ namespace Tests.EditMode
     public class GridPresenterTests
     {
         [Test]
-        public void GenerateGrid_ShouldPassCellTypeAndCellsPresenceMatrixFromGameStartData_ToGridView()
+        public void GenerateGrid_ShouldPassCellTypeAndCellsPresenceMatrixFromBoardData_ToGridView()
         {
             var viewMock = new Mock<IGridView>();
-            var gameStartData = GetGameStartData();
-            var gridPresenter = new GridPresenter(viewMock.Object, gameStartData);
+            var boardData = GetBoardData();
+            var gridPresenter = new GridPresenter(viewMock.Object, boardData);
             
             gridPresenter.GenerateGrid();
             
-            viewMock.Verify(v => v.GenerateGrid(gameStartData.CellType, gameStartData.CellsPresence), Times.Once);
+            viewMock.Verify(v => v.GenerateGrid(boardData.CellType, boardData.CellsPresence), Times.Once);
         }
     }
 }

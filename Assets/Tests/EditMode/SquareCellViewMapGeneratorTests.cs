@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using castledice_game_data_logic;
+using castledice_game_data_logic.Content.Placeable;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.Cells;
@@ -11,10 +12,10 @@ namespace Tests.EditMode
     public class SquareCellViewMapGeneratorTests
     {
         [TestCaseSource(nameof(GetCellViewMapTestCases))]
-        public void GetCellViewMap_ShouldGenerateAppropriateCellViewDataMap(GameStartData gameStartData, ISquareCellAssetIdProvider assetIdProvider, CellViewData[,] expectedCellViewDataMap)
+        public void GetCellViewMap_ShouldGenerateAppropriateCellViewDataMap(BoardData boardData, ISquareCellAssetIdProvider assetIdProvider, CellViewData[,] expectedCellViewDataMap)
         {
             var mapGenerator = new SquareCellViewMapGenerator(assetIdProvider);
-            var actualCellViewDataMap = mapGenerator.GetCellViewMap(gameStartData);
+            var actualCellViewDataMap = mapGenerator.GetCellViewMap(boardData);
             for (int i = 0; i < actualCellViewDataMap.GetLength(0); i++)
             {
                 for (int j = 0; j < actualCellViewDataMap.GetLength(1); j++)
@@ -28,7 +29,7 @@ namespace Tests.EditMode
         {
             new object[]
             {
-                GetGameStartData(new[,]
+                GetBoardData(new[,]
                 {
                     { true, true },
                     { true, true }
@@ -42,7 +43,7 @@ namespace Tests.EditMode
             },
             new object[]
             {
-                GetGameStartData(new[,]
+                GetBoardData(new[,]
                 {
                     { true, true, true },
                     { true, true, true },

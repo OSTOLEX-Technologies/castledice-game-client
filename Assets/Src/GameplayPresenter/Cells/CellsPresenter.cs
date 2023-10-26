@@ -1,25 +1,25 @@
-﻿using castledice_game_data_logic;
+﻿using castledice_game_data_logic.Content.Placeable;
 using Src.GameplayView.Cells;
 
 namespace Src.GameplayPresenter.Cells
 {
     public class CellsPresenter
     {
-        private ICellViewMapProvider _cellViewMapProvider;
-        private ICellsView _cellsView;
-        private GameStartData _gameStartData;
+        private readonly ICellViewMapProvider _cellViewMapProvider;
+        private readonly ICellsView _cellsView;
+        private readonly BoardData _boardData;
 
-        public CellsPresenter(ICellViewMapProvider cellViewMapProvider, ICellsView cellsView, GameStartData gameStartData)
+        public CellsPresenter(ICellViewMapProvider cellViewMapProvider, ICellsView cellsView, BoardData boardData)
         {
             _cellViewMapProvider = cellViewMapProvider;
             _cellsView = cellsView;
-            _gameStartData = gameStartData;
+            _boardData = boardData;
         }
 
         public void GenerateCells()
         {
-            var cellViewMap = _cellViewMapProvider.GetCellViewMap(_gameStartData);
-            _cellsView.GenerateCells(_gameStartData.CellType, cellViewMap);
+            var cellViewMap = _cellViewMapProvider.GetCellViewMap(_boardData);
+            _cellsView.GenerateCells(_boardData.CellType, cellViewMap);
         }
     }
 }

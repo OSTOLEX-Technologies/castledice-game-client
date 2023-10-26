@@ -69,7 +69,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
     private void SetUpGrid()
     {
         _gridGenerator = new SquareGridGenerator(grid, gridGenerationConfig);
-        _gridGenerator.GenerateGrid(GetGameStartData().CellsPresence);
+        _gridGenerator.GenerateGrid(GetBoardData().CellsPresence);
     }
 
     private void SetUpClickDetectors()
@@ -84,7 +84,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
         cellsFactory.Init(assetsConfig);
         _cellsGenerator = new SquareCellsGenerator3D(cellsFactory, grid);
         var cellViewMapGenerator = new SquareCellViewMapGenerator(assetsConfig);
-        var cellViewMap = cellViewMapGenerator.GetCellViewMap(GetGameStartData());
+        var cellViewMap = cellViewMapGenerator.GetCellViewMap(GetBoardData());
         _cellsGenerator.GenerateCells(cellViewMap);
     }
     
