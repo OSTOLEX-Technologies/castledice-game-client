@@ -1,4 +1,5 @@
-﻿using Src.Constants;
+﻿using System.Linq;
+using Src.Constants;
 using UnityEngine;
 
 namespace Src.PlayerInput
@@ -9,7 +10,7 @@ namespace Src.PlayerInput
         {
             var hits = new RaycastHit[RaycastConstants.MaxRaycastHits];
             Physics.RaycastNonAlloc(ray, hits, RaycastConstants.MaxRaycastDistance);
-            return hits;
+            return hits.Where(h => h.collider != null).ToArray();
         }
     }
 }
