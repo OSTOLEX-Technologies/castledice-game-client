@@ -4,6 +4,8 @@ using castledice_game_data_logic.Content;
 using castledice_game_data_logic.Content.Generated;
 using castledice_game_logic;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
+using castledice_game_logic.GameObjects;
+using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
@@ -18,17 +20,24 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 
         public ContentToCoordinate GetContentToCoordinate(GeneratedContentData data)
         {
-            throw new NotImplementedException();
+            return data.Accept(this);
         }
         
         public ContentToCoordinate VisitCastleData(CastleData data)
         {
-            throw new System.NotImplementedException();
+            var player = _players.Find(p => p.Id == data.OwnerId);
+            if (player == null)
+            {
+                throw new ArgumentException("Castle data with unknown owner id " + data.OwnerId);
+            }
+            var castle = new CastleGO(player, data.DefaultDurability, data.FreeDurability, data.CastleCaptureHitCost);
+            return new ContentToCoordinate(data.Position, castle);
         }
 
         public ContentToCoordinate VisitTreeData(TreeData data)
         {
-            throw new System.NotImplementedException();
+            var tree = new Tree(data.RemoveCost, data.CanBeRemoved);
+            return new ContentToCoordinate(data.Position, tree);
         }
     }
 }
