@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using castledice_game_logic;
+using castledice_game_logic.ActionPointsLogic;
 
 namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
@@ -7,7 +8,13 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
     {
         public List<Player> GetPlayersList(List<int> ids)
         {
-            throw new System.NotImplementedException();
+            var playersList = new List<Player>();
+            foreach (var id in ids)
+            {
+                playersList.Add(new Player(new PlayerActionPoints(),id));
+            }
+
+            return playersList;
         }
     }
 }
