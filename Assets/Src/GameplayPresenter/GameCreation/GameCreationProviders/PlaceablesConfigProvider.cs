@@ -1,5 +1,6 @@
 ﻿using castledice_game_data_logic.Content.Placeable;
 using castledice_game_logic.GameConfiguration;
+using castledice_game_logic.GameObjects.Configs;
 
 namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
@@ -7,7 +8,7 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
     {
         public PlaceablesConfig GetPlaceablesConfig(PlaceablesConfigData configData)
         {
-            throw new System.NotImplementedException();
+            return new PlaceablesConfig(new KnightConfig(configData.KnightConfig.PlacementCost, configData.KnightConfig.Health));
         }
     }
 }
