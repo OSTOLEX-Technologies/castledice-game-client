@@ -37,22 +37,26 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriateCastle_IfCastleDataGiven()
+        [TestCase(1, 2, 3, 3, 1)]
+        [TestCase(1, 1, 5, 4, 13)]
+        [TestCase(2, 3, 5, 2, 4)]
+        public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriateCastle_IfCastleDataGiven(int captureHitCost, int maxFreeDurability, int maxDurability, int durability, int ownerId)
         {
-            var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
-            var castleData = new CastleData((0, 0), 1, 2, 3, 4, 1);
+            var owner = GetPlayer(ownerId);
+            var players = new List<Player> {owner, GetPlayer(2) };
+            var castleData = new CastleData((0, 0), captureHitCost, maxFreeDurability, maxDurability, durability, ownerId);
             var contentToCoordinateProvider = new ContentToCoordinateProvider(players);
             
             var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(castleData);
             var content = contentToCoordinate.Content;
             var castle = content as CastleGO;
             
-            //TODO: Make it possible to create castle with given durability.
-            Assert.AreEqual(castleData.CastleCaptureHitCost, castle.GetCaptureHitCost(GetPlayer()));
-            Assert.AreEqual(castleData.OwnerId, castle.GetOwner().Id);
-            Assert.AreEqual(castleData.DefaultDurability, castle.GetMaxDurability());
+            Assert.AreEqual(castleData.Durability, castle.GetDurability());
+            Assert.AreEqual(castleData.CaptureHitCost, castle.GetCaptureHitCost(GetPlayer()));
+            Assert.AreSame(owner, castle.GetOwner());
+            Assert.AreEqual(castleData.MaxDurability, castle.GetMaxDurability());
             castle.Free();
-            Assert.AreEqual(castleData.FreeDurability, castle.GetDurability());
+            Assert.AreEqual(castleData.MaxFreeDurability, castle.GetDurability());
         }
 
         [Test]

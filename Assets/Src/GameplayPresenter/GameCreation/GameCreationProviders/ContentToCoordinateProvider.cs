@@ -30,7 +30,7 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
             {
                 throw new ArgumentException("Castle data with unknown owner id " + data.OwnerId);
             }
-            var castle = new CastleGO(player, data.DefaultDurability, data.FreeDurability, data.CastleCaptureHitCost);
+            var castle = new CastleGO(player, data.Durability, data.MaxDurability, data.MaxFreeDurability, data.CaptureHitCost);
             return new ContentToCoordinate(data.Position, castle);
         }
 

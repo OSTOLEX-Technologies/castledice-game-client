@@ -162,7 +162,7 @@ namespace Tests
         
         public static CastleGO GetCastle()
         {
-            return new CastleGO(new Player(new PlayerActionPoints(), 0), 1, 2, 3);
+            return new CastleGO(new Player(new PlayerActionPoints(), 0), 3, 3, 1, 1);
         }
         
         public static Knight GetKnight()
