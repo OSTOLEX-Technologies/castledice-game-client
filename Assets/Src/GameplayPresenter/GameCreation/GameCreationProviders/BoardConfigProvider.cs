@@ -7,8 +7,8 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
     public class BoardConfigProvider : IBoardConfigProvider
     {
-        private IContentSpawnersListProvider _spawnersProvider;
-        private ICellsGeneratorProvider _cellsGeneratorProvider;
+        private readonly IContentSpawnersListProvider _spawnersProvider;
+        private readonly ICellsGeneratorProvider _cellsGeneratorProvider;
 
         public BoardConfigProvider(IContentSpawnersListProvider spawnersProvider, ICellsGeneratorProvider cellsGeneratorProvider)
         {
@@ -18,7 +18,9 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 
         public BoardConfig GetBoardConfig(BoardData boardData, List<Player> players)
         {
-            throw new System.NotImplementedException();
+            var spawners = _spawnersProvider.GetContentSpawnersList(boardData.GeneratedContent, players);
+            var cellsGenerator = _cellsGeneratorProvider.GetCellsGenerator(boardData.CellsPresence);
+            return new BoardConfig(spawners, cellsGenerator, boardData.CellType);
         }
     }
 }
