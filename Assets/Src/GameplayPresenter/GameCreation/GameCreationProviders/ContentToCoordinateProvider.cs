@@ -9,11 +9,11 @@ using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
-    public class ContentToCoordinateProvider : IGeneratedContentDataVisitor<ContentToCoordinate>
+    public class ContentToCoordinateProvider : IGeneratedContentDataVisitor<ContentToCoordinate>, IContentToCoordinateProvider
     {
-        private readonly List<Player> _players;
+        private List<Player> _players;
 
-        public ContentToCoordinateProvider(List<Player> players)
+        public void SetPlayers(List<Player> players)
         {
             _players = players;
         }
