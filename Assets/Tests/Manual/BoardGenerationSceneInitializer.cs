@@ -1,8 +1,11 @@
 using System.Collections.Generic;
+using castledice_game_data_logic;
 using castledice_game_logic;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
+using Src.GameplayPresenter.GameCreation;
+using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using Src.GameplayView.Cells;
 using Src.GameplayView.CellsContent;
 using Src.GameplayView.CellsContent.ContentCreation;
@@ -38,6 +41,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
     private ClientMovesPresenter _clientMovesPresenter;
 
     private Game _game;
+    private GameStartData _gameStartData;
 
     private void Start()
     {
@@ -52,7 +56,15 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
 
     private void SetUpGame()
     {
-        _game = GetGame();
+        _gameStartData = GetGameStartData();
+        var playersListProvider = new PlayersListProvider();
+        var coordinateSpawnerProvider = new CoordinateContentSpawnerProvider(new ContentToCoordinateProvider());
+        var matrixCellsGeneratorProvider = new MatrixCellsGeneratorProvider();
+        var boardConfigProvider = new BoardConfigProvider(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
+        var placeablesConfigProvider = new PlaceablesConfigProvider();
+        var decksListProvider = new DecksListProvider();
+        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, decksListProvider);
+        _game = gameCreator.CreateGame(_gameStartData);
         _game.GiveActionPointsToPlayer(1, 6);
     }
     
@@ -69,7 +81,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
     private void SetUpGrid()
     {
         _gridGenerator = new SquareGridGenerator(grid, gridGenerationConfig);
-        _gridGenerator.GenerateGrid(GetBoardData().CellsPresence);
+        _gridGenerator.GenerateGrid(_gameStartData.BoardData.CellsPresence);
     }
 
     private void SetUpClickDetectors()
@@ -84,7 +96,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
         cellsFactory.Init(assetsConfig);
         _cellsViewGenerator = new SquareCellsViewGenerator3D(cellsFactory, grid);
         var cellViewMapGenerator = new SquareCellViewMapGenerator(assetsConfig);
-        var cellViewMap = cellViewMapGenerator.GetCellViewMap(GetBoardData());
+        var cellViewMap = cellViewMapGenerator.GetCellViewMap(_gameStartData.BoardData);
         _cellsViewGenerator.GenerateCellsView(cellViewMap);
     }
     
