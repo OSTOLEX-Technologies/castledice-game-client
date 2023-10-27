@@ -7,7 +7,6 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
     public interface IContentToCoordinateProvider
     {
-        ContentToCoordinate GetContentToCoordinate(GeneratedContentData contentData);
-        void SetPlayers(List<Player> players);
+        ContentToCoordinate GetContentToCoordinate(GeneratedContentData contentData, List<Player> players);
     }
 }

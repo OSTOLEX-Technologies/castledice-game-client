@@ -13,16 +13,12 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
     {
         private List<Player> _players;
 
-        public void SetPlayers(List<Player> players)
+        public ContentToCoordinate GetContentToCoordinate(GeneratedContentData data, List<Player> players)
         {
             _players = players;
-        }
-
-        public ContentToCoordinate GetContentToCoordinate(GeneratedContentData data)
-        {
             return data.Accept(this);
         }
-        
+
         public ContentToCoordinate VisitCastleData(CastleData data)
         {
             var player = _players.Find(p => p.Id == data.OwnerId);

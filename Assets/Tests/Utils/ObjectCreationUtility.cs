@@ -23,7 +23,15 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
+        public static CastleData GetCastleData()
+        {
+            return new CastleData((0, 0), 1, 1, 3, 3, 1);
+        }
 
+        public static TreeData GetTreeData()
+        {
+            return new TreeData((0, 0), 3, false);
+        }
         
         public static GameStartData GetGameStartData()
         {
@@ -153,6 +161,11 @@ namespace Tests
                 }
             }
             return board;
+        }
+
+        public static GeneratedContentData GetGeneratedContentData()
+        {
+            return new Mock<GeneratedContentData>().Object;
         }
         
         public static Content GetCellContent()

@@ -7,9 +7,24 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
     public class CoordinateContentSpawnerProvider : IContentSpawnersListProvider
     {
+        private readonly IContentToCoordinateProvider _contentToCoordinateProvider;
+
+        public CoordinateContentSpawnerProvider(IContentToCoordinateProvider contentToCoordinateProvider)
+        {
+            _contentToCoordinateProvider = contentToCoordinateProvider;
+        }
+
         public List<IContentSpawner> GetContentSpawnersList(List<GeneratedContentData> contentData, List<Player> players)
         {
-            throw new System.NotImplementedException();
+            var spawners = new List<IContentSpawner>();
+            var contentToCoordinates = new List<ContentToCoordinate>();
+            foreach (var data in contentData)
+            {
+                var contentToCoordinate = _contentToCoordinateProvider.GetContentToCoordinate(data, players);
+                contentToCoordinates.Add(contentToCoordinate);
+            }
+            spawners.Add(new CoordinateContentSpawner(contentToCoordinates));
+            return spawners;
         }
     }
 }

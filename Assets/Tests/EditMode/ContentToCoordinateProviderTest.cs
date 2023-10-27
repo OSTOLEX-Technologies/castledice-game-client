@@ -19,9 +19,9 @@ namespace Tests.EditMode
         {
             var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
             var castleData = new CastleData((0, 0), 1, 1, 1, 1, 4);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider(players);
+            var contentToCoordinateProvider = new ContentToCoordinateProvider();
             
-            Assert.Throws<System.ArgumentException>(() => contentToCoordinateProvider.GetContentToCoordinate(castleData));
+            Assert.Throws<System.ArgumentException>(() => contentToCoordinateProvider.GetContentToCoordinate(castleData, players));
         }
 
         [Test]
@@ -29,9 +29,9 @@ namespace Tests.EditMode
         {
             var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
             var castleData = new CastleData(position, 1, 1, 1, 1, 1);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider(players);
+            var contentToCoordinateProvider = new ContentToCoordinateProvider();
             
-            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(castleData);
+            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(castleData, players);
             
             Assert.That(contentToCoordinate.Coordinate, Is.EqualTo(position));
         }
@@ -45,9 +45,9 @@ namespace Tests.EditMode
             var owner = GetPlayer(ownerId);
             var players = new List<Player> {owner, GetPlayer(2) };
             var castleData = new CastleData((0, 0), captureHitCost, maxFreeDurability, maxDurability, durability, ownerId);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider(players);
+            var contentToCoordinateProvider = new ContentToCoordinateProvider();
             
-            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(castleData);
+            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(castleData, players);
             var content = contentToCoordinate.Content;
             var castle = content as CastleGO;
             
@@ -63,9 +63,9 @@ namespace Tests.EditMode
         public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriateTree_IfTreeDataGiven()
         {
             var treeData = new TreeData((0, 0), 3, true);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider(new List<Player>());
+            var contentToCoordinateProvider = new ContentToCoordinateProvider();
             
-            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(treeData);
+            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(treeData, new List<Player>());
             var content = contentToCoordinate.Content;
             var tree = content as Tree;
 
