@@ -1,24 +1,23 @@
 using System;
 using castledice_game_logic;
-using UnityEngine;
 
 namespace Src.GameplayView.Cells
 {
     public class CellsViewGeneratorsFactory : ICellsViewGeneratorsFactory
     {
-        private readonly SquareCellsGenerator3D _squareCellsGenerator3D;
+        private readonly SquareCellsViewGenerator3D _squareCellsViewGenerator3D;
 
-        public CellsViewGeneratorsFactory(SquareCellsGenerator3D squareCellsGenerator)
+        public CellsViewGeneratorsFactory(SquareCellsViewGenerator3D squareCellsViewGenerator)
         {
-            _squareCellsGenerator3D = squareCellsGenerator;
+            _squareCellsViewGenerator3D = squareCellsViewGenerator;
         }
         
-        public ICellsGenerator GetGenerator(CellType cellType)
+        public ICellsViewGenerator GetGenerator(CellType cellType)
         {
             switch (cellType)
             {
                 case CellType.Square:
-                    return _squareCellsGenerator3D;
+                    return _squareCellsViewGenerator3D;
                 default:
                     throw new ArgumentException("Unfamiliar cell type: " + nameof(cellType));
             }

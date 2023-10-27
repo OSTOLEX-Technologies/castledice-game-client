@@ -4,6 +4,6 @@ namespace Src.GameplayView.Cells
 {
     public interface ICellsViewGeneratorsFactory
     {
-        ICellsGenerator GetGenerator(CellType cellType);
+        ICellsViewGenerator GetGenerator(CellType cellType);
     }
 }

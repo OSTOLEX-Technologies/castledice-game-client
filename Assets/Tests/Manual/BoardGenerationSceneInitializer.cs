@@ -31,7 +31,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
     private TouchInputHandler _touchInputHandler;
     private PlayerInputReader _inputReader;
     private SquareGridGenerator _gridGenerator;
-    private SquareCellsGenerator3D _cellsGenerator;
+    private SquareCellsViewGenerator3D _cellsViewGenerator;
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
     private ClientMovesView _clientMovesView;
@@ -82,10 +82,10 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
     private void SetUpCells()
     {
         cellsFactory.Init(assetsConfig);
-        _cellsGenerator = new SquareCellsGenerator3D(cellsFactory, grid);
+        _cellsViewGenerator = new SquareCellsViewGenerator3D(cellsFactory, grid);
         var cellViewMapGenerator = new SquareCellViewMapGenerator(assetsConfig);
         var cellViewMap = cellViewMapGenerator.GetCellViewMap(GetBoardData());
-        _cellsGenerator.GenerateCells(cellViewMap);
+        _cellsViewGenerator.GenerateCellsView(cellViewMap);
     }
     
     private void SetUpContent()

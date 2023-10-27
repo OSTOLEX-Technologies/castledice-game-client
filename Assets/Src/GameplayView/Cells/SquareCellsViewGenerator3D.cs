@@ -3,18 +3,18 @@ using Src.GameplayView.Grid;
 
 namespace Src.GameplayView.Cells
 {
-    public class SquareCellsGenerator3D : ICellsGenerator
+    public class SquareCellsViewGenerator3D : ICellsViewGenerator
     {
         private readonly ISquareCellsFactory _cellsFactory;
         private readonly IGrid _grid;
 
-        public SquareCellsGenerator3D(ISquareCellsFactory factory, IGrid grid)
+        public SquareCellsViewGenerator3D(ISquareCellsFactory factory, IGrid grid)
         {
             _cellsFactory = factory;
             _grid = grid;
         }
     
-        public void GenerateCells(CellViewData[,] cellsViewMap)
+        public void GenerateCellsView(CellViewData[,] cellsViewMap)
         {
             for (int i = 0; i < cellsViewMap.GetLength(0); i++)
             {

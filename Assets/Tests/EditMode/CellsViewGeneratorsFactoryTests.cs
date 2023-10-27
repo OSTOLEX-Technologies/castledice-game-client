@@ -11,7 +11,7 @@ namespace Tests.EditMode
         [Test]
         public void GetGenerator_ShouldReturnSquareCellGenerator3D_IfSquareCellTypeGiven()
         {
-            var squareCellsGenerator3D = new SquareCellsGenerator3D(new Mock<ISquareCellsFactory>().Object, new Mock<IGrid>().Object);
+            var squareCellsGenerator3D = new SquareCellsViewGenerator3D(new Mock<ISquareCellsFactory>().Object, new Mock<IGrid>().Object);
             var factory = new CellsViewGeneratorsFactory(squareCellsGenerator3D);
             
             var generator = factory.GetGenerator(CellType.Square);

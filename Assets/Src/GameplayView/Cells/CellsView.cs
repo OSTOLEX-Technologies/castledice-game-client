@@ -15,7 +15,7 @@ namespace Src.GameplayView.Cells
         public void GenerateCells(CellType cellType, CellViewData[,] cellViewMap)
         {
             var cellsGenerator = _cellsViewGeneratorsFactory.GetGenerator(cellType);
-            cellsGenerator.GenerateCells(cellViewMap);
+            cellsGenerator.GenerateCellsView(cellViewMap);
         }
     }
 }

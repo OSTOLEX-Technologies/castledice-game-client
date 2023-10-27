@@ -8,7 +8,7 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.EditMode
 {
-    public class SquareCellsGenerator3DTests
+    public class SquareCellsViewGenerator3DTests
     {
         public static CellViewData[][,] CellViewMaps =
         {
@@ -33,15 +33,15 @@ namespace Tests.EditMode
         };
         
         [Test]
-        public void GenerateCells_ShouldPassCellViewDataAssetId_ToGivenCellsFactoryIfDataIsNotNull([ValueSource(nameof(CellViewMaps))]CellViewData[,] cellViewMap)
+        public void GenerateCellsView_ShouldPassCellViewDataAssetId_ToGivenCellsFactoryIfDataIsNotNull([ValueSource(nameof(CellViewMaps))]CellViewData[,] cellViewMap)
         {
             var cellsFactory = new Mock<ISquareCellsFactory>();
             cellsFactory.Setup(c => c.GetSquareCell(It.IsAny<int>())).Returns(new GameObject());
             var gridMock = new Mock<IGrid>();
             gridMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(new Mock<IGridCell>().Object);
-            var generator = new SquareCellsGenerator3D(cellsFactory.Object, gridMock.Object);
+            var generator = new SquareCellsViewGenerator3D(cellsFactory.Object, gridMock.Object);
             
-            generator.GenerateCells(cellViewMap);
+            generator.GenerateCellsView(cellViewMap);
 
             foreach (var data in cellViewMap)
             {
@@ -54,7 +54,7 @@ namespace Tests.EditMode
         }
         
         [Test]
-        public void GenerateCells_ShouldAddGameObjects_ToGivenGridWithAppropriateGamePosition([ValueSource(nameof(CellViewMaps))]CellViewData[,] cellViewMap)
+        public void GenerateCellsView_ShouldAddGameObjects_ToGivenGridWithAppropriateGamePosition([ValueSource(nameof(CellViewMaps))]CellViewData[,] cellViewMap)
         {
             //Setting up cells factory
             var cellsFactory = new Mock<ISquareCellsFactory>();
@@ -76,9 +76,9 @@ namespace Tests.EditMode
             var gridMock = new Mock<IGrid>();
             var gridCellMock = new Mock<IGridCell>();
             gridMock.Setup(g => g.GetCell(It.IsAny<Vector2Int>())).Returns(gridCellMock.Object);
-            var generator = new SquareCellsGenerator3D(cellsFactory.Object, gridMock.Object);
+            var generator = new SquareCellsViewGenerator3D(cellsFactory.Object, gridMock.Object);
             
-            generator.GenerateCells(cellViewMap);
+            generator.GenerateCellsView(cellViewMap);
 
             for (int i = 0; i < cellViewMap.GetLength(0); i++)
             {
