@@ -14,7 +14,7 @@ namespace Tests.PlayMode
         [Test]
         public void GenerateCells_ShouldPassCellType_ToGivenCellsGeneratorsFactory([ValueSource(nameof(CellTypes))]CellType cellType)
         {
-            var cellsGeneratorsFactoryMock = new Mock<ICellsGeneratorsFactory>();
+            var cellsGeneratorsFactoryMock = new Mock<ICellsViewGeneratorsFactory>();
             var cellsGeneratorMock = new Mock<ICellsGenerator>();
             cellsGeneratorsFactoryMock.Setup(factory => factory.GetGenerator(It.IsAny<CellType>())).Returns(cellsGeneratorMock.Object);
             var cellsView = new CellsView(cellsGeneratorsFactoryMock.Object);
@@ -28,7 +28,7 @@ namespace Tests.PlayMode
         [Test]
         public void GenerateCells_ShouldPassCellViewMap_ToGivenCellsGenerator()
         {
-            var cellsGeneratorsFactoryMock = new Mock<ICellsGeneratorsFactory>();
+            var cellsGeneratorsFactoryMock = new Mock<ICellsViewGeneratorsFactory>();
             var cellsGeneratorMock = new Mock<ICellsGenerator>();
             cellsGeneratorsFactoryMock.Setup(factory => factory.GetGenerator(It.IsAny<CellType>())).Returns(cellsGeneratorMock.Object);
             var cellsView = new CellsView(cellsGeneratorsFactoryMock.Object);

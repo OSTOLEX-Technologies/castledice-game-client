@@ -2,7 +2,7 @@
 
 namespace Src.GameplayView.Cells
 {
-    public interface ICellsGeneratorsFactory
+    public interface ICellsViewGeneratorsFactory
     {
         ICellsGenerator GetGenerator(CellType cellType);
     }

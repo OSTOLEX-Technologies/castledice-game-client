@@ -4,11 +4,11 @@ using UnityEngine;
 
 namespace Src.GameplayView.Cells
 {
-    public class CellsGeneratorsFactory : ICellsGeneratorsFactory
+    public class CellsViewGeneratorsFactory : ICellsViewGeneratorsFactory
     {
         private readonly SquareCellsGenerator3D _squareCellsGenerator3D;
 
-        public CellsGeneratorsFactory(SquareCellsGenerator3D squareCellsGenerator)
+        public CellsViewGeneratorsFactory(SquareCellsGenerator3D squareCellsGenerator)
         {
             _squareCellsGenerator3D = squareCellsGenerator;
         }
