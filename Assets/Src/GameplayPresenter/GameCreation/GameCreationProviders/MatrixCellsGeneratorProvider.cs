@@ -6,7 +6,7 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
     {
         public ICellsGenerator GetCellsGenerator(bool[,] cellsPresence)
         {
-            throw new System.NotImplementedException();
+            return new MatrixCellsGenerator(cellsPresence);
         }
     }
 }
