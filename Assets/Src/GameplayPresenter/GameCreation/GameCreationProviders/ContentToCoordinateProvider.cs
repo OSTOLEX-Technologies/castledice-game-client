@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using castledice_game_data_logic.Content;
-using castledice_game_data_logic.Content.Generated;
 using castledice_game_logic;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 using castledice_game_logic.GameObjects;
@@ -9,11 +8,11 @@ using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 {
-    public class ContentToCoordinateProvider : IGeneratedContentDataVisitor<ContentToCoordinate>, IContentToCoordinateProvider
+    public class ContentToCoordinateProvider : IContentDataVisitor<ContentToCoordinate>, IContentToCoordinateProvider
     {
         private List<Player> _players;
 
-        public ContentToCoordinate GetContentToCoordinate(GeneratedContentData data, List<Player> players)
+        public ContentToCoordinate GetContentToCoordinate(ContentData data, List<Player> players)
         {
             _players = players;
             return data.Accept(this);
@@ -34,6 +33,11 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
         {
             var tree = new Tree(data.RemoveCost, data.CanBeRemoved);
             return new ContentToCoordinate(data.Position, tree);
+        }
+
+        public ContentToCoordinate VisitKnightData(KnightData data)
+        {
+            throw new NotImplementedException();
         }
     }
 }

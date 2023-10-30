@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using castledice_game_data_logic.Content.Generated;
+using castledice_game_data_logic.Content;
 using castledice_game_logic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
@@ -21,7 +21,7 @@ namespace Tests.EditMode
             var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
             var cellsGeneratorProviderMock = new Mock<ICellsGeneratorProvider>();
             var expectedList = new List<IContentSpawner>();
-            spawnersProviderMock.Setup(provider => provider.GetContentSpawnersList(It.IsAny<List<GeneratedContentData>>(), It.IsAny<List<Player>>()))
+            spawnersProviderMock.Setup(provider => provider.GetContentSpawnersList(It.IsAny<List<ContentData>>(), It.IsAny<List<Player>>()))
                 .Returns(expectedList);
             var boardConfigProvider = new BoardConfigProvider(spawnersProviderMock.Object, cellsGeneratorProviderMock.Object);
             
@@ -59,7 +59,7 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public void GetBoardConfig_ShouldPassGeneratedContentDataListFromBoardData_ToGivenContentSpawnersListProvider()
+        public void GetBoardConfig_ShouldPassContentDataListFromBoardData_ToGivenContentSpawnersListProvider()
         {
             var boardData = GetBoardData();
             var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
@@ -81,7 +81,7 @@ namespace Tests.EditMode
             
             boardConfigProvider.GetBoardConfig(GetBoardData(), players);
             
-            spawnersProviderMock.Verify(provider => provider.GetContentSpawnersList(It.IsAny<List<GeneratedContentData>>(), players), Times.Once);
+            spawnersProviderMock.Verify(provider => provider.GetContentSpawnersList(It.IsAny<List<ContentData>>(), players), Times.Once);
         }
         
         [Test]

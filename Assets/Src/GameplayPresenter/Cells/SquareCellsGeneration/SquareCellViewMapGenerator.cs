@@ -1,13 +1,12 @@
 ﻿using System;
 using System.Collections.Generic;
-using castledice_game_data_logic;
-using castledice_game_data_logic.Content.Placeable;
+using castledice_game_data_logic.ConfigsData;
 
 namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
 {
     public class SquareCellViewMapGenerator : ICellViewMapProvider
     {
-        private ISquareCellAssetIdProvider _assetIdProvider;
+        private readonly ISquareCellAssetIdProvider _assetIdProvider;
 
         public SquareCellViewMapGenerator(ISquareCellAssetIdProvider assetIdProvider)
         {

@@ -1,5 +1,4 @@
-﻿using castledice_game_data_logic;
-using castledice_game_data_logic.Content.Placeable;
+﻿using castledice_game_data_logic.ConfigsData;
 using Src.GameplayView.Grid;
 
 namespace Src.GameplayPresenter.Grid

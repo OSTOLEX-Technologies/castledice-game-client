@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
-using castledice_game_data_logic;
-using castledice_game_data_logic.Content.Placeable;
+using castledice_game_data_logic.ConfigsData;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.Cells;

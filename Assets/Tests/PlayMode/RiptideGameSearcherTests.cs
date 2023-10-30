@@ -3,7 +3,6 @@ using casltedice_events_logic.ServerToClient;
 using Moq;
 using NUnit.Framework;
 using Riptide;
-using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameCreation;
 using Src.NetworkingModule;
 using static Tests.ObjectCreationUtility;
@@ -72,7 +71,7 @@ namespace Tests.PlayMode
         public async Task CancelGameSearchAsync_ShouldReturnBool_FromAcceptedCancelGameResultDTO(
             [ValueSource(nameof(CancelGameResultValues))]bool value)
         {
-            var dto = new CancelGameResultDTO(value);
+            var dto = new CancelGameResultDTO(value, 1);
             var senderMock = new Mock<IMessageSender>();
             var searcher = new RiptideGameSearcher(senderMock.Object);
             
@@ -86,7 +85,7 @@ namespace Tests.PlayMode
         [Test]
         public async Task SearchGameAsync_ShouldReturnResultWithCanceledStatus_IfAcceptedTrueCancelResult()
         {
-            var dto = new CancelGameResultDTO(true);
+            var dto = new CancelGameResultDTO(true, 1);
             var senderMock = new Mock<IMessageSender>();
             var searcher = new RiptideGameSearcher(senderMock.Object);
             

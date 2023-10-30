@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using castledice_game_data_logic.Content.Placeable;
+using castledice_game_data_logic.ConfigsData;
 using castledice_game_logic;
 using castledice_game_logic.GameConfiguration;
 

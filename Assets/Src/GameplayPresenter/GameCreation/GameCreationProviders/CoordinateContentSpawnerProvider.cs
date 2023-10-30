@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using castledice_game_data_logic.Content.Generated;
+using castledice_game_data_logic.Content;
 using castledice_game_logic;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
 
@@ -14,7 +14,7 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
             _contentToCoordinateProvider = contentToCoordinateProvider;
         }
 
-        public List<IContentSpawner> GetContentSpawnersList(List<GeneratedContentData> contentData, List<Player> players)
+        public List<IContentSpawner> GetContentSpawnersList(List<ContentData> contentData, List<Player> players)
         {
             var spawners = new List<IContentSpawner>();
             var contentToCoordinates = new List<ContentToCoordinate>();

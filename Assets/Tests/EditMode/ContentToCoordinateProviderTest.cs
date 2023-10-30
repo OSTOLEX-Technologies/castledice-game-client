@@ -1,5 +1,5 @@
 ﻿using System.Collections.Generic;
-using castledice_game_data_logic.Content.Generated;
+using castledice_game_data_logic.Content;
 using castledice_game_logic;
 using castledice_game_logic.GameObjects;
 using NUnit.Framework;

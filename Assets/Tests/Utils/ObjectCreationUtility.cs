@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using castledice_game_data_logic;
-using castledice_game_data_logic.Content.Generated;
-using castledice_game_data_logic.Content.Placeable;
+using castledice_game_data_logic.ConfigsData;
+using castledice_game_data_logic.Content;
 using castledice_game_logic;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
@@ -10,6 +10,7 @@ using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories;
+using castledice_game_logic.GameObjects.Factories.Castles;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Moq;
@@ -60,7 +61,7 @@ namespace Tests
             var boardWidth = 10;
             var firstCastle = new CastleData((0, 0), 1, 1, 3, 3, 1);
             var secondCastle = new CastleData((9, 9), 1, 1, 3, 3, 2);
-            var generatedContent = new List<GeneratedContentData>
+            var generatedContent = new List<ContentData>
             {
                 firstCastle, 
                 secondCastle
@@ -163,9 +164,9 @@ namespace Tests
             return board;
         }
 
-        public static GeneratedContentData GetGeneratedContentData()
+        public static ContentData GetGeneratedContentData()
         {
-            return new Mock<GeneratedContentData>().Object;
+            return new Mock<ContentData>().Object;
         }
         
         public static Content GetCellContent()
