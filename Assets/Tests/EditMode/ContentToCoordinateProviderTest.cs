@@ -25,6 +25,16 @@ namespace Tests.EditMode
         }
 
         [Test]
+        public void GetContentToCoordinate_ShouldThrowArgumentException_IfKnightDataWithUnknownIdIsGiven()
+        {
+            var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
+            var knightData = new KnightData((0, 0), 1, 1, 3);
+            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            
+            Assert.Throws<System.ArgumentException>(() => contentToCoordinateProvider.GetContentToCoordinate(knightData, players));
+        }
+
+        [Test]
         public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriatePosition([ValueSource(nameof(Positions))]Vector2Int position)
         {
             var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
@@ -60,9 +70,11 @@ namespace Tests.EditMode
         }
 
         [Test]
-        public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriateTree_IfTreeDataGiven()
+        [TestCase(1, true)]
+        [TestCase(2, false)]
+        public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriateTree_IfTreeDataGiven(int removeCost, bool canBeRemoved)
         {
-            var treeData = new TreeData((0, 0), 3, true);
+            var treeData = new TreeData((0, 0), removeCost, canBeRemoved);
             var contentToCoordinateProvider = new ContentToCoordinateProvider();
             
             var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(treeData, new List<Player>());
@@ -71,6 +83,26 @@ namespace Tests.EditMode
 
             Assert.AreEqual(treeData.CanBeRemoved, tree.CanBeRemoved());
             Assert.AreEqual(treeData.RemoveCost, tree.GetRemoveCost());
+        }
+
+        [Test]
+        [TestCase(1, 2, 3)]
+        [TestCase(2, 3, 4)]
+        [TestCase(3, 4, 5)]
+        public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriateKnight_IfKnightDataGiven(int health, int placeCost, int ownerId)
+        {
+            var owner = GetPlayer(ownerId);
+            var players = new List<Player> {owner, GetPlayer(2) };
+            var knightData = new KnightData((0, 0), health, placeCost, ownerId);
+            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            
+            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(knightData, players);
+            var content = contentToCoordinate.Content;
+            var knight = content as Knight;
+            
+            Assert.AreEqual(knightData.Health, knight.GetReplaceCost());
+            Assert.AreEqual(knightData.PlaceCost, knight.GetPlacementCost());
+            Assert.AreSame(owner, knight.GetOwner());
         }
     }
 }

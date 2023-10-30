@@ -37,7 +37,13 @@ namespace Src.GameplayPresenter.GameCreation.GameCreationProviders
 
         public ContentToCoordinate VisitKnightData(KnightData data)
         {
-            throw new NotImplementedException();
+            var player = _players.Find(p => p.Id == data.OwnerId);
+            if (player == null)
+            {
+                throw new ArgumentException("Knight data with unknown owner id " + data.OwnerId);
+            }
+            var knight = new Knight(player, data.PlaceCost, data.Health);
+            return new ContentToCoordinate(data.Position, knight);
         }
     }
 }
