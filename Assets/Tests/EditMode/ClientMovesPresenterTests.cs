@@ -145,7 +145,11 @@ namespace Tests.EditMode
         {
             var viewStub = new ClientMovesViewStub();
             var position = new Vector2Int(0, 0);
-            var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), new Mock<IServerMoveApplier>().Object, GetPossibleMovesListProvider(), new Mock<ILocalMoveApplier>().Object, viewStub);
+            var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), 
+                new Mock<IServerMoveApplier>().Object, 
+                GetPossibleMovesListProvider(), 
+                new Mock<ILocalMoveApplier>().Object, 
+                new Mock<IMoveToDataConverter>().Object, viewStub);
             var presenter = presenterMock.Object;
             
             viewStub.ClickOnPosition(position);
@@ -158,7 +162,12 @@ namespace Tests.EditMode
         {
             var viewStub = new ClientMovesViewStub();
             var move = GetMove();
-            var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), new Mock<IServerMoveApplier>().Object, GetPossibleMovesListProvider(), new Mock<ILocalMoveApplier>().Object, viewStub);
+            var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), 
+                new Mock<IServerMoveApplier>().Object, 
+                GetPossibleMovesListProvider(), 
+                new Mock<ILocalMoveApplier>().Object, 
+                new Mock<IMoveToDataConverter>().Object, 
+                viewStub);
             var presenter = presenterMock.Object;
             
             viewStub.PickMove(move);

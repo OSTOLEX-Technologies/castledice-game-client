@@ -21,6 +21,7 @@ namespace Src.GameplayPresenter.ClientMoves
             _serverMoveApplier = serverMoveApplier;
             _possibleMovesListProvider = possibleMovesListProvider;
             _localMoveApplier = localMoveApplier;
+            _moveToDataConverter = moveToDataConverter;
             _view = view;
             _view.MovePicked += OnMovePicked;
             _view.PositionClicked += OnPositionClicked;
@@ -28,11 +29,12 @@ namespace Src.GameplayPresenter.ClientMoves
 
         public virtual async Task MakeMove(AbstractMove move)
         {
-            // var applicationResult = await _serverMoveApplier.ApplyMoveAsync(move);
-            // if (applicationResult == MoveApplicationResult.Applied)
-            // {
-            //     _localMoveApplier.ApplyMove(move);
-            // }
+            var moveData = _moveToDataConverter.ConvertToData(move);
+            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(moveData);
+            if (applicationResult == MoveApplicationResult.Applied)
+            {
+                _localMoveApplier.ApplyMove(move);
+            }
         }
 
         public virtual void ShowMovesForPosition(Vector2Int position)
