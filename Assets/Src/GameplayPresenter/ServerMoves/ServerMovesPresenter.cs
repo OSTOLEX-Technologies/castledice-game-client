@@ -1,6 +1,5 @@
 ﻿using castledice_game_data_logic.MoveConverters;
 using castledice_game_data_logic.Moves;
-using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.GameWrappers;
 
 namespace Src.GameplayPresenter.ServerMoves
@@ -9,16 +8,19 @@ namespace Src.GameplayPresenter.ServerMoves
     {
         private readonly ILocalMoveApplier _localMoveApplier;
         private readonly IDataToMoveConverter _converter;
+        private readonly IPlayerProvider _playerProvider;
 
-        public ServerMovesPresenter(ILocalMoveApplier localMoveApplier, IDataToMoveConverter converter)
+        public ServerMovesPresenter(ILocalMoveApplier localMoveApplier, IDataToMoveConverter converter, IPlayerProvider playerProvider)
         {
             _localMoveApplier = localMoveApplier;
             _converter = converter;
+            _playerProvider = playerProvider;
         }
 
         public void MakeMove(MoveData moveData)
         {
-            throw new System.NotImplementedException();
+            var move = _converter.ConvertToMove(moveData, _playerProvider.GetPlayer(moveData.PlayerId));
+            _localMoveApplier.ApplyMove(move);
         }
     }
 }
