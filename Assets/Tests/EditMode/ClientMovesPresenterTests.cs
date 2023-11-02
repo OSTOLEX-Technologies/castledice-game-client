@@ -85,23 +85,28 @@ namespace Tests.EditMode
             converter.Verify(s => s.ConvertToData(move), Times.Once);
         }
 
-        [Test]
-        public async Task MakeMove_ShouldPassMoveDataFromConverter_ToGivenServerMoveApplier()
+        [TestCase("token1")]
+        [TestCase("someToken")]
+        [TestCase("12345")]
+        public async Task MakeMove_ShouldPassMoveDataFromConverter_ToGivenServerMoveApplierWithAppropriateToken(string playerToken)
         {
             var move = GetMove();
             var expectedMoveData = new Mock<MoveData>(1, new Vector2Int(1, 1));
             var converter = new Mock<IMoveToDataConverter>();
+            var playerDataProviderMock = new Mock<IPlayerDataProvider>();
+            playerDataProviderMock.Setup(p => p.GetAccessToken()).Returns(playerToken);
             converter.Setup(c => c.ConvertToData(move)).Returns(expectedMoveData.Object);
             var serverMoveApplierMock = new Mock<IServerMoveApplier>();
             var presenter = new ClientMovesPresenterBuilder
             {
                 MoveToDataConverter = converter.Object,
-                ServerMoveApplier = serverMoveApplierMock.Object
+                ServerMoveApplier = serverMoveApplierMock.Object,
+                PlayerDataProvider = playerDataProviderMock.Object
             }.Build();
             
             await presenter.MakeMove(move);
             
-            serverMoveApplierMock.Verify(s => s.ApplyMoveAsync(expectedMoveData.Object), Times.Once);
+            serverMoveApplierMock.Verify(s => s.ApplyMoveAsync(expectedMoveData.Object, playerToken), Times.Once);
         }
 
         [Test]
@@ -109,7 +114,7 @@ namespace Tests.EditMode
         {
             var move = GetMove();
             var serverMoveApplierMock = new Mock<IServerMoveApplier>();
-            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<MoveData>())).ReturnsAsync(MoveApplicationResult.Applied);
+            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<MoveData>(), It.IsAny<string>())).ReturnsAsync(MoveApplicationResult.Applied);
             var localMoveApplierMock = new Mock<ILocalMoveApplier>();
             var presenter = new ClientMovesPresenterBuilder
             {
@@ -127,7 +132,7 @@ namespace Tests.EditMode
         {
             var move = GetMove();
             var serverMoveApplierMock = new Mock<IServerMoveApplier>();
-            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<MoveData>())).ReturnsAsync(MoveApplicationResult.Rejected);
+            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<MoveData>(), It.IsAny<string>())).ReturnsAsync(MoveApplicationResult.Rejected);
             var localMoveApplierMock = new Mock<ILocalMoveApplier>();
             var presenter = new ClientMovesPresenterBuilder
             {

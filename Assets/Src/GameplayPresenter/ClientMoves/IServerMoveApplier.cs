@@ -6,6 +6,6 @@ namespace Src.GameplayPresenter.ClientMoves
 {
     public interface IServerMoveApplier
     {
-        Task<MoveApplicationResult> ApplyMoveAsync(MoveData moveData);
+        Task<MoveApplicationResult> ApplyMoveAsync(MoveData moveData, string playerToken);
     }
 }

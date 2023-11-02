@@ -30,7 +30,7 @@ namespace Src.GameplayPresenter.ClientMoves
         public virtual async Task MakeMove(AbstractMove move)
         {
             var moveData = _moveToDataConverter.ConvertToData(move);
-            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(moveData);
+            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(moveData, _playerDataProvider.GetAccessToken());
             if (applicationResult == MoveApplicationResult.Applied)
             {
                 _localMoveApplier.ApplyMove(move);

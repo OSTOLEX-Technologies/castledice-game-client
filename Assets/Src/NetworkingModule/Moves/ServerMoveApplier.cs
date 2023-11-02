@@ -10,8 +10,13 @@ namespace Src.NetworkingModule.Moves
     {
         private TaskCompletionSource<MoveApplicationResult> _moveApplicationResultTcs;
         private readonly IMessageSender _messageSender;
-        
-        public Task<MoveApplicationResult> ApplyMoveAsync(MoveData moveData)
+
+        public ServerMoveApplier(IMessageSender messageSender)
+        {
+            _messageSender = messageSender;
+        }
+
+        public Task<MoveApplicationResult> ApplyMoveAsync(MoveData moveData, string playerToken)
         {
             throw new System.NotImplementedException();
         }
