@@ -1,6 +1,9 @@
 ﻿using System.Threading.Tasks;
+using casltedice_events_logic.ClientToServer;
 using casltedice_events_logic.ServerToClient;
 using castledice_game_data_logic.Moves;
+using castledice_riptide_dto_adapters.Extensions;
+using Riptide;
 using Src.GameplayPresenter.ClientMoves;
 using Src.NetworkingModule.DTOAccepters;
 
@@ -8,7 +11,7 @@ namespace Src.NetworkingModule.Moves
 {
     public class ServerMoveApplier : IServerMoveApplier, IApproveMoveDTOAccepter
     {
-        private TaskCompletionSource<MoveApplicationResult> _moveApplicationResultTcs;
+        private readonly TaskCompletionSource<MoveApplicationResult> _moveApplicationResultTcs = new();
         private readonly IMessageSender _messageSender;
 
         public ServerMoveApplier(IMessageSender messageSender)
@@ -16,14 +19,21 @@ namespace Src.NetworkingModule.Moves
             _messageSender = messageSender;
         }
 
-        public Task<MoveApplicationResult> ApplyMoveAsync(MoveData moveData, string playerToken)
+        public async Task<MoveApplicationResult> ApplyMoveAsync(MoveData moveData, string playerToken)
         {
-            throw new System.NotImplementedException();
+            var moveFromClientDTO = new MoveFromClientDTO(moveData, playerToken);
+            var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.MakeMove);
+            message.AddMoveFromClientDTO(moveFromClientDTO);
+            _messageSender.Send(message);
+            return await _moveApplicationResultTcs.Task;
         }
 
         public void AcceptApproveMoveDTO(ApproveMoveDTO dto)
         {
-            throw new System.NotImplementedException();
+            var moveApplicationResult = dto.IsMoveValid
+                ? MoveApplicationResult.Applied
+                : MoveApplicationResult.Rejected;
+            _moveApplicationResultTcs.SetResult(moveApplicationResult);
         }
     }
 }

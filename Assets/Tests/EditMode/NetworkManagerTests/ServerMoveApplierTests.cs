@@ -20,17 +20,34 @@ namespace Tests.EditMode.NetworkManagerTests
         public async Task ApplyMove_ShouldSendMessage_WithAppropriateDTO(int playerId, int x, int y, string playerToken)
         {
             var messageSender = new TestMessageSender();
-            var moveData = new Mock<MoveData>(playerId, new Vector2Int(x, y)).Object;
+            var moveData = new UpgradeMoveData(playerId, new Vector2Int(x, y));
             var applier = new ServerMoveApplier(messageSender);
             var expectedDTO = new MoveFromClientDTO(moveData, playerToken);
             
-            await applier.ApplyMoveAsync(moveData, playerToken);
+            var applyTask = applier.ApplyMoveAsync(moveData, playerToken);
+            applier.AcceptApproveMoveDTO(new ApproveMoveDTO(true));
+            await applyTask;
             var sentMessage = messageSender.SentMessage;
             sentMessage.GetByte();
             sentMessage.GetByte();
             var actualDTO = sentMessage.GetMoveFromClientDTO();
             
             Assert.AreEqual(expectedDTO, actualDTO);
+        }
+
+        [Test]
+        public async Task ApplyMove_ShouldSendMessage_WithMakeMoveMessageId()
+        {
+            var messageSender = new TestMessageSender();
+            var applier = new ServerMoveApplier(messageSender);
+            
+            var applyTask = applier.ApplyMoveAsync(new Mock<MoveData>(1, new Vector2Int(1, 1)).Object, "sometoken");
+            applier.AcceptApproveMoveDTO(new ApproveMoveDTO(true));
+            await applyTask;
+            var sentMessage = messageSender.SentMessage;
+            var actualMessageId = sentMessage.GetByte();
+            
+            Assert.AreEqual((byte)ClientToServerMessageType.MakeMove, actualMessageId);
         }
 
         [TestCase(true, MoveApplicationResult.Applied)]
