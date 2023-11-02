@@ -15,7 +15,7 @@ namespace Src.NetworkingModule
 
         public void AcceptGiveActionPointsDTO(GiveActionPointsDTO dto)
         {
-            throw new System.NotImplementedException();
+            _presenter.GiveActionPoints(dto.PlayerId, dto.Amount);
         }
     }
 }
