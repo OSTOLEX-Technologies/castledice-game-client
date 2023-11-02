@@ -16,12 +16,16 @@ namespace Src.GameplayView.ActionPointsGiving
 
         public void ShowActionPointsPopup(PlayerColor playersColor, int amount)
         {
-            throw new System.NotImplementedException();
+            var popup = _popupsProvider.GetPopup(playersColor);
+            popup.SetAmount(amount);
+            popup.Show();
+            Task.Run(() => HidePopup(popup));
         }
 
-        private async Task HidePopup()
+        private async Task HidePopup(IActionPointsPopup popup)
         {
-            
+            await Task.Delay(_popupDisappearTimeMilliseconds);
+            popup.Hide();
         }
     }
 }
