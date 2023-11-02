@@ -16,7 +16,8 @@ namespace Src.GameplayView.ActionPointsGiving
 
         public void ShowActionPointsForPlayer(Player player, int amount)
         {
-            throw new System.NotImplementedException();
+            var playerColor = _playerColorProvider.GetPlayerColor(player);
+            _popupDemonstrator.ShowActionPointsPopup(playerColor, amount);
         }
     }
 }
