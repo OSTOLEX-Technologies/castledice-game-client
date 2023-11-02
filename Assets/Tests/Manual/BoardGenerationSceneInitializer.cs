@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using castledice_game_data_logic;
+using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
@@ -116,7 +117,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
         var serverMovesApplier = new ServerMovesApplierStub();
         var localMovesApplier = new LocalMovesApplier(_game);
         var possibleMovesProvider = new PossibleMovesListProvider(_game);
-        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider, localMovesApplier, _clientMovesView);
+        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider, localMovesApplier, new MoveToDataConverter(), _clientMovesView);
     }
 
 }

@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using castledice_game_data_logic.MoveConverters;
+using castledice_game_data_logic.Moves;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Moq;
@@ -69,18 +71,37 @@ namespace Tests.EditMode
         }
         
         [Test]
-        public async Task MakeMove_ShouldPassGivenMove_ToGivenServerMoveApplier()
+        public async Task MakeMove_ShouldPassGivenMove_ToGivenConverter()
         {
             var move = GetMove();
+            var converter = new Mock<IMoveToDataConverter>();
+            var presenter = new ClientMovesPresenterBuilder
+            {
+                MoveToDataConverter = converter.Object
+            }.Build();
+            
+            await presenter.MakeMove(move);
+            
+            converter.Verify(s => s.ConvertToData(move), Times.Once);
+        }
+
+        [Test]
+        public async Task MakeMove_ShouldPassMoveDataFromConverter_ToGivenServerMoveApplier()
+        {
+            var move = GetMove();
+            var expectedMoveData = new Mock<MoveData>(1, new Vector2Int(1, 1));
+            var converter = new Mock<IMoveToDataConverter>();
+            converter.Setup(c => c.ConvertToData(move)).Returns(expectedMoveData.Object);
             var serverMoveApplierMock = new Mock<IServerMoveApplier>();
             var presenter = new ClientMovesPresenterBuilder
             {
+                MoveToDataConverter = converter.Object,
                 ServerMoveApplier = serverMoveApplierMock.Object
             }.Build();
             
             await presenter.MakeMove(move);
             
-            serverMoveApplierMock.Verify(s => s.ApplyMoveAsync(move), Times.Once);
+            serverMoveApplierMock.Verify(s => s.ApplyMoveAsync(expectedMoveData.Object), Times.Once);
         }
 
         [Test]
@@ -88,7 +109,7 @@ namespace Tests.EditMode
         {
             var move = GetMove();
             var serverMoveApplierMock = new Mock<IServerMoveApplier>();
-            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<AbstractMove>())).ReturnsAsync(MoveApplicationResult.Applied);
+            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<MoveData>())).ReturnsAsync(MoveApplicationResult.Applied);
             var localMoveApplierMock = new Mock<ILocalMoveApplier>();
             var presenter = new ClientMovesPresenterBuilder
             {
@@ -106,7 +127,7 @@ namespace Tests.EditMode
         {
             var move = GetMove();
             var serverMoveApplierMock = new Mock<IServerMoveApplier>();
-            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<AbstractMove>())).ReturnsAsync(MoveApplicationResult.Rejected);
+            serverMoveApplierMock.Setup(s => s.ApplyMoveAsync(It.IsAny<MoveData>())).ReturnsAsync(MoveApplicationResult.Rejected);
             var localMoveApplierMock = new Mock<ILocalMoveApplier>();
             var presenter = new ClientMovesPresenterBuilder
             {
@@ -151,11 +172,12 @@ namespace Tests.EditMode
             public IServerMoveApplier ServerMoveApplier { get; set; } = new Mock<IServerMoveApplier>().Object;
             public IPossibleMovesListProvider PossibleMovesListProvider { get; set; } = GetPossibleMovesListProvider();
             public ILocalMoveApplier LocalMoveApplier { get; set; } = new Mock<ILocalMoveApplier>().Object;
+            public IMoveToDataConverter MoveToDataConverter { get; set; } = new Mock<IMoveToDataConverter>().Object;
             public IClientMovesView View { get; set; } = new Mock<IClientMovesView>().Object;
             
             public ClientMovesPresenter Build()
             {
-                return new ClientMovesPresenter(PlayerDataProvider, ServerMoveApplier, PossibleMovesListProvider, LocalMoveApplier, View);
+                return new ClientMovesPresenter(PlayerDataProvider, ServerMoveApplier, PossibleMovesListProvider, LocalMoveApplier, MoveToDataConverter, View);
             }
         }
 

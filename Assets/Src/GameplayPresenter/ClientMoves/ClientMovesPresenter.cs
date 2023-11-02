@@ -1,4 +1,5 @@
 ﻿using System.Threading.Tasks;
+using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Src.GameplayView.ClientMoves;
@@ -7,13 +8,14 @@ namespace Src.GameplayPresenter.ClientMoves
 {
     public class ClientMovesPresenter
     {
-        private IPlayerDataProvider _playerDataProvider;
-        private IServerMoveApplier _serverMoveApplier;
-        private IPossibleMovesListProvider _possibleMovesListProvider;
-        private ILocalMoveApplier _localMoveApplier;
-        private IClientMovesView _view;
-        
-        public ClientMovesPresenter(IPlayerDataProvider playerDataProvider, IServerMoveApplier serverMoveApplier, IPossibleMovesListProvider possibleMovesListProvider, ILocalMoveApplier localMoveApplier, IClientMovesView view)
+        private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly IServerMoveApplier _serverMoveApplier;
+        private readonly IPossibleMovesListProvider _possibleMovesListProvider;
+        private readonly ILocalMoveApplier _localMoveApplier;
+        private readonly IMoveToDataConverter _moveToDataConverter;
+        private readonly IClientMovesView _view;
+
+        public ClientMovesPresenter(IPlayerDataProvider playerDataProvider, IServerMoveApplier serverMoveApplier, IPossibleMovesListProvider possibleMovesListProvider, ILocalMoveApplier localMoveApplier, IMoveToDataConverter moveToDataConverter, IClientMovesView view)
         {
             _playerDataProvider = playerDataProvider;
             _serverMoveApplier = serverMoveApplier;
@@ -26,11 +28,11 @@ namespace Src.GameplayPresenter.ClientMoves
 
         public virtual async Task MakeMove(AbstractMove move)
         {
-            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(move);
-            if (applicationResult == MoveApplicationResult.Applied)
-            {
-                _localMoveApplier.ApplyMove(move);
-            }
+            // var applicationResult = await _serverMoveApplier.ApplyMoveAsync(move);
+            // if (applicationResult == MoveApplicationResult.Applied)
+            // {
+            //     _localMoveApplier.ApplyMove(move);
+            // }
         }
 
         public virtual void ShowMovesForPosition(Vector2Int position)
