@@ -5,7 +5,7 @@ namespace Src.Stubs
     //This class MUST NOT be used in a production build.
     public class PlayerDataProviderStub : IPlayerDataProvider
     {
-        private int _id;
+        private readonly int _id;
 
         public PlayerDataProviderStub()
         {

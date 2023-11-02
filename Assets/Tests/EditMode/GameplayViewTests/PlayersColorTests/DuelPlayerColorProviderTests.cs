@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using castledice_game_logic;
+﻿using Moq;
 using NUnit.Framework;
+using Src.GameplayPresenter;
 using Src.GameplayView.CellsContent.ContentCreation;
 using Src.GameplayView.PlayersColor;
 using static Tests.ObjectCreationUtility;
@@ -10,26 +9,13 @@ namespace Tests.EditMode.GameplayViewTests.PlayersColorTests
 {
     public class DuelPlayerColorProviderTests
     {
-        [TestCase(1)]
-        [TestCase(3)]
-        [TestCase(15)]
-        public void Constructor_ShouldThrowArgumentException_IfGivenPlayersListCountIsOtherThanTwo(int playersCount)
-        {
-            var playersList = new List<Player>();
-            for (var i = 0; i < playersCount; i++)
-            {
-                playersList.Add(GetPlayer(i));
-            }
-            
-            Assert.Throws<ArgumentException>(() => new DuelPlayerColorProvider(playersList));
-        }
-
         [Test]
-        public void GetPlayerColor_ShouldReturnBlue_IfPlayerIsFirstInTheList()
+        public void GetPlayerColor_ShouldReturnBlue_IfPlayerIdIsEqualToIdFromProvider([Values(1, 2, 3, 1234, 432)]int playerId)
         {
-            var firstPlayer = GetPlayer(1);
-            var playersList = new List<Player>{firstPlayer, GetPlayer(2)};
-            var playerColorProvider = new DuelPlayerColorProvider(playersList);
+            var firstPlayer = GetPlayer(playerId);
+            var playerDataProvider = new Mock<IPlayerDataProvider>();
+            playerDataProvider.Setup(provider => provider.GetId()).Returns(playerId);
+            var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider.Object);
             
             var actualColor = playerColorProvider.GetPlayerColor(firstPlayer);
             
@@ -37,24 +23,16 @@ namespace Tests.EditMode.GameplayViewTests.PlayersColorTests
         }
         
         [Test]
-        public void GetPlayerColor_ShouldReturnRed_IfPlayerIsSecondInTheList()
+        public void GetPlayerColor_ShouldReturnRed_IfPlayerIdIsNotEqualToIdFromProvider([Values(1, 2, 3, 1234, 432)]int playerId)
         {
-            var secondPlayer = GetPlayer(2);
-            var playersList = new List<Player>{GetPlayer(1), secondPlayer};
-            var playerColorProvider = new DuelPlayerColorProvider(playersList);
+            var firstPlayer = GetPlayer(playerId);
+            var playerDataProvider = new Mock<IPlayerDataProvider>();
+            playerDataProvider.Setup(provider => provider.GetId()).Returns(playerId + 1);
+            var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider.Object);
             
-            var actualColor = playerColorProvider.GetPlayerColor(secondPlayer);
+            var actualColor = playerColorProvider.GetPlayerColor(firstPlayer);
             
             Assert.AreEqual(PlayerColor.Red, actualColor);
-        }
-        
-        [Test]
-        public void GetPlayerColor_ShouldThrowArgumentException_IfPlayerIsNotInTheList()
-        {
-            var playersList = new List<Player>{GetPlayer(1), GetPlayer(2)};
-            var playerColorProvider = new DuelPlayerColorProvider(playersList);
-            
-            Assert.Throws<ArgumentException>(() => playerColorProvider.GetPlayerColor(GetPlayer(3)));
         }
     }
 }
