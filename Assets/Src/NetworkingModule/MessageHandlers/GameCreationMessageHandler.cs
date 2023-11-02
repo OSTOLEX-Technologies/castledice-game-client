@@ -1,8 +1,9 @@
 ﻿using casltedice_events_logic.ServerToClient;
 using castledice_riptide_dto_adapters.Extensions;
 using Riptide;
+using Src.NetworkingModule.DTOAccepters;
 
-namespace Src.NetworkingModule
+namespace Src.NetworkingModule.MessageHandlers
 {
     public static class GameCreationMessageHandler
     {

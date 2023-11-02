@@ -5,6 +5,7 @@ using castledice_riptide_dto_adapters.Extensions;
 using Riptide;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameCreation;
+using Src.NetworkingModule.DTOAccepters;
 
 namespace Src.NetworkingModule
 {

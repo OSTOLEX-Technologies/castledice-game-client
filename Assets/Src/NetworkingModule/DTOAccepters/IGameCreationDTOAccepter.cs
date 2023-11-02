@@ -1,6 +1,6 @@
 ﻿using casltedice_events_logic.ServerToClient;
 
-namespace Src.NetworkingModule
+namespace Src.NetworkingModule.DTOAccepters
 {
     public interface IGameCreationDTOAccepter
     {
