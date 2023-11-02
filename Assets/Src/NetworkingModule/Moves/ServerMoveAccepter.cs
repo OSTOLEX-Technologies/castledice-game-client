@@ -15,7 +15,7 @@ namespace Src.NetworkingModule.Moves
 
         public void AcceptMoveFromServerDTO(MoveFromServerDTO dto)
         {
-            throw new System.NotImplementedException();
+            _presenter.MakeMove(dto.MoveData);
         }
     }
 }
