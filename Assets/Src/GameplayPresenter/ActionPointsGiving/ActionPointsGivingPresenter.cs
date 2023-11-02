@@ -18,7 +18,9 @@ namespace Src.GameplayPresenter.ActionPointsGiving
 
         public void GiveActionPoints(int playerId, int amount)
         {
-            throw new System.NotImplementedException();
+            var player = _playerProvider.GetPlayer(playerId);
+            _actionPointsGiver.GiveActionPoints(playerId, amount);
+            _view.ShowActionPointsForPlayer(player, amount);
         }
     }
 }
