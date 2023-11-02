@@ -8,13 +8,13 @@ using Src.GameplayPresenter.GameCreation;
 
 namespace Src.NetworkingModule
 {
-    public class RiptideGameSearcher : IGameSearcher, IGameCreationDTOAccepter
+    public class GameSearcher : IGameSearcher, IGameCreationDTOAccepter
     {
         private readonly TaskCompletionSource<GameSearchResult> _searchGameResponseTcs = new();
         private readonly TaskCompletionSource<bool> _cancelGameResponseTcs = new();
         private readonly IMessageSender _messageSender;
 
-        public RiptideGameSearcher(IMessageSender messageSender)
+        public GameSearcher(IMessageSender messageSender)
         {
             _messageSender = messageSender;
         }

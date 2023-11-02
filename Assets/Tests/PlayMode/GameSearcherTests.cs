@@ -9,7 +9,7 @@ using static Tests.ObjectCreationUtility;
 
 namespace Tests.PlayMode
 {
-    public class RiptideGameSearcherTests
+    public class GameSearcherTests
     {
         private static bool[] CancelGameResultValues = { true, false };
         
@@ -17,7 +17,7 @@ namespace Tests.PlayMode
         public void SearchGameAsync_ShouldCallSendMethod_OnMessageSender()
         {
             var senderMock = new Mock<IMessageSender>();
-            var searcher = new RiptideGameSearcher(senderMock.Object);
+            var searcher = new GameSearcher(senderMock.Object);
             
             searcher.SearchGameAsync("whatever");
             
@@ -28,7 +28,7 @@ namespace Tests.PlayMode
         public void CancelGameSearchAsync_ShouldCallSendMethod_OnMessageSender()
         {
             var senderMock = new Mock<IMessageSender>();
-            var searcher = new RiptideGameSearcher(senderMock.Object);
+            var searcher = new GameSearcher(senderMock.Object);
             
             searcher.CancelGameSearchAsync("whatever");
             
@@ -42,7 +42,7 @@ namespace Tests.PlayMode
             var gameStartData = GetGameStartData();
             var dto = new CreateGameDTO(gameStartData);
             var senderMock = new Mock<IMessageSender>();
-            var searcher = new RiptideGameSearcher(senderMock.Object);
+            var searcher = new GameSearcher(senderMock.Object);
             
             var searchTask = searcher.SearchGameAsync("whatever");
             searcher.AcceptCreateGameDTO(dto);
@@ -57,7 +57,7 @@ namespace Tests.PlayMode
         {
             var dto = new CreateGameDTO(GetGameStartData());
             var senderMock = new Mock<IMessageSender>();
-            var searcher = new RiptideGameSearcher(senderMock.Object);
+            var searcher = new GameSearcher(senderMock.Object);
             
             var searchTask = searcher.SearchGameAsync("whatever");
             searcher.AcceptCreateGameDTO(dto);
@@ -73,7 +73,7 @@ namespace Tests.PlayMode
         {
             var dto = new CancelGameResultDTO(value, 1);
             var senderMock = new Mock<IMessageSender>();
-            var searcher = new RiptideGameSearcher(senderMock.Object);
+            var searcher = new GameSearcher(senderMock.Object);
             
             var cancelTask = searcher.CancelGameSearchAsync("whatever");
             searcher.AcceptCancelGameResultDTO(dto);
@@ -87,7 +87,7 @@ namespace Tests.PlayMode
         {
             var dto = new CancelGameResultDTO(true, 1);
             var senderMock = new Mock<IMessageSender>();
-            var searcher = new RiptideGameSearcher(senderMock.Object);
+            var searcher = new GameSearcher(senderMock.Object);
             
             var searchTask = searcher.SearchGameAsync("whatever");
             searcher.AcceptCancelGameResultDTO(dto);
