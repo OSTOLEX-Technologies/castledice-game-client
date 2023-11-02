@@ -9,6 +9,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ClientMoves;
+using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
 using static Tests.ObjectCreationUtility;
 

@@ -1,7 +1,7 @@
 ﻿using castledice_game_logic;
 using castledice_game_logic.MovesLogic;
 
-namespace Src.GameplayPresenter.ClientMoves
+namespace Src.GameplayPresenter.GameWrappers
 {
     public class LocalMovesApplier : ILocalMoveApplier
     {

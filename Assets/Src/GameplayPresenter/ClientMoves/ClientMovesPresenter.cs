@@ -2,6 +2,7 @@
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
 
 namespace Src.GameplayPresenter.ClientMoves

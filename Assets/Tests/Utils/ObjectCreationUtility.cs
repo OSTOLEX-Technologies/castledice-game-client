@@ -16,6 +16,7 @@ using castledice_game_logic.MovesLogic;
 using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ClientMoves;
+using Src.GameplayPresenter.GameWrappers;
 using Tests.Mocks;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
