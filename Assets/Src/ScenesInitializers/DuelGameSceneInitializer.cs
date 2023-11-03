@@ -1,9 +1,8 @@
-using System;
-using System.Collections;
 using System.Collections.Generic;
 using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
+using castledice_game_logic.MovesLogic;
 using Src;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsGiving;
@@ -27,7 +26,7 @@ using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
-using Src.Stubs;
+using TMPro;
 using UnityEngine;
 
 public class DuelGameSceneInitializer : MonoBehaviour
@@ -37,6 +36,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private GameObject blueWinnerScreen;
     [SerializeField] private GameObject redWinnerScreen;
     [SerializeField] private GameObject drawScreen;
+    [SerializeField] private TextMeshProUGUI actionPointsText;
+    [SerializeField] private GameObject currentPlayerBlueText;
+    [SerializeField] private GameObject currentPlayerRedText;
     [SerializeField] private Transform secondPlayerCameraPosition;
     [SerializeField] private int popupDisappearTimeMilliseconds;
     [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
@@ -78,6 +80,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpActionPointsGiving();
         SetUpGameOverProcessing();
         SetUpCamera();
+        SetUpMoveAppliedEvent();
+        SetUpTurnSwitchedEvent();
+        UpdateActionPoints();
+        UpdateCurrentPlayerText();
+        SetUpActionPointsEvent();
     }
 
     private void SetUpGame()
@@ -89,10 +96,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var boardConfigProvider = new BoardConfigProvider(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
         var placeablesConfigProvider = new PlaceablesConfigProvider();
         var decksListProvider = new DecksListProvider();
-        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, decksListProvider);
+        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider,
+            decksListProvider);
         _game = gameCreator.CreateGame(_gameStartData);
     }
-    
+
     private void SetUpInput()
     {
         var cameraWrapper = new CameraWrapper(camera);
@@ -120,7 +128,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var placer = new CellClickDetectorsPlacer(grid, cellClickDetectorsFactory);
         _cellClickDetectors = placer.PlaceDetectors();
     }
-    
+
     private void SetUpCells()
     {
         cellsFactory.Init(assetsConfig);
@@ -129,11 +137,12 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var cellViewMap = cellViewMapGenerator.GetCellViewMap(_gameStartData.BoardData);
         _cellsViewGenerator.GenerateCellsView(cellViewMap);
     }
-    
+
     private void SetUpContent()
     {
         var playerPrefabProvider =
-            new PlayerContentViewPrefabProvider(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance), playerContentConfig);
+            new PlayerContentViewPrefabProvider(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+                playerContentConfig);
         contentViewProvider.Init(playerPrefabProvider, commonContentConfig);
         _contentView = new CellsContentView(grid, contentViewProvider);
         _cellContentPresenter = new CellsContentPresenter(_contentView, _game.GetBoard());
@@ -147,12 +156,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
         ApproveMoveMessageHandler.SetDTOAccepter(serverMovesApplier);
         var localMovesApplier = new LocalMovesApplier(_game);
         var possibleMovesProvider = new PossibleMovesListProvider(_game);
-        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider, localMovesApplier, new MoveToDataConverter(), _clientMovesView);
+        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider,
+            localMovesApplier, new MoveToDataConverter(), _clientMovesView);
     }
 
     private void SetUpServerMoves()
     {
-        _serverMovesPresenter = new ServerMovesPresenter(new LocalMovesApplier(_game), new DataToMoveConverter(_game.PlaceablesFactory), new PlayerProvider(_game));
+        _serverMovesPresenter = new ServerMovesPresenter(new LocalMovesApplier(_game),
+            new DataToMoveConverter(_game.PlaceablesFactory), new PlayerProvider(_game));
         var movesAccepter = new ServerMoveAccepter(_serverMovesPresenter);
         MoveFromServerMessageHandler.SetDTOAccepter(movesAccepter);
     }
@@ -161,7 +172,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         var popupsProvider = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
         var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsProvider, popupDisappearTimeMilliseconds);
-        _actionPointsGivingView = new ActionPointsGivingView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance), popupDemonstrator);
+        _actionPointsGivingView =
+            new ActionPointsGivingView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+                popupDemonstrator);
         _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
             new ActionPointsGiver(_game), _actionPointsGivingView);
         var actionPointsGivingAccepter = new GiveActionPointsAccepter(_actionPointsGivingPresenter);
@@ -203,5 +216,65 @@ public class DuelGameSceneInitializer : MonoBehaviour
             camera.transform.localPosition = Vector3.zero;
             camera.transform.localEulerAngles = Vector3.zero;
         }
+    }
+
+    private void SetUpMoveAppliedEvent()
+    {
+        _game.MoveApplied += OnMoveApplied;
+    }
+
+    private void SetUpTurnSwitchedEvent()
+    {
+        _game.TurnSwitched += OnTurnSwitched;
+    }
+
+    private void SetUpActionPointsEvent()
+    {
+        var firstPlayer = _game.GetPlayer(_game.GetAllPlayersIds()[0]);
+        var secondPlayer = _game.GetPlayer(_game.GetAllPlayersIds()[1]);
+        firstPlayer.ActionPoints.ActionPointsIncreased += OnActionPointsIncreased;
+        secondPlayer.ActionPoints.ActionPointsIncreased += OnActionPointsIncreased;
+    }
+
+    private void OnActionPointsIncreased(object sender, int e)
+    {
+        UpdateActionPoints();
+    }
+
+    private void OnTurnSwitched(object sender, Game e)
+    {
+        UpdateActionPoints();
+        UpdateCurrentPlayerText();
+    }
+
+    private void OnMoveApplied(object sender, AbstractMove e)
+    {
+        UpdateActionPoints();
+        UpdateCurrentPlayerText();
+    }
+
+    private void UpdateCurrentPlayerText()
+    {
+        var currentPlayer = _game.GetCurrentPlayer();
+        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var playerColor = playerColorProvider.GetPlayerColor(currentPlayer);
+        if (playerColor == PlayerColor.Blue)
+        {
+            currentPlayerBlueText.SetActive(true);
+            currentPlayerRedText.SetActive(false);
+        }
+        else
+        {
+            currentPlayerBlueText.SetActive(false);
+            currentPlayerRedText.SetActive(true);
+        }
+    }
+
+    private void UpdateActionPoints()
+    {
+        var currentPlayer = _game.GetCurrentPlayer();
+        var actionPoints = currentPlayer.ActionPoints.Amount;
+        var actionPointsString = actionPoints.ToString();
+        actionPointsText.text = actionPointsString;
     }
 }
