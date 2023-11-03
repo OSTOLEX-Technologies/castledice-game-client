@@ -25,7 +25,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
 
         public override void DestroyView()
         {
-
+            Destroy(gameObject);
         }
     }
 }

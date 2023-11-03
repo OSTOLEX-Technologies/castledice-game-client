@@ -11,7 +11,7 @@ namespace Src.NetworkingModule.Moves
 {
     public class ServerMoveApplier : IServerMoveApplier, IApproveMoveDTOAccepter
     {
-        private readonly TaskCompletionSource<MoveApplicationResult> _moveApplicationResultTcs = new();
+        private TaskCompletionSource<MoveApplicationResult> _moveApplicationResultTcs = new();
         private readonly IMessageSender _messageSender;
 
         public ServerMoveApplier(IMessageSender messageSender)
@@ -25,7 +25,9 @@ namespace Src.NetworkingModule.Moves
             var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.MakeMove);
             message.AddMoveFromClientDTO(moveFromClientDTO);
             _messageSender.Send(message);
-            return await _moveApplicationResultTcs.Task;
+            var result = await _moveApplicationResultTcs.Task;
+            _moveApplicationResultTcs = new TaskCompletionSource<MoveApplicationResult>();
+            return result;
         }
 
         public void AcceptApproveMoveDTO(ApproveMoveDTO dto)

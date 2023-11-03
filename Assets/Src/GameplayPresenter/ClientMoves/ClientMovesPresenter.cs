@@ -1,9 +1,10 @@
 ﻿using System.Threading.Tasks;
 using castledice_game_data_logic.MoveConverters;
-using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
+using UnityEngine;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayPresenter.ClientMoves
 {

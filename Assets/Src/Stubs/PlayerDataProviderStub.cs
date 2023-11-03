@@ -1,4 +1,5 @@
-﻿using Src.GameplayPresenter;
+﻿using System;
+using Src.GameplayPresenter;
 
 namespace Src.Stubs
 {
@@ -9,8 +10,12 @@ namespace Src.Stubs
 
         public PlayerDataProviderStub()
         {
-            var rnd = new System.Random();
-            _id = rnd.Next(0, 10);
+            var rnd = new System.Random(Guid.NewGuid().GetHashCode());
+            var number = rnd.Next(0, 1000000000);
+            #if UNITY_EDITOR
+            number += 1;
+            #endif
+            _id = number;
         }
 
         public string GetAccessToken()

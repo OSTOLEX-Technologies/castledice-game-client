@@ -65,9 +65,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpGame();
         SetUpInput();
         SetUpGrid();
-        SetUpClickDetectors();
         SetUpContent();
         SetUpCells();
+        SetUpClickDetectors();
         SetUpClientMoves();
         SetUpServerMoves();
         SetUpActionPointsGiving();
@@ -84,7 +84,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var decksListProvider = new DecksListProvider();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, decksListProvider);
         _game = gameCreator.CreateGame(_gameStartData);
-        _game.GiveActionPointsToPlayer(1, 6);
     }
     
     private void SetUpInput()
@@ -131,8 +130,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpClientMoves()
     {
         _clientMovesView = new ClientMovesView(_cellClickDetectors);
-        var playerDataProvider = new PlayerDataProviderStub();
+        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
         var serverMovesApplier = new ServerMoveApplier(ClientsHolder.GetClient(ClientType.GameServerClient));
+        ApproveMoveMessageHandler.SetDTOAccepter(serverMovesApplier);
         var localMovesApplier = new LocalMovesApplier(_game);
         var possibleMovesProvider = new PossibleMovesListProvider(_game);
         _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider, localMovesApplier, new MoveToDataConverter(), _clientMovesView);

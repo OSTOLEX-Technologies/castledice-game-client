@@ -1,5 +1,6 @@
 ﻿using castledice_game_data_logic;
 using castledice_game_logic;
+using castledice_game_logic.TurnsLogic;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 
 namespace Src.GameplayPresenter.GameCreation
@@ -25,7 +26,9 @@ namespace Src.GameplayPresenter.GameCreation
             var boardConfig = _boardConfigProvider.GetBoardConfig(gameData.BoardData, players);
             var placeablesConfig = _placeablesConfigProvider.GetPlaceablesConfig(gameData.PlaceablesConfigData);
             var decks = _decksListProvider.GetDecksList(gameData.Decks);
-            return new Game(players, boardConfig, placeablesConfig, decks);
+            var game = new Game(players, boardConfig, placeablesConfig, decks);
+            game.AddTurnSwitchCondition(new ActionPointsCondition(game.CurrentPlayerProvider)); //TODO: add proper logic for adding turn switch conditions.
+            return game;
         }
     }
 }
