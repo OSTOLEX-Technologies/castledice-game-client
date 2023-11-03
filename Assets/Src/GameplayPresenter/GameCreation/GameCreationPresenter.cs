@@ -51,6 +51,15 @@ namespace Src.GameplayPresenter.GameCreation
             {
                 var gameStartData = gameSearchResult.GameStartData;
                 var game = _gameCreator.CreateGame(gameStartData);
+                if (Singleton<Game>.Registered) //TODO: Refactor this and get rid of singleton
+                {
+                    Singleton<Game>.Unregister();
+                }
+
+                if (Singleton<GameStartData>.Registered)
+                {
+                    Singleton<GameStartData>.Unregister();
+                }
                 Singleton<Game>.Register(game);
                 Singleton<GameStartData>.Register(gameStartData);
                 GameCreated?.Invoke(this, EventArgs.Empty);

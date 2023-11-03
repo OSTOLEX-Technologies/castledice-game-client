@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using castledice_game_data_logic;
@@ -33,6 +34,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
 {
     [SerializeField] private Camera camera;
     [SerializeField] private UnityGrid grid;
+    [SerializeField] private GameObject blueWinnerScreen;
+    [SerializeField] private GameObject redWinnerScreen;
+    [SerializeField] private GameObject drawScreen;
     [SerializeField] private int popupDisappearTimeMilliseconds;
     [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
     [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
@@ -71,6 +75,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpClientMoves();
         SetUpServerMoves();
         SetUpActionPointsGiving();
+        SetUpGameOverProcessing();
     }
 
     private void SetUpGame()
@@ -94,7 +99,12 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _inputReader = new PlayerInputReader(_touchInputHandler);
         _inputReader.Enable();
     }
-    
+
+    private void OnDestroy()
+    {
+        _inputReader.Disable();
+    }
+
 
     private void SetUpGrid()
     {
@@ -154,5 +164,30 @@ public class DuelGameSceneInitializer : MonoBehaviour
             new ActionPointsGiver(_game), _actionPointsGivingView);
         var actionPointsGivingAccepter = new GiveActionPointsAccepter(_actionPointsGivingPresenter);
         GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
+    }
+
+    //TODO: Refactor this and move game over logic into separate class
+    private void SetUpGameOverProcessing()
+    {
+        _game.Win += OnWin;
+        _game.Draw += OnDraw;
+    }
+
+    private void OnDraw(object sender, Game e)
+    {
+        drawScreen.SetActive(true);
+    }
+
+    private void OnWin(object sender, (Game game, Player player) e)
+    {
+        var colorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        if (colorProvider.GetPlayerColor(e.player) == PlayerColor.Blue)
+        {
+            blueWinnerScreen.SetActive(true);
+        }
+        else
+        {
+            redWinnerScreen.SetActive(true);
+        }
     }
 }
