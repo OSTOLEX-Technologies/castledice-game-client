@@ -28,9 +28,11 @@ using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
 using TMPro;
 using UnityEngine;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 public class DuelGameSceneInitializer : MonoBehaviour
 {
+    [SerializeField] private UnityCellHightlight cellHighlightPrefab;
     [SerializeField] private Camera camera;
     [SerializeField] private UnityGrid grid;
     [SerializeField] private GameObject blueWinnerScreen;
@@ -66,6 +68,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private Game _game;
     private GameStartData _gameStartData;
+    
+    private Dictionary<Vector2Int, UnityCellHightlight> _cellHighlightMap = new Dictionary<Vector2Int, UnityCellHightlight>();
 
     private void Start()
     {
@@ -85,6 +89,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         UpdateActionPoints();
         UpdateCurrentPlayerText();
         SetUpActionPointsEvent();
+        SetUpCellHighlightsMap();
     }
 
     private void SetUpGame()
@@ -120,6 +125,17 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         _gridGenerator = new SquareGridGenerator(grid, gridGenerationConfig);
         _gridGenerator.GenerateGrid(_gameStartData.BoardData.CellsPresence);
+    }
+
+    private void SetUpCellHighlightsMap()
+    {
+        foreach (var gridCell in grid)
+        {
+            var position = gridCell.Position;
+            var highlight = Instantiate(cellHighlightPrefab, Vector3.zero, Quaternion.identity);
+            gridCell.AddChild(highlight.gameObject);
+            _cellHighlightMap.Add(position, highlight);
+        }
     }
 
     private void SetUpClickDetectors()
@@ -239,18 +255,50 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void OnActionPointsIncreased(object sender, int e)
     {
         UpdateActionPoints();
+        UpdateCellHighlights();
     }
 
     private void OnTurnSwitched(object sender, Game e)
     {
         UpdateActionPoints();
         UpdateCurrentPlayerText();
+        UpdateCellHighlights();
     }
 
     private void OnMoveApplied(object sender, AbstractMove e)
     {
         UpdateActionPoints();
         UpdateCurrentPlayerText();
+        UpdateCellHighlights();
+    }
+
+    private void UpdateCellHighlights()
+    {
+        foreach (var highlight in _cellHighlightMap.Values)
+        {
+            highlight.HideAllHighlights();
+        }
+        var currentPlayer = _game.GetCurrentPlayer();
+        var colorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var playerColor = colorProvider.GetPlayerColor(currentPlayer);
+        if (playerColor != PlayerColor.Blue)
+        {
+            return;
+        }
+
+        var cellMoves = _game.GetCellMoves(currentPlayer.Id);
+        foreach (var cellMove in cellMoves)
+        {
+            var highlight = _cellHighlightMap[cellMove.Cell.Position];
+            if (cellMove.MoveType == MoveType.Capture || cellMove.MoveType == MoveType.Replace || cellMove.MoveType == MoveType.Remove)
+            {
+                highlight.ShowAttackHighlight();
+            }
+            else if (cellMove.MoveType == MoveType.Place)
+            {
+                highlight.ShowMoveHighlight();
+            }
+        }
     }
 
     private void UpdateCurrentPlayerText()
