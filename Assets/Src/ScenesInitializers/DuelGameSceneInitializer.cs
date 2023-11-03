@@ -37,6 +37,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private GameObject blueWinnerScreen;
     [SerializeField] private GameObject redWinnerScreen;
     [SerializeField] private GameObject drawScreen;
+    [SerializeField] private Transform secondPlayerCameraPosition;
     [SerializeField] private int popupDisappearTimeMilliseconds;
     [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
     [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
@@ -76,6 +77,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpServerMoves();
         SetUpActionPointsGiving();
         SetUpGameOverProcessing();
+        SetUpCamera();
     }
 
     private void SetUpGame()
@@ -188,6 +190,18 @@ public class DuelGameSceneInitializer : MonoBehaviour
         else
         {
             redWinnerScreen.SetActive(true);
+        }
+    }
+
+    private void SetUpCamera()
+    {
+        var playerId = Singleton<IPlayerDataProvider>.Instance.GetId();
+        var playerIndex = _game.GetAllPlayersIds().IndexOf(playerId);
+        if (playerIndex == 1)
+        {
+            camera.transform.SetParent(secondPlayerCameraPosition);
+            camera.transform.localPosition = Vector3.zero;
+            camera.transform.localEulerAngles = Vector3.zero;
         }
     }
 }

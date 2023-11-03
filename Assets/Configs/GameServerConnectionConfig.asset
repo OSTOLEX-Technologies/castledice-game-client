@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27e9464088524fd38d4961e03e8fd6af, type: 3}
   m_Name: GameServerConnectionConfig
   m_EditorClassIdentifier: 
-  ip: 127.0.0.1
+  ip: 135.181.41.45
   port: 7779
