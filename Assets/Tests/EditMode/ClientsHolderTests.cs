@@ -19,6 +19,22 @@ namespace Tests.EditMode
         }
         
         [Test]
+        public void HasClient_ShouldReturnFalse_IfNoClientWithGivenType()
+        {
+            Assert.IsFalse(ClientsHolder.HasClient(ClientType.GameServerClient));
+        }
+        
+        [Test]
+        public void HasClient_ShouldReturnTrue_IfClientWithGivenTypeWasAdded()
+        {
+            var client = new ClientWrapper(new Client());
+            ClientsHolder.AddClient(ClientType.GameServerClient, client);
+            
+            Assert.IsTrue(ClientsHolder.HasClient(ClientType.GameServerClient));
+            ClientsHolder.RemoveClient(ClientType.GameServerClient);
+        }
+        
+        [Test]
         public void GetClient_ShouldThrowInvalidOperationException_IfNoClientWithGivenType()
         {
             Assert.Throws<InvalidOperationException>(() => ClientsHolder.GetClient(ClientType.GameServerClient));

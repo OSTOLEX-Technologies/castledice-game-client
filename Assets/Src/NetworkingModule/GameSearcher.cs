@@ -10,8 +10,8 @@ namespace Src.NetworkingModule
 {
     public class GameSearcher : IGameSearcher, IGameCreationDTOAccepter
     {
-        private readonly TaskCompletionSource<GameSearchResult> _searchGameResponseTcs = new();
-        private readonly TaskCompletionSource<bool> _cancelGameResponseTcs = new();
+        private TaskCompletionSource<GameSearchResult> _searchGameResponseTcs = new();
+        private TaskCompletionSource<bool> _cancelGameResponseTcs = new();
         private readonly IMessageSender _messageSender;
 
         public GameSearcher(IMessageSender messageSender)
@@ -25,16 +25,20 @@ namespace Src.NetworkingModule
             var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.RequestGame);
             message.AddRequestGameDTO(requestGameDTO);
             _messageSender.Send(message);
-            return await _searchGameResponseTcs.Task;
+            var result = await _searchGameResponseTcs.Task;
+            _searchGameResponseTcs = new TaskCompletionSource<GameSearchResult>();
+            return result;
         }
 
         public async Task<bool> CancelGameSearchAsync(string playerToken)
         {
-            var cancleGameDTO = new CancelGameDTO(playerToken);
+            var cancelGameDTO = new CancelGameDTO(playerToken);
             var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.CancelGame);
-            message.AddCancelGameDTO(cancleGameDTO);
+            message.AddCancelGameDTO(cancelGameDTO);
             _messageSender.Send(message);
-            return await _cancelGameResponseTcs.Task;
+            var result = await _cancelGameResponseTcs.Task;
+            _cancelGameResponseTcs = new TaskCompletionSource<bool>();
+            return result;
         }
 
         public void AcceptCreateGameDTO(CreateGameDTO dto)

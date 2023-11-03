@@ -10,7 +10,7 @@ namespace Src.Stubs
         public PlayerDataProviderStub()
         {
             var rnd = new System.Random();
-            _id = rnd.Next(0, 10000000);
+            _id = rnd.Next(0, 10);
         }
 
         public string GetAccessToken()

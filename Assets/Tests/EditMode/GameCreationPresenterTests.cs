@@ -125,6 +125,28 @@ public class GameCreationPresenterTests
     }
 
     [Test]
+    public async Task CreateGame_ShouldInvokeGameCreatedEvent_IfGameCreated()
+    {
+        var gameSearcherMock = new Mock<IGameSearcher>();
+        gameSearcherMock.Setup(g => g.SearchGameAsync(It.IsAny<string>())).ReturnsAsync(new GameSearchResult
+        {
+            Status = GameSearchResult.ResultStatus.Success,
+            GameStartData = GetGameStartData()
+        });
+        var presenter = new GameCreationPresenterBuilder
+        {
+            GameSearcher = gameSearcherMock.Object,
+            PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+        }.Build();
+        var gameCreatedEventInvoked = false;
+        presenter.GameCreated += (sender, args) => gameCreatedEventInvoked = true;
+        
+        await presenter.CreateGame();
+        
+        Assert.IsTrue(gameCreatedEventInvoked);
+    }
+
+    [Test]
     public async Task CreateGame_ShouldHideLoadingScreenAndCancelingMessage_IfGameCreationIsCanceled()
     {
         var viewMock = new Mock<IGameCreationView>();
