@@ -6,10 +6,10 @@ namespace Src.GameplayPresenter.CellMovesHighlights
 {
     public class CellMovesHighlightPresenter
     {
-        private IPlayerDataProvider _playerDataProvider;
-        private ICellMovesListProvider _cellMovesListProvider;
-        private Game _game;
-        private ICellMovesHighlightView _view;
+        private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly ICellMovesListProvider _cellMovesListProvider;
+        private readonly Game _game;
+        private readonly ICellMovesHighlightView _view;
 
         public CellMovesHighlightPresenter(IPlayerDataProvider playerDataProvider, ICellMovesListProvider cellMovesListProvider, Game game, ICellMovesHighlightView view)
         {
@@ -19,9 +19,11 @@ namespace Src.GameplayPresenter.CellMovesHighlights
             _view = view;
         }
 
-        public void HighlightCellMove()
+        public void HighlightCellMoves()
         {
-            
+            var playerId = _playerDataProvider.GetId();
+            var cellMovesList = _cellMovesListProvider.GetCellMovesList(playerId);
+            _view.HighlightCellMoves(cellMovesList);
         }
 
         private void OnMoveApplied(object sender, AbstractMove move)
