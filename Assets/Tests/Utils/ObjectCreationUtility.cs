@@ -11,20 +11,32 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories;
 using castledice_game_logic.GameObjects.Factories.Castles;
-using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.GameWrappers;
+using Src.GameplayView.ActionPointsGiving;
 using Tests.Mocks;
+using UnityEditor;
+using UnityEngine;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
+using Tree = castledice_game_logic.GameObjects.Tree;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 
 namespace Tests
 {
     public static class ObjectCreationUtility
     {
+        public static void AddObjectReferenceValueToSerializedProperty<U, T>(U gameObject, string propertyName, T value) where T : Object 
+            where U: Component
+        {
+            var serializedObject = new SerializedObject(gameObject);
+            serializedObject.FindProperty(propertyName).objectReferenceValue = value;
+            serializedObject.ApplyModifiedProperties();
+        }
+        
         public static Mock<TestGame> GetTestGameMock()
         {
             var player = GetPlayer(1);
