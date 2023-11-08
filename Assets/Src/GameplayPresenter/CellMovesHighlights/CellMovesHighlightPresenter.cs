@@ -17,9 +17,11 @@ namespace Src.GameplayPresenter.CellMovesHighlights
             _cellMovesListProvider = cellMovesListProvider;
             _game = game;
             _view = view;
+            _game.MoveApplied += OnMoveApplied;
+            _game.TurnSwitched += OnTurnSwitched;
         }
 
-        public void HighlightCellMoves()
+        public virtual void HighlightCellMoves()
         {
             var playerId = _playerDataProvider.GetId();
             var cellMovesList = _cellMovesListProvider.GetCellMovesList(playerId);
@@ -28,12 +30,12 @@ namespace Src.GameplayPresenter.CellMovesHighlights
 
         private void OnMoveApplied(object sender, AbstractMove move)
         {
-            
+            HighlightCellMoves();
         }
 
         private void OnTurnSwitched(object sender, Game game)
         {
-            
+            HighlightCellMoves();
         }
     }
 }

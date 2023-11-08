@@ -27,5 +27,35 @@ namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
             
             viewMock.Verify(view => view.HighlightCellMoves(expectedList), Times.Once);
         }
+
+        [Test]
+        public void HighlightCellMoves_ShouldBeCalled_IfMoveAppliedEventInvokedInGame()
+        {
+            var game = GetTestGameMock().Object;
+            var viewMock = new Mock<ICellMovesHighlightView>();
+            var playerDataProviderMock = new Mock<IPlayerDataProvider>();
+            var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
+            var presenterMock = new Mock<CellMovesHighlightPresenter>(playerDataProviderMock.Object, cellMovesListProviderMock.Object, game, viewMock.Object);
+            var testObject = presenterMock.Object;
+            
+            game.InvokeMoveApplied(GetMove());
+            
+            presenterMock.Verify(presenter => presenter.HighlightCellMoves(), Times.Once);
+        }
+
+        [Test]
+        public void HighlightCellMoves_ShouldBeCalled_IfTurnSwitchedInGame()
+        {
+            var game = GetTestGameMock().Object;
+            var viewMock = new Mock<ICellMovesHighlightView>();
+            var playerDataProviderMock = new Mock<IPlayerDataProvider>();
+            var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
+            var presenterMock = new Mock<CellMovesHighlightPresenter>(playerDataProviderMock.Object, cellMovesListProviderMock.Object, game, viewMock.Object);
+            var testObject = presenterMock.Object;
+            
+            game.SwitchTurn();
+            
+            presenterMock.Verify(presenter => presenter.HighlightCellMoves(), Times.Once);
+        }
     }
 }
