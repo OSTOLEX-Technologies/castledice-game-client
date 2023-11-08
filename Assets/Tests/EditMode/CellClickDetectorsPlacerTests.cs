@@ -1,9 +1,7 @@
-﻿using System.Collections;
-using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ClickDetection;
-using Src.GameplayView.Grid;
+using Tests.Mocks;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -11,66 +9,6 @@ namespace Tests.EditMode
 {
     public class CellClickDetectorsPlacerTests
     {
-        private class GridCellForTests : IGridCell
-        {
-            public Vector2Int Position { get; set; }
-            public List<GameObject> Children { get; set; } = new();
-            
-            public GridCellForTests(Vector2Int position)
-            {
-                Position = position;
-            }
-            public IEnumerator<GameObject> GetEnumerator()
-            {
-                throw new System.NotImplementedException();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            public void AddChild(GameObject child)
-            {
-                Children.Add(child);                
-            }
-
-            public bool RemoveChild(GameObject child)
-            {
-                return Children.Remove(child);
-            }
-        }
-        
-        private class GridForTests : IGrid
-        {
-            public List<GridCellForTests> Cells { get; set; } = new();
-            
-            public IEnumerator<IGridCell> GetEnumerator()
-            {
-                return Cells.GetEnumerator();
-            }
-
-            IEnumerator IEnumerable.GetEnumerator()
-            {
-                return GetEnumerator();
-            }
-
-            public void AddCell(Vector2Int gamePosition, Vector3 scenePosition)
-            {
-                Cells.Add(new GridCellForTests(gamePosition));
-            }
-
-            public bool RemoveCell(Vector2Int gamePosition)
-            {
-                throw new System.NotImplementedException();
-            }
-
-            public IGridCell GetCell(Vector2Int gamePosition)
-            {
-                return Cells.Find(c => c.Position == gamePosition);
-            }
-        }
-
         public static Vector2Int[][] PositionsArrays =
         {
             new Vector2Int[] {(1, 2), (3, 4), (5, 6)},
