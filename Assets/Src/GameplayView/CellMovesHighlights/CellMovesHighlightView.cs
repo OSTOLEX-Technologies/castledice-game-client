@@ -6,7 +6,7 @@ namespace Src.GameplayView.CellMovesHighlights
 {
     public class CellMovesHighlightView : ICellMovesHighlightView
     {
-        private readonly Dictionary<Vector2Int, ICellHighlight> _cellHighlights;
+        private readonly Dictionary<Vector2Int, ICellMoveHighlight> _cellHighlights;
         private readonly ICellHighlightsPlacer _cellHighlightsPlacer;
         
         public CellMovesHighlightView(ICellHighlightsPlacer cellHighlightsPlacer)
@@ -17,12 +17,22 @@ namespace Src.GameplayView.CellMovesHighlights
         
         public void HighlightCellMoves(List<CellMove> cellMoves)
         {
-            throw new System.NotImplementedException();
+            foreach (var cellMove in cellMoves)
+            {
+                if (!_cellHighlights.ContainsKey(cellMove.Cell.Position))
+                {
+                    throw new System.ArgumentException("Cell move has unknown position: " + cellMove.Cell.Position);
+                }
+                _cellHighlights[cellMove.Cell.Position].ShowHighlight(cellMove.MoveType);
+            }
         }
 
         public void HideHighlights()
         {
-            throw new System.NotImplementedException();
+            foreach (var cellHighlight in _cellHighlights)
+            {
+                cellHighlight.Value.HideAllHighlights();
+            }
         }
     }
 }

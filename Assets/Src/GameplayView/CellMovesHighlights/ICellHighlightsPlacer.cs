@@ -9,6 +9,6 @@ namespace Src.GameplayView.CellMovesHighlights
         /// This method places highlights on the scene/field/grid or whatever is used to display the game and returns a dictionary of highlights corresponding to their positions.
         /// </summary>
         /// <returns></returns>
-        Dictionary<Vector2Int, ICellHighlight> PlaceHighlights();
+        Dictionary<Vector2Int, ICellMoveHighlight> PlaceHighlights();
     }
 }
