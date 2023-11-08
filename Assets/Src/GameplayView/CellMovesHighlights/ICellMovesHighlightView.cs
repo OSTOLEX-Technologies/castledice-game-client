@@ -6,5 +6,6 @@ namespace Src.GameplayView.CellMovesHighlights
     public interface ICellMovesHighlightView
     {
         void HighlightCellMoves(List<CellMove> cellMoves);
+        void HideHighlights();
     }
 }

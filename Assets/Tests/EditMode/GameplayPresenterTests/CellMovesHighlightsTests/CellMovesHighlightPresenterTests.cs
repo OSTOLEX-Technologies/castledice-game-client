@@ -57,5 +57,20 @@ namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
             
             presenterMock.Verify(presenter => presenter.HighlightCellMoves(), Times.Once);
         }
+        
+        [Test]
+        public void HighlightCellMoves_ShouldCallHideHighlights_BeforeCallingHighlightCellMoves()
+        {
+            var game = GetTestGameMock().Object;
+            var viewMock = new Mock<ICellMovesHighlightView>(MockBehavior.Strict);
+            var mockSequence = new MockSequence();
+            viewMock.InSequence(mockSequence).Setup(view => view.HideHighlights());
+            viewMock.InSequence(mockSequence).Setup(view => view.HighlightCellMoves(It.IsAny<List<CellMove>>()));
+            var playerDataProviderMock = new Mock<IPlayerDataProvider>();
+            var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
+            var presenter = new CellMovesHighlightPresenter(playerDataProviderMock.Object, cellMovesListProviderMock.Object, game, viewMock.Object);
+            
+            presenter.HighlightCellMoves();
+        }
     }
 }

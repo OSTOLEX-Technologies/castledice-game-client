@@ -23,6 +23,7 @@ namespace Src.GameplayPresenter.CellMovesHighlights
 
         public virtual void HighlightCellMoves()
         {
+            _view.HideHighlights();
             var playerId = _playerDataProvider.GetId();
             var cellMovesList = _cellMovesListProvider.GetCellMovesList(playerId);
             _view.HighlightCellMoves(cellMovesList);
