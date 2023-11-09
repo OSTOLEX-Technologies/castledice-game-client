@@ -867,6 +867,7 @@ MonoBehaviour:
   popupDisappearTimeMilliseconds: 1500
   redActionPointsPopup: {fileID: 1306602971}
   blueActionPointsPopup: {fileID: 1856468401}
+  actionPointsLabel: {fileID: 2064774227}
   actionPointsText: {fileID: 2064774224}
   cellMoveHighlightsConfig: {fileID: 11400000, guid: 299796ff4d01cc74384058d8e2af43d5, type: 2}
   cellMoveHighlightsFactory: {fileID: 2095275312}
@@ -1241,7 +1242,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 8054231189717775424, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
       propertyPath: m_text
-      value: 5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8674514083394302991, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
       propertyPath: m_Pivot.x
@@ -1354,6 +1355,17 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 822411174044536371, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
   m_PrefabInstance: {fileID: 2064774223}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &2064774227 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6739179096471925976, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
+  m_PrefabInstance: {fileID: 2064774223}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &2095275311
 GameObject:
   m_ObjectHideFlags: 0

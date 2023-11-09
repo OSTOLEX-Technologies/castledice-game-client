@@ -5,6 +5,7 @@ using castledice_game_logic;
 using castledice_game_logic.MovesLogic;
 using Src;
 using Src.GameplayPresenter;
+using Src.GameplayPresenter.ActionPointsCount;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
@@ -14,6 +15,7 @@ using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.ServerMoves;
+using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
@@ -44,47 +46,53 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     [SerializeField] private UnityContentViewProvider contentViewProvider;
     
-    //Clicks detection
+    [Header("Clicks detection")]
     [SerializeField] private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
     [SerializeField] private UnityCellClickDetectorsFactory cellClickDetectorsFactory;
     private List<ICellClickDetector> _cellClickDetectors;
     private TouchInputHandler _touchInputHandler;
     private PlayerInputReader _inputReader;
     
-    //Grid
-    private SquareGridGenerator _gridGenerator;
+    [Header("Grid")]
     [SerializeField] private UnityGrid grid;
     [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
-
-    //Cells
-    private SquareCellsViewGenerator3D _cellsViewGenerator;
+    private SquareGridGenerator _gridGenerator;
+    
+    [Header("Cells")]
     [SerializeField] private UnitySquareCellsFactory cellsFactory;
     [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
-
-    //Content
-    private CellsContentPresenter _cellContentPresenter;
-    private CellsContentView _contentView;
+    private SquareCellsViewGenerator3D _cellsViewGenerator;
+    
+    [Header("Content")]
     [SerializeField] private UnityCommonContentViewPrefabConfig commonContentConfig;
     [SerializeField] private UnityPlayerContentViewPrefabsConfig playerContentConfig;
+    private CellsContentPresenter _cellContentPresenter;
+    private CellsContentView _contentView;
     
     //Moves
     private ClientMovesView _clientMovesView;
     private ClientMovesPresenter _clientMovesPresenter;
     private ServerMovesPresenter _serverMovesPresenter;
     
-    //Action points
-    private ActionPointsGivingPresenter _actionPointsGivingPresenter;
-    private ActionPointsGivingView _actionPointsGivingView;
+    [Header("Action points giving")]
     [SerializeField] private int popupDisappearTimeMilliseconds;
     [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
     [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
-    [SerializeField] private TextMeshProUGUI actionPointsText;
+    private ActionPointsGivingPresenter _actionPointsGivingPresenter;
+    private ActionPointsGivingView _actionPointsGivingView;
     
-    //Move highlights
-    private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
-    private CellMovesHighlightView _cellMovesHighlightView;
+    [Header("Action points count")]
+    [SerializeField] private TextMeshProUGUI actionPointsLabel;
+    [SerializeField] private TextMeshProUGUI actionPointsText;
+    private ActionPointsCountPresenter _actionPointsCountPresenter;
+    private ActionPointsCountView _actionPointsCountView;
+    
+    [Header("Move highlights")]
     [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
     [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
+    private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
+    private CellMovesHighlightView _cellMovesHighlightView;
+
 
     private Game _game;
     private GameStartData _gameStartData;
@@ -104,10 +112,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpCamera();
         SetUpMoveAppliedEvent();
         SetUpTurnSwitchedEvent();
-        UpdateActionPoints();
         UpdateCurrentPlayerText();
-        SetUpActionPointsEvent();
         SetUpCellMovesHighlights();
+        SetUpActionPointsCount();
     }
 
     private void SetUpGame()
@@ -214,6 +221,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
         GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
     }
 
+    private void SetUpActionPointsCount()
+    {
+        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+        _actionPointsCountView = new ActionPointsCountView(actionPointsText, actionPointsLabel);
+        _actionPointsCountPresenter = new ActionPointsCountPresenter(playerDataProvider, _game,
+            _actionPointsCountView);
+    }
+
     //TODO: Refactor this and move game over logic into separate class
     private void SetUpGameOverProcessing()
     {
@@ -260,29 +275,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         _game.TurnSwitched += OnTurnSwitched;
     }
-
-    private void SetUpActionPointsEvent()
-    {
-        var firstPlayer = _game.GetPlayer(_game.GetAllPlayersIds()[0]);
-        var secondPlayer = _game.GetPlayer(_game.GetAllPlayersIds()[1]);
-        firstPlayer.ActionPoints.ActionPointsIncreased += OnActionPointsIncreased;
-        secondPlayer.ActionPoints.ActionPointsIncreased += OnActionPointsIncreased;
-    }
-
-    private void OnActionPointsIncreased(object sender, int e)
-    {
-        UpdateActionPoints();
-    }
-
+    
     private void OnTurnSwitched(object sender, Game e)
     {
-        UpdateActionPoints();
         UpdateCurrentPlayerText();
     }
 
     private void OnMoveApplied(object sender, AbstractMove e)
     {
-        UpdateActionPoints();
         UpdateCurrentPlayerText();
     }
 
@@ -301,13 +301,5 @@ public class DuelGameSceneInitializer : MonoBehaviour
             currentPlayerBlueText.SetActive(false);
             currentPlayerRedText.SetActive(true);
         }
-    }
-
-    private void UpdateActionPoints()
-    {
-        var currentPlayer = _game.GetCurrentPlayer();
-        var actionPoints = currentPlayer.ActionPoints.Amount;
-        var actionPointsString = actionPoints.ToString();
-        actionPointsText.text = actionPointsString;
     }
 }
