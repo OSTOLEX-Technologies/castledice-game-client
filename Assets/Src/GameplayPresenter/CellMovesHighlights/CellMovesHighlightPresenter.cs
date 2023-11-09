@@ -17,8 +17,21 @@ namespace Src.GameplayPresenter.CellMovesHighlights
             _cellMovesListProvider = cellMovesListProvider;
             _game = game;
             _view = view;
+            SubscribeToGameEvents();
+            SubscribeToPlayerEvents();
+        }
+
+        private void SubscribeToGameEvents()
+        {
             _game.MoveApplied += OnMoveApplied;
             _game.TurnSwitched += OnTurnSwitched;
+        }
+        
+        private void SubscribeToPlayerEvents()
+        {
+            var playerId = _playerDataProvider.GetId();
+            var player = _game.GetPlayer(playerId);
+            player.ActionPoints.ActionPointsIncreased += OnActionPointsGiven;
         }
 
         public virtual void HighlightCellMoves()
@@ -35,6 +48,11 @@ namespace Src.GameplayPresenter.CellMovesHighlights
         }
 
         private void OnTurnSwitched(object sender, Game game)
+        {
+            HighlightCellMoves();
+        }
+
+        private void OnActionPointsGiven(object sender, int amount)
         {
             HighlightCellMoves();
         }

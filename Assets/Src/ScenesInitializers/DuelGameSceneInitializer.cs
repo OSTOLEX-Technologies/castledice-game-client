@@ -6,6 +6,7 @@ using castledice_game_logic.MovesLogic;
 using Src;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsGiving;
+using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
@@ -14,6 +15,7 @@ using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayView.ActionPointsGiving;
+using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
 using Src.GameplayView.CellsContent;
 using Src.GameplayView.CellsContent.ContentCreation;
@@ -32,44 +34,60 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 public class DuelGameSceneInitializer : MonoBehaviour
 {
-    [SerializeField] private UnityCellHightlight cellHighlightPrefab;
     [SerializeField] private Camera camera;
-    [SerializeField] private UnityGrid grid;
     [SerializeField] private GameObject blueWinnerScreen;
     [SerializeField] private GameObject redWinnerScreen;
     [SerializeField] private GameObject drawScreen;
-    [SerializeField] private TextMeshProUGUI actionPointsText;
     [SerializeField] private GameObject currentPlayerBlueText;
     [SerializeField] private GameObject currentPlayerRedText;
     [SerializeField] private Transform secondPlayerCameraPosition;
-    [SerializeField] private int popupDisappearTimeMilliseconds;
-    [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
-    [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
-    [SerializeField] private UnitySquareCellsFactory cellsFactory;
-    [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
-    [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
-    [SerializeField] private UnityCommonContentViewPrefabConfig commonContentConfig;
-    [SerializeField] private UnityPlayerContentViewPrefabsConfig playerContentConfig;
+
     [SerializeField] private UnityContentViewProvider contentViewProvider;
+    
+    //Clicks detection
     [SerializeField] private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
     [SerializeField] private UnityCellClickDetectorsFactory cellClickDetectorsFactory;
     private List<ICellClickDetector> _cellClickDetectors;
     private TouchInputHandler _touchInputHandler;
     private PlayerInputReader _inputReader;
+    
+    //Grid
     private SquareGridGenerator _gridGenerator;
+    [SerializeField] private UnityGrid grid;
+    [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
+
+    //Cells
     private SquareCellsViewGenerator3D _cellsViewGenerator;
+    [SerializeField] private UnitySquareCellsFactory cellsFactory;
+    [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
+
+    //Content
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
+    [SerializeField] private UnityCommonContentViewPrefabConfig commonContentConfig;
+    [SerializeField] private UnityPlayerContentViewPrefabsConfig playerContentConfig;
+    
+    //Moves
     private ClientMovesView _clientMovesView;
     private ClientMovesPresenter _clientMovesPresenter;
     private ServerMovesPresenter _serverMovesPresenter;
+    
+    //Action points
     private ActionPointsGivingPresenter _actionPointsGivingPresenter;
     private ActionPointsGivingView _actionPointsGivingView;
+    [SerializeField] private int popupDisappearTimeMilliseconds;
+    [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
+    [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
+    [SerializeField] private TextMeshProUGUI actionPointsText;
+    
+    //Move highlights
+    private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
+    private CellMovesHighlightView _cellMovesHighlightView;
+    [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
+    [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
 
     private Game _game;
     private GameStartData _gameStartData;
-    
-    private Dictionary<Vector2Int, UnityCellHightlight> _cellHighlightMap = new Dictionary<Vector2Int, UnityCellHightlight>();
 
     private void Start()
     {
@@ -89,7 +107,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         UpdateActionPoints();
         UpdateCurrentPlayerText();
         SetUpActionPointsEvent();
-        SetUpCellHighlightsMap();
+        SetUpCellMovesHighlights();
     }
 
     private void SetUpGame()
@@ -127,15 +145,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _gridGenerator.GenerateGrid(_gameStartData.BoardData.CellsPresence);
     }
 
-    private void SetUpCellHighlightsMap()
+    private void SetUpCellMovesHighlights()
     {
-        foreach (var gridCell in grid)
-        {
-            var position = gridCell.Position;
-            var highlight = Instantiate(cellHighlightPrefab, Vector3.zero, Quaternion.identity);
-            gridCell.AddChild(highlight.gameObject);
-            _cellHighlightMap.Add(position, highlight);
-        }
+        cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
+        var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
+        _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
+        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+        _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataProvider,
+            new CellMovesListProvider(_game), _game, _cellMovesHighlightView);
     }
 
     private void SetUpClickDetectors()
@@ -255,50 +272,18 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void OnActionPointsIncreased(object sender, int e)
     {
         UpdateActionPoints();
-        UpdateCellHighlights();
     }
 
     private void OnTurnSwitched(object sender, Game e)
     {
         UpdateActionPoints();
         UpdateCurrentPlayerText();
-        UpdateCellHighlights();
     }
 
     private void OnMoveApplied(object sender, AbstractMove e)
     {
         UpdateActionPoints();
         UpdateCurrentPlayerText();
-        UpdateCellHighlights();
-    }
-
-    private void UpdateCellHighlights()
-    {
-        foreach (var highlight in _cellHighlightMap.Values)
-        {
-            highlight.HideAllHighlights();
-        }
-        var currentPlayer = _game.GetCurrentPlayer();
-        var colorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
-        var playerColor = colorProvider.GetPlayerColor(currentPlayer);
-        if (playerColor != PlayerColor.Blue)
-        {
-            return;
-        }
-
-        var cellMoves = _game.GetCellMoves(currentPlayer.Id);
-        foreach (var cellMove in cellMoves)
-        {
-            var highlight = _cellHighlightMap[cellMove.Cell.Position];
-            if (cellMove.MoveType == MoveType.Capture || cellMove.MoveType == MoveType.Replace || cellMove.MoveType == MoveType.Remove)
-            {
-                highlight.ShowAttackHighlight();
-            }
-            else if (cellMove.MoveType == MoveType.Place)
-            {
-                highlight.ShowMoveHighlight();
-            }
-        }
     }
 
     private void UpdateCurrentPlayerText()

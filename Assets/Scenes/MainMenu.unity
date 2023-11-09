@@ -2464,7 +2464,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   duelModeSceneName: DuelGame
   sceneLoader: {fileID: 629418342}
-  gameServerConnectionConfig: {fileID: 11400000, guid: 3363e2ac3c2afae4a97f6cdb32d433cb, type: 2}
+  gameServerConnectionConfig: {fileID: 11400000, guid: 0601496dfcca4024e86979ae55541ceb, type: 2}
   gameCreationView: {fileID: 227222422}
   peerUpdater: {fileID: 1180158530}
 --- !u!4 &1386543723
