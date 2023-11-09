@@ -38,8 +38,15 @@ namespace Src.GameplayPresenter.CellMovesHighlights
         {
             _view.HideHighlights();
             var playerId = _playerDataProvider.GetId();
+            if (!IsCurrentPlayer(playerId)) return;
             var cellMovesList = _cellMovesListProvider.GetCellMovesList(playerId);
             _view.HighlightCellMoves(cellMovesList);
+        }
+
+        private bool IsCurrentPlayer(int playerId)
+        {
+            var currentPlayer = _game.GetCurrentPlayer();
+            return currentPlayer.Id == playerId;
         }
 
         private void OnMoveApplied(object sender, AbstractMove move)

@@ -21,11 +21,31 @@ namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
             playerDataProviderMock.Setup(provider => provider.GetId()).Returns(playerId);
             cellMovesListProviderMock.Setup(provider => provider.GetCellMovesList(playerId)).Returns(expectedList);
             var gameMock = GetGameMock();
+            gameMock.Setup(game => game.GetCurrentPlayer()).Returns(GetPlayer(playerId));
             var presenter = new CellMovesHighlightPresenter(playerDataProviderMock.Object, cellMovesListProviderMock.Object, gameMock.Object, viewMock.Object);
             
             presenter.HighlightCellMoves();
             
             viewMock.Verify(view => view.HighlightCellMoves(expectedList), Times.Once);
+        }
+
+        [Test]
+        public void HighlightCellMoves_ShouldNotSendCellMovesListToView_IfPlayerIsNotCurrent(
+            [Values(1, 2, 3, 4, 5)] int playerId)
+        {
+            var gameMock = GetGameMock();
+            gameMock.Setup(game => game.GetCurrentPlayer()).Returns(GetPlayer(playerId + 1));
+            var viewMock = new Mock<ICellMovesHighlightView>();
+            var playerDataProviderMock = new Mock<IPlayerDataProvider>();
+            playerDataProviderMock.Setup(provider => provider.GetId()).Returns(playerId);
+            var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
+            var cellMovesList = new List<CellMove>();
+            cellMovesListProviderMock.Setup(provider => provider.GetCellMovesList(playerId)).Returns(cellMovesList);
+            var presenter = new CellMovesHighlightPresenter(playerDataProviderMock.Object, cellMovesListProviderMock.Object, gameMock.Object, viewMock.Object);
+            
+            presenter.HighlightCellMoves();
+            
+            viewMock.Verify(view => view.HighlightCellMoves(cellMovesList), Times.Never);
         }
 
         [Test]
