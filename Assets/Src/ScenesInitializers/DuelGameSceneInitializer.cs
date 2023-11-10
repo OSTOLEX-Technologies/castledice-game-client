@@ -13,6 +13,7 @@ using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
+using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayView.ActionPointsCount;
@@ -24,6 +25,7 @@ using Src.GameplayView.CellsContent.ContentCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
 using Src.GameplayView.CurrentPlayer;
+using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.PlayersColor;
@@ -37,12 +39,16 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 public class DuelGameSceneInitializer : MonoBehaviour
 {
+    [Header("Camera")]
     [SerializeField] private Camera camera;
+    [SerializeField] private Transform secondPlayerCameraPosition;
+
+    [Header("Game over")]
     [SerializeField] private GameObject blueWinnerScreen;
     [SerializeField] private GameObject redWinnerScreen;
     [SerializeField] private GameObject drawScreen;
-    [SerializeField] private Transform secondPlayerCameraPosition;
-
+    private GameOverPresenter _gameOverPresenter;
+    private GameOverView _gameOverView;
     
     [Header("Clicks detection")]
     [SerializeField] private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
@@ -119,6 +125,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpActionPointsCount();
         SetUpCurrentPlayerLabel();
         SetUpCurrentPlayerLabel();
+        SetUpGameOver();
     }
 
     private void SetUpGame()
@@ -133,6 +140,13 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider,
             decksListProvider);
         _game = gameCreator.CreateGame(_gameStartData);
+    }
+
+    private void SetUpGameOver()
+    {
+        _gameOverView = new GameOverView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+            blueWinnerScreen, redWinnerScreen, drawScreen);
+        _gameOverPresenter = new GameOverPresenter(_game, _gameOverView);
     }
 
     private void SetUpInput()
