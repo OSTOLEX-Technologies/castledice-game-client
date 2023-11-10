@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
-using castledice_game_logic.MovesLogic;
 using Src;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsCount;
@@ -11,6 +10,7 @@ using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
+using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using Src.GameplayPresenter.GameWrappers;
@@ -23,6 +23,7 @@ using Src.GameplayView.CellsContent;
 using Src.GameplayView.CellsContent.ContentCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
+using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.PlayersColor;
@@ -40,11 +41,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private GameObject blueWinnerScreen;
     [SerializeField] private GameObject redWinnerScreen;
     [SerializeField] private GameObject drawScreen;
-    [SerializeField] private GameObject currentPlayerBlueText;
-    [SerializeField] private GameObject currentPlayerRedText;
     [SerializeField] private Transform secondPlayerCameraPosition;
 
-    [SerializeField] private UnityContentViewProvider contentViewProvider;
     
     [Header("Clicks detection")]
     [SerializeField] private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
@@ -66,6 +64,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [Header("Content")]
     [SerializeField] private UnityCommonContentViewPrefabConfig commonContentConfig;
     [SerializeField] private UnityPlayerContentViewPrefabsConfig playerContentConfig;
+    [SerializeField] private UnityContentViewProvider contentViewProvider;
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
     
@@ -93,6 +92,12 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
     private CellMovesHighlightView _cellMovesHighlightView;
 
+    [Header("Current player label")] 
+    [SerializeField] private GameObject bluePlayerLabel;
+    [SerializeField] private GameObject redPlayerLabel;
+    private CurrentPlayerPresenter _currentPlayerPresenter;
+    private CurrentPlayerView _currentPlayerView;
+
 
     private Game _game;
     private GameStartData _gameStartData;
@@ -110,11 +115,10 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpActionPointsGiving();
         SetUpGameOverProcessing();
         SetUpCamera();
-        SetUpMoveAppliedEvent();
-        SetUpTurnSwitchedEvent();
-        UpdateCurrentPlayerText();
         SetUpCellMovesHighlights();
         SetUpActionPointsCount();
+        SetUpCurrentPlayerLabel();
+        SetUpCurrentPlayerLabel();
     }
 
     private void SetUpGame()
@@ -265,41 +269,12 @@ public class DuelGameSceneInitializer : MonoBehaviour
             camera.transform.localEulerAngles = Vector3.zero;
         }
     }
-
-    private void SetUpMoveAppliedEvent()
-    {
-        _game.MoveApplied += OnMoveApplied;
-    }
-
-    private void SetUpTurnSwitchedEvent()
-    {
-        _game.TurnSwitched += OnTurnSwitched;
-    }
     
-    private void OnTurnSwitched(object sender, Game e)
+    private void SetUpCurrentPlayerLabel()
     {
-        UpdateCurrentPlayerText();
-    }
-
-    private void OnMoveApplied(object sender, AbstractMove e)
-    {
-        UpdateCurrentPlayerText();
-    }
-
-    private void UpdateCurrentPlayerText()
-    {
-        var currentPlayer = _game.GetCurrentPlayer();
-        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
-        var playerColor = playerColorProvider.GetPlayerColor(currentPlayer);
-        if (playerColor == PlayerColor.Blue)
-        {
-            currentPlayerBlueText.SetActive(true);
-            currentPlayerRedText.SetActive(false);
-        }
-        else
-        {
-            currentPlayerBlueText.SetActive(false);
-            currentPlayerRedText.SetActive(true);
-        }
+        _currentPlayerView = new CurrentPlayerView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+            bluePlayerLabel, redPlayerLabel);
+        _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
+        _currentPlayerPresenter.ShowCurrentPlayer();
     }
 }
