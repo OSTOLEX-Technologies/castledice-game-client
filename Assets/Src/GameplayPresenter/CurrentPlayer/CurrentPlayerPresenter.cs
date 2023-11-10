@@ -12,16 +12,17 @@ namespace Src.GameplayPresenter.CurrentPlayer
         {
             _game = game;
             _view = view;
+            _game.TurnSwitched += OnTurnSwitched;
         }
 
         public virtual void ShowCurrentPlayer()
         {
-            
+            _view.ShowCurrentPlayer(_game.GetCurrentPlayer());
         }
 
         private void OnTurnSwitched(object sender, Game game)
         {
-            
+            ShowCurrentPlayer();
         }
     }
 }
