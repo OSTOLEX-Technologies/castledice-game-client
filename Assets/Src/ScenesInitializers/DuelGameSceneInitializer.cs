@@ -126,6 +126,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpCurrentPlayerLabel();
         SetUpCurrentPlayerLabel();
         SetUpGameOver();
+        NotifyPlayerIsReady();
     }
 
     private void SetUpGame()
@@ -290,5 +291,13 @@ public class DuelGameSceneInitializer : MonoBehaviour
             bluePlayerLabel, redPlayerLabel);
         _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
         _currentPlayerPresenter.ShowCurrentPlayer();
+    }
+
+    private void NotifyPlayerIsReady()
+    {
+        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+        var playerToken = playerDataProvider.GetAccessToken();
+        var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
+        playerReadinessSender.SendPlayerReadiness(playerToken);
     }
 }
