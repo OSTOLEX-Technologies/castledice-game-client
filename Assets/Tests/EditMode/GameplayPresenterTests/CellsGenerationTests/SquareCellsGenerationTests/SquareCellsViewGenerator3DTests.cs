@@ -1,12 +1,12 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Src.GameplayPresenter.Cells;
+using Src.GameplayPresenter.CellsGeneration;
 using Src.GameplayView.Cells;
 using Src.GameplayView.Grid;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.CellsGenerationTests.SquareCellsGenerationTests
 {
     public class SquareCellsViewGenerator3DTests
     {

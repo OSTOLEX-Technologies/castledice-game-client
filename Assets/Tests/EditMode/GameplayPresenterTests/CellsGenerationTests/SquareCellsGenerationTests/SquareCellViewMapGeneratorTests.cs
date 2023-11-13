@@ -2,11 +2,11 @@
 using castledice_game_data_logic.ConfigsData;
 using Moq;
 using NUnit.Framework;
-using Src.GameplayPresenter.Cells;
-using Src.GameplayPresenter.Cells.SquareCellsGeneration;
+using Src.GameplayPresenter.CellsGeneration;
+using Src.GameplayPresenter.CellsGeneration.SquareCellsGeneration;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.CellsGenerationTests.SquareCellsGenerationTests
 {
     public class SquareCellViewMapGeneratorTests
     {

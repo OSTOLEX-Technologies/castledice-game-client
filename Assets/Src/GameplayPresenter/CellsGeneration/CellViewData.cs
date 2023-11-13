@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Src.GameplayPresenter.Cells
+namespace Src.GameplayPresenter.CellsGeneration
 {
     public sealed class CellViewData
     {

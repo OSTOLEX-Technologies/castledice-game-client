@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using castledice_game_data_logic.ConfigsData;
 
-namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
+namespace Src.GameplayPresenter.CellsGeneration.SquareCellsGeneration
 {
     public class SquareCellViewMapGenerator : ICellViewMapProvider
     {

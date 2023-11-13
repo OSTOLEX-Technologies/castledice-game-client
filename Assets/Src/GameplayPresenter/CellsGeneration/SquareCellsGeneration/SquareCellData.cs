@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
+namespace Src.GameplayPresenter.CellsGeneration.SquareCellsGeneration
 {
     public sealed class SquareCellData
     {

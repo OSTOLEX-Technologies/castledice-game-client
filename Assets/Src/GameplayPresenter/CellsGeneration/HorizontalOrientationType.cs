@@ -1,4 +1,4 @@
-﻿namespace Src.GameplayPresenter.Cells
+﻿namespace Src.GameplayPresenter.CellsGeneration
 {
     public enum HorizontalOrientationType
     {

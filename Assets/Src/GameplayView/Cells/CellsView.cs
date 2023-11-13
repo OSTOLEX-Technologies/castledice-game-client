@@ -1,5 +1,5 @@
 ﻿using castledice_game_logic;
-using Src.GameplayPresenter.Cells;
+using Src.GameplayPresenter.CellsGeneration;
 
 namespace Src.GameplayView.Cells
 {

@@ -5,8 +5,8 @@ namespace Src.GameplayPresenter.Grid
 {
     public class GridPresenter
     {
-        private IGridView _view;
-        private BoardData _boardData;
+        private readonly IGridView _view;
+        private readonly BoardData _boardData;
         
         public GridPresenter(IGridView view, BoardData boardData)
         {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
-using Src.GameplayPresenter.Cells;
-using Src.GameplayPresenter.Cells.SquareCellsGeneration;
+using Src.GameplayPresenter.CellsGeneration;
+using Src.GameplayPresenter.CellsGeneration.SquareCellsGeneration;
 using UnityEngine;
 
 namespace Src.GameplayView.Cells

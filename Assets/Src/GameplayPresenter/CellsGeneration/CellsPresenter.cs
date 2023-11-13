@@ -1,7 +1,7 @@
 ﻿using castledice_game_data_logic.ConfigsData;
 using Src.GameplayView.Cells;
 
-namespace Src.GameplayPresenter.Cells
+namespace Src.GameplayPresenter.CellsGeneration
 {
     public class CellsPresenter
     {

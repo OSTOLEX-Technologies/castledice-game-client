@@ -13,7 +13,7 @@ using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
 {
     public class ClientMovesPresenterTests
     {
