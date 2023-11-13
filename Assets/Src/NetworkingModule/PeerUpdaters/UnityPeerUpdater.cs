@@ -2,7 +2,7 @@
 using Riptide;
 using UnityEngine;
 
-namespace Src.NetworkingModule.Monobehaviours
+namespace Src.NetworkingModule.PeerUpdaters
 {
     public class UnityPeerUpdater : MonoBehaviour, IPeerUpdater
     {

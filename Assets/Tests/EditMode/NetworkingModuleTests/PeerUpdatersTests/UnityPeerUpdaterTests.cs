@@ -2,7 +2,7 @@
 using System.Collections;
 using NUnit.Framework;
 using Riptide;
-using Src.NetworkingModule.Monobehaviours;
+using Src.NetworkingModule.PeerUpdaters;
 using UnityEngine;
 using UnityEngine.TestTools;
 

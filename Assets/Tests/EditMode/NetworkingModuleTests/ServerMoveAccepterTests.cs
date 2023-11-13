@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Src.GameplayPresenter.ServerMoves;
 using Src.NetworkingModule.Moves;
 
-namespace Tests.EditMode.NetworkManagerTests
+namespace Tests.EditMode.NetworkingModuleTests
 {
     public class ServerMoveAccepterTests
     {

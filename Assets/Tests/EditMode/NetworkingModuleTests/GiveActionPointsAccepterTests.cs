@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.NetworkingModule;
 
-namespace Tests.EditMode.NetworkManagerTests
+namespace Tests.EditMode.NetworkingModuleTests
 {
     public class GiveActionPointsAccepterTests
     {

@@ -10,7 +10,7 @@ using Src.GameplayView.GameCreation;
 using Src.NetworkingModule;
 using Src.NetworkingModule.ConnectionConfiguration;
 using Src.NetworkingModule.MessageHandlers;
-using Src.NetworkingModule.Monobehaviours;
+using Src.NetworkingModule.PeerUpdaters;
 using Src.Stubs;
 using UnityEngine;
 

@@ -10,7 +10,7 @@ using Src.GameplayPresenter.ClientMoves;
 using Src.NetworkingModule.Moves;
 using Tests.Mocks;
 
-namespace Tests.EditMode.NetworkManagerTests
+namespace Tests.EditMode.NetworkingModuleTests
 {
     public class ServerMoveApplierTests
     {

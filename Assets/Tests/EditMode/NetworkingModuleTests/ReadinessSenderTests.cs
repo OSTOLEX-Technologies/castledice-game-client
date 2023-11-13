@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Src.NetworkingModule;
 using Tests.Mocks;
 
-namespace Tests.EditMode.NetworkManagerTests
+namespace Tests.EditMode.NetworkingModuleTests
 {
     public class ReadinessSenderTests
     {
