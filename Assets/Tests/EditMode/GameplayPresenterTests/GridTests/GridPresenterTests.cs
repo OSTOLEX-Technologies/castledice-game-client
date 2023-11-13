@@ -4,7 +4,7 @@ using Src.GameplayPresenter.Grid;
 using Src.GameplayView.Grid;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.GridTests
 {
     public class GridPresenterTests
     {

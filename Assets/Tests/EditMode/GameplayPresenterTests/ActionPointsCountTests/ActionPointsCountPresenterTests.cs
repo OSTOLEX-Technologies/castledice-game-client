@@ -5,7 +5,7 @@ using Src.GameplayPresenter.ActionPointsCount;
 using Src.GameplayView.ActionPointsCount;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayPresenterTests.ActionPointsCount
+namespace Tests.EditMode.GameplayPresenterTests.ActionPointsCountTests
 {
     public class ActionPointsCountPresenterTests
     {

@@ -3,7 +3,7 @@ using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using Src.GameplayPresenter;
-using Src.GameplayPresenter.CellsGeneration.SquareCellsGeneration;
+using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.GameCreation;

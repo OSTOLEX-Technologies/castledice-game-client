@@ -4,7 +4,7 @@ using castledice_game_logic.GameObjects;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.GameCreationProvidersTests
 {
     public class DecksListProviderTests
     {

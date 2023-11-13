@@ -1,4 +1,4 @@
-﻿using Src.GameplayPresenter.CellsGeneration;
+﻿using Src.GameplayPresenter.Cells;
 
 namespace Src.GameplayView.Cells
 {

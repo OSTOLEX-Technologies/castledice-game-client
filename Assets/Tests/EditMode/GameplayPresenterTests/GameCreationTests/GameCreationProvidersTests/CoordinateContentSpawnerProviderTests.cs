@@ -9,7 +9,7 @@ using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.GameCreationProvidersTests
 {
     public class CoordinateContentSpawnerProviderTests
     {

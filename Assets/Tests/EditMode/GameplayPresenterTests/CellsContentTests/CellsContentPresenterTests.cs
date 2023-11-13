@@ -6,7 +6,7 @@ using Src.GameplayPresenter.CellsContent;
 using Src.GameplayView.CellsContent;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.CellsContentTests
 {
     public class CellsContentPresenterTests
     {

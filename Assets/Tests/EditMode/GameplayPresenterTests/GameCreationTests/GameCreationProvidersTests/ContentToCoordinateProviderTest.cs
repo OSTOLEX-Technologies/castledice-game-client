@@ -8,7 +8,7 @@ using static Tests.ObjectCreationUtility;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.GameCreationProvidersTests
 {
     public class ContentToCoordinateProviderTest
     {

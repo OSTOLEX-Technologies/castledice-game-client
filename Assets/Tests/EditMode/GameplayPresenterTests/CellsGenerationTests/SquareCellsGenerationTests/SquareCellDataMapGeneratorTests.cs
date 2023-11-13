@@ -1,7 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
-using Src.GameplayPresenter.CellsGeneration;
-using Src.GameplayPresenter.CellsGeneration.SquareCellsGeneration;
+using Src.GameplayPresenter.Cells;
+using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 
 namespace Tests.EditMode.GameplayPresenterTests.CellsGenerationTests.SquareCellsGenerationTests
 {

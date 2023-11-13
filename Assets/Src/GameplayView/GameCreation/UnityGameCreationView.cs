@@ -3,6 +3,7 @@ using UnityEngine;
 
 namespace Src.GameplayView.GameCreation
 {
+    //TODO: Finish this class and test
     public class UnityGameCreationView : MonoBehaviour, IGameCreationView
     {
         [SerializeField] private GameObject creationProcessScreen;

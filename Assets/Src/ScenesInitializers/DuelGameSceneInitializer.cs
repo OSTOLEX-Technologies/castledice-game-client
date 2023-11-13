@@ -7,7 +7,7 @@ using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsCount;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.CellMovesHighlights;
-using Src.GameplayPresenter.CellsGeneration.SquareCellsGeneration;
+using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.CurrentPlayer;

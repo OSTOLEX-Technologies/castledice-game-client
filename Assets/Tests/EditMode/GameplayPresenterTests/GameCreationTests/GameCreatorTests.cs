@@ -11,7 +11,7 @@ using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
 {
     public class GameCreatorTests
     {

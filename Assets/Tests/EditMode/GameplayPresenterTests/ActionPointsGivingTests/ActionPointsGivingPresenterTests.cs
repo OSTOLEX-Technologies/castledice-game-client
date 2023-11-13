@@ -1,11 +1,11 @@
 ﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.ActionPointsGiving;
-using static Tests.ObjectCreationUtility;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ActionPointsGiving;
+using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayPresenterTests.ActionPointsGiving
+namespace Tests.EditMode.GameplayPresenterTests.ActionPointsGivingTests
 {
     public class ActionPointsGivingPresenterTests
     {

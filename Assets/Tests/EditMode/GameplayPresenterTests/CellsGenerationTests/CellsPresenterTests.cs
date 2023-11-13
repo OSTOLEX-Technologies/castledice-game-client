@@ -2,7 +2,7 @@
 using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
-using Src.GameplayPresenter.CellsGeneration;
+using Src.GameplayPresenter.Cells;
 using Src.GameplayView.Cells;
 using static Tests.ObjectCreationUtility;
 
