@@ -27,6 +27,7 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
+#if UNITY_EDITOR
         public static void AddObjectReferenceValueToSerializedProperty<U, T>(U gameObject, string propertyName, T value) where T : Object 
             where U: Component
         {
@@ -34,6 +35,7 @@ namespace Tests
             serializedObject.FindProperty(propertyName).objectReferenceValue = value;
             serializedObject.ApplyModifiedProperties();
         }
+#endif
         
         public static void SetPrivateFieldValue<T>(T value, object obj, string propertyName)
         {

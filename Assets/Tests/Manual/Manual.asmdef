@@ -1,8 +1,9 @@
 {
-    "name": "Utils",
+    "name": "Manual",
     "rootNamespace": "",
     "references": [
-        "GUID:3a0e8c3393809314faa8bd6139116349"
+        "GUID:3a0e8c3393809314faa8bd6139116349",
+        "GUID:38df9c461bb445a5ac40c9c05a4f9942"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],

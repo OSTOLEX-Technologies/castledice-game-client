@@ -4,11 +4,14 @@ using Riptide.Transports.Tcp;
 using Riptide.Utils;
 using Src;
 using Src.GameplayPresenter;
+using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.GameCreationProviders;
+using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
 using Src.NetworkingModule;
 using Src.NetworkingModule.ConnectionConfiguration;
+using Src.NetworkingModule.Errors;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.PeerUpdaters;
 using Src.Stubs;
@@ -16,13 +19,17 @@ using UnityEngine;
 
 public class MainMenuInitializer : MonoBehaviour
 {
+    [SerializeField] private UnityErrorPopup errorPopup;
     [SerializeField] private string duelModeSceneName;
     [SerializeField] private SceneLoader sceneLoader;
     [SerializeField] private GameServerConnectionConfig gameServerConnectionConfig;
     [SerializeField] private UnityGameCreationView gameCreationView;
+    [SerializeField] private GameObject gameCreationProcessScreen;
     [SerializeField] private UnityPeerUpdater peerUpdater;
 
-    private GameCreationPresenter gameCreationPresenter;
+    private GameCreationPresenter _gameCreationPresenter;
+    private GameNotSavedErrorPresenter _gameNotSavedErrorPresenter;
+    private GameNotSavedErrorView _gameNotSavedErrorView;
     
     private void Start()
     {
@@ -66,9 +73,16 @@ public class MainMenuInitializer : MonoBehaviour
         var placeablesConfigProvider = new PlaceablesConfigProvider();
         var decksListProvider = new DecksListProvider();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, decksListProvider);
-        gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
+        _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
         
-        gameCreationPresenter.GameCreated += OnGameCreated;
+        //Setting up error handling
+        _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, gameCreationProcessScreen);
+        _gameNotSavedErrorPresenter = new GameNotSavedErrorPresenter(_gameNotSavedErrorView);
+        var errorPresentersProvider = new ErrorPresentersProvider(_gameNotSavedErrorPresenter);
+        var serverErrorsRouter = new ServerErrorsRouter(errorPresentersProvider);
+        ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
+        
+        _gameCreationPresenter.GameCreated += OnGameCreated;
     }
 
     private void OnGameCreated(object sender, EventArgs e)
