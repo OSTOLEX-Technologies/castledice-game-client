@@ -27,6 +27,8 @@ namespace Src.GameplayPresenter.GameCreation
             view.CreateGameChosen += OnCreateGame;
         }
 
+        
+        //TODO: Refactor this method as it is too long.
         public virtual async Task CreateGame()
         {
             var isAuthorized = _playerDataProvider.IsAuthorized();
