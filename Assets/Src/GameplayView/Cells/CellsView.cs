@@ -5,17 +5,17 @@ namespace Src.GameplayView.Cells
 {
     public class CellsView : ICellsView
     {
-        private readonly ICellsGeneratorsFactory _cellsGeneratorsFactory;
+        private readonly ICellsViewGeneratorsFactory _cellsViewGeneratorsFactory;
 
-        public CellsView(ICellsGeneratorsFactory cellsGeneratorsFactory)
+        public CellsView(ICellsViewGeneratorsFactory cellsViewGeneratorsFactory)
         {
-            _cellsGeneratorsFactory = cellsGeneratorsFactory;
+            _cellsViewGeneratorsFactory = cellsViewGeneratorsFactory;
         }
         
         public void GenerateCells(CellType cellType, CellViewData[,] cellViewMap)
         {
-            var cellsGenerator = _cellsGeneratorsFactory.GetGenerator(cellType);
-            cellsGenerator.GenerateCells(cellViewMap);
+            var cellsGenerator = _cellsViewGeneratorsFactory.GetGenerator(cellType);
+            cellsGenerator.GenerateCellsView(cellViewMap);
         }
     }
 }

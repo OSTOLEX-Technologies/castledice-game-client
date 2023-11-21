@@ -4,10 +4,10 @@ namespace Src.GameplayView.Grid.GridGeneration
 {
     public class SquareGridGenerator : IGridGenerator
     {
-        private readonly IGameObjectsGrid _grid;
+        private readonly IGrid _grid;
         private readonly ISquareGridGenerationConfig _config;
 
-        public SquareGridGenerator(IGameObjectsGrid grid, ISquareGridGenerationConfig config)
+        public SquareGridGenerator(IGrid grid, ISquareGridGenerationConfig config)
         {
             _grid = grid;
             _config = config;
@@ -22,10 +22,8 @@ namespace Src.GameplayView.Grid.GridGeneration
             {
                 for (int j = 0; j < cellsPresenceMatrix.GetLength(1); j++)
                 {
-                    var go = new GameObject();
                     var position = startPos + new Vector3(j * length, 0, i * width);
-                    go.transform.position = position;
-                    _grid.AddParent((i, j), go);
+                    _grid.AddCell((i, j), position);
                 }
             }
         }

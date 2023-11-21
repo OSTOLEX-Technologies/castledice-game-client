@@ -8,6 +8,8 @@ namespace Src.NetworkingModule
     {
         private static readonly Dictionary<ClientType, ClientWrapper> Clients = new();
         
+        public static bool HasClient(ClientType type) => Clients.ContainsKey(type);
+        
         public static ClientWrapper GetClient(ClientType type)
         {
             if (Clients.TryGetValue(type, out var client))

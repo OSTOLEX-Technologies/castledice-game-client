@@ -41,7 +41,7 @@ namespace Src.GameplayView.Cells
             HorizontalOrientationType.Middle, SquareCellBorderType.None);
         
 
-        private void OnValidate()
+        private void OnEnable()
         {
             _allPrefabs.Clear();
             foreach (var prefab in upperBorderCells)
@@ -137,6 +137,10 @@ namespace Src.GameplayView.Cells
 
         public GameObject GetAssetPrefab(int id)
         {
+            if (_allPrefabs.Count <= id)
+            {
+                return null;
+            }
             return _allPrefabs[id];
         }
     }

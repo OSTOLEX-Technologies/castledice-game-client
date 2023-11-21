@@ -1,22 +1,22 @@
-﻿using castledice_game_data_logic;
+﻿using castledice_game_data_logic.ConfigsData;
 using Src.GameplayView.Grid;
 
 namespace Src.GameplayPresenter.Grid
 {
     public class GridPresenter
     {
-        private IGridView _view;
-        private GameStartData _gameStartData;
+        private readonly IGridView _view;
+        private readonly BoardData _boardData;
         
-        public GridPresenter(IGridView view, GameStartData gameStartData)
+        public GridPresenter(IGridView view, BoardData boardData)
         {
             _view = view;
-            _gameStartData = gameStartData;
+            _boardData = boardData;
         }
         
         public void GenerateGrid()
         {
-            _view.GenerateGrid(_gameStartData.CellType, _gameStartData.CellsPresence);
+            _view.GenerateGrid(_boardData.CellType, _boardData.CellsPresence);
         }
     }
 }

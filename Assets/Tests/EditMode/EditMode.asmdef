@@ -3,7 +3,10 @@
     "rootNamespace": "",
     "references": [
         "GUID:38df9c461bb445a5ac40c9c05a4f9942",
-        "GUID:3a0e8c3393809314faa8bd6139116349"
+        "GUID:3a0e8c3393809314faa8bd6139116349",
+        "GUID:6055be8ebefd69e48b49212b09b47b2f",
+        "GUID:0acc523941302664db1f4e527237feb3",
+        "GUID:27619889b8ba8c24980f49ee34dbb44a"
     ],
     "includePlatforms": [],
     "excludePlatforms": [],
@@ -11,7 +14,9 @@
     "overrideReferences": false,
     "precompiledReferences": [],
     "autoReferenced": true,
-    "defineConstraints": [],
+    "defineConstraints": [
+        "UNITY_EDITOR"
+    ],
     "versionDefines": [],
     "noEngineReferences": false
 }

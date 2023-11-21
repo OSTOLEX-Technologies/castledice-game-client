@@ -1,21 +1,21 @@
 ﻿using System;
 using System.Collections.Generic;
-using castledice_game_data_logic;
+using castledice_game_data_logic.ConfigsData;
 
 namespace Src.GameplayPresenter.Cells.SquareCellsGeneration
 {
     public class SquareCellViewMapGenerator : ICellViewMapProvider
     {
-        private ISquareCellAssetIdProvider _assetIdProvider;
+        private readonly ISquareCellAssetIdProvider _assetIdProvider;
 
         public SquareCellViewMapGenerator(ISquareCellAssetIdProvider assetIdProvider)
         {
             _assetIdProvider = assetIdProvider;
         }
 
-        public CellViewData[,] GetCellViewMap(GameStartData gameStartData)
+        public CellViewData[,] GetCellViewMap(BoardData boardData)
         {
-            var squareCellDataMap = SquareCellDataMapGenerator.GetSquareCellDataMap(gameStartData.CellsPresence);
+            var squareCellDataMap = SquareCellDataMapGenerator.GetSquareCellDataMap(boardData.CellsPresence);
             var cellViewDataMap = new CellViewData[squareCellDataMap.GetLength(0), squareCellDataMap.GetLength(1)];
             for (int i = 0; i < squareCellDataMap.GetLength(0); i++)
             {

@@ -3,13 +3,14 @@ using System.Threading.Tasks;
 using castledice_game_data_logic;
 using castledice_game_logic;
 using Src.Constants;
-using Src.GameplayView;
 using Src.GameplayView.GameCreation;
 
 namespace Src.GameplayPresenter.GameCreation
 {
     public class GameCreationPresenter
     {
+        public event EventHandler GameCreated;
+        
         private readonly IGameSearcher _gameSearcher;
         private readonly IGameCreator _gameCreator;
         private readonly IPlayerDataProvider _playerDataProvider;
@@ -50,8 +51,18 @@ namespace Src.GameplayPresenter.GameCreation
             {
                 var gameStartData = gameSearchResult.GameStartData;
                 var game = _gameCreator.CreateGame(gameStartData);
+                if (Singleton<Game>.Registered) //TODO: Refactor this and get rid of singleton
+                {
+                    Singleton<Game>.Unregister();
+                }
+
+                if (Singleton<GameStartData>.Registered)
+                {
+                    Singleton<GameStartData>.Unregister();
+                }
                 Singleton<Game>.Register(game);
                 Singleton<GameStartData>.Register(gameStartData);
+                GameCreated?.Invoke(this, EventArgs.Empty);
             }
         }
 

@@ -8,11 +8,11 @@ namespace Src.GameplayView.CellsContent
 {
     public class CellsContentView : ICellsContentView
     {
-        private readonly IGameObjectsGrid _grid;
+        private readonly IGrid _grid;
         private readonly IContentViewProvider _contentViewProvider;
         private readonly Dictionary<Content, ContentView> _contentToView = new();
 
-        public CellsContentView(IGameObjectsGrid grid, IContentViewProvider contentViewProvider)
+        public CellsContentView(IGrid grid, IContentViewProvider contentViewProvider)
         {
             _grid = grid;
             _contentViewProvider = contentViewProvider;
@@ -26,7 +26,7 @@ namespace Src.GameplayView.CellsContent
             }
 
             var view = _contentViewProvider.GetContentView(content);
-            _grid.AddChild(position, view.gameObject);
+            _grid.GetCell(position).AddChild(view.gameObject);
             _contentToView.Add(content, view);
             view.StartView();
         }
