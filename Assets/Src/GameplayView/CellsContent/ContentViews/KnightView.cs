@@ -1,29 +1,30 @@
-﻿using castledice_game_logic;
-using castledice_game_logic.GameObjects;
+﻿using castledice_game_logic.GameObjects;
+using Src.GameplayView.CellsContent.ContentAudio;
 using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentViews
 {
-    //TODO: Refactor this class
     public class KnightView : ContentView
     {
-        [SerializeField] private int rotationIfFirst;
-        [SerializeField] private int rotationIfSecond;
+        private IKnightAudio _audio;
+        private GameObject _model;
         private Knight _knight;
         
         public override Content Content => _knight;
 
-        public void Init(Knight knight)
+        public void Init(Knight knight, GameObject model, Vector3 rotation)
         {
             _knight = knight;
+            _model = model;
+            _model.transform.SetParent(transform);
+            _model.transform.localPosition = Vector3.zero;
+            _model.transform.localEulerAngles = rotation;
+            _audio = gameObject.GetComponent<IKnightAudio>();
         }
         
         public override void StartView()
         {
-            var game = Singleton<Game>.Instance;
-            var playerIndex = game.GetAllPlayersIds().IndexOf(_knight.GetOwner().Id);
-            var rotation = playerIndex == 0 ? rotationIfFirst : rotationIfSecond;
-            transform.localEulerAngles = new Vector3(0, rotation, 0);
+            _audio.PlayPlaceSound();
         }
 
         public override void UpdateView()
@@ -33,7 +34,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
 
         public override void DestroyView()
         {
-            Destroy(gameObject);
+            _audio.PlayDestroySound();
         }
     }
 }

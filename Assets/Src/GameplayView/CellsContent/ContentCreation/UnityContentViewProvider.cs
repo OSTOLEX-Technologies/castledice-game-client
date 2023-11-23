@@ -41,7 +41,7 @@ namespace Src.GameplayView.CellsContent.ContentCreation
         {
             var prefab = _playerContentViewPrefabProvider.GetKnightPrefab(knight.GetOwner());
             var knightView = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            knightView.Init(knight);
+            knightView.Init(knight, new GameObject(), Vector3.zero);
             return knightView;
         }
     }
