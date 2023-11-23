@@ -1054,7 +1054,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7786878531140430315, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7.1497498
+      value: -7.1497803
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}
@@ -1263,7 +1263,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 8300000, guid: b1df99e719a9a7747b7962c595560b9f, type: 3}
   m_PlayOnAwake: 1
-  m_Volume: 0.5
+  m_Volume: 0.25
   m_Pitch: 1
   Loop: 1
   Mute: 0
@@ -2105,7 +2105,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7786878531140430315, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7.1497498
+      value: -7.1497803
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}
@@ -2219,7 +2219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7786878531140430315, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7.1497498
+      value: -7.1497803
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}
@@ -2830,7 +2830,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7786878531140430315, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -7.2410583
+      value: -7.241089
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 8ae64e3f8d2321f42a9986baebdab74a, type: 3}

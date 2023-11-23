@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView.CellsContent;
+using Src.GameplayView.CellsContent.ContentCreation;
 using Src.GameplayView.Grid;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
