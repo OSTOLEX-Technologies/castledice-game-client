@@ -4,7 +4,7 @@ namespace Src.GameplayView
 {
     public class Instantiator : IInstantiator
     {
-        public GameObject Instantiate(GameObject prefab)
+        public T Instantiate<T>(T prefab) where T : Object
         {
             return Object.Instantiate(prefab);
         }

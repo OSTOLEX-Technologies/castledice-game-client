@@ -4,6 +4,6 @@ namespace Src.GameplayView
 {
     public interface IInstantiator
     {
-        GameObject Instantiate(GameObject prefab);
+        T Instantiate<T>(T prefab) where T: Object;
     }
 }
