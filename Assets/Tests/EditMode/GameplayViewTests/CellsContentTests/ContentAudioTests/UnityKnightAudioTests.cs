@@ -1,6 +1,7 @@
 ﻿using System.Reflection;
 using NUnit.Framework;
 using Src.GameplayView.CellsContent.ContentAudio;
+using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using static Tests.ObjectCreationUtility;
 using Tests.Utils.Mocks;
 using UnityEngine;

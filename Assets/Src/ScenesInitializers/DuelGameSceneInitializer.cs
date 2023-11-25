@@ -21,7 +21,7 @@ using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
 using Src.GameplayView.CellsContent;
-using Src.GameplayView.CellsContent.ContentCreation;
+using Src.GameplayView.CellsContent.ContentViewsCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
 using Src.GameplayView.CurrentPlayer;

@@ -1,4 +1,5 @@
 ﻿using Src.GameplayView.CellsContent.ContentAudio;
+using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using UnityEngine;
 
 namespace Tests.Utils.Mocks

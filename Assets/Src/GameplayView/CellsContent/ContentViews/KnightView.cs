@@ -1,5 +1,6 @@
 ﻿using castledice_game_logic.GameObjects;
 using Src.GameplayView.CellsContent.ContentAudio;
+using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentViews

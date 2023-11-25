@@ -2,7 +2,6 @@
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ActionPointsGiving;
-using Src.GameplayView.CellsContent.ContentCreation;
 using Src.GameplayView.PlayersColors;
 
 namespace Tests.EditMode.GameplayViewTests.ActionPointsGivingTests
