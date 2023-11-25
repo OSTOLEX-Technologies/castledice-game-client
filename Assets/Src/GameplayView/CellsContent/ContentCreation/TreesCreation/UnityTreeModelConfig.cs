@@ -2,6 +2,7 @@
 
 namespace Src.GameplayView.CellsContent.ContentCreation.TreesCreation
 {
+    [CreateAssetMenu(fileName = "UnityTreeModelConfig", menuName = "Configs/Content/UnityTreeModelConfig")]
     public class UnityTreeModelConfig : ScriptableObject, ITreeModelProvider
     {
         [SerializeField] private GameObject treeModel;
