@@ -61,7 +61,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentCreationTest
             }.Build();
             
             var knightView = factory.GetKnightView(knight);
-            var fieldInfo = typeof(KnightView).GetField("_model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var fieldInfo = typeof(KnightView).GetField("Model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var actualModel = fieldInfo?.GetValue(knightView);
             
             Assert.AreSame(expectedModel, actualModel);
@@ -86,7 +86,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentCreationTest
             }.Build();
             
             var knightView = factory.GetKnightView(knight);
-            var fieldInfo = typeof(KnightView).GetField("_model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var fieldInfo = typeof(KnightView).GetField("Model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var model = fieldInfo?.GetValue(knightView);
             var actualRotation = ((GameObject) model).transform.localRotation.eulerAngles;
             

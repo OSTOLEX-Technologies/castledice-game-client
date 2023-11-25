@@ -25,7 +25,7 @@ namespace Src.GameplayView.CellsContent.ContentCreation
         {
             var prefab = _commonContentViewPrefabProvider.TreePrefab;
             var treeView = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            treeView.Init(tree);
+            treeView.Init(tree, new GameObject());
             return treeView;
         }
 

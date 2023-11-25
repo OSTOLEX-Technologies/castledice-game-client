@@ -7,18 +7,15 @@ namespace Src.GameplayView.CellsContent.ContentViews
     public class KnightView : ContentView
     {
         private IKnightAudio _audio;
-        private GameObject _model;
         private Knight _knight;
         
         public override Content Content => _knight;
 
         public void Init(Knight knight, GameObject model, Vector3 rotation)
         {
+            Init(model);
             _knight = knight;
-            _model = model;
-            _model.transform.SetParent(transform);
-            _model.transform.localPosition = Vector3.zero;
-            _model.transform.localEulerAngles = rotation;
+            Model.transform.localEulerAngles = rotation;
             _audio = gameObject.GetComponent<IKnightAudio>();
         }
         

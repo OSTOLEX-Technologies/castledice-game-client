@@ -1,15 +1,19 @@
 ﻿using castledice_game_logic.GameObjects;
+using UnityEngine;
+using Tree = castledice_game_logic.GameObjects.Tree;
 
 namespace Src.GameplayView.CellsContent.ContentViews
 {
     public class TreeView : ContentView
     {
         private Tree _tree;
+        private GameObject _model;
         
         public override Content Content => _tree;
         
-        public void Init(Tree tree)
+        public void Init(Tree tree, GameObject model)
         {
+            Init(model);
             _tree = tree;
         }
         

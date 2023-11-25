@@ -15,6 +15,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         {
             var rotation = new Vector3(Random.value, Random.value, Random.value);
             var model = new GameObject();
+            model.transform.position = Random.insideUnitSphere;
             var knightView = new GameObject().AddComponent<KnightView>();
             var knight = GetKnight();
             
@@ -52,6 +53,18 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             knightView.DestroyView();
             
             Assert.IsTrue(audio.PlayDestroySoundCalled);
+        }
+
+        [Test]
+        public void ContentProperty_ShouldReturnKnight_GivenInInit()
+        {
+            var expectedKnight = GetKnight();
+            var knightView = new GameObject().AddComponent<KnightView>();
+            knightView.Init(expectedKnight, new GameObject(), Vector3.zero);
+            
+            var actualKnight = knightView.Content;
+            
+            Assert.AreSame(expectedKnight, actualKnight);
         }
     }
 }
