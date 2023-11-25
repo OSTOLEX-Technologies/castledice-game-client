@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Src.GameplayView.CellsContent.ContentAudio;
 using static Tests.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
-using Tests.Mocks;
+using Tests.Utils.Mocks;
 using UnityEngine;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests

@@ -15,7 +15,7 @@ using castledice_game_logic.MovesLogic;
 using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
-using Tests.Mocks;
+using Tests.Utils.Mocks;
 using UnityEditor;
 using UnityEngine;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
@@ -29,13 +29,18 @@ namespace Tests
     {
 #if UNITY_EDITOR
         public static void AddObjectReferenceValueToSerializedProperty<U, T>(U gameObject, string propertyName, T value) where T : Object 
-            where U: Component
+            where U: Object
         {
             var serializedObject = new SerializedObject(gameObject);
             serializedObject.FindProperty(propertyName).objectReferenceValue = value;
             serializedObject.ApplyModifiedProperties();
         }
 #endif
+        
+        public static AudioClip GetAudioClip()
+        {
+            return AudioClip.Create("someClip", 1, 1, 1001, false);
+        }
         
         public static void SetPrivateFieldValue<T>(T value, object obj, string propertyName)
         {

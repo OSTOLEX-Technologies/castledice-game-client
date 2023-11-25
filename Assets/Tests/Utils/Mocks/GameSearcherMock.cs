@@ -1,9 +1,8 @@
-﻿using Src.GameplayPresenter;
-using static Tests.ObjectCreationUtility;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Src.GameplayPresenter.GameCreation;
+using static Tests.ObjectCreationUtility;
 
-namespace Tests.Mocks
+namespace Tests.Utils.Mocks
 {
     public class GameSearcherMock : IGameSearcher
     {

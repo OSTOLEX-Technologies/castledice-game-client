@@ -2,7 +2,7 @@
 using castledice_riptide_dto_adapters.Extensions;
 using NUnit.Framework;
 using Src.NetworkingModule;
-using Tests.Mocks;
+using Tests.Utils.Mocks;
 
 namespace Tests.EditMode.NetworkingModuleTests
 {

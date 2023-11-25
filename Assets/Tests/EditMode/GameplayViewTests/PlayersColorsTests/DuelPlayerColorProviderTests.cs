@@ -1,11 +1,10 @@
 ﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter;
-using Src.GameplayView.CellsContent.ContentCreation;
-using Src.GameplayView.PlayersColor;
+using Src.GameplayView.PlayersColors;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayViewTests.PlayersColorTests
+namespace Tests.EditMode.GameplayViewTests.PlayersColorsTests
 {
     public class DuelPlayerColorProviderTests
     {

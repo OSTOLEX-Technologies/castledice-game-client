@@ -2,6 +2,7 @@
 using NUnit.Framework;
 using Src.GameplayView.CellsContent.ContentCreation;
 using Src.GameplayView.CurrentPlayer;
+using Src.GameplayView.PlayersColors;
 using UnityEngine;
 using static Tests.ObjectCreationUtility;
 

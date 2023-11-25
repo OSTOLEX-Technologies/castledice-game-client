@@ -8,7 +8,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.ClientMoves;
 using Src.NetworkingModule.Moves;
-using Tests.Mocks;
+using Tests.Utils.Mocks;
 
 namespace Tests.EditMode.NetworkingModuleTests
 {

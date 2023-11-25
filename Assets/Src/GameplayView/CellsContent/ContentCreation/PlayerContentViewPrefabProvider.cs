@@ -1,6 +1,7 @@
 ﻿using System;
 using castledice_game_logic;
 using Src.GameplayView.CellsContent.ContentViews;
+using Src.GameplayView.PlayersColors;
 
 namespace Src.GameplayView.CellsContent.ContentCreation
 {

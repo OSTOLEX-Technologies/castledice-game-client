@@ -28,7 +28,7 @@ using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
-using Src.GameplayView.PlayersColor;
+using Src.GameplayView.PlayersColors;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;

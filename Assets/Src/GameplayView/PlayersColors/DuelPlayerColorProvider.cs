@@ -1,9 +1,7 @@
-﻿using System;
-using castledice_game_logic;
+﻿using castledice_game_logic;
 using Src.GameplayPresenter;
-using Src.GameplayView.CellsContent.ContentCreation;
 
-namespace Src.GameplayView.PlayersColor
+namespace Src.GameplayView.PlayersColors
 {
     public class DuelPlayerColorProvider : IPlayerColorProvider
     {

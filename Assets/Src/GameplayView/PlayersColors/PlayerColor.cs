@@ -1,4 +1,4 @@
-﻿namespace Src.GameplayView.CellsContent.ContentCreation
+﻿namespace Src.GameplayView.PlayersColors
 {
     public enum PlayerColor
     {

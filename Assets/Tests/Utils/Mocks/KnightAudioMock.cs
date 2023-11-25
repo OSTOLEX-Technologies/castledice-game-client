@@ -1,7 +1,7 @@
 ﻿using Src.GameplayView.CellsContent.ContentAudio;
 using UnityEngine;
 
-namespace Tests.Mocks
+namespace Tests.Utils.Mocks
 {
     public class KnightAudioMock : MonoBehaviour, IKnightAudio
     {

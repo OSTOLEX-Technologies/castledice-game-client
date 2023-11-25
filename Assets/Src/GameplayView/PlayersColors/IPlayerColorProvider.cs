@@ -1,6 +1,6 @@
 ﻿using castledice_game_logic;
 
-namespace Src.GameplayView.CellsContent.ContentCreation
+namespace Src.GameplayView.PlayersColors
 {
     public interface IPlayerColorProvider
     {
