@@ -12,6 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0b8d74cd207f429e86e600a2f791c75b, type: 3}
   m_Name: UnityPlayerRotationConfig
   m_EditorClassIdentifier: 
-  playerNumbersToRotations:
-  - playerNumber: 0
+  colorsToRotations:
+  - playerColor: 0
+    rotation: {x: 0, y: 0, z: 0}
+  - playerColor: 1
     rotation: {x: 0, y: 0, z: 0}
