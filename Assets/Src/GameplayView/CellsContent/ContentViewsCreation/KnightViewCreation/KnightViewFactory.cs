@@ -28,7 +28,7 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
             var playerColor = _colorProvider.GetPlayerColor(knight.GetOwner());
             var model = _modelProvider.GetKnightModel(playerColor);
             var rotation = _rotationProvider.GetRotation(playerColor);
-            view.Init(knight, model, rotation);
+            view.Init(knight, model, rotation, null);
             return view;
         }
     }

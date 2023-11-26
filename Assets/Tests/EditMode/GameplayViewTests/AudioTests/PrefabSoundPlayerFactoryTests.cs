@@ -10,8 +10,8 @@ namespace Tests.EditMode.GameplayViewTests.AudioTests
         [Test]
         public void GetSoundPlayer_ShouldReturn_InstantiatedSoundPlayerPrefab()
         {
-            var prefab = new Mock<UnitySoundPlayer>().Object;
-            var instantiatedPrefab = new Mock<UnitySoundPlayer>().Object;
+            var prefab = new Mock<SoundPlayer>().Object;
+            var instantiatedPrefab = new Mock<SoundPlayer>().Object;
             var instantiatorMock = new Mock<IInstantiator>();
             instantiatorMock.Setup(instantiator => instantiator.Instantiate(prefab)).Returns(instantiatedPrefab);
             var factory = new PrefabSoundPlayerFactory(prefab, instantiatorMock.Object);

@@ -2,7 +2,7 @@
 
 namespace Src.GameplayView.Audio
 {
-    public class UnityAudioSourceSoundPlayer : UnitySoundPlayer
+    public class AudioSourceSoundPlayer : SoundPlayer
     {
         [SerializeField] private AudioSource audioSource;
         

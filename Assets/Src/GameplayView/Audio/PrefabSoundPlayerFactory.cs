@@ -1,17 +1,17 @@
 ﻿namespace Src.GameplayView.Audio
 {
-    public class PrefabSoundPlayerFactory : IUnitySoundPlayerFactory
+    public class PrefabSoundPlayerFactory : ISoundPlayerFactory
     {
-        private readonly UnitySoundPlayer _prefab;
+        private readonly SoundPlayer _prefab;
         private readonly IInstantiator _instantiator;
 
-        public PrefabSoundPlayerFactory(UnitySoundPlayer prefab, IInstantiator instantiator)
+        public PrefabSoundPlayerFactory(SoundPlayer prefab, IInstantiator instantiator)
         {
             _prefab = prefab;
             _instantiator = instantiator;
         }
 
-        public UnitySoundPlayer GetSoundPlayer()
+        public SoundPlayer GetSoundPlayer()
         {
             return _instantiator.Instantiate(_prefab);
         }

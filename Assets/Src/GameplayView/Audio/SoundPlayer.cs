@@ -2,7 +2,7 @@
 
 namespace Src.GameplayView.Audio
 {
-    public abstract class UnitySoundPlayer : MonoBehaviour, ISoundPlayer
+    public abstract class SoundPlayer : MonoBehaviour
     {
         public abstract void PlaySound(Sound sound);
     }
