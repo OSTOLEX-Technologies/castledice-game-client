@@ -1,30 +1,20 @@
-﻿using Moq;
-using NUnit.Framework;
-using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
+﻿using NUnit.Framework;
 using static Tests.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
+using Tests.Utils.Mocks;
 using UnityEngine;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
 {
     public class KnightViewTests
     {
-        private class TestKnightAudio : KnightAudio
-        {
-            public override void PlayPlaceSound() { }
-
-            public override void PlayHitSound() { }
-
-            public override void PlayDestroySound() { }
-        }
-        
         [Test, Repeat(10)]
         public void Init_ShouldSetGivenModelAsChildObjectWithZeroLocalPosition_AndSetGivenRotation()
         {
             var rotation = new Vector3(Random.value, Random.value, Random.value);
             var model = new GameObject();
             model.transform.position = Random.insideUnitSphere;
-            var audio = new Mock<KnightAudio>().Object;
+            var audio = new GameObject().AddComponent<KnightAudioForTests>();
             var knightView = new GameObject().AddComponent<KnightView>();
             var knight = GetKnight();
             
@@ -42,7 +32,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         public void Init_ShouldSetKnightSound_AsChildObjectWithZeroLocalPosition()
         {
             var model = new GameObject();
-            var audio = new GameObject().AddComponent<TestKnightAudio>();
+            var audio = new GameObject().AddComponent<KnightAudioForTests>();
             audio.transform.position = Random.insideUnitSphere;
             var knightView = new GameObject().AddComponent<KnightView>();
             var knight = GetKnight();
@@ -59,24 +49,24 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         public void StartView_ShouldPlayPlaceSound_OnGivenKnightAudio()
         {
             var knightView = new GameObject().AddComponent<KnightView>();
-            var audioMock = new Mock<KnightAudio>();
-            knightView.Init(GetKnight(), new GameObject(), Vector3.zero, audioMock.Object);
+            var audio = new GameObject().AddComponent<KnightAudioForTests>();
+            knightView.Init(GetKnight(), new GameObject(), Vector3.zero, audio);
             
             knightView.StartView();
             
-            audioMock.Verify(audio => audio.PlayPlaceSound(), Times.Once);
+            Assert.IsTrue(audio.PlayPlaceSoundWasCalled);
         }
         
         [Test]
         public void DestroyView_ShouldPlayDestroySound_OnAttachedKnightAudio()
         {
             var knightView = new GameObject().AddComponent<KnightView>();
-            var audioMock = new Mock<KnightAudio>();
-            knightView.Init(GetKnight(), new GameObject(), Vector3.zero, audioMock.Object);
+            var audio = new GameObject().AddComponent<KnightAudioForTests>();
+            knightView.Init(GetKnight(), new GameObject(), Vector3.zero, audio);
             
             knightView.DestroyView();
             
-            audioMock.Verify(audio => audio.PlayDestroySound(), Times.Once);
+            Assert.IsTrue(audio.PlayDestroySoundWasCalled);
         }
 
         [Test]
@@ -84,7 +74,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         {
             var expectedKnight = GetKnight();
             var knightView = new GameObject().AddComponent<KnightView>();
-            var audio = new Mock<KnightAudio>().Object;
+            var audio = new GameObject().AddComponent<KnightAudioForTests>();
             knightView.Init(expectedKnight, new GameObject(), Vector3.zero, audio);
             
             var actualKnight = knightView.Content;

@@ -6,14 +6,14 @@ using UnityEngine;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreationTests.KnightViewCreationTests
 {
-    public class UnityKnightModelConfigTests
+    public class KnightModelConfigTests
     {
         [Test]
         [TestCase(PlayerColor.Blue, "blueKnightModel")]
         [TestCase(PlayerColor.Red, "redKnightModel")]
         public void GetKnightModel_ShouldReturnKnightModel_WithAppropriateColor(PlayerColor color, string modelPropertyName)
         {
-            var config = ScriptableObject.CreateInstance<UnityKnightModelConfig>();
+            var config = ScriptableObject.CreateInstance<KnightModelConfig>();
             var expectedModel = new GameObject();
             config.GetType().GetField(modelPropertyName, BindingFlags.NonPublic | BindingFlags.Instance)?.SetValue(config, expectedModel);
             

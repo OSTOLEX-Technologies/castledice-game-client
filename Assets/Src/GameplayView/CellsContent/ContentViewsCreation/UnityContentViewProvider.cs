@@ -1,4 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
+using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using UnityEngine;
 using Tree = castledice_game_logic.GameObjects.Tree;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
@@ -41,7 +42,7 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation
         {
             var prefab = _playerContentViewPrefabProvider.GetKnightPrefab(knight.GetOwner());
             var knightView = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            knightView.Init(knight, new GameObject(), Vector3.zero, null);
+            knightView.Init(knight, new GameObject(), Vector3.zero, new GameObject().AddComponent<KnightAudio>());
             return knightView;
         }
     }

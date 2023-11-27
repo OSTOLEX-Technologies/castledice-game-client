@@ -15,6 +15,7 @@ using castledice_game_logic.MovesLogic;
 using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
+using Src.GameplayView.Audio;
 using Tests.Utils.Mocks;
 using UnityEditor;
 using UnityEngine;
@@ -36,6 +37,11 @@ namespace Tests
             serializedObject.ApplyModifiedProperties();
         }
 #endif
+
+        public static Sound GetSound()
+        {
+            return new Sound(GetAudioClip(), 1);
+        }
         
         public static AudioClip GetAudioClip()
         {

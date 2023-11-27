@@ -1,11 +1,14 @@
 ﻿using castledice_game_logic;
+using castledice_game_logic.GameObjects;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
+using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersRotations;
+using Tests.Utils.Mocks;
 using UnityEngine;
 using static Tests.ObjectCreationUtility;
 
@@ -95,11 +98,32 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             Assert.AreEqual(expectedRotation.z, actualRotation.z, 0.0001f);
         }
 
+        //In this test word "appropriate" means that the audio corresponds to knight, that is, obtained from the audio factory by passing Knight from view to it.
+        [Test]
+        public void GetKnightView_ShouldReturnView_WithAppropriateKnightAudio()
+        {
+            var knight = GetKnight();
+            var audioFactoryMock = new Mock<IKnightAudioFactory>();
+            var expectedAudio = new GameObject().AddComponent<KnightAudioForTests>();;
+            audioFactoryMock.Setup(f => f.GetAudio(knight)).Returns(expectedAudio);
+            var factory = new KnightViewFactoryBuilder
+            {
+                AudioFactory = audioFactoryMock.Object
+            }.Build();
+            
+            var knightView = factory.GetKnightView(knight);
+            var fieldInfo = typeof(KnightView).GetField("_audio", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var actualAudio = fieldInfo?.GetValue(knightView);
+            
+            Assert.AreSame(expectedAudio, actualAudio);
+        }
+
         private class KnightViewFactoryBuilder
         {
             public IPlayerRotationProvider RotationProvider { get; set; }
             public IPlayerColorProvider ColorProvider { get; set; }
             public IKnightModelProvider ModelProvider { get; set; }
+            public IKnightAudioFactory AudioFactory { get; set; }
             public KnightView KnightViewPrefab { get; set; }
             public IInstantiator Instantiator { get; set; }
 
@@ -120,11 +144,15 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
                 var modelProviderMock = new Mock<IKnightModelProvider>();
                 modelProviderMock.Setup(provider => provider.GetKnightModel(It.IsAny<PlayerColor>())).Returns(new GameObject());
                 ModelProvider = modelProviderMock.Object;
+                var audioFactoryMock = new Mock<IKnightAudioFactory>();
+                var audio = new GameObject().AddComponent<KnightAudioForTests>();;
+                audioFactoryMock.Setup(factory => factory.GetAudio(It.IsAny<Knight>())).Returns(audio);
+                AudioFactory = audioFactoryMock.Object;
             }
             
             public KnightViewFactory Build()
             {
-                return new KnightViewFactory(RotationProvider, ColorProvider, ModelProvider, KnightViewPrefab, Instantiator);
+                return new KnightViewFactory(RotationProvider, ColorProvider, ModelProvider, AudioFactory, KnightViewPrefab, Instantiator);
             }
         }
     }
