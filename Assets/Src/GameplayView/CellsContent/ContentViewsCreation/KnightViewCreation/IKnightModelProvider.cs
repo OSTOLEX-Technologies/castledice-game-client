@@ -1,4 +1,4 @@
-﻿using Src.GameplayView.PlayersColors;
+﻿using castledice_game_logic.GameObjects;
 using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
@@ -8,6 +8,6 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
     /// </summary>
     public interface IKnightModelProvider
     {
-        GameObject GetKnightModel(PlayerColor color);
+        GameObject GetKnightModel(Knight knight);
     }
 }

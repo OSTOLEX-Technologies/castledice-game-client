@@ -6,7 +6,6 @@ using Src.GameplayView;
 using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
-using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersRotations;
 using Tests.Utils.Mocks;
 using UnityEngine;
@@ -45,21 +44,16 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             Assert.AreSame(expectedKnight, knightView.Content);
         }
 
-        //In this test word "appropriate" means that the model corresponds to player color, that is, obtained from the model provider.
+
         [Test]
-        [TestCase(PlayerColor.Blue)]
-        [TestCase(PlayerColor.Red)]
-        public void GetKnightView_ShouldReturnView_WithAppropriateModel(PlayerColor playerColor)
+        public void GetKnightView_ShouldReturnView_WithAppropriateModel()
         {
             var knight = GetKnight();
-            var playerColorProviderMock = new Mock<IPlayerColorProvider>();
-            playerColorProviderMock.Setup(p => p.GetPlayerColor(knight.GetOwner())).Returns(playerColor);
             var expectedModel = new GameObject();
             var modelProviderMock = new Mock<IKnightModelProvider>();
-            modelProviderMock.Setup(p => p.GetKnightModel(playerColor)).Returns(expectedModel);
+            modelProviderMock.Setup(p => p.GetKnightModel(knight)).Returns(expectedModel);
             var factory = new KnightViewFactoryBuilder
             {
-                ColorProvider = playerColorProviderMock.Object,
                 ModelProvider = modelProviderMock.Object
             }.Build();
             
@@ -70,21 +64,15 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             Assert.AreSame(expectedModel, actualModel);
         }
 
-        //In this test word "appropriate" means that the rotation corresponds to player color, that is, obtained from the rotation provider.
         [Test]
-        [TestCase(PlayerColor.Blue)]
-        [TestCase(PlayerColor.Red)]
-        public void GetKnightView_ShouldReturnView_WithAppropriateModelRotation(PlayerColor playerColor)
+        public void GetKnightView_ShouldReturnView_WithAppropriateModelRotation()
         {
             var knight = GetKnight();
-            var playerColorProviderMock = new Mock<IPlayerColorProvider>();
-            playerColorProviderMock.Setup(p => p.GetPlayerColor(knight.GetOwner())).Returns(playerColor);
             var expectedRotation = new Vector3(Random.value, Random.value, Random.value); //We pass Vector3 with only positive values because Unity normalizes rotation values to be between 0 and 360 and it may ruin the test.
             var rotationProviderMock = new Mock<IPlayerRotationProvider>();
-            rotationProviderMock.Setup(p => p.GetRotation(playerColor)).Returns(expectedRotation);
+            rotationProviderMock.Setup(p => p.GetRotation(knight.GetOwner())).Returns(expectedRotation);
             var factory = new KnightViewFactoryBuilder
             {
-                ColorProvider = playerColorProviderMock.Object,
                 RotationProvider = rotationProviderMock.Object
             }.Build();
             
@@ -121,7 +109,6 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
         private class KnightViewFactoryBuilder
         {
             public IPlayerRotationProvider RotationProvider { get; set; }
-            public IPlayerColorProvider ColorProvider { get; set; }
             public IKnightModelProvider ModelProvider { get; set; }
             public IKnightAudioFactory AudioFactory { get; set; }
             public KnightView KnightViewPrefab { get; set; }
@@ -136,13 +123,10 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
                 instantiatorMock.Setup(instantiator => instantiator.Instantiate(knightViewPrefab)).Returns(instantiatedKnightView);
                 Instantiator = instantiatorMock.Object;
                 var rotationProviderMock = new Mock<IPlayerRotationProvider>();
-                rotationProviderMock.Setup(provider => provider.GetRotation(It.IsAny<PlayerColor>())).Returns(Random.insideUnitSphere);
+                rotationProviderMock.Setup(provider => provider.GetRotation(It.IsAny<Player>())).Returns(Random.insideUnitSphere);
                 RotationProvider = rotationProviderMock.Object;
-                var colorProviderMock = new Mock<IPlayerColorProvider>();
-                colorProviderMock.Setup(provider => provider.GetPlayerColor(It.IsAny<Player>())).Returns(PlayerColor.Blue);
-                ColorProvider = colorProviderMock.Object;
                 var modelProviderMock = new Mock<IKnightModelProvider>();
-                modelProviderMock.Setup(provider => provider.GetKnightModel(It.IsAny<PlayerColor>())).Returns(new GameObject());
+                modelProviderMock.Setup(provider => provider.GetKnightModel(It.IsAny<Knight>())).Returns(new GameObject());
                 ModelProvider = modelProviderMock.Object;
                 var audioFactoryMock = new Mock<IKnightAudioFactory>();
                 var audio = new GameObject().AddComponent<KnightAudioForTests>();;
@@ -152,7 +136,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             
             public KnightViewFactory Build()
             {
-                return new KnightViewFactory(RotationProvider, ColorProvider, ModelProvider, AudioFactory, KnightViewPrefab, Instantiator);
+                return new KnightViewFactory(RotationProvider, ModelProvider, AudioFactory, KnightViewPrefab, Instantiator);
             }
         }
     }

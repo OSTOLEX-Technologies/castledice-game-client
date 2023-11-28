@@ -9,6 +9,6 @@ namespace Src.GameplayView.PlayersRotations
     /// </summary>
     public interface IPlayerRotationProvider
     {
-        Vector3 GetRotation(PlayerColor playerColor);
+        Vector3 GetRotation(Player player);
     }
 }
