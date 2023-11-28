@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
 {
-    [CreateAssetMenu(fileName = "UnityKnightModelConfig", menuName = "Configs/Content/UnityKnightModelConfig")]
+    [CreateAssetMenu(fileName = "KnightModelConfig", menuName = "Configs/Content/Knight/KnightModelConfig")]
     public class KnightModelConfig : ScriptableObject, IKnightModelProvider
     {
         [SerializeField] private GameObject redKnightModel;
