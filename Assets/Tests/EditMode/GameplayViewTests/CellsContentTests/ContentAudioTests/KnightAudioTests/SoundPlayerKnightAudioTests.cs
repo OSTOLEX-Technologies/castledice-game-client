@@ -15,7 +15,8 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.K
             var expectedPlaceSound = GetSound();
             var soundPlayerMock = new Mock<SoundPlayer>();
             var soundPlayerKnightAudio = new GameObject().AddComponent<SoundPlayerKnightAudio>();
-            soundPlayerKnightAudio.Init(expectedPlaceSound, GetSound(), GetSound(), soundPlayerMock.Object);
+            soundPlayerKnightAudio.Init(expectedPlaceSound, GetSound(), GetSound());
+            SetPrivateFieldValue(soundPlayerMock.Object, soundPlayerKnightAudio, "soundPlayer");
             
             soundPlayerKnightAudio.PlayPlaceSound();
             
@@ -28,7 +29,8 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.K
             var expectedHitSound = GetSound();
             var soundPlayerMock = new Mock<SoundPlayer>();
             var soundPlayerKnightAudio = new GameObject().AddComponent<SoundPlayerKnightAudio>();
-            soundPlayerKnightAudio.Init(GetSound(), expectedHitSound, GetSound(), soundPlayerMock.Object);
+            soundPlayerKnightAudio.Init(GetSound(), expectedHitSound, GetSound());
+            SetPrivateFieldValue(soundPlayerMock.Object, soundPlayerKnightAudio, "soundPlayer");
             
             soundPlayerKnightAudio.PlayHitSound();
             
@@ -41,7 +43,8 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.K
             var expectedDestroySound = GetSound();
             var soundPlayerMock = new Mock<SoundPlayer>();
             var soundPlayerKnightAudio = new GameObject().AddComponent<SoundPlayerKnightAudio>();
-            soundPlayerKnightAudio.Init(GetSound(), GetSound(), expectedDestroySound, soundPlayerMock.Object);
+            soundPlayerKnightAudio.Init(GetSound(), GetSound(), expectedDestroySound);
+            SetPrivateFieldValue(soundPlayerMock.Object, soundPlayerKnightAudio, "soundPlayer");
             
             soundPlayerKnightAudio.PlayDestroySound();
             

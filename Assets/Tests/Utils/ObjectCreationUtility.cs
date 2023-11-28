@@ -38,6 +38,11 @@ namespace Tests
         }
 #endif
 
+        public static SoundPlayer GetSoundPlayer()
+        {
+            return new GameObject().AddComponent<AudioSourceSoundPlayer>();
+        }
+        
         public static Sound GetSound()
         {
             return new Sound(GetAudioClip(), 1);

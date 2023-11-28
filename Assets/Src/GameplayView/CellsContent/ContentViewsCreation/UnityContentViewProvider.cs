@@ -42,7 +42,7 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation
         {
             var prefab = _playerContentViewPrefabProvider.GetKnightPrefab(knight.GetOwner());
             var knightView = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            knightView.Init(knight, new GameObject(), Vector3.zero, new GameObject().AddComponent<KnightAudio>());
+            knightView.Init(knight, new GameObject(), Vector3.zero, new GameObject().AddComponent<SoundPlayerKnightAudio>());
             return knightView;
         }
     }
