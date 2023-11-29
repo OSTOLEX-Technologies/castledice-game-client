@@ -34,7 +34,7 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation
         {
             var prefab = _playerContentViewPrefabProvider.GetCastlePrefab(castle.GetOwner());
             var castleView = Instantiate(prefab, Vector3.zero, Quaternion.identity);
-            castleView.Init(castle, new GameObject());
+            castleView.Init(castle, new GameObject(), null);
             return castleView;
         }
 

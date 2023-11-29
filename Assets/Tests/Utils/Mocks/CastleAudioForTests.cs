@@ -1,19 +1,19 @@
-﻿using Src.GameplayView.CellsContent.ContentAudio.TreeAudio;
+﻿using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using UnityEngine;
 
 namespace Tests.Utils.Mocks
 {
-    public class CastleAudioForTests : MonoBehaviour, ICastleAudio
+    public class CastleAudioForTests : CastleAudio
     {
         public bool PlayHitSoundCalled { get; private set; }
         public bool PlayDestroySoundCalled { get; private set; }
         
-        public void PlayHitSound()
+        public override void PlayHitSound()
         {
             PlayHitSoundCalled = true;
         }
 
-        public void PlayDestroySound()
+        public override void  PlayDestroySound()
         {
             PlayDestroySoundCalled = true;
         }

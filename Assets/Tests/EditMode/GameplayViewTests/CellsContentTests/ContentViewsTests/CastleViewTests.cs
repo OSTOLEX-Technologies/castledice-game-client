@@ -13,21 +13,22 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         {
             var model = new GameObject();
             model.transform.position = Random.insideUnitSphere;
+            var audio = new GameObject().AddComponent<CastleAudioForTests>();
             var castleView = new GameObject().AddComponent<CastleView>();
             var castle = GetCastle();
             
-            castleView.Init(castle, model);
+            castleView.Init(castle, model, audio);
             
             Assert.AreSame(castleView.transform, model.transform.parent);
             Assert.AreEqual(Vector3.zero, model.transform.localPosition);
         }
 
         [Test]
-        public void DestroyView_ShouldCallPlayDestroySound_OnAttachedCastleAudio()
+        public void DestroyView_ShouldCallPlayDestroySound_OnGivenCastleAudio()
         {
             var castleView = new GameObject().AddComponent<CastleView>();
             var audio = castleView.gameObject.AddComponent<CastleAudioForTests>();
-            castleView.Init(GetCastle(), new GameObject());
+            castleView.Init(GetCastle(), new GameObject(), audio);
             
             castleView.DestroyView();
             
@@ -38,8 +39,9 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         public void ContentProperty_ShouldReturnCastle_GivenInInit()
         {
             var castleView = new GameObject().AddComponent<CastleView>();
+            var audio = castleView.gameObject.AddComponent<CastleAudioForTests>();
             var castle = GetCastle();
-            castleView.Init(castle, new GameObject());
+            castleView.Init(castle, new GameObject(), audio);
             
             Assert.AreSame(castle, castleView.Content);
         }
