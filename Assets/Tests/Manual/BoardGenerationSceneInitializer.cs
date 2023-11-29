@@ -27,9 +27,6 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
     [SerializeField] private UnitySquareCellsFactory cellsFactory;
     [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
     [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
-    [SerializeField] private UnityCommonContentViewPrefabConfig commonContentConfig;
-    [SerializeField] private UnityPlayerContentViewPrefabsConfig playerContentConfig;
-    [SerializeField] private UnityContentViewProvider contentViewProvider;
     [SerializeField] private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
     [SerializeField] private UnityCellClickDetectorsFactory cellClickDetectorsFactory;
     private List<ICellClickDetector> _cellClickDetectors;
@@ -104,10 +101,7 @@ public class BoardGenerationSceneInitializer : MonoBehaviour
     
     private void SetUpContent()
     {
-        var playerPrefabProvider =
-            new PlayerContentViewPrefabProvider(new PlayerColorProviderStub(), playerContentConfig);
-        contentViewProvider.Init(playerPrefabProvider, commonContentConfig);
-        _contentView = new CellsContentView(grid, contentViewProvider);
+        _contentView = new CellsContentView(grid, null);
         _cellContentPresenter = new CellsContentPresenter(_contentView, _game.GetBoard());
     }
 
