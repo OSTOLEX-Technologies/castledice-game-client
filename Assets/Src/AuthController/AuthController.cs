@@ -25,13 +25,6 @@ namespace Src.AuthController
         {
             IAccessTokenProvider tokenProvider = _tokenProvidersStrategy.GetAccessTokenProvider(authType);
             _cacher.CacheObject(tokenProvider);
-            
-            
-            var tokenAccessOperation = Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
-            await tokenAccessOperation;
-            
-            /*TODO: Implement converting string to a corresponding DTO
-             and check for auth error (is nesessary) based on that data*/
         }
     }
 }
