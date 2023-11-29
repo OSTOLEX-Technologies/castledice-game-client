@@ -1,5 +1,4 @@
-﻿using System;
-using IObjectCacher = Src.Caching.IObjectCacher;
+﻿using Src.Caching;
 
 namespace Src.AuthController
 {
@@ -14,16 +13,25 @@ namespace Src.AuthController
             _tokenProvidersStrategy = tokenProvidersStrategy;
             _cacher = cacher;
             _view = view;
+            _view.AuthTypeChosen += OnAuthTypeChosen;
         }
 
-        public void AuthorizeWith(AuthType authType)
+        ~AuthController()
         {
-            throw new NotImplementedException();
+            _view.AuthTypeChosen -= OnAuthTypeChosen;
         }
-
-        private void OnAuthTypeChosen(object sender, AuthType authType)
+        
+        private async void OnAuthTypeChosen(object sender, AuthType authType)
         {
-            throw new NotImplementedException();   
+            IAccessTokenProvider tokenProvider = _tokenProvidersStrategy.GetAccessTokenProvider(authType);
+            _cacher.CacheObject(tokenProvider);
+            
+            
+            var tokenAccessOperation = Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
+            await tokenAccessOperation;
+            
+            /*TODO: Implement converting string to a corresponding DTO
+             and check for auth error (is nesessary) based on that data*/
         }
     }
 }
