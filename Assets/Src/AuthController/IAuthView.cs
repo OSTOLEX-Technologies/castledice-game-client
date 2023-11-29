@@ -2,6 +2,8 @@
 {
     public interface IAuthView
     {
+        public void ShowAuthResult();
+        
         
     }
 }
