@@ -12,11 +12,14 @@ namespace Src.GameplayView.CellsContent.ContentViews
 
         public override Content Content => _castle;
 
-        public void Init(CastleGO castle, GameObject model, CastleAudio audio)
+        public void Init(CastleGO castle, GameObject model, CastleAudio castleAudio)
         {
             Init(model);
-            _audio = audio;
+            _audio = castleAudio;
             _castle = castle;
+            var audioTransform = _audio.transform;
+            audioTransform.SetParent(transform);
+            audioTransform.localPosition = Vector3.zero;
         }
         
         public override void StartView()

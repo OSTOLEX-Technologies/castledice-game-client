@@ -5,6 +5,6 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation
 {
     public interface ICastleViewFactory
     {
-        CastleView GetCastleView(CastleGO knight);
+        CastleView GetCastleView(CastleGO castle);
     }
 }

@@ -22,6 +22,21 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             Assert.AreSame(castleView.transform, model.transform.parent);
             Assert.AreEqual(Vector3.zero, model.transform.localPosition);
         }
+        
+        [Test]
+        public void Init_ShouldSetGivenAudioAsChildObjectWithZeroLocalPosition()
+        {
+            var audio = new GameObject().AddComponent<CastleAudioForTests>();
+            audio.transform.position = Random.insideUnitSphere;
+            var model = new GameObject();
+            var castleView = new GameObject().AddComponent<CastleView>();
+            var castle = GetCastle();
+            
+            castleView.Init(castle, model, audio);
+            
+            Assert.AreSame(castleView.transform, audio.transform.parent);
+            Assert.AreEqual(Vector3.zero, audio.transform.localPosition);
+        }
 
         [Test]
         public void DestroyView_ShouldCallPlayDestroySound_OnGivenCastleAudio()
