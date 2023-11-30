@@ -9,7 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0efb47ab2014ef6aeab9f864e62611e, type: 3}
-  m_Name: CommonContentViewPrefabConfig
+  m_Script: {fileID: 11500000, guid: 57878aa6584c4b75b20bb9e32a16a6a8, type: 3}
+  m_Name: PlayerOrderRotationConfig
   m_EditorClassIdentifier: 
-  treePrefab: {fileID: 3613128195052720161, guid: 2e79f17d2e55446419ff3414fc6e4aee, type: 3}
+  firstPlayerRotation: {x: 0, y: 0, z: 0}
+  secondPlayerRotation: {x: 0, y: -180, z: 0}

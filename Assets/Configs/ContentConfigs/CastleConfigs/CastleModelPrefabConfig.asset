@@ -1,0 +1,16 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 342a14a7db234432abe103d9305d4dc3, type: 3}
+  m_Name: CastleModelPrefabConfig
+  m_EditorClassIdentifier: 
+  redCastleModelPrefab: {fileID: 3936718736587996255, guid: 3e04e75cc7fe4404495879f0ae87bc37, type: 3}
+  blueCastleModelPrefab: {fileID: 1266689213251016223, guid: d2719f176820ede44a71d9b7f9f96861, type: 3}

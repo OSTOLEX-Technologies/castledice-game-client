@@ -815,17 +815,17 @@ MonoBehaviour:
   gridGenerationConfig: {fileID: 11400000, guid: fd08ed526d45082449186b12a879de7e, type: 2}
   cellsFactory: {fileID: 1815871629}
   assetsConfig: {fileID: 11400000, guid: 98a63a0dc7d70744e9fa2aa3d8ada4dd, type: 2}
-  playerColorRotationConfig: {fileID: 0}
-  knightSoundsConfig: {fileID: 0}
-  knightAudioPrefab: {fileID: 0}
-  knightViewPrefab: {fileID: 0}
-  knightModelPrefabConfig: {fileID: 0}
-  treeViewPrefab: {fileID: 0}
-  treeModelPrefabConfig: {fileID: 0}
-  castleSoundsConfig: {fileID: 0}
-  castleViewPrefab: {fileID: 0}
-  castleAudioPrefab: {fileID: 0}
-  castleModelPrefabConfig: {fileID: 0}
+  playerOrderRotations: {fileID: 11400000, guid: 46274906cb25fe443bf11edbaee9faec, type: 2}
+  knightSoundsConfig: {fileID: 11400000, guid: 485eb9cf476b15846a9daa2cc5f3fd51, type: 2}
+  knightAudioPrefab: {fileID: 9031346945946173860, guid: abb0e1d6dcd916b4cbcd0a662fdec3a6, type: 3}
+  knightViewPrefab: {fileID: 8287254654038348272, guid: fec35469feb64db409bb0570e44ff1ae, type: 3}
+  knightModelPrefabConfig: {fileID: 11400000, guid: 3eb0bf1400b768348a21e9c386b86dbb, type: 2}
+  treeViewPrefab: {fileID: 6641248664255995534, guid: 89c5eb029b6403f41a5c1af3cd1c0e23, type: 3}
+  treeModelPrefabConfig: {fileID: 11400000, guid: 5de1aa0ca1a4f6447b49b8b83ae81fa9, type: 2}
+  castleSoundsConfig: {fileID: 11400000, guid: da329f08e63390a4bbcfcb6c496a1916, type: 2}
+  castleViewPrefab: {fileID: 7926198696129808440, guid: 8fd36fd32163a4e489e348d9dca9a4ca, type: 3}
+  castleAudioPrefab: {fileID: 312714061503171999, guid: 8efee6a2294d5fc4dba083eb75ad1003, type: 3}
+  castleModelPrefabConfig: {fileID: 11400000, guid: 0f61c6e54b735274c8922b3926ba91cd, type: 2}
   popupDisappearTimeMilliseconds: 1500
   redActionPointsPopup: {fileID: 1306602971}
   blueActionPointsPopup: {fileID: 1856468401}

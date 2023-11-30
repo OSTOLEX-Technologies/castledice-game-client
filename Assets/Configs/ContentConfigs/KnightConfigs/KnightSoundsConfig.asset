@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: KnightSoundsConfig
   m_EditorClassIdentifier: 
   placeSound:
-    clip: {fileID: 0}
-    volume: 0
+    clip: {fileID: 8300000, guid: 24dd6734a4dfcdf44b8a2dc9aed6156a, type: 3}
+    volume: 1
   hitSound:
-    clip: {fileID: 0}
-    volume: 0
+    clip: {fileID: 8300000, guid: f14844cbd932aa54ebcbbaf47222546e, type: 3}
+    volume: 1
   destroySound:
-    clip: {fileID: 0}
-    volume: 0
+    clip: {fileID: 8300000, guid: 250317c304a230d47aa182bdc681a426, type: 3}
+    volume: 1

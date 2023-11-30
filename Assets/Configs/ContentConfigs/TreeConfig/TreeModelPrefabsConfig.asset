@@ -9,8 +9,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: ce145446a2e04a5f8541596d58870e7f, type: 3}
-  m_Name: KnightModelConfig
+  m_Script: {fileID: 11500000, guid: e46616e7a9ce487ba030dec942427a94, type: 3}
+  m_Name: TreeModelPrefabsConfig
   m_EditorClassIdentifier: 
-  redKnightModel: {fileID: 0}
-  blueKnightModel: {fileID: 0}
+  treeModelPrefabsList:
+  - {fileID: -7949136978043226412, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}

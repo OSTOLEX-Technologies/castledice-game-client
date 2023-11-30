@@ -144,8 +144,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 778f43ca603b4f6ab5e18e24c73a5a62, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  rotationIfFirst: 45
-  rotationIfSecond: -135
 --- !u!1001 &3003957390018591422
 PrefabInstance:
   m_ObjectHideFlags: 0
