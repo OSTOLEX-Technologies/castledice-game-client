@@ -1,7 +1,6 @@
 ﻿using System;
-using System.Net.NetworkInformation;
 
-namespace Src
+namespace Src.Caching
 {
     public static class Singleton<T>
     {
