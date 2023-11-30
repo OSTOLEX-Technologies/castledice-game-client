@@ -2,7 +2,7 @@
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
-namespace Src.GameplayView.PlayersRotations
+namespace Src.GameplayView.PlayersRotations.RotationsByColor
 {
     [CreateAssetMenu(fileName = "PlayerColorRotationConfig", menuName = "Configs/PlayerRotation/PlayerColorRotationConfig")]
     public class ScriptablePlayerColorRotationConfig : ScriptableObject, IPlayerColorRotationConfig

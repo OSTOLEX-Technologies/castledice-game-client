@@ -1,9 +1,8 @@
-﻿using System;
-using castledice_game_logic;
+﻿using castledice_game_logic;
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
-namespace Src.GameplayView.PlayersRotations
+namespace Src.GameplayView.PlayersRotations.RotationsByColor
 {
     public class PlayerColorRotationProvider : IPlayerRotationProvider
     {

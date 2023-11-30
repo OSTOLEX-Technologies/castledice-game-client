@@ -1,7 +1,7 @@
 ﻿using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
-namespace Src.GameplayView.PlayersRotations
+namespace Src.GameplayView.PlayersRotations.RotationsByColor
 {
     public interface IPlayerColorRotationConfig
     {

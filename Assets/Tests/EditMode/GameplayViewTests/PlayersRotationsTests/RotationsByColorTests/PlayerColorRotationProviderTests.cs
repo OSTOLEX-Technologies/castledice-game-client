@@ -1,11 +1,11 @@
-﻿using UnityEngine;
-using static Tests.ObjectCreationUtility;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayView.PlayersColors;
-using Src.GameplayView.PlayersRotations;
+using Src.GameplayView.PlayersRotations.RotationsByColor;
+using UnityEngine;
+using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayViewTests.PlayersRotationsTests
+namespace Tests.EditMode.GameplayViewTests.PlayersRotationsTests.RotationsByColorTests
 {
     public class PlayerColorRotationProviderTests
     {
