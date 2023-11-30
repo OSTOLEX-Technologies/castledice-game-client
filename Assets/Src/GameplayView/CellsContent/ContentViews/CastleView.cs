@@ -35,6 +35,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
         public override void DestroyView()
         {
             _audio.PlayDestroySound();
+            Model.SetActive(false);
         }
     }
 }

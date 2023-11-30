@@ -49,6 +49,19 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             
             Assert.IsTrue(audio.PlayDestroySoundCalled);
         }
+
+        [Test]
+        public void DestroyView_ShouldSetModelInactive()
+        {
+            var model = new GameObject();
+            model.SetActive(true);
+            var castleView = new GameObject().AddComponent<CastleView>();
+            castleView.Init(GetCastle(), model, new GameObject().AddComponent<CastleAudioForTests>());
+            
+            castleView.DestroyView();
+            
+            Assert.IsFalse(model.activeSelf);
+        }
         
         [Test]
         public void ContentProperty_ShouldReturnCastle_GivenInInit()
