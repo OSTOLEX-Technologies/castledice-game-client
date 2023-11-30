@@ -21,7 +21,7 @@ namespace Src.AuthController
             _view.AuthTypeChosen -= OnAuthTypeChosen;
         }
         
-        private async void OnAuthTypeChosen(object sender, AuthType authType)
+        private void OnAuthTypeChosen(object sender, AuthType authType)
         {
             IAccessTokenProvider tokenProvider = _tokenProvidersStrategy.GetAccessTokenProvider(authType);
             _cacher.CacheObject(tokenProvider);
