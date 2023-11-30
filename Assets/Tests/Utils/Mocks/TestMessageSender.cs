@@ -1,7 +1,7 @@
 ﻿using Riptide;
 using Src.NetworkingModule;
 
-namespace Tests.Mocks
+namespace Tests.Utils.Mocks
 {
     public class TestMessageSender : IMessageSender
     {

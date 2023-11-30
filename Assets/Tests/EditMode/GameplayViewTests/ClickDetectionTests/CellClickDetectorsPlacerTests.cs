@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ClickDetection;
-using Tests.Mocks;
+using Tests.Utils.Mocks;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 

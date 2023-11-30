@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Reflection;
 using castledice_game_data_logic;
 using castledice_game_data_logic.ConfigsData;
@@ -15,10 +16,13 @@ using castledice_game_logic.MovesLogic;
 using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
-using Tests.Mocks;
+using Src.GameplayView.Audio;
+using Src.GameplayView.PlayersColors;
+using Tests.Utils.Mocks;
 using UnityEditor;
 using UnityEngine;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
+using Object = UnityEngine.Object;
 using Tree = castledice_game_logic.GameObjects.Tree;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -29,13 +33,28 @@ namespace Tests
     {
 #if UNITY_EDITOR
         public static void AddObjectReferenceValueToSerializedProperty<U, T>(U gameObject, string propertyName, T value) where T : Object 
-            where U: Component
+            where U: Object
         {
             var serializedObject = new SerializedObject(gameObject);
             serializedObject.FindProperty(propertyName).objectReferenceValue = value;
             serializedObject.ApplyModifiedProperties();
         }
 #endif
+        
+        public static SoundPlayer GetSoundPlayer()
+        {
+            return new GameObject().AddComponent<AudioSourceSoundPlayer>();
+        }
+        
+        public static Sound GetSound()
+        {
+            return new Sound(GetAudioClip(), 1);
+        }
+        
+        public static AudioClip GetAudioClip()
+        {
+            return AudioClip.Create("someClip", 1, 1, 1001, false);
+        }
         
         public static void SetPrivateFieldValue<T>(T value, object obj, string propertyName)
         {

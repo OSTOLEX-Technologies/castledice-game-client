@@ -2,7 +2,9 @@ using System.Collections.Generic;
 using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
+using castledice_game_logic.Math;
 using Src;
+using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsCount;
 using Src.GameplayPresenter.ActionPointsGiving;
@@ -16,19 +18,27 @@ using Src.GameplayPresenter.GameCreation.GameCreationProviders;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.ServerMoves;
+using Src.GameplayView;
 using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
 using Src.GameplayView.CellsContent;
-using Src.GameplayView.CellsContent.ContentCreation;
+using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
+using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
+using Src.GameplayView.CellsContent.ContentViews;
+using Src.GameplayView.CellsContent.ContentViewsCreation;
+using Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation;
+using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
+using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
 using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
-using Src.GameplayView.PlayersColor;
+using Src.GameplayView.PlayersColors;
+using Src.GameplayView.PlayersRotations;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
@@ -67,10 +77,21 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
     private SquareCellsViewGenerator3D _cellsViewGenerator;
     
-    [Header("Content")]
-    [SerializeField] private UnityCommonContentViewPrefabConfig commonContentConfig;
-    [SerializeField] private UnityPlayerContentViewPrefabsConfig playerContentConfig;
-    [SerializeField] private UnityContentViewProvider contentViewProvider;
+    [Header("Content configs")]
+    [SerializeField] private ScriptablePlayerColorRotationConfig playerColorRotationConfig;
+    [Header("Knight configs")]
+    [SerializeField] private KnightSoundsConfig knightSoundsConfig;
+    [SerializeField] private SoundPlayerKnightAudio knightAudioPrefab;
+    [SerializeField] private KnightView knightViewPrefab;
+    [SerializeField] private KnightModelPrefabConfig knightModelPrefabConfig;
+    [Header("Tree config")]
+    [SerializeField] private TreeView treeViewPrefab;
+    [SerializeField] private TreeModelPrefabsConfig treeModelPrefabConfig;
+    [Header("Castle config")]
+    [SerializeField] private CastleSoundsConfig castleSoundsConfig;
+    [SerializeField] private CastleView castleViewPrefab;
+    [SerializeField] private SoundPlayerCastleAudio castleAudioPrefab;
+    [SerializeField] private CastleModelPrefabConfig castleModelPrefabConfig;
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
     
@@ -199,10 +220,23 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpContent()
     {
-        var playerPrefabProvider =
-            new PlayerContentViewPrefabProvider(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
-                playerContentConfig);
-        contentViewProvider.Init(playerPrefabProvider, commonContentConfig);
+        var instantiator = new Instantiator();
+        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+        var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider);
+        var playerRotationProvider = new PlayerColorRotationProvider(playerColorRotationConfig, playerColorProvider);
+        
+        var treeModelProvider = new RandomTreeModelProvider(new RangeRandomNumberGenerator(), treeModelPrefabConfig, instantiator);
+        var treeViewFactory = new TreeViewFactory(treeModelProvider, treeViewPrefab, instantiator);
+
+        var knightModelProvider = new ColoredKnightModelProvider(playerColorProvider, knightModelPrefabConfig, instantiator);
+        var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
+        var knightViewFactory = new KnightViewFactory(playerRotationProvider, knightModelProvider, knightAudioFactory, knightViewPrefab, instantiator);
+
+        var castleModelProvider = new ColoredCastleModelProvider(playerColorProvider, castleModelPrefabConfig, instantiator);
+        var castleAudioFactory = new SoundPlayerCastleAudioFactory(castleSoundsConfig, castleAudioPrefab, instantiator);
+        var castleViewFactory = new CastleViewFactory(castleModelProvider, castleAudioFactory, castleViewPrefab, instantiator);
+        
+        var contentViewProvider = new ContentViewProvider(treeViewFactory, knightViewFactory, castleViewFactory);
         _contentView = new CellsContentView(grid, contentViewProvider);
         _cellContentPresenter = new CellsContentPresenter(_contentView, _game.GetBoard());
     }

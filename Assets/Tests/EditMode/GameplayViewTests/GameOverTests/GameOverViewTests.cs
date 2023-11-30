@@ -1,8 +1,8 @@
 ﻿using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
-using Src.GameplayView.CellsContent.ContentCreation;
 using Src.GameplayView.GameOver;
+using Src.GameplayView.PlayersColors;
 using UnityEngine;
 using static Tests.ObjectCreationUtility;
 

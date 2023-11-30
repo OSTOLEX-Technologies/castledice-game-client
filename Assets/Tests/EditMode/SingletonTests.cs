@@ -1,6 +1,7 @@
 ﻿using System;
 using NUnit.Framework;
 using Src;
+using Src.Caching;
 
 namespace Tests.EditMode
 {

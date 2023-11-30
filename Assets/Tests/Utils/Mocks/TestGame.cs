@@ -4,7 +4,7 @@ using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.MovesLogic;
 
-namespace Tests.Mocks
+namespace Tests.Utils.Mocks
 {
     public class TestGame : Game
     {

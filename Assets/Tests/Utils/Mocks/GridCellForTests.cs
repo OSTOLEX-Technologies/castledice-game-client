@@ -4,7 +4,7 @@ using Src.GameplayView.Grid;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
-namespace Tests.Mocks
+namespace Tests.Utils.Mocks
 {
     public class GridCellForTests : IGridCell
     {

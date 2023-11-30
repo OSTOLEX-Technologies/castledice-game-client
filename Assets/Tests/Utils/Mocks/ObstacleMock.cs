@@ -1,7 +1,7 @@
 ﻿using System;
 using castledice_game_logic.GameObjects;
 
-namespace Tests.Mocks
+namespace Tests.Utils.Mocks
 {
     public class ObstacleMock : Content, IPlaceBlocking
     {
