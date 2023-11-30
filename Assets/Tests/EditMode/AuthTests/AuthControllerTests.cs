@@ -1,4 +1,6 @@
-﻿using Moq;
+﻿using System;
+using System.Collections.Generic;
+using Moq;
 using NUnit.Framework;
 using Src.AuthController;
 using Src.Caching;
@@ -9,38 +11,27 @@ namespace Tests.EditMode.AuthTests
     public class AuthControllerTests
     {
         [Test]
-        [TestCase(AuthType.Google)]
-        [TestCase(AuthType.Metamask)]
-        public void CacheObject_ShouldSubscribeToAuthRequestEvent(AuthType authType)
+        [TestCaseSource(nameof(GetAuthTypes))]
+        public void OnAuthTypeChosen_ShouldCacheAccessTokenProvider_ObtainedFromStrategy(AuthType authType)
         {
+            var expectedTokenProvider = new Mock<IAccessTokenProvider>().Object;
+            var cacherMock = new Mock<IObjectCacher>();
             var providersStrategyMock = new Mock<IAccessTokenProvidersStrategy>();
+            providersStrategyMock.Setup(s => s.GetAccessTokenProvider(authType)).Returns(expectedTokenProvider);
             AuthViewMock viewMock = new AuthViewMock();
             
-            var controller = new AuthControllerMock(providersStrategyMock.Object, new SingletonCacher(), viewMock);
-            
+            var controller = new AuthController(providersStrategyMock.Object, cacherMock.Object, viewMock);
             viewMock.SelectAuthType(authType);
-            Assert.True(controller.EventFired);
-        }
-        
-        [Test]
-        [TestCase(AuthType.Google, typeof(FirebaseTokenProvider))]
-        [TestCase(AuthType.Metamask, typeof(MetamaskTokenProvider))]
-        public void OnAuthTypeChosen_ShouldCacheAccessTokenProvider(AuthType authType, object tokenProviderClass)
-        {
-            var providersStrategyMock = new Mock<IAccessTokenProvidersStrategy>();
-            AuthViewMock viewMock = new AuthViewMock();
-            
-            var controller = new AuthController(providersStrategyMock.Object, new SingletonCacher(), viewMock);
 
-            Assert.IsInstanceOf<IAccessTokenProvider>(Singleton<IAccessTokenProvider>.Instance);
+            cacherMock.Verify(c => c.CacheObject(expectedTokenProvider), Times.Once);
         }
-        
-        [TearDown]
-        public void UnregisterTokenProviderSingleton()
+
+        public static IEnumerable<AuthType> GetAuthTypes()
         {
-            if (Singleton<IAccessTokenProvider>.Registered)
+            var authTypes = Enum.GetValues(typeof(AuthType));
+            foreach (var authType in authTypes)
             {
-                Singleton<IAccessTokenProvider>.Unregister();
+                yield return (AuthType) authType;
             }
         }
     }
