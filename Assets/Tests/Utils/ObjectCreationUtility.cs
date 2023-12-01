@@ -269,15 +269,12 @@ namespace Tests
         {
             return new Tree(1, false);
         }
-
-        public static Player GetPlayer()
+        
+        public static Player GetPlayer(int id = 1, int actionPointsCount = 6)
         {
-            return GetPlayer(1);
-        }
-
-        public static Player GetPlayer(int id)
-        {
-            return new Player(new PlayerActionPoints(), id);
+            var actionPoints = new PlayerActionPoints();
+            actionPoints.IncreaseActionPoints(actionPointsCount);
+            return new Player(actionPoints, id);
         }
 
         public static IPlayerDataProvider GetPlayerDataProvider(bool authorized = true, string token = "token", int id = 1)
