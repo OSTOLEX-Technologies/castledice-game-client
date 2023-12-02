@@ -1,8 +1,8 @@
 ﻿using System.Threading.Tasks;
 
-namespace Src.AuthController
+namespace Src.AuthController.TokenProviders
 {
-    public class FirebaseTokenProvider : IAccessTokenProvider
+    public class MetamaskTokenProvider : IAccessTokenProvider
     {
         public Task<string> GetAccessTokenAsync()
         {

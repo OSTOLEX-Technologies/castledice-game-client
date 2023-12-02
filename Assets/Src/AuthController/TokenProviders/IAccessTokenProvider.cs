@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 
-namespace Src.AuthController
+namespace Src.AuthController.TokenProviders
 {
     public interface IAccessTokenProvider
     {

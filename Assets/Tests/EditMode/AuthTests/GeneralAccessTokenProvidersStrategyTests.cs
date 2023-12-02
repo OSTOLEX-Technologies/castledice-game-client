@@ -1,8 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Src.AuthController;
+using Src.AuthController.TokenProviders;
+using Src.AuthController.TokenProviders.TokenProvidersFactory;
 
 namespace Tests.EditMode.AuthTests
 {
@@ -10,21 +13,21 @@ namespace Tests.EditMode.AuthTests
     {
         [Test]
         [TestCaseSource(nameof(GetAuthTypes))]
-        public void GetAccessTokenProvider_ShouldReturnCorrectTokenProvider_ObtainedFromStrategy(AuthType authType)
+        public async Task GetAccessTokenProvider_ShouldReturnCorrectTokenProvider_ObtainedFromStrategy(AuthType authType)
         {
-            var expectedFirebaseTokenProvider = new FirebaseTokenProvider();
-            var expectedMetamaskTokenProvider = new MetamaskTokenProvider();
+            var expectedFirebaseTokenProvider = new Mock<FirebaseTokenProvider>();
+            var expectedMetamaskTokenProvider = new Mock<MetamaskTokenProvider>();
 
             var firebaseTokenProviderFactoryMock = new Mock<IFirebaseTokenProvidersFactory>();
             firebaseTokenProviderFactoryMock.Setup(s => 
-                s.GetTokenProvider(FirebaseAuthProviderType.Google)).Returns(expectedFirebaseTokenProvider);
+                s.GetTokenProviderAsync(FirebaseAuthProviderType.Google)).ReturnsAsync(expectedFirebaseTokenProvider.Object);
             var metamaskTokenProviderFactoryMock = new Mock<IMetamaskTokenProvidersFactory>();
             metamaskTokenProviderFactoryMock.Setup(s => 
-                s.GetTokenProvider()).Returns(expectedMetamaskTokenProvider);
+                s.GetTokenProviderAsync()).ReturnsAsync(expectedMetamaskTokenProvider.Object);
 
             
             var generalProviderStrategy = new GeneralAccessTokenProvidersStrategy(firebaseTokenProviderFactoryMock.Object, metamaskTokenProviderFactoryMock.Object);
-            var actualTokenProvider = generalProviderStrategy.GetAccessTokenProvider(authType);
+            var actualTokenProvider = await generalProviderStrategy.GetAccessTokenProviderAsync(authType);
             
             
             if (authType.Equals(AuthType.Metamask))

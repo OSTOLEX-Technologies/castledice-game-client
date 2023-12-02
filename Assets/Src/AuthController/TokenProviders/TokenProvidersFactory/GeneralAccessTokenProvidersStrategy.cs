@@ -1,6 +1,7 @@
-﻿using Src.AuthController.Exceptions;
+﻿using System.Threading.Tasks;
+using Src.AuthController.Exceptions;
 
-namespace Src.AuthController
+namespace Src.AuthController.TokenProviders.TokenProvidersFactory
 {
     public class GeneralAccessTokenProvidersStrategy : IAccessTokenProvidersStrategy
     {
@@ -15,12 +16,12 @@ namespace Src.AuthController
             _metamaskFactory = metamaskFactory;
         }
 
-        public IAccessTokenProvider GetAccessTokenProvider(AuthType authType)
+        public async Task<IAccessTokenProvider> GetAccessTokenProviderAsync(AuthType authType)
         {
             switch (authType)
             {
-                case AuthType.Google: return _firebaseFactory.GetTokenProvider(FirebaseAuthProviderType.Google);
-                case AuthType.Metamask: return _metamaskFactory.GetTokenProvider();
+                case AuthType.Google: return await _firebaseFactory.GetTokenProviderAsync(FirebaseAuthProviderType.Google);
+                case AuthType.Metamask: return await _metamaskFactory.GetTokenProviderAsync();
                 default: throw new NotSelectedAccessTokenProviderException(authType);
             }
         }
