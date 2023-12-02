@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using Firebase;
+using Firebase.Auth;
 using Moq;
 using NUnit.Framework;
 using Src.AuthController;
@@ -15,7 +17,10 @@ namespace Tests.EditMode.AuthTests
         [TestCaseSource(nameof(GetAuthTypes))]
         public async Task GetAccessTokenProvider_ShouldReturnCorrectTokenProvider_ObtainedFromStrategy(AuthType authType)
         {
-            var expectedFirebaseTokenProvider = new Mock<FirebaseTokenProvider>();
+
+            var firebaseUserMock = FirebaseAuth.GetAuth(FirebaseApp.DefaultInstance).CurrentUser;
+            
+            var expectedFirebaseTokenProvider = new Mock<FirebaseTokenProvider>(firebaseUserMock);
             var expectedMetamaskTokenProvider = new Mock<MetamaskTokenProvider>();
 
             var firebaseTokenProviderFactoryMock = new Mock<IFirebaseTokenProvidersFactory>();
@@ -32,11 +37,11 @@ namespace Tests.EditMode.AuthTests
             
             if (authType.Equals(AuthType.Metamask))
             {
-                Assert.AreSame(expectedMetamaskTokenProvider, actualTokenProvider);
+                Assert.AreSame(expectedMetamaskTokenProvider.Object, actualTokenProvider);
             }
             else
             {
-                Assert.AreSame(expectedFirebaseTokenProvider, actualTokenProvider);
+                Assert.AreSame(expectedFirebaseTokenProvider.Object, actualTokenProvider);
             }
         }
 

@@ -13,15 +13,13 @@ namespace Src.AuthController.CredentialProviders
     {
         private const int LoopbackPort = 3303;
         private static readonly string RedirectUri = $"http://localhost:{LoopbackPort}";
-
-        private static readonly HttpPortListener Listener;
+        
         private static string _authCode;
         
         private static GoogleIdTokenResponse _googleApiResponse;
         private static float _googleApiResponseIssueTime;
         private const float AccessTokenValidityMargin = 30f;
-
-
+        
         public static async Task<GoogleIdTokenResponse> GetCredentialAsync()
         {
             TaskCompletionSource<GoogleIdTokenResponse> responseTcs =
@@ -57,18 +55,18 @@ namespace Src.AuthController.CredentialProviders
         {
             Application.OpenURL($"https://accounts.google.com/o/oauth2/v2/auth?client_id={GoogleAuthConfig.ClientId}&redirect_uri={RedirectUri}&response_type=code&scope=email");
 
-            Listener.StartListening(code =>
+            var listener = new HttpPortListener(LoopbackPort);
+            listener.StartListening(code =>
             {
                 _authCode = code;
                 
                 ExchangeAuthCodeWithIdToken(googleIdTokenResponse =>
                 {
-                    //SingInWithToken(idToken, "google.com");
                     _googleApiResponse = googleIdTokenResponse;
                     tcs.SetResult(_googleApiResponse);
                 });
                 
-                Listener.StopListening();
+                listener.StopListening();
             });
         }
         
