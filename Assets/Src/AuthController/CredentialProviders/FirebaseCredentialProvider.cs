@@ -15,8 +15,9 @@ namespace Src.AuthController
         {
             switch (authProviderType)
             {
-                case FirebaseAuthProviderType.Google: 
-                    var googleCredentials = await GoogleCredentialProvider.GetCredentialAsync();
+                case FirebaseAuthProviderType.Google:
+                    var googleCredentialProvider = new GoogleCredentialProvider();
+                    var googleCredentials = await googleCredentialProvider.GetCredentialAsync();
                     Credential credential = GoogleAuthProvider.GetCredential(googleCredentials.id_token, googleCredentials.access_token);
                     return credential;
                 default:

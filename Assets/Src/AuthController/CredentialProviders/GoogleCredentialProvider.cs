@@ -9,18 +9,18 @@ using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders
 {
-    public static class GoogleCredentialProvider
+    public class GoogleCredentialProvider
     {
         private const int LoopbackPort = 3303;
-        private static readonly string RedirectUri = $"http://localhost:{LoopbackPort}";
+        private readonly string _redirectUri = $"http://localhost:{LoopbackPort}";
         
-        private static string _authCode;
+        private string _authCode;
         
-        private static GoogleIdTokenResponse _googleApiResponse;
-        private static float _googleApiResponseIssueTime;
+        private GoogleIdTokenResponse _googleApiResponse;
+        private float _googleApiResponseIssueTime;
         private const float AccessTokenValidityMargin = 30f;
         
-        public static async Task<GoogleIdTokenResponse> GetCredentialAsync()
+        public virtual async Task<GoogleIdTokenResponse> GetCredentialAsync()
         {
             TaskCompletionSource<GoogleIdTokenResponse> responseTcs =
                 new TaskCompletionSource<GoogleIdTokenResponse>();
@@ -43,7 +43,7 @@ namespace Src.AuthController.CredentialProviders
             return _googleApiResponse;
         }
 
-        private static bool ValidateAccessToken()
+        private bool ValidateAccessToken()
         {
             int.TryParse(_googleApiResponse.expires_in, out var validityPeriod);
 
@@ -51,9 +51,9 @@ namespace Src.AuthController.CredentialProviders
                    (validityPeriod - AccessTokenValidityMargin);
         }
         
-        private static void GetAuthData(TaskCompletionSource<GoogleIdTokenResponse> tcs)
+        private void GetAuthData(TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
-            Application.OpenURL($"https://accounts.google.com/o/oauth2/v2/auth?client_id={GoogleAuthConfig.ClientId}&redirect_uri={RedirectUri}&response_type=code&scope=email");
+            Application.OpenURL($"https://accounts.google.com/o/oauth2/v2/auth?client_id={GoogleAuthConfig.ClientId}&redirect_uri={_redirectUri}&response_type=code&scope=email");
 
             var listener = new HttpPortListener(LoopbackPort);
             listener.StartListening(code =>
@@ -70,7 +70,7 @@ namespace Src.AuthController.CredentialProviders
             });
         }
         
-        private static void ExchangeAuthCodeWithIdToken(Action<GoogleIdTokenResponse> callback)
+        private void ExchangeAuthCodeWithIdToken(Action<GoogleIdTokenResponse> callback)
         {
             RestClient.Request(new RequestHelper
             {
@@ -81,7 +81,7 @@ namespace Src.AuthController.CredentialProviders
                     {"code", _authCode},
                     {"client_id", GoogleAuthConfig.ClientId},
                     {"client_secret", GoogleAuthConfig.ClientSecret},
-                    {"redirect_uri", RedirectUri},
+                    {"redirect_uri", _redirectUri},
                     {"grant_type","authorization_code"}
                 }
             
@@ -93,7 +93,7 @@ namespace Src.AuthController.CredentialProviders
                 }).Catch(Debug.Log);
         }
         
-        private static void RefreshAccessToken(TaskCompletionSource<GoogleIdTokenResponse> tcs)
+        private void RefreshAccessToken(TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
             RestClient.Request(new RequestHelper
             {
@@ -104,7 +104,7 @@ namespace Src.AuthController.CredentialProviders
                     {"code", _authCode},
                     {"client_id", GoogleAuthConfig.ClientId},
                     {"client_secret", GoogleAuthConfig.ClientSecret},
-                    {"redirect_uri", RedirectUri},
+                    {"redirect_uri", _redirectUri},
                     {"grant_type","authorization_code"}
                 }
             
