@@ -1,6 +1,7 @@
 ﻿using NUnit.Framework;
 using Src.GameplayView.CellsContent.ContentViews;
 using Tests.Utils.Mocks;
+using UnityEditor;
 using static Tests.ObjectCreationUtility;
 using UnityEngine;
 
@@ -49,6 +50,19 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             
             Assert.IsTrue(audio.PlayDestroySoundCalled);
         }
+
+        [Test]
+        public void DestroyView_ShouldSetModelInactive()
+        {
+            var model = new GameObject();
+            model.SetActive(true);
+            var castleView = new GameObject().AddComponent<CastleView>();
+            castleView.Init(GetCastle(), model, new GameObject().AddComponent<CastleAudioForTests>());
+            
+            castleView.DestroyView();
+            
+            Assert.IsFalse(model.activeSelf);
+        }
         
         [Test]
         public void ContentProperty_ShouldReturnCastle_GivenInInit()
@@ -59,6 +73,19 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             castleView.Init(castle, new GameObject(), audio);
             
             Assert.AreSame(castle, castleView.Content);
+        }
+
+        [Test]
+        public void HitSound_ShouldBePlayed_IfCastleGotHit()
+        {
+            var castleView = new GameObject().AddComponent<CastleView>();
+            var audio = castleView.gameObject.AddComponent<CastleAudioForTests>();
+            var castle = GetCastle();
+            castleView.Init(castle, new GameObject(), audio);
+            
+            castle.CaptureHit(GetPlayer(actionPointsCount: 6));
+            
+            Assert.IsTrue(audio.PlayHitSoundCalled);
         }
     }
 }

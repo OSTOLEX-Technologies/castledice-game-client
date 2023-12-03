@@ -38,14 +38,15 @@ using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.PlayersColors;
-using Src.GameplayView.PlayersRotations;
+using Src.GameplayView.PlayersNumbers;
+using Src.GameplayView.PlayersRotations.RotationsByColor;
+using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
 using TMPro;
 using UnityEngine;
-using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 public class DuelGameSceneInitializer : MonoBehaviour
 {
@@ -78,7 +79,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private SquareCellsViewGenerator3D _cellsViewGenerator;
     
     [Header("Content configs")]
-    [SerializeField] private ScriptablePlayerColorRotationConfig playerColorRotationConfig;
+    [SerializeField] private ScriptablePlayerOrderRotationConfig playerOrderRotations;
     [Header("Knight configs")]
     [SerializeField] private KnightSoundsConfig knightSoundsConfig;
     [SerializeField] private SoundPlayerKnightAudio knightAudioPrefab;
@@ -221,9 +222,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpContent()
     {
         var instantiator = new Instantiator();
+        var playersList = _game.GetAllPlayers();
         var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
         var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider);
-        var playerRotationProvider = new PlayerColorRotationProvider(playerColorRotationConfig, playerColorProvider);
+        var playerNumberProvider = new PlayerNumberProvider(playersList);
+        var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
         
         var treeModelProvider = new RandomTreeModelProvider(new RangeRandomNumberGenerator(), treeModelPrefabConfig, instantiator);
         var treeViewFactory = new TreeViewFactory(treeModelProvider, treeViewPrefab, instantiator);

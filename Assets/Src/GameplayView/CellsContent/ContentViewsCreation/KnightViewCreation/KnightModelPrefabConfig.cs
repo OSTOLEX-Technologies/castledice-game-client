@@ -4,6 +4,8 @@ using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
 {
+    [CreateAssetMenu(fileName = "KnightModelPrefabConfig", menuName = "Configs/Content/Knight/KnightModelPrefabConfig")]
+
     public class KnightModelPrefabConfig : ScriptableObject, IKnightModelPrefabProvider
     {
         [SerializeField] private GameObject redKnightModelPrefab;

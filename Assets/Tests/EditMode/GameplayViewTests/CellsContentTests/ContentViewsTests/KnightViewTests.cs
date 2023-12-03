@@ -70,6 +70,19 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         }
 
         [Test]
+        public void DestroyView_ShouldSetModelInactive()
+        {
+            var model = new GameObject();
+            model.SetActive(true);
+            var knightView = new GameObject().AddComponent<KnightView>();
+            knightView.Init(GetKnight(), model, Vector3.zero, new GameObject().AddComponent<KnightAudioForTests>());
+            
+            knightView.DestroyView();
+            
+            Assert.IsFalse(model.activeSelf);
+        }
+
+        [Test]
         public void ContentProperty_ShouldReturnKnight_GivenInInit()
         {
             var expectedKnight = GetKnight();

@@ -17,6 +17,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
             Init(model);
             _audio = castleAudio;
             _castle = castle;
+            _castle.Hit += OnHit;
             var audioTransform = _audio.transform;
             audioTransform.SetParent(transform);
             audioTransform.localPosition = Vector3.zero;
@@ -35,6 +36,12 @@ namespace Src.GameplayView.CellsContent.ContentViews
         public override void DestroyView()
         {
             _audio.PlayDestroySound();
+            Model.SetActive(false);
+        }
+
+        private void OnHit(object sender, int damage)
+        {
+            _audio.PlayHitSound();
         }
     }
 }

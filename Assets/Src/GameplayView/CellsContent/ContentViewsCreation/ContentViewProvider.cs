@@ -2,6 +2,7 @@
 using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
+using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.GameplayView.CellsContent.ContentViewsCreation
 {
@@ -28,7 +29,7 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation
             return _treeViewFactory.GetTreeView(tree);
         }
 
-        public ContentView VisitCastle(castledice_game_logic.GameObjects.Castle castle)
+        public ContentView VisitCastle(CastleGO castle)
         {
             return _castleViewFactory.GetCastleView(castle);
         }
