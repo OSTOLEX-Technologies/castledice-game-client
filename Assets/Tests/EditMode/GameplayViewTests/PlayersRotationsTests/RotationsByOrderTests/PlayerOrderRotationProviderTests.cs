@@ -5,6 +5,7 @@ using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView.PlayersColors;
+using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Random = UnityEngine.Random;
 
@@ -12,49 +13,22 @@ namespace Tests.EditMode.GameplayViewTests.PlayersRotationsTests.RotationsByOrde
 {
     public class PlayerOrderRotationProviderTests
     {
-        public struct PlayerOrderAndPlayersCount
-        {
-            public int PlayerOrder { get; }
-            public int PlayersCount { get; }
-            
-            public PlayerOrderAndPlayersCount(int playerOrder, int playersCount)
-            {
-                PlayerOrder = playerOrder;
-                PlayersCount = playersCount;
-            }
-        }
         
         [Test]
-        [TestCaseSource(nameof(GetOrdersAndCounts))]
-        public void GetRotation_ShouldReturnRotation_AccordingToConfig(PlayerOrderAndPlayersCount data)
+        public void GetRotation_ShouldReturnRotation_AccordingToConfig()
         {
-            var playerOrder = data.PlayerOrder;
-            var playersCount = data.PlayersCount;
-            var playersList = new List<Player>();
-            for (var i = 0; i < playersCount; i++)
-            {
-                playersList.Add(GetPlayer());
-            }
-            var player = playersList[playerOrder - 1];
+            var player = GetPlayer();
+            var playerNumber = Random.Range(1, 100);
+            var playerNumberProviderMock = new Mock<IPlayerNumberProvider>();
+            playerNumberProviderMock.Setup(provider => provider.GetPlayerNumber(player)).Returns(playerNumber);
             var configMock = new Mock<IPlayerOrderRotationConfig>();
             var expectedRotation = Random.insideUnitSphere;
-            configMock.Setup(config => config.GetRotation(playerOrder)).Returns(expectedRotation);
-            var playerRotationProvider = new PlayerOrderRotationProvider(configMock.Object, playersList);
+            configMock.Setup(config => config.GetRotation(playerNumber)).Returns(expectedRotation);
+            var playerRotationProvider = new PlayerOrderRotationProvider(configMock.Object, playerNumberProviderMock.Object);
             
             var rotation = playerRotationProvider.GetRotation(player);
             
             Assert.AreEqual(expectedRotation, rotation);
-        }
-        
-        public static IEnumerable<PlayerOrderAndPlayersCount> GetOrdersAndCounts()
-        {
-            var colors = Enum.GetValues(typeof(PlayerColor));
-            var orderNumber = 1;
-            foreach (var color in colors)
-            {
-                yield return new PlayerOrderAndPlayersCount(orderNumber, colors.Length);
-                orderNumber++;
-            }
         }
     }
 }

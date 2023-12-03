@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using castledice_game_logic;
+using Src.GameplayView.PlayersNumbers;
 using UnityEngine;
 
 namespace Src.GameplayView.PlayersRotations.RotationsByOrder
@@ -7,18 +8,18 @@ namespace Src.GameplayView.PlayersRotations.RotationsByOrder
     public class PlayerOrderRotationProvider : IPlayerRotationProvider
     {
         private readonly IPlayerOrderRotationConfig _config;
-        private readonly List<Player> _orderedPlayers;
+        private readonly IPlayerNumberProvider _playerNumberProvider;
 
-        public PlayerOrderRotationProvider(IPlayerOrderRotationConfig config, List<Player> orderedPlayers)
+        public PlayerOrderRotationProvider(IPlayerOrderRotationConfig config, IPlayerNumberProvider playerNumberProvider)
         {
             _config = config;
-            _orderedPlayers = orderedPlayers;
+            _playerNumberProvider = playerNumberProvider;
         }
 
         public Vector3 GetRotation(Player player)
         {
-            var playerOrder = _orderedPlayers.IndexOf(player) + 1;
-            var rotation = _config.GetRotation(playerOrder);
+            var playerNumber = _playerNumberProvider.GetPlayerNumber(player);
+            var rotation = _config.GetRotation(playerNumber);
             return rotation;
         }
     }

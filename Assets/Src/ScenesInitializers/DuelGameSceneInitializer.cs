@@ -37,6 +37,7 @@ using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.PlayersColors;
+using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByColor;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.NetworkingModule;
@@ -223,7 +224,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var playersList = _game.GetAllPlayers();
         var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
         var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider);
-        var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playersList);
+        var playerNumberProvider = new PlayerNumberProvider(playersList);
+        var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
         
         var treeModelProvider = new RandomTreeModelProvider(new RangeRandomNumberGenerator(), treeModelPrefabConfig, instantiator);
         var treeViewFactory = new TreeViewFactory(treeModelProvider, treeViewPrefab, instantiator);
