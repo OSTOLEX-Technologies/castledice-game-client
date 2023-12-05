@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Src.AuthController.REST.REST_Responses
+namespace Src.AuthController.REST.REST_Response_DTOs
 {
     [Serializable]
     public class GoogleIdTokenResponse
@@ -13,5 +13,9 @@ namespace Src.AuthController.REST.REST_Responses
         public string id_token;
 
         public string refresh_token;
+        
+        public string scope;
+        
+        public string token_type;
     }
 }

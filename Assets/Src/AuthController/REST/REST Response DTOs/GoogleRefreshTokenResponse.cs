@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Src.AuthController.REST.REST_Responses
+namespace Src.AuthController.REST.REST_Response_DTOs
 {
     [Serializable]
     public class GoogleRefreshTokenResponse

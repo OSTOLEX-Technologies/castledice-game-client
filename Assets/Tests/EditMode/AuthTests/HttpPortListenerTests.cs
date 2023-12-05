@@ -6,7 +6,6 @@ using NUnit.Framework;
 using Proyecto26;
 using Src.AuthController;
 using Src.AuthController.REST;
-using Src.AuthController.REST.REST_Responses;
 using UnityEngine;
 using UnityEngine.Networking;
 

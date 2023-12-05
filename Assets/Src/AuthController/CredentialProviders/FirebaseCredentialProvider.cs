@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Firebase.Auth;
 using Src.AuthController.CredentialProviders;
+using Src.AuthController.CredentialProviders.Google;
 using Src.AuthController.Exceptions;
 
 namespace Src.AuthController
