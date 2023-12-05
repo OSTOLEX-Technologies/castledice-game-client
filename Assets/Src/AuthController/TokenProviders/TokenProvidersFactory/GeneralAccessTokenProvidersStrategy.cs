@@ -22,7 +22,7 @@ namespace Src.AuthController.TokenProviders.TokenProvidersFactory
             {
                 case AuthType.Google: return await _firebaseFactory.GetTokenProviderAsync(FirebaseAuthProviderType.Google);
                 case AuthType.Metamask: return await _metamaskFactory.GetTokenProviderAsync();
-                default: throw new NotSelectedAccessTokenProviderException(authType);
+                default: throw new AccessTokenProviderNotFoundException(authType);
             }
         }
     }

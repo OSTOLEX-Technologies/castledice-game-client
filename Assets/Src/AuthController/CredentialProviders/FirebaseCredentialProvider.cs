@@ -22,7 +22,7 @@ namespace Src.AuthController
                     Credential credential = GoogleAuthProvider.GetCredential(googleCredentials.id_token, googleCredentials.access_token);
                     return credential;
                 default:
-                    throw new NotSelectedFirebaseCredentialProviderException(authProviderType);
+                    throw new FirebaseCredentialProviderNotFoundException(authProviderType);
             }
         }
     }

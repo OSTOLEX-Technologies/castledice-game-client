@@ -15,7 +15,7 @@ namespace Src.AuthController.REST
                 case RestRequestMethodType.Post: return "POST";
                 case RestRequestMethodType.Get: return "GET";
                 case RestRequestMethodType.Delete: return "DELETE";
-                default: throw new NotAssignedRestRequestMethodNameException(type);
+                default: throw new RestRequestMethodNameNotFoundException(type);
             }
         }
         
