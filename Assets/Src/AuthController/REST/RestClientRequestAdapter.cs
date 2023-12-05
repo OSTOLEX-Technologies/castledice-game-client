@@ -8,7 +8,7 @@ namespace Src.AuthController.REST
 {
     public static class RestClientRequestAdapter
     {
-        private static string GetRequestMethodName(RestRequestMethodType type)
+        public static string GetRequestMethodName(RestRequestMethodType type)
         {
             switch (type)
             {
