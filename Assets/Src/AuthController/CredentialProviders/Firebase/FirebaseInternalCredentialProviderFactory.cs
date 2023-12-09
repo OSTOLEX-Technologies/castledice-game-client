@@ -1,4 +1,5 @@
 ﻿using Src.AuthController.CredentialProviders.Firebase.Google;
+using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST;
 
 namespace Src.AuthController.CredentialProviders.Firebase
@@ -9,7 +10,8 @@ namespace Src.AuthController.CredentialProviders.Firebase
         {
             return new GoogleCredentialProvider(
                 new GoogleRestRequestsAdapter(
-                    new RestClientRequestAdapter()));
+                    new RestClientRequestAdapter()),
+                new GoogleOAuthUrl());
         }
     }
 }

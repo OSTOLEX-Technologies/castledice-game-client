@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.AuthKeys;
+using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST;
 using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
@@ -9,20 +10,19 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
     public class GoogleCredentialProvider : IGoogleCredentialProvider
     {
-        private const int LoopbackPort = 3303;
-        private readonly string _redirectUri = $"http://localhost:{LoopbackPort}";
-        
         private readonly IGoogleRestRequestsAdapter _googleRestRequestsAdapter;
-        
+        private readonly IGoogleOAuthUrl _oAuthUrl;
+
         private string _authCode;
         
         private GoogleIdTokenResponse _googleApiResponse;
         private float _googleApiResponseIssueTime;
         private const float AccessTokenValidityMargin = 30f;
 
-        public GoogleCredentialProvider(IGoogleRestRequestsAdapter googleRestRequestsAdapter)
+        public GoogleCredentialProvider(IGoogleRestRequestsAdapter googleRestRequestsAdapter, IGoogleOAuthUrl oAuthUrl)
         {
             _googleRestRequestsAdapter = googleRestRequestsAdapter;
+            _oAuthUrl = oAuthUrl;
         }
         
         public async Task<GoogleIdTokenResponse> GetCredentialAsync()
@@ -68,11 +68,9 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         
         private void GetAuthData(TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
-            Application.OpenURL($"https://accounts.google.com/o/oauth2/v2/auth?client_id=" +
-                                $"{GoogleAuthConfig.ClientId}&redirect_uri=" +
-                                $"{_redirectUri}&response_type=code&scope=email");
+            _oAuthUrl.Open();
 
-            var listener = new HttpPortListener(LoopbackPort);
+            var listener = new HttpPortListener(GoogleAuthConfig.LoopbackPort);
             listener.StartListening(code =>
             {
                 _authCode = code;
@@ -90,7 +88,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.ClientSecret,
                 _authCode,
                 GoogleAuthConfig.Verifier,
-                _redirectUri);
+                GoogleAuthConfig.RedirectUri);
             
             _googleRestRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto.AsDictionary(), tcs);
         }
