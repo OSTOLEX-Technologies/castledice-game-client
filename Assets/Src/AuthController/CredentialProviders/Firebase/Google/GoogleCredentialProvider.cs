@@ -5,9 +5,9 @@ using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
 using UnityEngine;
 
-namespace Src.AuthController.CredentialProviders.Google
+namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
-    public class GoogleCredentialProvider
+    public class GoogleCredentialProvider : IGoogleCredentialProvider
     {
         private const int LoopbackPort = 3303;
         private readonly string _redirectUri = $"http://localhost:{LoopbackPort}";
@@ -18,7 +18,7 @@ namespace Src.AuthController.CredentialProviders.Google
         private float _googleApiResponseIssueTime;
         private const float AccessTokenValidityMargin = 30f;
         
-        public virtual async Task<GoogleIdTokenResponse> GetCredentialAsync()
+        public async Task<GoogleIdTokenResponse> GetCredentialAsync()
         {
             if (_googleApiResponse != null)
             {

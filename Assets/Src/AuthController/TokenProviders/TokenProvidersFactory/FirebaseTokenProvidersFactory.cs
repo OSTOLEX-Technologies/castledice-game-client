@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Firebase.Auth;
+using Src.AuthController.CredentialProviders.Firebase;
 
 namespace Src.AuthController.TokenProviders.TokenProvidersFactory
 {

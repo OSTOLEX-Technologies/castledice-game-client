@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Firebase.Auth;
 
-namespace Src.AuthController
+namespace Src.AuthController.CredentialProviders.Firebase
 {
     public interface IFirebaseCredentialProvider
     {

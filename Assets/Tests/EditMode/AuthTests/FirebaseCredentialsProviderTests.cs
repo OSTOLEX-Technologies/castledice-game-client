@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Src.AuthController;
-using Src.AuthController.CredentialProviders.Google;
+using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.REST.REST_Response_DTOs;
 
 namespace Tests.EditMode.AuthTests
