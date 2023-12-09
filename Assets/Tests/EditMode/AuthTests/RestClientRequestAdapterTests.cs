@@ -11,7 +11,7 @@ namespace Tests.EditMode.AuthTests
         [TestCaseSource(nameof(GetRequestMethodTypes))]
         public void GetRequestMethodName_ShouldReturnValidName(RestRequestMethodType type)
         {
-            Assert.DoesNotThrow(() => RestClientRequestAdapter.GetRequestMethodName(type));
+            Assert.DoesNotThrow(() => RestRequestMethodNames.GetRequestMethodName(type));
         }
 
         public static IEnumerable<RestRequestMethodType> GetRequestMethodTypes()

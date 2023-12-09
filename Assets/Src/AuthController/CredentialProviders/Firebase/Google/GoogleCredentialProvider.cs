@@ -12,11 +12,18 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         private const int LoopbackPort = 3303;
         private readonly string _redirectUri = $"http://localhost:{LoopbackPort}";
         
+        private readonly IGoogleRestRequestsAdapter _googleRestRequestsAdapter;
+        
         private string _authCode;
         
         private GoogleIdTokenResponse _googleApiResponse;
         private float _googleApiResponseIssueTime;
         private const float AccessTokenValidityMargin = 30f;
+
+        public GoogleCredentialProvider(IGoogleRestRequestsAdapter googleRestRequestsAdapter)
+        {
+            _googleRestRequestsAdapter = googleRestRequestsAdapter;
+        }
         
         public async Task<GoogleIdTokenResponse> GetCredentialAsync()
         {
@@ -85,7 +92,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.Verifier,
                 _redirectUri);
             
-            GoogleRestRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto.AsDictionary(), tcs);
+            _googleRestRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto.AsDictionary(), tcs);
         }
         
         private void RefreshAccessToken(TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
@@ -95,7 +102,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.ClientSecret,
                 _googleApiResponse.refresh_token);
             
-            GoogleRestRequestsAdapter.RefreshAccessToken(requestParamsDto.AsDictionary(), tcs);
+            _googleRestRequestsAdapter.RefreshAccessToken(requestParamsDto.AsDictionary(), tcs);
         }
     }
 }

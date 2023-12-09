@@ -5,18 +5,24 @@ using Src.AuthController.REST.REST_Response_DTOs;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
-    public static class GoogleRestRequestsAdapter
+    public class GoogleRestRequestsAdapter : IGoogleRestRequestsAdapter
     {
         private const string TokenAccessUri = "https://oauth2.googleapis.com/token";
-        
-        public static void ExchangeAuthCodeWithIdToken(Dictionary<string, string> requestParams,TaskCompletionSource<GoogleIdTokenResponse> tcs)
+        private readonly IRestClientRequestAdapter _restClientRequestAdapter;
+
+        public GoogleRestRequestsAdapter(IRestClientRequestAdapter restClientRequestAdapter)
         {
-            RestClientRequestAdapter.Request(RestRequestMethodType.Post, TokenAccessUri, requestParams, tcs);
+            _restClientRequestAdapter = restClientRequestAdapter;
         }
         
-        public static void RefreshAccessToken(Dictionary<string, string> requestParams, TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
+        public void ExchangeAuthCodeWithIdToken(Dictionary<string, string> requestParams,TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
-            RestClientRequestAdapter.Request(RestRequestMethodType.Post, TokenAccessUri,
+            _restClientRequestAdapter.Request(RestRequestMethodType.Post, TokenAccessUri, requestParams, tcs);
+        }
+        
+        public void RefreshAccessToken(Dictionary<string, string> requestParams, TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
+        {
+            _restClientRequestAdapter.Request(RestRequestMethodType.Post, TokenAccessUri,
                 requestParams, tcs);
         }
     }
