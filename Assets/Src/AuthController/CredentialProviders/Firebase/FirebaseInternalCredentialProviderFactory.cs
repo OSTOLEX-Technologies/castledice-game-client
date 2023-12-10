@@ -1,6 +1,10 @@
-﻿using Src.AuthController.CredentialProviders.Firebase.Google;
+﻿using Src.AuthController.AuthKeys;
+using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST;
+using Src.AuthController.REST.PortListener;
+using Src.AuthController.REST.PortListener.ListenerContextInterpretation;
+using Src.AuthController.REST.PortListener.ListenerContextResponse;
 
 namespace Src.AuthController.CredentialProviders.Firebase
 {
@@ -11,7 +15,14 @@ namespace Src.AuthController.CredentialProviders.Firebase
             return new GoogleCredentialProvider(
                 new GoogleRestRequestsAdapter(
                     new RestClientRequestAdapter()),
-                new GoogleOAuthUrl());
+                new GoogleOAuthUrl(),
+                new LocalHttpPortListener(
+                    new HttpPortListenerHandler(
+                        GoogleAuthConfig.LoopbackPort,
+                        new HttpListenerContextInterpreter(),
+                        GoogleAuthConfig.AuthCodeQueryKeyName,
+                        new HttpListenerContextResponse(),
+                        GoogleAuthConfig.ResponseHtml)));
         }
     }
 }

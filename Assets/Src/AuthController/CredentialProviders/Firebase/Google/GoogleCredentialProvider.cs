@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
-using Src.AuthController.REST;
+using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
 using UnityEngine;
@@ -12,6 +12,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
     {
         private readonly IGoogleRestRequestsAdapter _googleRestRequestsAdapter;
         private readonly IGoogleOAuthUrl _oAuthUrl;
+        private readonly ILocalHttpPortListener _localHttpPortListener;
 
         private string _authCode;
         
@@ -19,10 +20,11 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         private float _googleApiResponseIssueTime;
         private const float AccessTokenValidityMargin = 30f;
 
-        public GoogleCredentialProvider(IGoogleRestRequestsAdapter googleRestRequestsAdapter, IGoogleOAuthUrl oAuthUrl)
+        public GoogleCredentialProvider(IGoogleRestRequestsAdapter googleRestRequestsAdapter, IGoogleOAuthUrl oAuthUrl, ILocalHttpPortListener localHttpPortListener)
         {
             _googleRestRequestsAdapter = googleRestRequestsAdapter;
             _oAuthUrl = oAuthUrl;
+            _localHttpPortListener = localHttpPortListener;
         }
         
         public async Task<GoogleIdTokenResponse> GetCredentialAsync()
@@ -70,14 +72,13 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         {
             _oAuthUrl.Open();
 
-            var listener = new HttpPortListener(GoogleAuthConfig.LoopbackPort);
-            listener.StartListening(code =>
+            _localHttpPortListener.StartListening(code =>
             {
                 _authCode = code;
                 
                 ExchangeAuthCodeWithIdToken(tcs);
                 
-                listener.StopListening();
+                _localHttpPortListener.StopListening();
             });
         }
         

@@ -2,10 +2,12 @@
 using System.Collections.Generic;
 using System.Net;
 using System.Threading.Tasks;
+using Moq;
 using NUnit.Framework;
 using Proyecto26;
 using Src.AuthController;
 using Src.AuthController.REST;
+using Src.AuthController.REST.PortListener;
 using UnityEngine;
 using UnityEngine.Networking;
 
@@ -13,13 +15,13 @@ namespace Tests.EditMode.AuthTests
 {
     public class HttpPortListenerTests
     {
-        private HttpPortListener _listener;
+        private ILocalHttpPortListener _listener;
         private const int Port = 1234;
 
         [SetUp]
         public void SetUp()
         {
-            _listener = new HttpPortListener(Port);
+            _listener = new Mock<ILocalHttpPortListener>().Object;
         }
         
         [Test]
