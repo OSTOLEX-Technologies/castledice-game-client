@@ -1,11 +1,14 @@
 ﻿using System;
-using Src.AuthController.CredentialProviders;
+using Src.AuthController;
 using Src.AuthController.CredentialProviders.Firebase;
+using Src.AuthController.CredentialProviders.Firebase.Google;
+using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
+using Tests.EditMode.AuthTests;
 using UnityEngine;
 
-namespace Src.AuthController
+namespace Tests.Manual
 {
     public class SampleAuth : MonoBehaviour, IAuthView
     {
@@ -15,7 +18,9 @@ namespace Src.AuthController
             _authController = new AuthController(
                 new GeneralAccessTokenProvidersStrategy(
                     new FirebaseTokenProvidersFactory(
-                        new FirebaseCredentialProvider(new FirebaseInternalCredentialProviderFactory())), 
+                        new FirebaseCredentialProvider(
+                            new FirebaseInternalCredentialProviderFactory(),
+                            new FirebaseCredentialFormatter())), 
                     new SampleMetamaskProviderStub()),
                 new SingletonCacher(), 
                 this);

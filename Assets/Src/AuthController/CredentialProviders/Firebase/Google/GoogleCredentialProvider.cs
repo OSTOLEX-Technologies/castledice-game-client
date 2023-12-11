@@ -1,16 +1,18 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.AuthKeys;
+using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
+using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
 using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
-using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
     public class GoogleCredentialProvider : IGoogleCredentialProvider
     {
-        private readonly IGoogleRestRequestsAdapter _googleRestRequestsAdapter;
+        private readonly IGoogleAccessTokenValidator _accessTokenValidator;
+        private readonly IGoogleRestRequestsAdapter _restRequestsAdapter;
         private readonly IGoogleOAuthUrl _oAuthUrl;
         private readonly ILocalHttpPortListener _localHttpPortListener;
 
@@ -18,11 +20,11 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         
         private GoogleIdTokenResponse _googleApiResponse;
         private float _googleApiResponseIssueTime;
-        private const float AccessTokenValidityMargin = 30f;
 
-        public GoogleCredentialProvider(IGoogleRestRequestsAdapter googleRestRequestsAdapter, IGoogleOAuthUrl oAuthUrl, ILocalHttpPortListener localHttpPortListener)
+        public GoogleCredentialProvider(IGoogleAccessTokenValidator accessTokenValidator, IGoogleRestRequestsAdapter restRequestsAdapter, IGoogleOAuthUrl oAuthUrl, ILocalHttpPortListener localHttpPortListener)
         {
-            _googleRestRequestsAdapter = googleRestRequestsAdapter;
+            _accessTokenValidator = accessTokenValidator;
+            _restRequestsAdapter = restRequestsAdapter;
             _oAuthUrl = oAuthUrl;
             _localHttpPortListener = localHttpPortListener;
         }
@@ -31,7 +33,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         {
             if (_googleApiResponse != null)
             {
-                if (ValidateAccessToken()) 
+                if (_accessTokenValidator.ValidateAccessToken(_googleApiResponse, _googleApiResponseIssueTime))
                 {
                     return _googleApiResponse;
                 }
@@ -60,14 +62,6 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             }
         }
 
-        private bool ValidateAccessToken()
-        {
-            int.TryParse(_googleApiResponse.expires_in, out var validityPeriod);
-
-            return (Time.time - _googleApiResponseIssueTime) <
-                   (validityPeriod - AccessTokenValidityMargin);
-        }
-        
         private void GetAuthData(TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
             _oAuthUrl.Open();
@@ -91,7 +85,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.Verifier,
                 GoogleAuthConfig.RedirectUri);
             
-            _googleRestRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto.AsDictionary(), tcs);
+            _restRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto.AsDictionary(), tcs);
         }
         
         private void RefreshAccessToken(TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
@@ -101,7 +95,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.ClientSecret,
                 _googleApiResponse.refresh_token);
             
-            _googleRestRequestsAdapter.RefreshAccessToken(requestParamsDto.AsDictionary(), tcs);
+            _restRequestsAdapter.RefreshAccessToken(requestParamsDto.AsDictionary(), tcs);
         }
     }
 }

@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
-using Src.AuthController.REST;
 using Src.AuthController.REST.REST_Response_DTOs;
 
-namespace Src.AuthController.CredentialProviders.Firebase.Google
+namespace Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter
 {
     public interface IGoogleRestRequestsAdapter
     {

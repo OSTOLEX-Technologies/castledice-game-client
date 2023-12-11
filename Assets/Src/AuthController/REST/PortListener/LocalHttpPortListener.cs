@@ -9,7 +9,7 @@ namespace Src.AuthController.REST.PortListener
         private readonly IHttpPortListenerHandler _listenerHandler;
         private readonly HttpListener _listener;
         private Thread _listenerThread;
-        private Action<string> _onCodeFetched;
+        private Action<string> _callback;
         
         public LocalHttpPortListener(IHttpPortListenerHandler listenerHandler)
         {
@@ -18,20 +18,21 @@ namespace Src.AuthController.REST.PortListener
 
         public void StartListening(Action<string> callback)
         {
-            _onCodeFetched = callback;
+            _callback = callback;
             _listenerHandler.OnListenerFired += ListenerFired;
             _listenerHandler.Start();
         }
 
         public void StopListening()
         {
+            _listenerHandler.OnListenerFired -= ListenerFired;
             _listenerHandler.Stop();
-            _onCodeFetched = null;
+            _callback = null;
         }
 
         private void ListenerFired(string result)
         {
-            _onCodeFetched?.Invoke(result);
+            _callback?.Invoke(result);
             StopListening();
         }
     }

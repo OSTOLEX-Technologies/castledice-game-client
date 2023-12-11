@@ -5,7 +5,7 @@ using Src.AuthController.REST;
 
 namespace Tests.EditMode.AuthTests
 {
-    public class RestClientRequestAdapterTests
+    public class RestRequestMethodNamesTests
     {
         [Test]
         [TestCaseSource(nameof(GetRequestMethodTypes))]

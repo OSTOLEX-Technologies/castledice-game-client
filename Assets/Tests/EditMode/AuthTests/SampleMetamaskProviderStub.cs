@@ -2,7 +2,7 @@
 using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 
-namespace Src.AuthController
+namespace Tests.EditMode.AuthTests
 {
     public class SampleMetamaskProviderStub : IMetamaskTokenProvidersFactory
     {

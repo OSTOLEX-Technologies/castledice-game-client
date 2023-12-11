@@ -55,12 +55,12 @@ namespace Src.AuthController.REST.PortListener
         private void ListenerCallback(IAsyncResult result)
         {
             var context = _listener.EndGetContext(result);
-            
+
             if (!_listenerContextInterpreter.Contains(context, _queryContextKey)) return;
             
-            OnListenerFired?.Invoke(_listenerContextInterpreter.Get(context, _queryContextKey));
-
             _listenerContextResponse.SendResponse(context, _responseHtml);
+
+            OnListenerFired?.Invoke(_listenerContextInterpreter.Get(context, _queryContextKey));
         }
     }
 }
