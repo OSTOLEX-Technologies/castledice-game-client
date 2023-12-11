@@ -1,7 +1,6 @@
 ﻿using System;
 using Src.AuthController;
 using Src.AuthController.CredentialProviders.Firebase;
-using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;

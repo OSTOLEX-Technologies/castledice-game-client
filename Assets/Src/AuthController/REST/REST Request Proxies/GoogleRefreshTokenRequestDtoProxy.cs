@@ -1,34 +1,39 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Src.AuthController.REST.REST_Request_Proxies
 {
     [Serializable]
     public class GoogleRefreshTokenRequestDtoProxy
     {
-        public string client_id;
-        
-        public string client_secret;
+        [JsonProperty]
+        public string clientID;
 
-        public const string grant_type = "refresh_token";
+        [JsonProperty]
+        public string clientSecret;
 
-        public string refresh_token;
+        [JsonProperty]
+        public const string GrantType = "refresh_token";
+
+        [JsonProperty]
+        public string refreshToken;
 
         public GoogleRefreshTokenRequestDtoProxy(string clientID, string clientSecret, string refreshToken)
         {
-            client_id = clientID;
-            client_secret = clientSecret;
-            refresh_token = refreshToken;
+            this.clientID = clientID;
+            this.clientSecret = clientSecret;
+            this.refreshToken = refreshToken;
         }
 
         public Dictionary<string, string> AsDictionary()
         {
             return new Dictionary<string, string>
             {
-                { "client_id", client_id },
-                { "client_secret", client_secret },
-                { "refresh_token", refresh_token },
-                { "grant_type", grant_type }
+                { "client_id", clientID },
+                { "client_secret", clientSecret },
+                { "refresh_token", refreshToken },
+                { "grant_type", GrantType }
             };
         }
     }

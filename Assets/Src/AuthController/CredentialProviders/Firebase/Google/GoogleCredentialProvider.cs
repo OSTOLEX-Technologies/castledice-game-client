@@ -6,6 +6,7 @@ using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
+using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
@@ -45,8 +46,8 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 await responseTcs.Task;
                 var response = responseTcs.Task.Result;
 
-                _googleApiResponse.access_token = response.access_token;
-                _googleApiResponse.expires_in = response.expires_in;
+                _googleApiResponse.accessToken = response.accessToken;
+                _googleApiResponse.expiresIn = response.expiresIn;
                 
                 return _googleApiResponse;
             }
@@ -54,10 +55,15 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             {
                 var responseTcs = new TaskCompletionSource<GoogleIdTokenResponse>();
                 
+                Debug.Log("Before GetAuthData()");
                 GetAuthData(responseTcs);
                 
                 await responseTcs.Task;
+                
+                Debug.Log("GetAuthData TCS finished!");
                 _googleApiResponse = responseTcs.Task.Result;
+                
+                Debug.Log(_googleApiResponse.accessToken + " " + _googleApiResponse.expiresIn);
                 return _googleApiResponse;
             }
         }
@@ -65,7 +71,6 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         private void GetAuthData(TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
             _oAuthUrl.Open();
-
             _localHttpPortListener.StartListening(code =>
             {
                 _authCode = code;
@@ -85,7 +90,8 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.Verifier,
                 GoogleAuthConfig.RedirectUri);
             
-            _restRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto.AsDictionary(), tcs);
+            Debug.Log("Started exchanging...");
+            _restRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto, tcs);
         }
         
         private void RefreshAccessToken(TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
@@ -93,9 +99,9 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             var requestParamsDto = new GoogleRefreshTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
-                _googleApiResponse.refresh_token);
+                _googleApiResponse.refreshToken);
             
-            _restRequestsAdapter.RefreshAccessToken(requestParamsDto.AsDictionary(), tcs);
+            _restRequestsAdapter.RefreshAccessToken(requestParamsDto, tcs);
         }
     }
 }

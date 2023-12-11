@@ -1,30 +1,37 @@
 ﻿using System;
 using System.Collections.Generic;
+using Newtonsoft.Json;
 
 namespace Src.AuthController.REST.REST_Request_Proxies
 {
     [Serializable]
     public class GoogleIdTokenRequestDtoProxy
     {
-        public string client_id;
-        
-        public string client_secret;
+        [JsonProperty]
+        public string clientID;
 
+        [JsonProperty]
+        public string clientSecret;
+
+        [JsonProperty]
         public string code;
 
-        public string code_verifier;
+        [JsonProperty]
+        public string codeVerifier;
 
-        public const string grant_type = "authorization_code";
+        [JsonProperty]
+        public const string GrantType = "authorization_code";
 
-        public string redirect_uri;
+        [JsonProperty]
+        public string redirectUri;
 
         public GoogleIdTokenRequestDtoProxy(string clientID, string clientSecret, string code, string codeVerifier, string redirectUri)
         {
-            client_id = clientID;
-            client_secret = clientSecret;
+            this.clientID = clientID;
+            this.clientSecret = clientSecret;
             this.code = code;
-            code_verifier = codeVerifier;
-            redirect_uri = redirectUri;
+            this.codeVerifier = codeVerifier;
+            this.redirectUri = redirectUri;
         }
 
         public Dictionary<string, string> AsDictionary()
@@ -32,10 +39,10 @@ namespace Src.AuthController.REST.REST_Request_Proxies
             return new Dictionary<string, string>
             {
                 { "code", code },
-                { "client_id", client_id },
-                { "client_secret", client_secret },
-                { "redirect_uri", redirect_uri },
-                { "grant_type", grant_type }
+                { "client_id", clientID },
+                { "client_secret", clientSecret },
+                { "redirect_uri", redirectUri },
+                { "grant_type", GrantType }
             };
         }
     }

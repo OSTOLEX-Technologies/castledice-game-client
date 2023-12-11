@@ -1,6 +1,6 @@
-﻿using System.Collections.Generic;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Src.AuthController.REST;
+using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter
@@ -15,15 +15,16 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestReque
             _restClientRequestAdapter = restClientRequestAdapter;
         }
         
-        public void ExchangeAuthCodeWithIdToken(Dictionary<string, string> requestParams,TaskCompletionSource<GoogleIdTokenResponse> tcs)
+        public void ExchangeAuthCodeWithIdToken(GoogleIdTokenRequestDtoProxy requestParams,TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
-            _restClientRequestAdapter.Request(RestRequestMethodType.Post, TokenAccessUri, requestParams, tcs);
+            _restClientRequestAdapter.Request(RestRequestMethodType.Post, TokenAccessUri, 
+                requestParams.AsDictionary(), tcs);
         }
         
-        public void RefreshAccessToken(Dictionary<string, string> requestParams, TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
+        public void RefreshAccessToken(GoogleRefreshTokenRequestDtoProxy requestParams, TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
         {
             _restClientRequestAdapter.Request(RestRequestMethodType.Post, TokenAccessUri,
-                requestParams, tcs);
+                requestParams.AsDictionary(), tcs);
         }
     }
 }

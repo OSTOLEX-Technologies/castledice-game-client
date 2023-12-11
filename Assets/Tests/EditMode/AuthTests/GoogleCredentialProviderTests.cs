@@ -8,6 +8,7 @@ using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsA
 using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
 using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST.PortListener;
+using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
 namespace Tests.EditMode.AuthTests
 {
@@ -24,7 +25,7 @@ namespace Tests.EditMode.AuthTests
             var googleRestRequestsAdapterMock = new Mock<IGoogleRestRequestsAdapter>();
             googleRestRequestsAdapterMock.Setup(
                     a => a.ExchangeAuthCodeWithIdToken(
-                        It.IsAny<Dictionary<string, string>>(),
+                        It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
                 .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
@@ -53,8 +54,8 @@ namespace Tests.EditMode.AuthTests
             var expectedGoogleIdResponse = new GoogleIdTokenResponse();
             var usedGoogleRefreshResponse = new GoogleRefreshTokenResponse
             {
-                access_token = expectedGoogleIdResponse.access_token,
-                expires_in = expectedGoogleIdResponse.expires_in
+                accessToken = expectedGoogleIdResponse.accessToken,
+                expiresIn = expectedGoogleIdResponse.expiresIn
             };
             
             //Validator always returns false whilst token validation
@@ -67,13 +68,13 @@ namespace Tests.EditMode.AuthTests
             var googleRestRequestsAdapterMock = new Mock<IGoogleRestRequestsAdapter>();
             googleRestRequestsAdapterMock.Setup(
                     a => a.ExchangeAuthCodeWithIdToken(
-                        It.IsAny<Dictionary<string, string>>(),
+                        It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
                 .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
             googleRestRequestsAdapterMock.Setup(
                     (a => a.RefreshAccessToken(
-                        It.IsAny<Dictionary<string, string>>(),
+                        It.IsAny<GoogleRefreshTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleRefreshTokenResponse>>())))
                 .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleRefreshTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(usedGoogleRefreshResponse));
@@ -116,7 +117,7 @@ namespace Tests.EditMode.AuthTests
             var googleRestRequestsAdapterMock = new Mock<IGoogleRestRequestsAdapter>();
             googleRestRequestsAdapterMock.Setup(
                     a => a.ExchangeAuthCodeWithIdToken(
-                        It.IsAny<Dictionary<string, string>>(),
+                        It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
                 .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));

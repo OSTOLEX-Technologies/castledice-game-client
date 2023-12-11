@@ -1,17 +1,22 @@
 ﻿using System;
+using Newtonsoft.Json;
 
 namespace Src.AuthController.REST.REST_Response_DTOs
 {
     [Serializable]
     public class GoogleRefreshTokenResponse
     {
-        public string access_token;
+        [JsonProperty]
+        public string accessToken;
 
+        [JsonProperty]
         //In seconds
-        public string expires_in;
+        public string expiresIn;
 
+        [JsonProperty]
         public string scope;
 
-        public string token_type;
+        [JsonProperty]
+        public string tokenType;
     }
 }
