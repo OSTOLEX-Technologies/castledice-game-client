@@ -6,17 +6,17 @@ namespace Src.AuthController.REST.REST_Response_DTOs
     [Serializable]
     public class GoogleRefreshTokenResponse
     {
-        [JsonProperty]
+        [JsonProperty("access_token")]
         public string accessToken;
 
-        [JsonProperty]
+        [JsonProperty("expires_in")]
         //In seconds
-        public string expiresIn;
+        public float expiresIn;
 
-        [JsonProperty]
+        [JsonProperty("scope")]
         public string scope;
 
-        [JsonProperty]
+        [JsonProperty("token_type")]
         public string tokenType;
     }
 }

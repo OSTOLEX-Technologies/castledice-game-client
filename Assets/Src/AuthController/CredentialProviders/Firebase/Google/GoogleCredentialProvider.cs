@@ -60,7 +60,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 
                 await responseTcs.Task;
                 
-                Debug.Log("GetAuthData TCS finished!");
+                Debug.Log("GetAuthData TCS finished! Result (AT): " + responseTcs.Task.Result.accessToken);
                 _googleApiResponse = responseTcs.Task.Result;
                 
                 Debug.Log(_googleApiResponse.accessToken + " " + _googleApiResponse.expiresIn);

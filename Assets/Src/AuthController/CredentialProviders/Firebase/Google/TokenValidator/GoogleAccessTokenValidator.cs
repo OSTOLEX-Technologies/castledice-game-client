@@ -9,10 +9,8 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator
         
         public bool ValidateAccessToken(GoogleIdTokenResponse googleIdTokenResponse, float googleApiResponseIssueTime)
         {
-            int.TryParse(googleIdTokenResponse.expiresIn, out var validityPeriod);
-
             return (Time.time - googleApiResponseIssueTime) <
-                   (validityPeriod - AccessTokenValidityMargin);
+                   (googleIdTokenResponse.expiresIn - AccessTokenValidityMargin);
         }
     }
 }

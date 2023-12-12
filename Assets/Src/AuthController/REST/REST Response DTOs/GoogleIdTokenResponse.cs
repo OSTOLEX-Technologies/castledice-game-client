@@ -6,24 +6,23 @@ namespace Src.AuthController.REST.REST_Response_DTOs
     [Serializable]
     public class GoogleIdTokenResponse
     {
-        [JsonProperty]
+        [JsonProperty("access_token")]
         public string accessToken;
-
-
-        [JsonProperty]
-        //In seconds
-        public string expiresIn;
         
-        [JsonProperty]
+        [JsonProperty("expires_in")]
+        //In seconds
+        public float expiresIn;
+        
+        [JsonProperty("id_token")]
         public string idToken;
 
-        [JsonProperty]
+        [JsonProperty("refresh_token")]
         public string refreshToken;
 
-        [JsonProperty]
+        [JsonProperty("scope")]
         public string scope;
 
-        [JsonProperty]
+        [JsonProperty("token_type")]
         public string tokenType;
     }
 }

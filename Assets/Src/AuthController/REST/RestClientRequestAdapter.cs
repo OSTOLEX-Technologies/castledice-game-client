@@ -1,37 +1,33 @@
 ﻿using System.Collections.Generic;
+using System.Net;
+using System.Net.Http;
 using System.Threading.Tasks;
-using Proyecto26;
-using UnityEngine;
+using Newtonsoft.Json;
 
 namespace Src.AuthController.REST
 {
     public class RestClientRequestAdapter : IRestClientRequestAdapter
     {
-        public void Request<T>(RestRequestMethodType requestMethodType, string uri,
+        private static HttpClient _httpClient;
+
+        public RestClientRequestAdapter()
+        {
+            _httpClient ??= new HttpClient();
+        }
+        
+        public async void Request<T>(RestRequestMethodType requestMethodType, string uri,
             Dictionary<string, string> requestParams, TaskCompletionSource<T> tcs)
         {
-            var requestHelper = new RequestHelper
-            {
-                Method = RestRequestMethodNames.GetRequestMethodName(requestMethodType),
-                Uri = uri,
-                Params = requestParams
-            };
-            string pars = "{";
-            foreach (var p in requestParams.Keys)
-            {
-                pars += p + ": " + requestParams[p] + "\n";
-            }
-            pars += "}";
-            
-            Debug.Log("Exchanging...\n Helper content: " + requestHelper.Method + " " + requestHelper.Uri + " " + pars);
+            var encodedParams = new FormUrlEncodedContent(requestParams);
+            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            request.Content = encodedParams;
 
-            RestClient.Request(requestHelper).Then(
-                response =>
-                {
-                    Debug.Log("Received response!");
-                    var data = JsonUtility.FromJson<T>(response.Text);
-                    tcs.SetResult(data);
-                }).Catch(Debug.Log);
+            var response = await _httpClient.SendAsync(request);
+            if (response.StatusCode == HttpStatusCode.OK) {
+                var responseContent = await response.Content.ReadAsStringAsync();
+                var data = JsonConvert.DeserializeObject<T>(responseContent);
+                tcs.SetResult(data);
+            }
         }
     }
 }

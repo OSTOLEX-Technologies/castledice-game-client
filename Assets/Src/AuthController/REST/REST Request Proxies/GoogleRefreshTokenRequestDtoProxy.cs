@@ -7,16 +7,16 @@ namespace Src.AuthController.REST.REST_Request_Proxies
     [Serializable]
     public class GoogleRefreshTokenRequestDtoProxy
     {
-        [JsonProperty]
+        [JsonProperty("client_id")]
         public string clientID;
 
-        [JsonProperty]
+        [JsonProperty("client_secret")]
         public string clientSecret;
 
-        [JsonProperty]
+        [JsonProperty("grant_type")]
         public const string GrantType = "refresh_token";
 
-        [JsonProperty]
+        [JsonProperty("refresh_token")]
         public string refreshToken;
 
         public GoogleRefreshTokenRequestDtoProxy(string clientID, string clientSecret, string refreshToken)

@@ -7,22 +7,22 @@ namespace Src.AuthController.REST.REST_Request_Proxies
     [Serializable]
     public class GoogleIdTokenRequestDtoProxy
     {
-        [JsonProperty]
+        [JsonProperty("client_id")]
         public string clientID;
 
-        [JsonProperty]
+        [JsonProperty("client_secret")]
         public string clientSecret;
 
-        [JsonProperty]
+        [JsonProperty("code")]
         public string code;
 
-        [JsonProperty]
+        [JsonProperty("code_verifier")]
         public string codeVerifier;
 
-        [JsonProperty]
+        [JsonProperty("grant_type")]
         public const string GrantType = "authorization_code";
 
-        [JsonProperty]
+        [JsonProperty("redirect_uri")]
         public string redirectUri;
 
         public GoogleIdTokenRequestDtoProxy(string clientID, string clientSecret, string code, string codeVerifier, string redirectUri)
