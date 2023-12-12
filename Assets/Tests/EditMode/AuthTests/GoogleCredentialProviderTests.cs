@@ -16,7 +16,7 @@ namespace Tests.EditMode.AuthTests
     public class GoogleCredentialProviderTests
     {
         [Test]
-        public async Task GetCredentialAsync_ShouldCreateCredentials()
+        public async Task GetCredentialAsync_ShouldCreateCredentials_IfThereIsNoSavedAccessToken()
         {
             var expectedGoogleIdResponse = new GoogleIdTokenResponse();
 
@@ -50,7 +50,7 @@ namespace Tests.EditMode.AuthTests
         }
         
         [Test]
-        public async Task GetCredentialAsync_ShouldRefreshCredentials()
+        public async Task GetCredentialAsync_ShouldRefreshCredentials_IfThereExistsSavedExpiredAccessToken()
         {
             var expectedGoogleIdResponse = new GoogleIdTokenResponse();
             var usedGoogleRefreshResponse = new GoogleRefreshTokenResponse
@@ -104,7 +104,7 @@ namespace Tests.EditMode.AuthTests
         }
         
         [Test]
-        public async Task GetCredentialAsync_ShouldNotRefreshCredentials()
+        public async Task GetCredentialAsync_ShouldNotRefreshCredentials_IfThereExistsSavedValidAccessToken()
         {
             var expectedGoogleIdResponse = new GoogleIdTokenResponse();
 
