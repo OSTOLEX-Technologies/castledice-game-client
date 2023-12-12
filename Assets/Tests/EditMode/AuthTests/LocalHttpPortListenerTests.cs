@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using NUnit.Framework;
+using Src.AuthController.REST.PortListener;
 using Tests.Utils.Mocks;
 
 namespace Tests.EditMode.AuthTests
@@ -12,7 +13,10 @@ namespace Tests.EditMode.AuthTests
             string expectedCode = "someComplexCode";
             string resultCode = "";
 
-            var httpPortListenerHandler = new HttpPortListenerHandlerMock(code => resultCode = code, expectedCode);
+            var httpPortListenerHandler = new HttpPortListenerHandlerMock();
+
+            var localHttpPortListener = new LocalHttpPortListener(httpPortListenerHandler);
+            localHttpPortListener.StartListening(_ => resultCode = expectedCode);
             
             httpPortListenerHandler.Start();
             

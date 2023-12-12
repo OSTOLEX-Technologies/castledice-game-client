@@ -28,6 +28,11 @@ namespace Src.AuthController.REST.PortListener
             _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
             _listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
         }
+
+        ~HttpPortListenerHandler()
+        {
+            OnListenerFired = null;
+        }
         
         public void Start()
         {
