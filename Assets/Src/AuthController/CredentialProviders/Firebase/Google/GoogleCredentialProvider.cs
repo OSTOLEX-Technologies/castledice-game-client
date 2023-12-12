@@ -6,7 +6,6 @@ using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
-using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
@@ -55,15 +54,12 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             {
                 var responseTcs = new TaskCompletionSource<GoogleIdTokenResponse>();
                 
-                Debug.Log("Before GetAuthData()");
                 GetAuthData(responseTcs);
                 
                 await responseTcs.Task;
                 
-                Debug.Log("GetAuthData TCS finished! Result (AT): " + responseTcs.Task.Result.accessToken);
                 _googleApiResponse = responseTcs.Task.Result;
                 
-                Debug.Log(_googleApiResponse.accessToken + " " + _googleApiResponse.expiresIn);
                 return _googleApiResponse;
             }
         }
@@ -90,7 +86,6 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.Verifier,
                 GoogleAuthConfig.RedirectUri);
             
-            Debug.Log("Started exchanging...");
             _restRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto, tcs);
         }
         

@@ -27,7 +27,7 @@ namespace Tests.EditMode.AuthTests
                     a => a.ExchangeAuthCodeWithIdToken(
                         It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
-                .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleIdTokenResponse>>(
+                .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
             
             var oAuthUrlMock = new Mock<IGoogleOAuthUrl>();
@@ -70,13 +70,13 @@ namespace Tests.EditMode.AuthTests
                     a => a.ExchangeAuthCodeWithIdToken(
                         It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
-                .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleIdTokenResponse>>(
+                .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
             googleRestRequestsAdapterMock.Setup(
                     (a => a.RefreshAccessToken(
                         It.IsAny<GoogleRefreshTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleRefreshTokenResponse>>())))
-                .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleRefreshTokenResponse>>(
+                .Callback<GoogleRefreshTokenRequestDtoProxy, TaskCompletionSource<GoogleRefreshTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(usedGoogleRefreshResponse));
             
             var oAuthUrlMock = new Mock<IGoogleOAuthUrl>();
@@ -119,7 +119,7 @@ namespace Tests.EditMode.AuthTests
                     a => a.ExchangeAuthCodeWithIdToken(
                         It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
-                .Callback<Dictionary<string, string>, TaskCompletionSource<GoogleIdTokenResponse>>(
+                .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
             
             var oAuthUrlMock = new Mock<IGoogleOAuthUrl>();
