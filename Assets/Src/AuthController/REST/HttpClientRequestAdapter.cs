@@ -16,11 +16,11 @@ namespace Src.AuthController.REST
             _httpClient ??= new HttpClient();
         }
 
-        public async void Request<T>(RestRequestMethodType requestMethodType, string uri,
+        public async void Request<T>(HttpMethod requestMethodType, string uri,
             Dictionary<string, string> requestParams, TaskCompletionSource<T> tcs)
         {
             var encodedParams = new FormUrlEncodedContent(requestParams);
-            var request = new HttpRequestMessage(RestRequestMethodNames.GetRequestMethodName(requestMethodType), uri);
+            var request = new HttpRequestMessage(requestMethodType, uri);
             request.Content = encodedParams;
 
             var response = await _httpClient.SendAsync(request);
