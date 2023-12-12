@@ -3,18 +3,19 @@ using System.Net;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
+using Src.AuthController.Exceptions;
 
 namespace Src.AuthController.REST
 {
-    public class RestClientRequestAdapter : IRestClientRequestAdapter
+    public class HttpClientRequestAdapter : IHttpClientRequestAdapter
     {
         private static HttpClient _httpClient;
 
-        public RestClientRequestAdapter()
+        public HttpClientRequestAdapter()
         {
             _httpClient ??= new HttpClient();
         }
-        
+
         public async void Request<T>(RestRequestMethodType requestMethodType, string uri,
             Dictionary<string, string> requestParams, TaskCompletionSource<T> tcs)
         {
@@ -23,11 +24,13 @@ namespace Src.AuthController.REST
             request.Content = encodedParams;
 
             var response = await _httpClient.SendAsync(request);
-            if (response.StatusCode == HttpStatusCode.OK) {
+            if (response.StatusCode == HttpStatusCode.OK)
+            {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var data = JsonConvert.DeserializeObject<T>(responseContent);
                 tcs.SetResult(data);
             }
+            else throw new HttpClientRequestException(response.StatusCode);
         }
     }
 }

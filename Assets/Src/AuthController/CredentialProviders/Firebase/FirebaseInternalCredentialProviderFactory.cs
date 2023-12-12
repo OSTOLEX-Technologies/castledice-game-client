@@ -17,7 +17,7 @@ namespace Src.AuthController.CredentialProviders.Firebase
             return new GoogleCredentialProvider(
                 new GoogleAccessTokenValidator(),
                 new GoogleRestRequestsAdapter(
-                    new RestClientRequestAdapter()),
+                    new HttpClientRequestAdapter()),
                 new GoogleOAuthUrl(),
                 new LocalHttpPortListener(
                     new HttpPortListenerHandler(
