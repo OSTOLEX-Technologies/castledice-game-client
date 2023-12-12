@@ -19,7 +19,7 @@ namespace Src.AuthController.REST
             Dictionary<string, string> requestParams, TaskCompletionSource<T> tcs)
         {
             var encodedParams = new FormUrlEncodedContent(requestParams);
-            var request = new HttpRequestMessage(HttpMethod.Post, uri);
+            var request = new HttpRequestMessage(RestRequestMethodNames.GetRequestMethodName(requestMethodType), uri);
             request.Content = encodedParams;
 
             var response = await _httpClient.SendAsync(request);

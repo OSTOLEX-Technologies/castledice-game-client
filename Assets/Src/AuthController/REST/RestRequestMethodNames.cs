@@ -1,16 +1,17 @@
-﻿using Src.AuthController.Exceptions;
+﻿using System.Net.Http;
+using Src.AuthController.Exceptions;
 
 namespace Src.AuthController.REST
 {
     public static class RestRequestMethodNames
     {
-        public static string GetRequestMethodName(RestRequestMethodType type)
+        public static HttpMethod GetRequestMethodName(RestRequestMethodType type)
         {
             switch (type)
             {
-                case RestRequestMethodType.Post: return "POST";
-                case RestRequestMethodType.Get: return "GET";
-                case RestRequestMethodType.Delete: return "DELETE";
+                case RestRequestMethodType.Post: return HttpMethod.Post;
+                case RestRequestMethodType.Get: return HttpMethod.Get;
+                case RestRequestMethodType.Delete: return HttpMethod.Delete;
                 default: throw new RestRequestMethodNameNotFoundException(type);
             }
         }
