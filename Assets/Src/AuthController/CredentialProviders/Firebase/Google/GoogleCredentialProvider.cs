@@ -2,10 +2,10 @@
 using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
-using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
+using Src.AuthController.UrlOpening;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
@@ -13,7 +13,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
     {
         private readonly IGoogleAccessTokenValidator _accessTokenValidator;
         private readonly IGoogleRestRequestsAdapter _restRequestsAdapter;
-        private readonly IGoogleOAuthUrl _oAuthUrl;
+        private readonly IUrlOpener _oAuthUrlOpener;
         private readonly ILocalHttpPortListener _localHttpPortListener;
 
         private string _authCode;
@@ -21,11 +21,11 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         private GoogleIdTokenResponse _googleApiResponse;
         private float _googleApiResponseIssueTime;
 
-        public GoogleCredentialProvider(IGoogleAccessTokenValidator accessTokenValidator, IGoogleRestRequestsAdapter restRequestsAdapter, IGoogleOAuthUrl oAuthUrl, ILocalHttpPortListener localHttpPortListener)
+        public GoogleCredentialProvider(IGoogleAccessTokenValidator accessTokenValidator, IGoogleRestRequestsAdapter restRequestsAdapter, IUrlOpener oAuthUrlOpener, ILocalHttpPortListener localHttpPortListener)
         {
             _accessTokenValidator = accessTokenValidator;
             _restRequestsAdapter = restRequestsAdapter;
-            _oAuthUrl = oAuthUrl;
+            _oAuthUrlOpener = oAuthUrlOpener;
             _localHttpPortListener = localHttpPortListener;
         }
         
@@ -66,7 +66,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
 
         private void GetAuthData(TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
-            _oAuthUrl.Open();
+            _oAuthUrlOpener.Open(GoogleAuthConfig.GoogleOAuthUrl);
             _localHttpPortListener.StartListening(code =>
             {
                 _authCode = code;

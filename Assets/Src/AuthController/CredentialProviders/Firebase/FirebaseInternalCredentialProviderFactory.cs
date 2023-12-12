@@ -2,11 +2,11 @@
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
-using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.PortListener.ListenerContextInterpretation;
 using Src.AuthController.REST.PortListener.ListenerContextResponse;
+using Src.AuthController.UrlOpening;
 
 namespace Src.AuthController.CredentialProviders.Firebase
 {
@@ -18,7 +18,7 @@ namespace Src.AuthController.CredentialProviders.Firebase
                 new GoogleAccessTokenValidator(),
                 new GoogleRestRequestsAdapter(
                     new HttpClientRequestAdapter()),
-                new GoogleOAuthUrl(),
+                new UrlOpener(),
                 new LocalHttpPortListener(
                     new HttpPortListenerHandler(
                         GoogleAuthConfig.LoopbackPort,

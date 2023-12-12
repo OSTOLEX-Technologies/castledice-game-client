@@ -6,10 +6,11 @@ using NUnit.Framework;
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
-using Src.AuthController.CredentialProviders.Firebase.Google.UrlOpening;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Response_DTOs;
+using Src.AuthController.UrlOpening;
+
 namespace Tests.EditMode.AuthTests
 {
     public class GoogleCredentialProviderTests
@@ -30,7 +31,7 @@ namespace Tests.EditMode.AuthTests
                 .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
             
-            var oAuthUrlMock = new Mock<IGoogleOAuthUrl>();
+            var oAuthUrlMock = new Mock<IUrlOpener>();
             
             //Port listener immediately invokes standard callback
             var localHttpPortListenerMock = new Mock<ILocalHttpPortListener>();
@@ -79,7 +80,7 @@ namespace Tests.EditMode.AuthTests
                 .Callback<GoogleRefreshTokenRequestDtoProxy, TaskCompletionSource<GoogleRefreshTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(usedGoogleRefreshResponse));
             
-            var oAuthUrlMock = new Mock<IGoogleOAuthUrl>();
+            var oAuthUrlMock = new Mock<IUrlOpener>();
             
             //Port listener immediately invokes standard callback
             var localHttpPortListenerMock = new Mock<ILocalHttpPortListener>();
@@ -122,7 +123,7 @@ namespace Tests.EditMode.AuthTests
                 .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
                     (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
             
-            var oAuthUrlMock = new Mock<IGoogleOAuthUrl>();
+            var oAuthUrlMock = new Mock<IUrlOpener>();
             
             //Port listener immediately invokes standard callback
             var localHttpPortListenerMock = new Mock<ILocalHttpPortListener>();
