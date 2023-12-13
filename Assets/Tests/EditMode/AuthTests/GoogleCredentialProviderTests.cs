@@ -55,8 +55,8 @@ namespace Tests.EditMode.AuthTests
             var expectedGoogleIdResponse = new GoogleIdTokenResponse();
             var usedGoogleRefreshResponse = new GoogleRefreshTokenResponse
             {
-                accessToken = expectedGoogleIdResponse.accessToken,
-                expiresIn = expectedGoogleIdResponse.expiresIn
+                AccessToken = expectedGoogleIdResponse.AccessToken,
+                ExpiresInSeconds = expectedGoogleIdResponse.ExpiresInSeconds
             };
             
             //Validator always returns false whilst token validation

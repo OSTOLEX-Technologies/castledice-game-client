@@ -7,22 +7,21 @@ namespace Src.AuthController.REST.REST_Response_DTOs
     public class GoogleIdTokenResponse
     {
         [JsonProperty("access_token")]
-        public string accessToken;
+        public string AccessToken { get; set; }
         
         [JsonProperty("expires_in")]
-        //In seconds
-        public float expiresIn;
+        public float ExpiresInSeconds { get; set; }
         
         [JsonProperty("id_token")]
-        public string idToken;
+        public string IDToken { get; private set; }
 
         [JsonProperty("refresh_token")]
-        public string refreshToken;
+        public string RefreshToken { get; private set; }
 
         [JsonProperty("scope")]
-        public string scope;
+        public string Scope { get; private set; }
 
         [JsonProperty("token_type")]
-        public string tokenType;
+        public string TokenType { get; private set; }
     }
 }

@@ -8,40 +8,40 @@ namespace Src.AuthController.REST.REST_Request_Proxies
     public class GoogleIdTokenRequestDtoProxy
     {
         [JsonProperty("client_id")]
-        public string clientID;
+        public string ClientID { get; private set; }
 
         [JsonProperty("client_secret")]
-        public string clientSecret;
+        public string ClientSecret { get; private set; }
 
         [JsonProperty("code")]
-        public string code;
+        public string Code { get; private set; }
 
         [JsonProperty("code_verifier")]
-        public string codeVerifier;
+        public string CodeVerifier { get; private set; }
 
         [JsonProperty("grant_type")]
-        public const string GrantType = "authorization_code";
+        public const string GrantType = "authorization_code"; 
 
         [JsonProperty("redirect_uri")]
-        public string redirectUri;
+        public string RedirectUri { get; private set; }
 
         public GoogleIdTokenRequestDtoProxy(string clientID, string clientSecret, string code, string codeVerifier, string redirectUri)
         {
-            this.clientID = clientID;
-            this.clientSecret = clientSecret;
-            this.code = code;
-            this.codeVerifier = codeVerifier;
-            this.redirectUri = redirectUri;
+            ClientID = clientID;
+            ClientSecret = clientSecret;
+            Code = code;
+            CodeVerifier = codeVerifier;
+            RedirectUri = redirectUri;
         }
 
         public Dictionary<string, string> AsDictionary()
         {
             return new Dictionary<string, string>
             {
-                { "code", code },
-                { "client_id", clientID },
-                { "client_secret", clientSecret },
-                { "redirect_uri", redirectUri },
+                { "code", Code },
+                { "client_id", ClientID },
+                { "client_secret", ClientSecret },
+                { "redirect_uri", RedirectUri },
                 { "grant_type", GrantType }
             };
         }

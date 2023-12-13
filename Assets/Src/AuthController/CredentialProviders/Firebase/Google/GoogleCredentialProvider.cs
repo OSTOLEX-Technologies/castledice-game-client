@@ -44,9 +44,9 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 
                 await responseTcs.Task;
                 var response = responseTcs.Task.Result;
-
-                _googleApiResponse.accessToken = response.accessToken;
-                _googleApiResponse.expiresIn = response.expiresIn;
+                
+                _googleApiResponse.AccessToken = response.AccessToken;
+                _googleApiResponse.ExpiresInSeconds = response.ExpiresInSeconds;
                 
                 return _googleApiResponse;
             }
@@ -94,7 +94,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             var requestParamsDto = new GoogleRefreshTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
-                _googleApiResponse.refreshToken);
+                _googleApiResponse.RefreshToken);
             
             _restRequestsAdapter.RefreshAccessToken(requestParamsDto, tcs);
         }

@@ -8,31 +8,31 @@ namespace Src.AuthController.REST.REST_Request_Proxies
     public class GoogleRefreshTokenRequestDtoProxy
     {
         [JsonProperty("client_id")]
-        public string clientID;
+        public string ClientID { get; private set; }
 
         [JsonProperty("client_secret")]
-        public string clientSecret;
+        public string ClientSecret { get; private set; }
 
         [JsonProperty("grant_type")]
         public const string GrantType = "refresh_token";
 
         [JsonProperty("refresh_token")]
-        public string refreshToken;
+        public string RefreshToken { get; private set; }
 
         public GoogleRefreshTokenRequestDtoProxy(string clientID, string clientSecret, string refreshToken)
         {
-            this.clientID = clientID;
-            this.clientSecret = clientSecret;
-            this.refreshToken = refreshToken;
+            ClientID = clientID;
+            ClientSecret = clientSecret;
+            RefreshToken = refreshToken;
         }
 
         public Dictionary<string, string> AsDictionary()
         {
             return new Dictionary<string, string>
             {
-                { "client_id", clientID },
-                { "client_secret", clientSecret },
-                { "refresh_token", refreshToken },
+                { "client_id", ClientID },
+                { "client_secret", ClientSecret },
+                { "refresh_token", RefreshToken },
                 { "grant_type", GrantType }
             };
         }

@@ -7,7 +7,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google.CredentialForma
     {
         public Credential FormatCredentials(GoogleIdTokenResponse googleCredentials)
         {
-            return GoogleAuthProvider.GetCredential(googleCredentials.idToken, googleCredentials.accessToken);
+            return GoogleAuthProvider.GetCredential(googleCredentials.IDToken, googleCredentials.AccessToken);
         }
     }
 }
