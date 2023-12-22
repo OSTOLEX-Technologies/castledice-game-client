@@ -4,6 +4,7 @@ using System.Reflection;
 using castledice_game_data_logic;
 using castledice_game_data_logic.ConfigsData;
 using castledice_game_data_logic.Content;
+using castledice_game_data_logic.TurnSwitchConditions;
 using castledice_game_logic;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
@@ -13,6 +14,7 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories.Castles;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
@@ -74,7 +76,7 @@ namespace Tests
             {
                 {player, (0, 0)},
                 {secondPlayer, (9, 9)}
-            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object);
+            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object, GetTurnSwitchConditionsConfig());
             gameMock.Setup(x => x.GetPlayer(It.IsAny<int>())).Returns(player);
             gameMock.Setup(x => x.GetAllPlayers()).Returns(playersList);
             gameMock.Setup(x => x.GetAllPlayersIds()).Returns(new List<int> { 1, 2 });
@@ -91,7 +93,7 @@ namespace Tests
             {
                 {player, (0, 0)},
                 {secondPlayer, (9, 9)}
-            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object);
+            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object, GetTurnSwitchConditionsConfig());
             gameMock.Setup(x => x.GetPlayer(It.IsAny<int>())).Returns(player);
             gameMock.Setup(x => x.GetAllPlayers()).Returns(playersList);
             gameMock.Setup(x => x.GetAllPlayersIds()).Returns(new List<int> { 1, 2 });
@@ -126,8 +128,19 @@ namespace Tests
                 new(playerIds[0], new List<PlacementType> { PlacementType.Knight }),
                 new (playerIds[1], new List<PlacementType> { PlacementType.Knight })
             };
-            var data = new GameStartData(version, boardData, placeablesConfigs, playerIds, playerDecks);
+            var tscConfigData = GetTscConfigData();
+            var data = new GameStartData(version, boardData, placeablesConfigs, tscConfigData, playerIds, playerDecks);
             return data;
+        }
+        
+        public static TurnSwitchConditionsConfig GetTurnSwitchConditionsConfig()
+        {
+            return new TurnSwitchConditionsConfig(new List<TscType> { TscType.SwitchByActionPoints });
+        }
+        
+        public static TscConfigData GetTscConfigData()
+        {
+            return new TscConfigData(new List<TscType> { TscType.SwitchByActionPoints });
         }
 
         public static BoardData GetBoardData(CellType cellType = CellType.Square)
@@ -187,8 +200,10 @@ namespace Tests
             {
                 PlacementType.Knight
             });
+
+            var turnSwitchConditionsConfig = GetTurnSwitchConditionsConfig();
             
-            var game = new Game(players, boardConfig, placeablesConfig, placementListProvider);
+            var game = new Game(players, boardConfig, placeablesConfig, placementListProvider, turnSwitchConditionsConfig);
 
             return game;
         }

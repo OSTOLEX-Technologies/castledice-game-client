@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using castledice_game_data_logic;
 using castledice_game_data_logic.ConfigsData;
+using castledice_game_data_logic.TurnSwitchConditions;
 using castledice_game_logic;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
@@ -97,17 +98,50 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             decksListProviderMock.Verify(p => p.GetDecksList(gameStartData.Decks), Times.Once); 
         }
+        
+        [Test]
+        public void CreateGame_ShouldCreateTurnsSwitchConditionsConfig_WithGivenProvider()
+        {
+            var gameStartData = GetGameStartData();
+            var turnSwitchConditionsConfigProviderMock = GetTurnSwitchConditionsConfigProviderMock();
+            var gameCreator = new GameCreatorBuilder
+            {
+                TurnSwitchConditionsConfigProvider = turnSwitchConditionsConfigProviderMock.Object
+            }.Build();    
+            
+            gameCreator.CreateGame(gameStartData);
+            
+            turnSwitchConditionsConfigProviderMock.Verify(p => p.GetTurnSwitchConditionsConfig(gameStartData.TscConfigData), Times.Once); 
+        }
+        
+        [Test]
+        public void CreateGame_ShouldCreateGame_WithTurnSwitchConditionsConfigFromProvider()
+        {
+            var gameStartData = GetGameStartData();
+            var turnSwitchConditionsConfig = GetTurnSwitchConditionsConfig();
+            var turnSwitchConditionsConfigProviderMock = new Mock<ITurnSwitchConditionsConfigProvider>();
+            turnSwitchConditionsConfigProviderMock.Setup(p => p.GetTurnSwitchConditionsConfig(It.IsAny<TscConfigData>())).Returns(turnSwitchConditionsConfig);
+            var gameCreator = new GameCreatorBuilder
+            {
+                TurnSwitchConditionsConfigProvider = turnSwitchConditionsConfigProviderMock.Object
+            }.Build();    
+            
+            var game = gameCreator.CreateGame(gameStartData);
+            
+            Assert.AreEqual(turnSwitchConditionsConfig, game.TurnSwitchConditionsConfig);
+        }
 
         private class GameCreatorBuilder
         {
             public IPlayersListProvider PlayersListProvider { get; set; } = GetPlayersListProviderMock().Object;
             public IBoardConfigProvider BoardConfigProvider { get; set; } = GetBoardConfigProviderMock().Object;
             public IPlaceablesConfigProvider PlaceablesConfigProvider { get; set; } = GetPlaceablesConfigProviderMock().Object;
+            public ITurnSwitchConditionsConfigProvider TurnSwitchConditionsConfigProvider { get; set; } = GetTurnSwitchConditionsConfigProviderMock().Object;
             public IDecksListProvider DecksListProvider { get; set; } = GetDecksListProviderMock().Object;
             
             public GameCreator Build()
             {
-                return new GameCreator(PlayersListProvider, BoardConfigProvider, PlaceablesConfigProvider, DecksListProvider);
+                return new GameCreator(PlayersListProvider, BoardConfigProvider, PlaceablesConfigProvider, TurnSwitchConditionsConfigProvider, DecksListProvider);
             }
         }
         
@@ -136,6 +170,13 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         {
             var mock = new Mock<IDecksListProvider>();
             mock.Setup(p => p.GetDecksList(It.IsAny<List<PlayerDeckData>>())).Returns(new Mock<IDecksList>().Object);
+            return mock;
+        }
+        
+        private static Mock<ITurnSwitchConditionsConfigProvider> GetTurnSwitchConditionsConfigProviderMock()
+        {
+            var mock = new Mock<ITurnSwitchConditionsConfigProvider>();
+            mock.Setup(p => p.GetTurnSwitchConditionsConfig(It.IsAny<TscConfigData>())).Returns(GetTurnSwitchConditionsConfig());
             return mock;
         }
     }

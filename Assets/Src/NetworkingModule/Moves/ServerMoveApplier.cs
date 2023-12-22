@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
-using casltedice_events_logic.ClientToServer;
-using casltedice_events_logic.ServerToClient;
+using castledice_events_logic.ClientToServer;
+using castledice_events_logic.ServerToClient;
 using castledice_game_data_logic.Moves;
 using castledice_riptide_dto_adapters.Extensions;
 using Riptide;

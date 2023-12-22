@@ -1,4 +1,4 @@
-﻿using casltedice_events_logic.ServerToClient;
+﻿using castledice_events_logic.ServerToClient;
 using castledice_game_data_logic.Errors;
 using Moq;
 using NUnit.Framework;

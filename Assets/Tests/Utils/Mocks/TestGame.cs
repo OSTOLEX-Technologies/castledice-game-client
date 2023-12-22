@@ -8,7 +8,7 @@ namespace Tests.Utils.Mocks
 {
     public class TestGame : Game
     {
-        public TestGame(List<Player> players, BoardConfig boardConfig, PlaceablesConfig placeablesConfig, IDecksList decksList) : base(players, boardConfig, placeablesConfig, decksList)
+        public TestGame(List<Player> players, BoardConfig boardConfig, PlaceablesConfig placeablesConfig, IDecksList decksList, TurnSwitchConditionsConfig turnSwitchConditionsConfig) : base(players, boardConfig, placeablesConfig, decksList, turnSwitchConditionsConfig)
         {
         }
         

@@ -72,7 +72,9 @@ public class MainMenuInitializer : MonoBehaviour
         var playersListProvider = new PlayersListProvider();
         var placeablesConfigProvider = new PlaceablesConfigProvider();
         var decksListProvider = new DecksListProvider();
-        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, decksListProvider);
+        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigProvider();
+        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
+            turnSwitchConditionsConfigProvider, decksListProvider);
         _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
         
         //Setting up error handling
