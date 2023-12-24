@@ -80,3 +80,5 @@ crashlytics-build.properties
 .idea/
 .idea/.idea.castledice-client/.idea/sonarlint/
 CodeCoverage/
+Assets/Src/AuthController/AuthKeys/*.cs
+Assets/Src/AuthController/AuthKeys/*.meta

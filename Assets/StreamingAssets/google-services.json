@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "150757942999",
+    "firebase_url": "https://ostolex-default-rtdb.europe-west1.firebasedatabase.app",
+    "project_id": "ostolex",
+    "storage_bucket": "ostolex.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:150757942999:android:98115651ec173f4bd43292",
+        "android_client_info": {
+          "package_name": "com.ostolex.castledice_client"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "150757942999-vitpotb0bc1cu4f8vknfmhbfpq30q2gr.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBPXUHLHmtV49z4s5NqizcW76oMxqJefWQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "150757942999-laicrio937c0qkoq9bn3l6nrpn5pq827.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

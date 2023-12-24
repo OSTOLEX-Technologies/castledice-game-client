@@ -1,4 +1,6 @@
-﻿using Src.Caching;
+﻿using Src.AuthController.TokenProviders;
+using Src.AuthController.TokenProviders.TokenProvidersFactory;
+using Src.Caching;
 
 namespace Src.AuthController
 {
@@ -13,17 +15,17 @@ namespace Src.AuthController
             _tokenProvidersStrategy = tokenProvidersStrategy;
             _cacher = cacher;
             _view = view;
-            _view.AuthTypeChosen += OnAuthTypeChosen;
+            _view.AuthTypeChosen += OnAuthTypeChosenAsync;
         }
 
         ~AuthController()
         {
-            _view.AuthTypeChosen -= OnAuthTypeChosen;
+            _view.AuthTypeChosen -= OnAuthTypeChosenAsync;
         }
         
-        private void OnAuthTypeChosen(object sender, AuthType authType)
+        private async void OnAuthTypeChosenAsync(object sender, AuthType authType)
         {
-            IAccessTokenProvider tokenProvider = _tokenProvidersStrategy.GetAccessTokenProvider(authType);
+            IAccessTokenProvider tokenProvider = await _tokenProvidersStrategy.GetAccessTokenProviderAsync(authType);
             _cacher.CacheObject(tokenProvider);
         }
     }

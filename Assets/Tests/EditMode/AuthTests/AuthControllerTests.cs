@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
 using Src.AuthController;
+using Src.AuthController.TokenProviders;
+using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using Tests.Utils.Mocks;
 
@@ -17,8 +19,9 @@ namespace Tests.EditMode.AuthTests
             var expectedTokenProvider = new Mock<IAccessTokenProvider>().Object;
             var cacherMock = new Mock<IObjectCacher>();
             var providersStrategyMock = new Mock<IAccessTokenProvidersStrategy>();
-            providersStrategyMock.Setup(s => s.GetAccessTokenProvider(authType)).Returns(expectedTokenProvider);
+            providersStrategyMock.Setup(s => s.GetAccessTokenProviderAsync(authType)).ReturnsAsync(expectedTokenProvider);
             AuthViewMock viewMock = new AuthViewMock();
+            
             
             var controller = new AuthController(providersStrategyMock.Object, cacherMock.Object, viewMock);
             viewMock.SelectAuthType(authType);
