@@ -15,7 +15,7 @@ namespace Src.AuthController.TokenProviders
         
         public Task<string> GetAccessTokenAsync()
         {
-            throw new NotImplementedException();
+            return _user.TokenAsync(true);
         }
     }
 }

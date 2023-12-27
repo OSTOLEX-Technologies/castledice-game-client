@@ -1,4 +1,5 @@
-﻿using Src.AuthController.TokenProviders;
+﻿using System;
+using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 
@@ -9,6 +10,8 @@ namespace Src.AuthController
         private readonly IAccessTokenProvidersStrategy _tokenProvidersStrategy;
         private readonly IObjectCacher _cacher;
         private readonly IAuthView _view;
+
+        public event EventHandler TokenProviderLoaded; 
 
         public AuthController(IAccessTokenProvidersStrategy tokenProvidersStrategy, IObjectCacher cacher, IAuthView view)
         {
@@ -27,6 +30,7 @@ namespace Src.AuthController
         {
             IAccessTokenProvider tokenProvider = await _tokenProvidersStrategy.GetAccessTokenProviderAsync(authType);
             _cacher.CacheObject(tokenProvider);
+            TokenProviderLoaded?.Invoke(this, EventArgs.Empty);
         }
     }
 }
