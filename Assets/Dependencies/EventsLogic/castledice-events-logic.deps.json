@@ -7,13 +7,25 @@
   "targets": {
     ".NETStandard,Version=v2.1": {},
     ".NETStandard,Version=v2.1/": {
-      "castledice-game-data-logic/1.0.0": {
+      "castledice-events-logic/1.0.0": {
+        "dependencies": {
+          "castledice-game-data-logic": "0.0.1-dev4",
+          "castledice-game-logic": "0.0.1-dev3"
+        },
+        "runtime": {
+          "castledice-events-logic.dll": {}
+        }
+      },
+      "castledice-game-data-logic/0.0.1-dev4": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3",
           "castledice-game-logic": "0.0.1-dev3"
         },
         "runtime": {
-          "castledice-game-data-logic.dll": {}
+          "lib/netstandard2.1/castledice-game-data-logic.dll": {
+            "assemblyVersion": "0.0.1.0",
+            "fileVersion": "0.0.1.0"
+          }
         }
       },
       "castledice-game-logic/0.0.1-dev3": {
@@ -38,10 +50,17 @@
     }
   },
   "libraries": {
-    "castledice-game-data-logic/1.0.0": {
+    "castledice-events-logic/1.0.0": {
       "type": "project",
       "serviceable": false,
       "sha512": ""
+    },
+    "castledice-game-data-logic/0.0.1-dev4": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-Zv6q52afr2IRZv/MOR/zdYNdAaVCuQRGw9wUhlA7FKrg85hvU8kuFa1G2q4PC0nO8DR78FdhPp3hEdNW0xB9Vw==",
+      "path": "castledice-game-data-logic/0.0.1-dev4",
+      "hashPath": "castledice-game-data-logic.0.0.1-dev4.nupkg.sha512"
     },
     "castledice-game-logic/0.0.1-dev3": {
       "type": "package",

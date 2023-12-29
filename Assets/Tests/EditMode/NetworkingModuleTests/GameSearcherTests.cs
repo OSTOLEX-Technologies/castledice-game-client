@@ -1,5 +1,5 @@
 ﻿using System.Threading.Tasks;
-using casltedice_events_logic.ServerToClient;
+using castledice_events_logic.ServerToClient;
 using Moq;
 using NUnit.Framework;
 using Riptide;

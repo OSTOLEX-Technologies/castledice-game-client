@@ -1,4 +1,4 @@
-﻿using casltedice_events_logic.ServerToClient;
+﻿using castledice_events_logic.ServerToClient;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.NetworkingModule.DTOAccepters;
 
