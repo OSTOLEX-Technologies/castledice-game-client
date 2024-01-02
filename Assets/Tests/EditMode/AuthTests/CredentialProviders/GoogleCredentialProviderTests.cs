@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
@@ -7,11 +6,11 @@ using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
 using Src.AuthController.REST.PortListener;
-using Src.AuthController.REST.REST_Request_Proxies;
-using Src.AuthController.REST.REST_Response_DTOs;
+using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
+using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
 using Src.AuthController.UrlOpening;
 
-namespace Tests.EditMode.AuthTests
+namespace Tests.EditMode.AuthTests.CredentialProviders
 {
     public class GoogleCredentialProviderTests
     {

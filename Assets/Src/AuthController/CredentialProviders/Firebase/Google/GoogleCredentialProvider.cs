@@ -4,7 +4,9 @@ using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsA
 using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies;
+using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
 using Src.AuthController.REST.REST_Response_DTOs;
+using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
 using Src.AuthController.UrlOpening;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
