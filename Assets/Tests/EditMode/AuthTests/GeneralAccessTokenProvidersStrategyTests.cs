@@ -6,6 +6,7 @@ using Firebase.Auth;
 using Moq;
 using NUnit.Framework;
 using Src.AuthController;
+using Src.AuthController.CredentialProviders.Metamask;
 using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 
@@ -17,18 +18,18 @@ namespace Tests.EditMode.AuthTests
         [TestCaseSource(nameof(GetAuthTypes))]
         public async Task GetAccessTokenProvider_ShouldReturnCorrectTokenProvider_ObtainedFromStrategy(AuthType authType)
         {
-
-            var firebaseUserMock = FirebaseAuth.GetAuth(FirebaseApp.DefaultInstance).CurrentUser;
+            var firebaseUserStub = FirebaseAuth.GetAuth(FirebaseApp.DefaultInstance).CurrentUser;
+            var metamaskBackendCredentialsProviderMock = new Mock<IMetamaskBackendCredentialProvider>();
             
-            var expectedFirebaseTokenProvider = new Mock<FirebaseTokenProvider>(firebaseUserMock);
-            var expectedMetamaskTokenProvider = new Mock<MetamaskTokenProvider>();
+            var expectedFirebaseTokenProvider = new FirebaseTokenProvider(firebaseUserStub);
+            var expectedMetamaskTokenProvider = new MetamaskTokenProvider(metamaskBackendCredentialsProviderMock.Object);
 
             var firebaseTokenProviderFactoryMock = new Mock<IFirebaseTokenProvidersFactory>();
             firebaseTokenProviderFactoryMock.Setup(s => 
-                s.GetTokenProviderAsync(FirebaseAuthProviderType.Google)).ReturnsAsync(expectedFirebaseTokenProvider.Object);
+                s.GetTokenProviderAsync(FirebaseAuthProviderType.Google)).ReturnsAsync(expectedFirebaseTokenProvider);
             var metamaskTokenProviderFactoryMock = new Mock<IMetamaskTokenProvidersFactory>();
             metamaskTokenProviderFactoryMock.Setup(s => 
-                s.GetTokenProviderAsync()).ReturnsAsync(expectedMetamaskTokenProvider.Object);
+                s.GetTokenProviderAsync()).ReturnsAsync(expectedMetamaskTokenProvider);
 
             
             var generalProviderStrategy = new GeneralAccessTokenProvidersStrategy(firebaseTokenProviderFactoryMock.Object, metamaskTokenProviderFactoryMock.Object);
@@ -37,11 +38,11 @@ namespace Tests.EditMode.AuthTests
             
             if (authType.Equals(AuthType.Metamask))
             {
-                Assert.AreSame(expectedMetamaskTokenProvider.Object, actualTokenProvider);
+                Assert.AreSame(expectedMetamaskTokenProvider, actualTokenProvider);
             }
             else
             {
-                Assert.AreSame(expectedFirebaseTokenProvider.Object, actualTokenProvider);
+                Assert.AreSame(expectedFirebaseTokenProvider, actualTokenProvider);
             }
         }
 
