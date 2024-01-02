@@ -1,7 +1,7 @@
 ﻿using System;
 using Newtonsoft.Json;
 
-namespace Src.AuthController.REST.REST_Response_DTOs
+namespace Src.AuthController.REST.REST_Response_DTOs.Firebase.Google
 {
     [Serializable]
     public class GoogleRefreshTokenResponse

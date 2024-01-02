@@ -8,9 +8,9 @@ using Src.AuthController;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
-using Src.AuthController.REST.REST_Response_DTOs;
+using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
 
-namespace Tests.EditMode.AuthTests
+namespace Tests.EditMode.AuthTests.CredentialProviders
 {
     public class FirebaseCredentialsProviderTests
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Newtonsoft.Json;
 
-namespace Src.AuthController.REST.REST_Request_Proxies
+namespace Src.AuthController.REST.REST_Request_Proxies.Firebase.Google
 {
     [Serializable]
     public class GoogleRefreshTokenRequestDtoProxy
