@@ -1,12 +1,21 @@
 ﻿using System.Threading.Tasks;
+using Src.AuthController.CredentialProviders.Metamask;
 
 namespace Src.AuthController.TokenProviders
 {
     public class MetamaskTokenProvider : IAccessTokenProvider
     {
-        public Task<string> GetAccessTokenAsync()
+        private readonly IMetamaskBackendCredentialProvider _credentialProvider;
+
+        public MetamaskTokenProvider(IMetamaskBackendCredentialProvider credentialProvider)
         {
-            throw new System.NotImplementedException();
+            _credentialProvider = credentialProvider;
+        }
+
+        public async Task<string> GetAccessTokenAsync()
+        {
+            var response = await _credentialProvider.GetCredentialAsync();
+            return response.AccessToken;
         }
     }
 }
