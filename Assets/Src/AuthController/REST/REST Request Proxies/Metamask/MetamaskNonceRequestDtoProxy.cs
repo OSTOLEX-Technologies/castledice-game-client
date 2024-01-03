@@ -5,21 +5,21 @@ using Newtonsoft.Json;
 namespace Src.AuthController.REST.REST_Request_Proxies.Metamask
 {
     [Serializable]
-    public class MetamaskRefreshRequestDtoProxy
+    public class MetamaskNonceRequestDtoProxy
     {
-        [JsonProperty("refresh_token")]
-        public string RefreshToken { get; private set; }
+        [JsonProperty("public_address")]
+        public string PublicAddress { get; private set; }
 
-        public MetamaskRefreshRequestDtoProxy(string refreshToken)
+        public MetamaskNonceRequestDtoProxy(string publicAddress)
         {
-            RefreshToken = refreshToken;
+            PublicAddress = publicAddress;
         }
 
         public Dictionary<string, string> AsDictionary()
         {
             return new Dictionary<string, string>
             {
-                { "refresh_token", RefreshToken },
+                { "public_address", PublicAddress },
             };
         }
     }

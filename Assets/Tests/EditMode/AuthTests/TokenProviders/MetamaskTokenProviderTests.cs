@@ -20,7 +20,7 @@ namespace Tests.EditMode.AuthTests.TokenProviders
             var metamaskTokenProvider = new MetamaskTokenProvider(credentialProviderMock.Object);
             var res = await metamaskTokenProvider.GetAccessTokenAsync();
             
-            Assert.AreEqual(expectedAccessTokenResponse.AccessToken, res);
+            Assert.AreEqual(expectedAccessTokenResponse.EncodedJwt, res);
         }
     }
 }

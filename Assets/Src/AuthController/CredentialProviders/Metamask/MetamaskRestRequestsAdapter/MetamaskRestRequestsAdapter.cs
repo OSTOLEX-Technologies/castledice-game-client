@@ -17,12 +17,12 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAd
             _httpClientRequestAdapter = httpClientRequestAdapter;
         }
 
-        public void GetNonce(TaskCompletionSource<MetamaskNonceResponse> tcs)
+        public void GetNonce(MetamaskNonceRequestDtoProxy requestParams, TaskCompletionSource<MetamaskNonceResponse> tcs)
         {
             _httpClientRequestAdapter.Request(
                 HttpMethod.Get, 
                 $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.NonceGetterUrl}", 
-                new Dictionary<string, string>(), 
+                requestParams.AsDictionary(), 
                 tcs);
         }
 
