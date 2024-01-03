@@ -11,8 +11,17 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wal
             
             var wallet = MetaMaskUnity.Instance.Wallet;
 
-            wallet.WalletConnectedHandler += (_, _) => OnConnected?.Invoke(this, EventArgs.Empty);
+            wallet.WalletConnectedHandler += (_, _) =>
+            {
+                IMetamaskWalletFacade.WalletConnected = true;
+                OnConnected?.Invoke(this, EventArgs.Empty);
+            };
             wallet.Connect();
+        }
+        
+        public string GetPublicAddress()
+        {
+            return MetaMaskUnity.Instance.Wallet.SelectedAddress;
         }
         
         public event EventHandler OnConnected;
