@@ -7,7 +7,6 @@ using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapte
 using Src.AuthController.REST;
 using Src.AuthController.REST.REST_Request_Proxies.Metamask;
 using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
-using UnityEngine;
 
 namespace Tests.EditMode.AuthTests.RestRequestsAdapters
 {
