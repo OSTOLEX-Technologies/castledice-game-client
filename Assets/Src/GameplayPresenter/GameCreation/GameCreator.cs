@@ -24,10 +24,11 @@ namespace Src.GameplayPresenter.GameCreation
         
         public Game CreateGame(GameStartData gameData)
         {
-            var boardConfig = _boardConfigCreator.GetBoardConfig(gameData.BoardData, null);
+            var playersList = _playersListCreator.GetPlayersList(gameData.PlayersData);
+            var boardConfig = _boardConfigCreator.GetBoardConfig(gameData.BoardData, playersList);
             var placeablesConfig = _placeablesConfigCreator.GetPlaceablesConfig(gameData.PlaceablesConfigData);
             var turnSwitchConditionsConfig = _turnSwitchConditionsConfigCreator.GetTurnSwitchConditionsConfig(gameData.TscConfigData);
-            var game = new Game(null, boardConfig, placeablesConfig, turnSwitchConditionsConfig);
+            var game = new Game(playersList, boardConfig, placeablesConfig, turnSwitchConditionsConfig);
             return game;
         }
     }
