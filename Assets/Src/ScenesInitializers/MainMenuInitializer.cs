@@ -76,11 +76,11 @@ public class MainMenuInitializer : MonoBehaviour
         var cellsGeneratorProvider = new MatrixCellsGeneratorCreator();
         var contentToCoordinateProvider = new ContentToCoordinateCreator();
         var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
-        var boardConfigProvider = new BoardConfigProvider(spawnersProvider, cellsGeneratorProvider);
+        var boardConfigProvider = new BoardConfigCreator(spawnersProvider, cellsGeneratorProvider);
         var playersListProvider = new PlayersListCreator();
         var placeablesConfigProvider = new PlaceablesConfigCreator();
         var decksListProvider = new DecksListCreator();
-        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigProvider();
+        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
             turnSwitchConditionsConfigProvider, decksListProvider);
         _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);

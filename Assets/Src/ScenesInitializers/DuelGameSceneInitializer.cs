@@ -164,10 +164,10 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var playersListProvider = new PlayersListCreator();
         var coordinateSpawnerProvider = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
         var matrixCellsGeneratorProvider = new MatrixCellsGeneratorCreator();
-        var boardConfigProvider = new BoardConfigProvider(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
+        var boardConfigProvider = new BoardConfigCreator(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
         var placeablesConfigProvider = new PlaceablesConfigCreator();
         var decksListProvider = new DecksListCreator();
-        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigProvider();
+        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, turnSwitchConditionsConfigProvider,
             decksListProvider);
         _game = gameCreator.CreateGame(_gameStartData);

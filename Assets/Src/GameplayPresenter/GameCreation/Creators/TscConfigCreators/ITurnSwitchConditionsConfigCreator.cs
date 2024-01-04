@@ -3,7 +3,7 @@ using castledice_game_logic.GameConfiguration;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators
 {
-    public interface ITurnSwitchConditionsConfigProvider
+    public interface ITurnSwitchConditionsConfigCreator
     {
         TurnSwitchConditionsConfig GetTurnSwitchConditionsConfig(TscConfigData data);
     }

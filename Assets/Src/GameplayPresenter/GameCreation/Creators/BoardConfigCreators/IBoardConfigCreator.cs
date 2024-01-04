@@ -5,7 +5,7 @@ using castledice_game_logic.GameConfiguration;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators
 {
-    public interface IBoardConfigProvider
+    public interface IBoardConfigCreator
     {
         BoardConfig GetBoardConfig(BoardData boardData, List<Player> players);
     }

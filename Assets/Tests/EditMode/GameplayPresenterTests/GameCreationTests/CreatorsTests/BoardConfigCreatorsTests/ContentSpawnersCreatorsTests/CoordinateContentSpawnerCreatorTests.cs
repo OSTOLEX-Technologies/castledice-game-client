@@ -24,7 +24,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         public void GetContentSpawners_ShouldReturnOneElementList_WithCoordinateContentSpawner()
         {
             var contentToCoordinateCreatorMock = new Mock<IContentToCoordinateCreator>();
-            contentToCoordinateCreatorMock.Setup(provider => provider.GetContentToCoordinate(It.IsAny<ContentData>(), It.IsAny<List<Player>>()))
+            contentToCoordinateCreatorMock.Setup(creator => creator.GetContentToCoordinate(It.IsAny<ContentData>(), It.IsAny<List<Player>>()))
                 .Returns(new ContentToCoordinate((0, 0), GetCellContent()));
             var spawnerCreator = new CoordinateContentSpawnerCreator(contentToCoordinateCreatorMock.Object);
             
@@ -57,7 +57,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
             var contentToCoordinateCreatorMock = new Mock<IContentToCoordinateCreator>();
             for (int i = 0; i < contentData.Count; i++)
             {
-                contentToCoordinateCreatorMock.Setup(provider => provider.GetContentToCoordinate(contentData[i], It.IsAny<List<Player>>()))
+                contentToCoordinateCreatorMock.Setup(creator => creator.GetContentToCoordinate(contentData[i], It.IsAny<List<Player>>()))
                     .Returns(expectedContentToCoordinates[i]);
             }
             var spawnerCreator = new CoordinateContentSpawnerCreator(contentToCoordinateCreatorMock.Object);

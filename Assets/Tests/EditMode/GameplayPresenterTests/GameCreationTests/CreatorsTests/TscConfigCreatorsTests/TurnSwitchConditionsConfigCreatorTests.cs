@@ -7,7 +7,7 @@ using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.TscConfigCreatorsTests
 {
-    public class TurnSwitchConditionsConfigProviderTests
+    public class TurnSwitchConditionsConfigCreatorTests
     {
         [Test]
         [TestCaseSource(nameof(GetTscTypes))]
@@ -15,9 +15,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         {
             var expectedList = new List<TscType> { type };
             var data = new TscConfigData(expectedList);
-            var provider = new TurnSwitchConditionsConfigProvider();
+            var creator = new TurnSwitchConditionsConfigCreator();
             
-            var config = provider.GetTurnSwitchConditionsConfig(data);
+            var config = creator.GetTurnSwitchConditionsConfig(data);
             
             Assert.AreEqual(expectedList, config.ConditionsToUse);
         }

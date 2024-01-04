@@ -7,12 +7,12 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpa
 
 namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators
 {
-    public class BoardConfigProvider : IBoardConfigProvider
+    public class BoardConfigCreator : IBoardConfigCreator
     {
         private readonly IContentSpawnersListCreator _spawnersCreator;
         private readonly ICellsGeneratorCreator _cellsGeneratorCreator;
 
-        public BoardConfigProvider(IContentSpawnersListCreator spawnersCreator, ICellsGeneratorCreator cellsGeneratorCreator)
+        public BoardConfigCreator(IContentSpawnersListCreator spawnersCreator, ICellsGeneratorCreator cellsGeneratorCreator)
         {
             _spawnersCreator = spawnersCreator;
             _cellsGeneratorCreator = cellsGeneratorCreator;
