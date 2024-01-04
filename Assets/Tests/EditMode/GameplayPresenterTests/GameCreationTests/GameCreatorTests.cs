@@ -9,7 +9,11 @@ using castledice_game_logic.GameObjects.Configs;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayPresenter.GameCreation.GameCreationProviders;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests

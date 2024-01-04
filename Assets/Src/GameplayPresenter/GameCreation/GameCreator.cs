@@ -1,6 +1,11 @@
 ﻿using castledice_game_data_logic;
 using castledice_game_logic;
-using Src.GameplayPresenter.GameCreation.GameCreationProviders;
+using Src.GameplayPresenter.GameCreation.Creators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 
 namespace Src.GameplayPresenter.GameCreation
 {

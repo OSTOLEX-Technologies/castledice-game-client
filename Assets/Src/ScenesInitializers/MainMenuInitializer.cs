@@ -7,7 +7,14 @@ using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayPresenter.GameCreation.GameCreationProviders;
+using Src.GameplayPresenter.GameCreation.Creators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
+using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
 using Src.NetworkingModule;
@@ -66,7 +73,7 @@ public class MainMenuInitializer : MonoBehaviour
         //Setting up game creation presenter
         var gameSearcher = new GameSearcher(clientWrapper);
         GameCreationMessageHandler.SetDTOAccepter(gameSearcher);
-        var cellsGeneratorProvider = new MatrixCellsGeneratorProvider();
+        var cellsGeneratorProvider = new MatrixCellsGeneratorCreator();
         var contentToCoordinateProvider = new ContentToCoordinateProvider();
         var spawnersProvider = new CoordinateContentSpawnerProvider(contentToCoordinateProvider);
         var boardConfigProvider = new BoardConfigProvider(spawnersProvider, cellsGeneratorProvider);
