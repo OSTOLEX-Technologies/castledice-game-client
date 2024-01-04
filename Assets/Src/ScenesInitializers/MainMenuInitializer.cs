@@ -74,8 +74,8 @@ public class MainMenuInitializer : MonoBehaviour
         var gameSearcher = new GameSearcher(clientWrapper);
         GameCreationMessageHandler.SetDTOAccepter(gameSearcher);
         var cellsGeneratorProvider = new MatrixCellsGeneratorCreator();
-        var contentToCoordinateProvider = new ContentToCoordinateProvider();
-        var spawnersProvider = new CoordinateContentSpawnerProvider(contentToCoordinateProvider);
+        var contentToCoordinateProvider = new ContentToCoordinateCreator();
+        var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
         var boardConfigProvider = new BoardConfigProvider(spawnersProvider, cellsGeneratorProvider);
         var playersListProvider = new PlayersListProvider();
         var placeablesConfigProvider = new PlaceablesConfigProvider();

@@ -5,13 +5,13 @@ using castledice_game_logic.BoardGeneration.ContentGeneration;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators
 {
-    public class CoordinateContentSpawnerProvider : IContentSpawnersListProvider
+    public class CoordinateContentSpawnerCreator : IContentSpawnersListCreator
     {
-        private readonly IContentToCoordinateProvider _contentToCoordinateProvider;
+        private readonly IContentToCoordinateCreator _contentToCoordinateCreator;
 
-        public CoordinateContentSpawnerProvider(IContentToCoordinateProvider contentToCoordinateProvider)
+        public CoordinateContentSpawnerCreator(IContentToCoordinateCreator contentToCoordinateCreator)
         {
-            _contentToCoordinateProvider = contentToCoordinateProvider;
+            _contentToCoordinateCreator = contentToCoordinateCreator;
         }
 
         public List<IContentSpawner> GetContentSpawnersList(List<ContentData> contentData, List<Player> players)
@@ -20,7 +20,7 @@ namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.Conten
             var contentToCoordinates = new List<ContentToCoordinate>();
             foreach (var data in contentData)
             {
-                var contentToCoordinate = _contentToCoordinateProvider.GetContentToCoordinate(data, players);
+                var contentToCoordinate = _contentToCoordinateCreator.GetContentToCoordinate(data, players);
                 contentToCoordinates.Add(contentToCoordinate);
             }
             spawners.Add(new CoordinateContentSpawner(contentToCoordinates));

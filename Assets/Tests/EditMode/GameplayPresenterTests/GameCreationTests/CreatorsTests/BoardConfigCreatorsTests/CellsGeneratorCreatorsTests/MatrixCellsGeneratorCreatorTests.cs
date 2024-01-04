@@ -5,7 +5,7 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGener
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.BoardConfigCreatorsTests.CellsGeneratorCreatorsTests
 {
-    public class MatrixCellsGeneratorProviderTests
+    public class MatrixCellsGeneratorCreatorTests
     {
         public static bool[][,] Matrices =
         {
@@ -35,9 +35,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         [Test]
         public void GetCellsGenerator_ShouldReturnMatrixCellsGenerator()
         {
-            var provider = new MatrixCellsGeneratorCreator();
+            var creator = new MatrixCellsGeneratorCreator();
             
-            var generator = provider.GetCellsGenerator(new bool[0, 0]);
+            var generator = creator.GetCellsGenerator(new bool[0, 0]);
             
             Assert.IsInstanceOf<MatrixCellsGenerator>(generator);
         }
@@ -46,9 +46,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         public void ReturnedGenerator_ShouldGenerateCells_AccordingToGivenMatrix([ValueSource(nameof(Matrices))]bool[,] matrix)
         {
             var board = new Board(CellType.Square);
-            var provider = new MatrixCellsGeneratorCreator();
+            var creator = new MatrixCellsGeneratorCreator();
             
-            var generator = provider.GetCellsGenerator(matrix);
+            var generator = creator.GetCellsGenerator(matrix);
             generator.GenerateCells(board);
 
             for (int i = 0; i < matrix.GetLength(0); i++)

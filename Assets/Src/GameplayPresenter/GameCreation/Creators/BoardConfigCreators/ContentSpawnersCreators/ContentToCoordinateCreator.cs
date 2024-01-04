@@ -8,7 +8,7 @@ using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators
 {
-    public class ContentToCoordinateProvider : IContentDataVisitor<ContentToCoordinate>, IContentToCoordinateProvider
+    public class ContentToCoordinateCreator : IContentDataVisitor<ContentToCoordinate>, IContentToCoordinateCreator
     {
         private List<Player> _players;
 

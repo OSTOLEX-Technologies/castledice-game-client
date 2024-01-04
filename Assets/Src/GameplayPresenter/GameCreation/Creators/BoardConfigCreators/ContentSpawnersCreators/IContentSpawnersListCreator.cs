@@ -5,7 +5,7 @@ using castledice_game_logic.BoardGeneration.ContentGeneration;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators
 {
-    public interface IContentSpawnersListProvider
+    public interface IContentSpawnersListCreator
     {
         List<IContentSpawner> GetContentSpawnersList(List<ContentData> contentData, List<Player> players);
     }

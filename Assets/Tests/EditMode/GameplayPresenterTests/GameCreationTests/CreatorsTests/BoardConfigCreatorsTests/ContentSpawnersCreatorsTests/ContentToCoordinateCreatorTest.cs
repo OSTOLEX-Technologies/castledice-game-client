@@ -10,7 +10,7 @@ using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.BoardConfigCreatorsTests.ContentSpawnersCreatorsTests
 {
-    public class ContentToCoordinateProviderTest
+    public class ContentToCoordinateCreatorTest
     {
         public static Vector2Int[] Positions = { (0, 0), (0, 1), (1, 0), (1, 1) };
         
@@ -19,9 +19,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         {
             var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
             var castleData = new CastleData((0, 0), 1, 1, 1, 1, 4);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            var contentToCoordinateCreator = new ContentToCoordinateCreator();
             
-            Assert.Throws<System.ArgumentException>(() => contentToCoordinateProvider.GetContentToCoordinate(castleData, players));
+            Assert.Throws<System.ArgumentException>(() => contentToCoordinateCreator.GetContentToCoordinate(castleData, players));
         }
 
         [Test]
@@ -29,9 +29,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         {
             var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
             var knightData = new KnightData((0, 0), 1, 1, 3);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            var contentToCoordinateCreator = new ContentToCoordinateCreator();
             
-            Assert.Throws<System.ArgumentException>(() => contentToCoordinateProvider.GetContentToCoordinate(knightData, players));
+            Assert.Throws<System.ArgumentException>(() => contentToCoordinateCreator.GetContentToCoordinate(knightData, players));
         }
 
         [Test]
@@ -39,9 +39,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         {
             var players = new List<Player> {GetPlayer(1), GetPlayer(2) };
             var castleData = new CastleData(position, 1, 1, 1, 1, 1);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            var contentToCoordinateCreator = new ContentToCoordinateCreator();
             
-            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(castleData, players);
+            var contentToCoordinate = contentToCoordinateCreator.GetContentToCoordinate(castleData, players);
             
             Assert.That(contentToCoordinate.Coordinate, Is.EqualTo(position));
         }
@@ -55,9 +55,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
             var owner = GetPlayer(ownerId);
             var players = new List<Player> {owner, GetPlayer(2) };
             var castleData = new CastleData((0, 0), captureHitCost, maxFreeDurability, maxDurability, durability, ownerId);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            var contentToCoordinateCreator = new ContentToCoordinateCreator();
             
-            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(castleData, players);
+            var contentToCoordinate = contentToCoordinateCreator.GetContentToCoordinate(castleData, players);
             var content = contentToCoordinate.Content;
             var castle = content as CastleGO;
             
@@ -75,9 +75,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         public void GetContentToCoordinate_ShouldReturnContentToCoordinateWithAppropriateTree_IfTreeDataGiven(int removeCost, bool canBeRemoved)
         {
             var treeData = new TreeData((0, 0), removeCost, canBeRemoved);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            var contentToCoordinateCreator = new ContentToCoordinateCreator();
             
-            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(treeData, new List<Player>());
+            var contentToCoordinate = contentToCoordinateCreator.GetContentToCoordinate(treeData, new List<Player>());
             var content = contentToCoordinate.Content;
             var tree = content as Tree;
 
@@ -94,9 +94,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
             var owner = GetPlayer(ownerId);
             var players = new List<Player> {owner, GetPlayer(2) };
             var knightData = new KnightData((0, 0), health, placeCost, ownerId);
-            var contentToCoordinateProvider = new ContentToCoordinateProvider();
+            var contentToCoordinateCreator = new ContentToCoordinateCreator();
             
-            var contentToCoordinate = contentToCoordinateProvider.GetContentToCoordinate(knightData, players);
+            var contentToCoordinate = contentToCoordinateCreator.GetContentToCoordinate(knightData, players);
             var content = contentToCoordinate.Content;
             var knight = content as Knight;
             

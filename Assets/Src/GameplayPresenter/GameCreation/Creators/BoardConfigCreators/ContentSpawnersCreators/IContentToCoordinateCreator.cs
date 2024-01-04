@@ -5,7 +5,7 @@ using castledice_game_logic.BoardGeneration.ContentGeneration;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators
 {
-    public interface IContentToCoordinateProvider
+    public interface IContentToCoordinateCreator
     {
         ContentToCoordinate GetContentToCoordinate(ContentData contentData, List<Player> players);
     }

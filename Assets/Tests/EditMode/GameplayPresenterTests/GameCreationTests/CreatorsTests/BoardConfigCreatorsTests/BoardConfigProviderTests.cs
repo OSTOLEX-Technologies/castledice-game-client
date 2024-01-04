@@ -20,7 +20,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         [Test]
         public void GetBoardConfig_ShouldReturnBoardConfig_WithSpawnersListFromGivenProvider()
         {
-            var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
+            var spawnersProviderMock = new Mock<IContentSpawnersListCreator>();
             var cellsGeneratorProviderMock = new Mock<ICellsGeneratorCreator>();
             var expectedList = new List<IContentSpawner>();
             spawnersProviderMock.Setup(provider => provider.GetContentSpawnersList(It.IsAny<List<ContentData>>(), It.IsAny<List<Player>>()))
@@ -35,7 +35,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         [Test]
         public void GetBoardConfig_ShouldReturnBoardConfig_WithCellsGeneratorFromGivenProvider()
         {
-            var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
+            var spawnersProviderMock = new Mock<IContentSpawnersListCreator>();
             var cellsGeneratorProviderMock = new Mock<ICellsGeneratorCreator>();
             var expectedGenerator = new Mock<ICellsGenerator>().Object;
             cellsGeneratorProviderMock.Setup(provider => provider.GetCellsGenerator(It.IsAny<bool[,]>()))
@@ -50,7 +50,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         [Test]
         public void GetBoardConfig_ShouldReturnBoardConfig_WithCellTypeFromGivenBoardData([ValueSource(nameof(CellTypes))] CellType cellType)
         {
-            var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
+            var spawnersProviderMock = new Mock<IContentSpawnersListCreator>();
             var cellsGeneratorProviderMock = new Mock<ICellsGeneratorCreator>();
             var boardConfigProvider = new BoardConfigProvider(spawnersProviderMock.Object, cellsGeneratorProviderMock.Object);
             var boardData = GetBoardData(cellType);
@@ -64,7 +64,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         public void GetBoardConfig_ShouldPassContentDataListFromBoardData_ToGivenContentSpawnersListProvider()
         {
             var boardData = GetBoardData();
-            var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
+            var spawnersProviderMock = new Mock<IContentSpawnersListCreator>();
             var cellsGeneratorProviderMock = new Mock<ICellsGeneratorCreator>();
             var boardConfigProvider = new BoardConfigProvider(spawnersProviderMock.Object, cellsGeneratorProviderMock.Object);
             
@@ -77,7 +77,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         public void GetBoardConfig_ShouldPassGivenPlayersList_ToGivenContentSpawnersListProvider()
         {
             var players = new List<Player>();
-            var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
+            var spawnersProviderMock = new Mock<IContentSpawnersListCreator>();
             var cellsGeneratorProviderMock = new Mock<ICellsGeneratorCreator>();
             var boardConfigProvider = new BoardConfigProvider(spawnersProviderMock.Object, cellsGeneratorProviderMock.Object);
             
@@ -90,7 +90,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         public void GetBoardConfig_ShouldPassCellsPresenceFromBoardData_ToGivenCellsGeneratorProvider()
         {
             var boardData = GetBoardData();
-            var spawnersProviderMock = new Mock<IContentSpawnersListProvider>();
+            var spawnersProviderMock = new Mock<IContentSpawnersListCreator>();
             var cellsGeneratorProviderMock = new Mock<ICellsGeneratorCreator>();
             var boardConfigProvider = new BoardConfigProvider(spawnersProviderMock.Object, cellsGeneratorProviderMock.Object);
             

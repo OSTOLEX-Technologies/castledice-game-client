@@ -11,7 +11,7 @@ using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.BoardConfigCreatorsTests.ContentSpawnersCreatorsTests
 {
-    public class CoordinateContentSpawnerProviderTests
+    public class CoordinateContentSpawnerCreatorTests
     {
         public static List<ContentData>[] ContentDataLists =
         {
@@ -23,46 +23,46 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         [Test]
         public void GetContentSpawners_ShouldReturnOneElementList_WithCoordinateContentSpawner()
         {
-            var contentToCoordinateProviderMock = new Mock<IContentToCoordinateProvider>();
-            contentToCoordinateProviderMock.Setup(provider => provider.GetContentToCoordinate(It.IsAny<ContentData>(), It.IsAny<List<Player>>()))
+            var contentToCoordinateCreatorMock = new Mock<IContentToCoordinateCreator>();
+            contentToCoordinateCreatorMock.Setup(provider => provider.GetContentToCoordinate(It.IsAny<ContentData>(), It.IsAny<List<Player>>()))
                 .Returns(new ContentToCoordinate((0, 0), GetCellContent()));
-            var spawnerProvider = new CoordinateContentSpawnerProvider(contentToCoordinateProviderMock.Object);
+            var spawnerCreator = new CoordinateContentSpawnerCreator(contentToCoordinateCreatorMock.Object);
             
-            var spawners = spawnerProvider.GetContentSpawnersList(new List<ContentData>(), new List<Player>());
+            var spawners = spawnerCreator.GetContentSpawnersList(new List<ContentData>(), new List<Player>());
             
             Assert.AreEqual(1, spawners.Count);
             Assert.IsInstanceOf<CoordinateContentSpawner>(spawners[0]);
         }
         
         [Test]
-        public void GetContentSpawners_ShouldPassEveryContentData_ToContentToCoordinateProvider([ValueSource(nameof(ContentDataLists))]List<ContentData> contentData)
+        public void GetContentSpawners_ShouldPassEveryContentData_ToContentToCoordinateCreator([ValueSource(nameof(ContentDataLists))]List<ContentData> contentData)
         {
-            var contentToCoordinateProviderMock = new Mock<IContentToCoordinateProvider>();
-            contentToCoordinateProviderMock
+            var contentToCoordinateCreatorMock = new Mock<IContentToCoordinateCreator>();
+            contentToCoordinateCreatorMock
                 .Setup(c => c.GetContentToCoordinate(It.IsAny<ContentData>(), It.IsAny<List<Player>>()))
                 .Returns(new ContentToCoordinate((0, 0), GetCellContent()));
-            var spawnerProvider = new CoordinateContentSpawnerProvider(contentToCoordinateProviderMock.Object);
+            var spawnerCreator = new CoordinateContentSpawnerCreator(contentToCoordinateCreatorMock.Object);
             
-            spawnerProvider.GetContentSpawnersList(contentData, new List<Player>());
+            spawnerCreator.GetContentSpawnersList(contentData, new List<Player>());
             
             foreach (var data in contentData)
             {
-                contentToCoordinateProviderMock.Verify(p => p.GetContentToCoordinate(data, It.IsAny<List<Player>>()), Times.Once);
+                contentToCoordinateCreatorMock.Verify(p => p.GetContentToCoordinate(data, It.IsAny<List<Player>>()), Times.Once);
             }
         }
         
         [TestCaseSource(nameof(ContentToCoordinateTestCases))]
-        public void ReturnedSpawner_ShouldHaveListOfContentToCoordinateObjects_FromGivenContentToCoordinateProvider(List<ContentData> contentData, List<ContentToCoordinate> expectedContentToCoordinates)
+        public void ReturnedSpawner_ShouldHaveListOfContentToCoordinateObjects_FromGivenContentToCoordinateCreator(List<ContentData> contentData, List<ContentToCoordinate> expectedContentToCoordinates)
         {
-            var contentToCoordinateProviderMock = new Mock<IContentToCoordinateProvider>();
+            var contentToCoordinateCreatorMock = new Mock<IContentToCoordinateCreator>();
             for (int i = 0; i < contentData.Count; i++)
             {
-                contentToCoordinateProviderMock.Setup(provider => provider.GetContentToCoordinate(contentData[i], It.IsAny<List<Player>>()))
+                contentToCoordinateCreatorMock.Setup(provider => provider.GetContentToCoordinate(contentData[i], It.IsAny<List<Player>>()))
                     .Returns(expectedContentToCoordinates[i]);
             }
-            var spawnerProvider = new CoordinateContentSpawnerProvider(contentToCoordinateProviderMock.Object);
+            var spawnerCreator = new CoordinateContentSpawnerCreator(contentToCoordinateCreatorMock.Object);
             
-            var spawners = spawnerProvider.GetContentSpawnersList(contentData, new List<Player>());
+            var spawners = spawnerCreator.GetContentSpawnersList(contentData, new List<Player>());
             var spawner = spawners[0] as CoordinateContentSpawner;
             var actualContentToCoordinates = spawner.ContentToCoordinates;
             

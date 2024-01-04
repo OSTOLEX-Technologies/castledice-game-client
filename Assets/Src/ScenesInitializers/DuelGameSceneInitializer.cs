@@ -162,7 +162,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         _gameStartData = Singleton<GameStartData>.Instance;
         var playersListProvider = new PlayersListProvider();
-        var coordinateSpawnerProvider = new CoordinateContentSpawnerProvider(new ContentToCoordinateProvider());
+        var coordinateSpawnerProvider = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
         var matrixCellsGeneratorProvider = new MatrixCellsGeneratorCreator();
         var boardConfigProvider = new BoardConfigProvider(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
         var placeablesConfigProvider = new PlaceablesConfigProvider();
