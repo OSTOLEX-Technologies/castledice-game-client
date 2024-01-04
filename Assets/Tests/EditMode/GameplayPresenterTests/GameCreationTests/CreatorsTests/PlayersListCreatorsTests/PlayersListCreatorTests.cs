@@ -5,7 +5,7 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.PlayersListCreatorsTests
 {
-    public class PlayersListProvidersTests
+    public class PlayersListCreatorTests
     {
         public static List<int>[] IdLists =
         {
@@ -16,9 +16,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         [Test]
         public void GetPlayersList_ShouldReturnListOfPlayers_WithAppropriateIds([ValueSource(nameof(IdLists))]List<int> ids)
         {
-            var playersListProvider = new PlayersListProvider();
+            var playersListCreator = new PlayersListCreator();
             
-            var playersList = playersListProvider.GetPlayersList(ids);
+            var playersList = playersListCreator.GetPlayersList(ids);
             
             Assert.That(playersList, Has.Count.EqualTo(ids.Count));
             foreach (var id in ids)

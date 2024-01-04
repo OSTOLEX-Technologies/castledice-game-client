@@ -11,15 +11,15 @@ namespace Src.GameplayPresenter.GameCreation
 {
     public class GameCreator : IGameCreator
     {
-        private readonly IPlayersListProvider _playersListProvider;
+        private readonly IPlayersListCreator _playersListCreator;
         private readonly IBoardConfigProvider _boardConfigProvider;
         private readonly IPlaceablesConfigCreator _placeablesConfigCreator;
         private readonly ITurnSwitchConditionsConfigProvider _turnSwitchConditionsConfigProvider;
         private readonly IDecksListCreator _decksListCreator;
         
-        public GameCreator(IPlayersListProvider playersListProvider, IBoardConfigProvider boardConfigProvider, IPlaceablesConfigCreator placeablesConfigCreator, ITurnSwitchConditionsConfigProvider turnSwitchConditionsConfigProvider, IDecksListCreator decksListCreator)
+        public GameCreator(IPlayersListCreator playersListCreator, IBoardConfigProvider boardConfigProvider, IPlaceablesConfigCreator placeablesConfigCreator, ITurnSwitchConditionsConfigProvider turnSwitchConditionsConfigProvider, IDecksListCreator decksListCreator)
         {
-            _playersListProvider = playersListProvider;
+            _playersListCreator = playersListCreator;
             _boardConfigProvider = boardConfigProvider;
             _placeablesConfigCreator = placeablesConfigCreator;
             _turnSwitchConditionsConfigProvider = turnSwitchConditionsConfigProvider;
@@ -28,7 +28,7 @@ namespace Src.GameplayPresenter.GameCreation
         
         public Game CreateGame(GameStartData gameData)
         {
-            var players = _playersListProvider.GetPlayersList(gameData.PlayersIds);
+            var players = _playersListCreator.GetPlayersList(gameData.PlayersIds);
             var boardConfig = _boardConfigProvider.GetBoardConfig(gameData.BoardData, players);
             var placeablesConfig = _placeablesConfigCreator.GetPlaceablesConfig(gameData.PlaceablesConfigData);
             var decks = _decksListCreator.GetDecksList(gameData.Decks);

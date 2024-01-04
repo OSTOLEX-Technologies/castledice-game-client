@@ -30,7 +30,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             var playersListProviderMock = GetPlayersListProviderMock();
             var gameCreator = new GameCreatorBuilder
             {
-                PlayersListProvider = playersListProviderMock.Object
+                PlayersListCreator = playersListProviderMock.Object
             }.Build();    
             
             gameCreator.CreateGame(gameStartData);
@@ -57,13 +57,13 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         public void CreateGame_ShouldPassPlayersListFromProvider_ToGivenBoardConfigProvider()
         {
             var gameStartData = GetGameStartData();
-            var playersListProviderMock = new Mock<IPlayersListProvider>();
+            var playersListProviderMock = new Mock<IPlayersListCreator>();
             var playersList = new List<Player>{ FirstPlayer, SecondPlayer };
             playersListProviderMock.Setup(p => p.GetPlayersList(It.IsAny<List<int>>())).Returns(playersList);
             var boardConfigProviderMock = GetBoardConfigProviderMock();
             var gameCreator = new GameCreatorBuilder
             {
-                PlayersListProvider = playersListProviderMock.Object,
+                PlayersListCreator = playersListProviderMock.Object,
                 BoardConfigProvider = boardConfigProviderMock.Object
             }.Build();    
             
@@ -137,7 +137,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
 
         private class GameCreatorBuilder
         {
-            public IPlayersListProvider PlayersListProvider { get; set; } = GetPlayersListProviderMock().Object;
+            public IPlayersListCreator PlayersListCreator { get; set; } = GetPlayersListProviderMock().Object;
             public IBoardConfigProvider BoardConfigProvider { get; set; } = GetBoardConfigProviderMock().Object;
             public IPlaceablesConfigCreator PlaceablesConfigCreator { get; set; } = GetPlaceablesConfigProviderMock().Object;
             public ITurnSwitchConditionsConfigProvider TurnSwitchConditionsConfigProvider { get; set; } = GetTurnSwitchConditionsConfigProviderMock().Object;
@@ -145,13 +145,13 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             public GameCreator Build()
             {
-                return new GameCreator(PlayersListProvider, BoardConfigProvider, PlaceablesConfigCreator, TurnSwitchConditionsConfigProvider, DecksListCreator);
+                return new GameCreator(PlayersListCreator, BoardConfigProvider, PlaceablesConfigCreator, TurnSwitchConditionsConfigProvider, DecksListCreator);
             }
         }
         
-        private static Mock<IPlayersListProvider> GetPlayersListProviderMock()
+        private static Mock<IPlayersListCreator> GetPlayersListProviderMock()
         {
-            var mock = new Mock<IPlayersListProvider>();
+            var mock = new Mock<IPlayersListCreator>();
             mock.Setup(p => p.GetPlayersList(It.IsAny<List<int>>())).Returns(new List<Player>{FirstPlayer, SecondPlayer});
             return mock;
         }

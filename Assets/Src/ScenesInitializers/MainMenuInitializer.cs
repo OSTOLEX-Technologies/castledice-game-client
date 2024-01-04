@@ -77,7 +77,7 @@ public class MainMenuInitializer : MonoBehaviour
         var contentToCoordinateProvider = new ContentToCoordinateCreator();
         var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
         var boardConfigProvider = new BoardConfigProvider(spawnersProvider, cellsGeneratorProvider);
-        var playersListProvider = new PlayersListProvider();
+        var playersListProvider = new PlayersListCreator();
         var placeablesConfigProvider = new PlaceablesConfigCreator();
         var decksListProvider = new DecksListCreator();
         var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigProvider();

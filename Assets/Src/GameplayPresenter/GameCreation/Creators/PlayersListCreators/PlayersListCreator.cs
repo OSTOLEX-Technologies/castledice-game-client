@@ -4,7 +4,7 @@ using castledice_game_logic.ActionPointsLogic;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators
 {
-    public class PlayersListProvider : IPlayersListProvider
+    public class PlayersListCreator : IPlayersListCreator
     {
         public List<Player> GetPlayersList(List<int> ids)
         {
