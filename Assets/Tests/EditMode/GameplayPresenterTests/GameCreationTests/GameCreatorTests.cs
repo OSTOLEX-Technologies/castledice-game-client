@@ -95,7 +95,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             var decksListProviderMock = GetDecksListProviderMock();
             var gameCreator = new GameCreatorBuilder
             {
-                DecksListProvider = decksListProviderMock.Object
+                DecksListCreator = decksListProviderMock.Object
             }.Build();    
             
             gameCreator.CreateGame(gameStartData);
@@ -141,11 +141,11 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             public IBoardConfigProvider BoardConfigProvider { get; set; } = GetBoardConfigProviderMock().Object;
             public IPlaceablesConfigProvider PlaceablesConfigProvider { get; set; } = GetPlaceablesConfigProviderMock().Object;
             public ITurnSwitchConditionsConfigProvider TurnSwitchConditionsConfigProvider { get; set; } = GetTurnSwitchConditionsConfigProviderMock().Object;
-            public IDecksListProvider DecksListProvider { get; set; } = GetDecksListProviderMock().Object;
+            public IDecksListCreator DecksListCreator { get; set; } = GetDecksListProviderMock().Object;
             
             public GameCreator Build()
             {
-                return new GameCreator(PlayersListProvider, BoardConfigProvider, PlaceablesConfigProvider, TurnSwitchConditionsConfigProvider, DecksListProvider);
+                return new GameCreator(PlayersListProvider, BoardConfigProvider, PlaceablesConfigProvider, TurnSwitchConditionsConfigProvider, DecksListCreator);
             }
         }
         
@@ -170,9 +170,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             return mock;
         }
             
-        private static Mock<IDecksListProvider> GetDecksListProviderMock()
+        private static Mock<IDecksListCreator> GetDecksListProviderMock()
         {
-            var mock = new Mock<IDecksListProvider>();
+            var mock = new Mock<IDecksListCreator>();
             mock.Setup(p => p.GetDecksList(It.IsAny<List<PlayerDeckData>>())).Returns(new Mock<IDecksList>().Object);
             return mock;
         }

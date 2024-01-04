@@ -6,7 +6,7 @@ using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.DecksListCreatorsTests
 {
-    public class DecksListProviderTests
+    public class DecksListCreatorTests
     {
         public static List<PlayerDeckData>[] DeckDataLists =
         {
@@ -27,9 +27,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
         [Test]
         public void GetDecksList_ShouldReturnDecksList_WithAppropriateDeckForEachPlayerId([ValueSource(nameof(DeckDataLists))]List<PlayerDeckData> decksData)
         {
-            var decksListProvider = new DecksListProvider();
+            var decksListCreator = new DecksListCreator();
             
-            var decksList = decksListProvider.GetDecksList(decksData);
+            var decksList = decksListCreator.GetDecksList(decksData);
             
             foreach (var data in decksData)
             {
@@ -49,9 +49,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
                 new(1, new List<PlacementType> { PlacementType.Knight , PlacementType.HeavyKnight }),
                 new(1, new List<PlacementType> { PlacementType.HeavyKnight }),
             };
-            var decksListProvider = new DecksListProvider();
+            var decksListCreator = new DecksListCreator();
             
-            Assert.Throws<System.ArgumentException>(() => decksListProvider.GetDecksList(decksData));
+            Assert.Throws<System.ArgumentException>(() => decksListCreator.GetDecksList(decksData));
         }
     }
 }

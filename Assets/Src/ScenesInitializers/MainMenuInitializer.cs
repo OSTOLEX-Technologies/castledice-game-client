@@ -79,7 +79,7 @@ public class MainMenuInitializer : MonoBehaviour
         var boardConfigProvider = new BoardConfigProvider(spawnersProvider, cellsGeneratorProvider);
         var playersListProvider = new PlayersListProvider();
         var placeablesConfigProvider = new PlaceablesConfigProvider();
-        var decksListProvider = new DecksListProvider();
+        var decksListProvider = new DecksListCreator();
         var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigProvider();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
             turnSwitchConditionsConfigProvider, decksListProvider);

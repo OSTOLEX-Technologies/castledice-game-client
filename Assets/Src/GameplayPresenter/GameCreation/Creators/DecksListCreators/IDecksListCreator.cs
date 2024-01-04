@@ -4,7 +4,7 @@ using castledice_game_logic.GameObjects;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.DecksListCreators
 {
-    public interface IDecksListProvider
+    public interface IDecksListCreator
     {
         IDecksList GetDecksList(List<PlayerDeckData> decksData);
     }

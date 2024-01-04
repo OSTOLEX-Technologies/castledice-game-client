@@ -6,7 +6,7 @@ using castledice_game_logic.GameObjects.Decks;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.DecksListCreators
 {
-    public class DecksListProvider : IDecksListProvider
+    public class DecksListCreator : IDecksListCreator
     {
         public IDecksList GetDecksList(List<PlayerDeckData> decksData)
         {
