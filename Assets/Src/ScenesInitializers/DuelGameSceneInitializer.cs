@@ -3,7 +3,6 @@ using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using castledice_game_logic.Math;
-using Src;
 using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsCount;
@@ -14,13 +13,10 @@ using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayPresenter.GameCreation.Creators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
-using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
-using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
@@ -46,7 +42,6 @@ using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersNumbers;
-using Src.GameplayView.PlayersRotations.RotationsByColor;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
@@ -161,15 +156,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpGame()
     {
         _gameStartData = Singleton<GameStartData>.Instance;
-        var playersListProvider = new PlayersListCreator();
-        var coordinateSpawnerProvider = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
-        var matrixCellsGeneratorProvider = new MatrixCellsGeneratorCreator();
-        var boardConfigProvider = new BoardConfigCreator(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
-        var placeablesConfigProvider = new PlaceablesConfigCreator();
-        var decksListProvider = new DecksListCreator();
-        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
-        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, turnSwitchConditionsConfigProvider,
-            decksListProvider);
+        //TODO: Create players list creator here
+        //var playersListCreator = new PlayersListCreator();
+        var coordinateSpawnerCreator = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
+        var matrixCellsGeneratorCreator = new MatrixCellsGeneratorCreator();
+        var boardConfigCreator = new BoardConfigCreator(coordinateSpawnerCreator, matrixCellsGeneratorCreator);
+        var placeablesConfigCreator = new PlaceablesConfigCreator();
+        var turnSwitchConditionsConfigCreator = new TurnSwitchConditionsConfigCreator();
+        var gameCreator = new GameCreator(null, boardConfigCreator, placeablesConfigCreator, turnSwitchConditionsConfigCreator);
         _game = gameCreator.CreateGame(_gameStartData);
     }
 
@@ -206,8 +200,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
         cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
         var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
         _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataProvider,
+        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
+        _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataCreator,
             new CellMovesListProvider(_game), _game, _cellMovesHighlightView);
     }
 
@@ -231,36 +225,36 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         var instantiator = new Instantiator();
         var playersList = _game.GetAllPlayers();
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider);
-        var playerNumberProvider = new PlayerNumberProvider(playersList);
-        var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
+        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
+        var playerColorCreator = new DuelPlayerColorProvider(playerDataCreator);
+        var playerNumberCreator = new PlayerNumberProvider(playersList);
+        var playerRotationCreator = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberCreator);
         
-        var treeModelProvider = new RandomTreeModelProvider(new RangeRandomNumberGenerator(), treeModelPrefabConfig, instantiator);
-        var treeViewFactory = new TreeViewFactory(treeModelProvider, treeViewPrefab, instantiator);
+        var treeModelCreator = new RandomTreeModelProvider(new RangeRandomNumberGenerator(), treeModelPrefabConfig, instantiator);
+        var treeViewFactory = new TreeViewFactory(treeModelCreator, treeViewPrefab, instantiator);
 
-        var knightModelProvider = new ColoredKnightModelProvider(playerColorProvider, knightModelPrefabConfig, instantiator);
+        var knightModelCreator = new ColoredKnightModelProvider(playerColorCreator, knightModelPrefabConfig, instantiator);
         var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
-        var knightViewFactory = new KnightViewFactory(playerRotationProvider, knightModelProvider, knightAudioFactory, knightViewPrefab, instantiator);
+        var knightViewFactory = new KnightViewFactory(playerRotationCreator, knightModelCreator, knightAudioFactory, knightViewPrefab, instantiator);
 
-        var castleModelProvider = new ColoredCastleModelProvider(playerColorProvider, castleModelPrefabConfig, instantiator);
+        var castleModelCreator = new ColoredCastleModelProvider(playerColorCreator, castleModelPrefabConfig, instantiator);
         var castleAudioFactory = new SoundPlayerCastleAudioFactory(castleSoundsConfig, castleAudioPrefab, instantiator);
-        var castleViewFactory = new CastleViewFactory(castleModelProvider, castleAudioFactory, castleViewPrefab, instantiator);
+        var castleViewFactory = new CastleViewFactory(castleModelCreator, castleAudioFactory, castleViewPrefab, instantiator);
         
-        var contentViewProvider = new ContentViewProvider(treeViewFactory, knightViewFactory, castleViewFactory);
-        _contentView = new CellsContentView(grid, contentViewProvider);
+        var contentViewCreator = new ContentViewProvider(treeViewFactory, knightViewFactory, castleViewFactory);
+        _contentView = new CellsContentView(grid, contentViewCreator);
         _cellContentPresenter = new CellsContentPresenter(_contentView, _game.GetBoard());
     }
 
     private void SetUpClientMoves()
     {
         _clientMovesView = new ClientMovesView(_cellClickDetectors);
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
         var serverMovesApplier = new ServerMoveApplier(ClientsHolder.GetClient(ClientType.GameServerClient));
         ApproveMoveMessageHandler.SetDTOAccepter(serverMovesApplier);
         var localMovesApplier = new LocalMovesApplier(_game);
-        var possibleMovesProvider = new PossibleMovesListProvider(_game);
-        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider,
+        var possibleMovesCreator = new PossibleMovesListProvider(_game);
+        _clientMovesPresenter = new ClientMovesPresenter(playerDataCreator, serverMovesApplier, possibleMovesCreator,
             localMovesApplier, new MoveToDataConverter(), _clientMovesView);
     }
 
@@ -274,8 +268,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpActionPointsGiving()
     {
-        var popupsProvider = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
-        var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsProvider, popupDisappearTimeMilliseconds);
+        var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
+        var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
         _actionPointsGivingView =
             new ActionPointsGivingView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
                 popupDemonstrator);
@@ -287,9 +281,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpActionPointsCount()
     {
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
         _actionPointsCountView = new ActionPointsCountView(actionPointsText, actionPointsLabel);
-        _actionPointsCountPresenter = new ActionPointsCountPresenter(playerDataProvider, _game,
+        _actionPointsCountPresenter = new ActionPointsCountPresenter(playerDataCreator, _game,
             _actionPointsCountView);
     }
 
@@ -307,8 +301,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void OnWin(object sender, (Game game, Player player) e)
     {
-        var colorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
-        if (colorProvider.GetPlayerColor(e.player) == PlayerColor.Blue)
+        var colorCreator = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        if (colorCreator.GetPlayerColor(e.player) == PlayerColor.Blue)
         {
             blueWinnerScreen.SetActive(true);
         }
@@ -340,8 +334,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void NotifyPlayerIsReady()
     {
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        var playerToken = playerDataProvider.GetAccessToken();
+        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
+        var playerToken = playerDataCreator.GetAccessToken();
         var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
         playerReadinessSender.SendPlayerReadiness(playerToken);
     }

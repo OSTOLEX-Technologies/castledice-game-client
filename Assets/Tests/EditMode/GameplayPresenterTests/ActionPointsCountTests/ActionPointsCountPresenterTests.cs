@@ -81,7 +81,9 @@ namespace Tests.EditMode.GameplayPresenterTests.ActionPointsCountTests
         [Test]
         public void UpdateActionPoints_ShouldBeCalled_WhenTurnSwitchedInGame()
         {
-            var game = GetTestGameMock().Object;
+            var gameMock = GetGameMock();
+            gameMock.Setup(g => g.SwitchTurn()).Raises(g => g.TurnSwitched += null, this, gameMock.Object);
+            var game = gameMock.Object;
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
             var viewMock = new Mock<IActionPointsCountView>();
             var presenterMock = new Mock<ActionPointsCountPresenter>(playerDataProviderMock.Object, game, viewMock.Object);
