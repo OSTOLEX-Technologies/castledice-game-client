@@ -7,14 +7,14 @@ using Assert = UnityEngine.Assertions.Assert;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.PlaceablesConfigCreatorsTests
 {
-    public class PlaceablesConfigProviderTests
+    public class PlaceablesConfigCreatorTests
     {
         [TestCaseSource(nameof(GetPlaceablesConfigTestCases))]
         public void GetPlaceablesConfig_ShouldReturnAppropriatePlaceablesConfig(PlaceablesConfigData configData, PlaceablesConfig expectedConfig)
         {
-            var provider = new PlaceablesConfigProvider();
+            var creator = new PlaceablesConfigCreator();
             
-            var actualConfig = provider.GetPlaceablesConfig(configData);
+            var actualConfig = creator.GetPlaceablesConfig(configData);
             
             Assert.IsTrue(ConfigsAreEqual(actualConfig, expectedConfig));
         }

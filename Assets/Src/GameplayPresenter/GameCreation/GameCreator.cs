@@ -13,15 +13,15 @@ namespace Src.GameplayPresenter.GameCreation
     {
         private readonly IPlayersListProvider _playersListProvider;
         private readonly IBoardConfigProvider _boardConfigProvider;
-        private readonly IPlaceablesConfigProvider _placeablesConfigProvider;
+        private readonly IPlaceablesConfigCreator _placeablesConfigCreator;
         private readonly ITurnSwitchConditionsConfigProvider _turnSwitchConditionsConfigProvider;
         private readonly IDecksListCreator _decksListCreator;
         
-        public GameCreator(IPlayersListProvider playersListProvider, IBoardConfigProvider boardConfigProvider, IPlaceablesConfigProvider placeablesConfigProvider, ITurnSwitchConditionsConfigProvider turnSwitchConditionsConfigProvider, IDecksListCreator decksListCreator)
+        public GameCreator(IPlayersListProvider playersListProvider, IBoardConfigProvider boardConfigProvider, IPlaceablesConfigCreator placeablesConfigCreator, ITurnSwitchConditionsConfigProvider turnSwitchConditionsConfigProvider, IDecksListCreator decksListCreator)
         {
             _playersListProvider = playersListProvider;
             _boardConfigProvider = boardConfigProvider;
-            _placeablesConfigProvider = placeablesConfigProvider;
+            _placeablesConfigCreator = placeablesConfigCreator;
             _turnSwitchConditionsConfigProvider = turnSwitchConditionsConfigProvider;
             _decksListCreator = decksListCreator;
         }
@@ -30,7 +30,7 @@ namespace Src.GameplayPresenter.GameCreation
         {
             var players = _playersListProvider.GetPlayersList(gameData.PlayersIds);
             var boardConfig = _boardConfigProvider.GetBoardConfig(gameData.BoardData, players);
-            var placeablesConfig = _placeablesConfigProvider.GetPlaceablesConfig(gameData.PlaceablesConfigData);
+            var placeablesConfig = _placeablesConfigCreator.GetPlaceablesConfig(gameData.PlaceablesConfigData);
             var decks = _decksListCreator.GetDecksList(gameData.Decks);
             var turnSwitchConditionsConfig = _turnSwitchConditionsConfigProvider.GetTurnSwitchConditionsConfig(gameData.TscConfigData);
             var game = new Game(players, boardConfig, placeablesConfig, decks, turnSwitchConditionsConfig);

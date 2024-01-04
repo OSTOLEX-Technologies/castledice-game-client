@@ -80,7 +80,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             var placeablesConfigProviderMock = GetPlaceablesConfigProviderMock();
             var gameCreator = new GameCreatorBuilder
             {
-                PlaceablesConfigProvider = placeablesConfigProviderMock.Object
+                PlaceablesConfigCreator = placeablesConfigProviderMock.Object
             }.Build();    
             
             gameCreator.CreateGame(gameStartData);
@@ -139,13 +139,13 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         {
             public IPlayersListProvider PlayersListProvider { get; set; } = GetPlayersListProviderMock().Object;
             public IBoardConfigProvider BoardConfigProvider { get; set; } = GetBoardConfigProviderMock().Object;
-            public IPlaceablesConfigProvider PlaceablesConfigProvider { get; set; } = GetPlaceablesConfigProviderMock().Object;
+            public IPlaceablesConfigCreator PlaceablesConfigCreator { get; set; } = GetPlaceablesConfigProviderMock().Object;
             public ITurnSwitchConditionsConfigProvider TurnSwitchConditionsConfigProvider { get; set; } = GetTurnSwitchConditionsConfigProviderMock().Object;
             public IDecksListCreator DecksListCreator { get; set; } = GetDecksListProviderMock().Object;
             
             public GameCreator Build()
             {
-                return new GameCreator(PlayersListProvider, BoardConfigProvider, PlaceablesConfigProvider, TurnSwitchConditionsConfigProvider, DecksListCreator);
+                return new GameCreator(PlayersListProvider, BoardConfigProvider, PlaceablesConfigCreator, TurnSwitchConditionsConfigProvider, DecksListCreator);
             }
         }
         
@@ -163,9 +163,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             return mock;
         }
             
-        private static Mock<IPlaceablesConfigProvider> GetPlaceablesConfigProviderMock()
+        private static Mock<IPlaceablesConfigCreator> GetPlaceablesConfigProviderMock()
         {
-            var mock = new Mock<IPlaceablesConfigProvider>();
+            var mock = new Mock<IPlaceablesConfigCreator>();
             mock.Setup(p => p.GetPlaceablesConfig(It.IsAny<PlaceablesConfigData>())).Returns(new PlaceablesConfig(new KnightConfig(1, 2)));
             return mock;
         }

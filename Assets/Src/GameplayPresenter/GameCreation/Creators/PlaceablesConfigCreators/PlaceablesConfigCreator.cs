@@ -4,7 +4,7 @@ using castledice_game_logic.GameObjects.Configs;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators
 {
-    public class PlaceablesConfigProvider : IPlaceablesConfigProvider
+    public class PlaceablesConfigCreator : IPlaceablesConfigCreator
     {
         public PlaceablesConfig GetPlaceablesConfig(PlaceablesConfigData configData)
         {
