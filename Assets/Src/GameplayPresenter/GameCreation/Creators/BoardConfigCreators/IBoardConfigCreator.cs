@@ -1,0 +1,12 @@
+﻿using System.Collections.Generic;
+using castledice_game_data_logic.ConfigsData;
+using castledice_game_logic;
+using castledice_game_logic.GameConfiguration;
+
+namespace Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators
+{
+    public interface IBoardConfigCreator
+    {
+        BoardConfig GetBoardConfig(BoardData boardData, List<Player> players);
+    }
+}

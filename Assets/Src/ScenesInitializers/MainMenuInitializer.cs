@@ -7,7 +7,14 @@ using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayPresenter.GameCreation.GameCreationProviders;
+using Src.GameplayPresenter.GameCreation.Creators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
+using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
 using Src.NetworkingModule;
@@ -66,14 +73,14 @@ public class MainMenuInitializer : MonoBehaviour
         //Setting up game creation presenter
         var gameSearcher = new GameSearcher(clientWrapper);
         GameCreationMessageHandler.SetDTOAccepter(gameSearcher);
-        var cellsGeneratorProvider = new MatrixCellsGeneratorProvider();
-        var contentToCoordinateProvider = new ContentToCoordinateProvider();
-        var spawnersProvider = new CoordinateContentSpawnerProvider(contentToCoordinateProvider);
-        var boardConfigProvider = new BoardConfigProvider(spawnersProvider, cellsGeneratorProvider);
-        var playersListProvider = new PlayersListProvider();
-        var placeablesConfigProvider = new PlaceablesConfigProvider();
-        var decksListProvider = new DecksListProvider();
-        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigProvider();
+        var cellsGeneratorProvider = new MatrixCellsGeneratorCreator();
+        var contentToCoordinateProvider = new ContentToCoordinateCreator();
+        var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
+        var boardConfigProvider = new BoardConfigCreator(spawnersProvider, cellsGeneratorProvider);
+        var playersListProvider = new PlayersListCreator();
+        var placeablesConfigProvider = new PlaceablesConfigCreator();
+        var decksListProvider = new DecksListCreator();
+        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
             turnSwitchConditionsConfigProvider, decksListProvider);
         _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);

@@ -14,7 +14,14 @@ using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayPresenter.GameCreation.GameCreationProviders;
+using Src.GameplayPresenter.GameCreation.Creators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
+using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
+using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
+using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.ServerMoves;
@@ -154,13 +161,13 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpGame()
     {
         _gameStartData = Singleton<GameStartData>.Instance;
-        var playersListProvider = new PlayersListProvider();
-        var coordinateSpawnerProvider = new CoordinateContentSpawnerProvider(new ContentToCoordinateProvider());
-        var matrixCellsGeneratorProvider = new MatrixCellsGeneratorProvider();
-        var boardConfigProvider = new BoardConfigProvider(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
-        var placeablesConfigProvider = new PlaceablesConfigProvider();
-        var decksListProvider = new DecksListProvider();
-        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigProvider();
+        var playersListProvider = new PlayersListCreator();
+        var coordinateSpawnerProvider = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
+        var matrixCellsGeneratorProvider = new MatrixCellsGeneratorCreator();
+        var boardConfigProvider = new BoardConfigCreator(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
+        var placeablesConfigProvider = new PlaceablesConfigCreator();
+        var decksListProvider = new DecksListCreator();
+        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, turnSwitchConditionsConfigProvider,
             decksListProvider);
         _game = gameCreator.CreateGame(_gameStartData);
