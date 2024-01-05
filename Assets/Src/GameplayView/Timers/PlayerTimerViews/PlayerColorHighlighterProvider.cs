@@ -4,7 +4,7 @@ using Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests;
 
 namespace Src.GameplayView.Timers.PlayerTimerViews
 {
-    public class PlayerColorHighlighterProvider : IPlayerHighlighterProvider
+    public class PlayerColorHighlighterProvider : IHighlighterForPlayerProvider
     {
         private readonly Highlighter _redPlayerHighlighter;
         private readonly Highlighter _bluePlayerHighlighter;

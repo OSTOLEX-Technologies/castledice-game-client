@@ -16,12 +16,12 @@ namespace Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests
         public void Create_ShouldReturnPlayerTimerView_WithHighlighterFromProvider()
         {
             var expectedHighlighter = new Mock<Highlighter>().Object;
-            var playerHighlighterProviderMock = new Mock<IPlayerHighlighterProvider>();
+            var playerHighlighterProviderMock = new Mock<IHighlighterForPlayerProvider>();
             var player = GetPlayer();
             playerHighlighterProviderMock.Setup(provider => provider.GetHighlighter(player))
                 .Returns(expectedHighlighter);
             var playerTimerViewCreator = new PlayerTimerViewCreatorBuilder
-                { PlayerHighlighterProvider = playerHighlighterProviderMock.Object }.Build();
+                { HighlighterForPlayerProvider = playerHighlighterProviderMock.Object }.Build();
             
             var playerTimerView = playerTimerViewCreator.Create(player);
             var actualHighlighter = playerTimerView.GetPrivateField<Highlighter>(HighlighterFieldName);
@@ -33,12 +33,12 @@ namespace Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests
         public void Create_ShouldReturnPlayerTimerView_WithTimeViewFromProvider()
         {
             var expectedTimeView = new Mock<TimeView>().Object;
-            var playerTimeViewProviderMock = new Mock<IPlayerTimeViewProvider>();
+            var playerTimeViewProviderMock = new Mock<ITimeViewForPlayerProvider>();
             var player = GetPlayer();
             playerTimeViewProviderMock.Setup(provider => provider.GetTimeView(player))
                 .Returns(expectedTimeView);
             var playerTimerViewCreator = new PlayerTimerViewCreatorBuilder
-                { PlayerTimeViewProvider = playerTimeViewProviderMock.Object }.Build();
+                { TimeViewForPlayerProvider = playerTimeViewProviderMock.Object }.Build();
             
             var playerTimerView = playerTimerViewCreator.Create(player);
             var actualTimeView = playerTimerView.GetPrivateField<TimeView>(TimeViewFieldName);
@@ -61,12 +61,12 @@ namespace Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests
         
         private class PlayerTimerViewCreatorBuilder
         {
-            public IPlayerHighlighterProvider PlayerHighlighterProvider { get; set; } = new Mock<IPlayerHighlighterProvider>().Object;
-            public IPlayerTimeViewProvider PlayerTimeViewProvider { get; set; } = new Mock<IPlayerTimeViewProvider>().Object;
+            public IHighlighterForPlayerProvider HighlighterForPlayerProvider { get; set; } = new Mock<IHighlighterForPlayerProvider>().Object;
+            public ITimeViewForPlayerProvider TimeViewForPlayerProvider { get; set; } = new Mock<ITimeViewForPlayerProvider>().Object;
             
             public PlayerTimerViewCreator Build()
             {
-                return new PlayerTimerViewCreator(PlayerHighlighterProvider, PlayerTimeViewProvider);
+                return new PlayerTimerViewCreator(HighlighterForPlayerProvider, TimeViewForPlayerProvider);
             }
         }
     }

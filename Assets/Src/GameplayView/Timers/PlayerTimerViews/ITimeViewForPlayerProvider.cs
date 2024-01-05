@@ -2,7 +2,7 @@
 
 namespace Src.GameplayView.Timers.PlayerTimerViews
 {
-    public interface IPlayerTimeViewProvider
+    public interface ITimeViewForPlayerProvider
     {
         TimeView GetTimeView(Player player);
     }

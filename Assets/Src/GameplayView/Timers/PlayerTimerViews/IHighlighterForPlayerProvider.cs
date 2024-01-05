@@ -3,7 +3,7 @@ using Src.GameplayView.Timers.PlayerTimerViews;
 
 namespace Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests
 {
-    public interface IPlayerHighlighterProvider
+    public interface IHighlighterForPlayerProvider
     {
         Highlighter GetHighlighter(Player player);
     }

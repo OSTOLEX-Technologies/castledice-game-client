@@ -5,19 +5,19 @@ namespace Src.GameplayView.Timers.PlayerTimerViews
 {
     public class PlayerTimerViewCreator : IPlayerTimerViewCreator
     {
-        private readonly IPlayerHighlighterProvider _playerHighlighterProvider;
-        private readonly IPlayerTimeViewProvider _playerTimeViewProvider;
+        private readonly IHighlighterForPlayerProvider _highlighterForPlayerProvider;
+        private readonly ITimeViewForPlayerProvider _timeViewForPlayerProvider;
         
-        public PlayerTimerViewCreator(IPlayerHighlighterProvider playerHighlighterProvider, IPlayerTimeViewProvider playerTimeViewProvider)
+        public PlayerTimerViewCreator(IHighlighterForPlayerProvider highlighterForPlayerProvider, ITimeViewForPlayerProvider timeViewForPlayerProvider)
         {
-            _playerHighlighterProvider = playerHighlighterProvider;
-            _playerTimeViewProvider = playerTimeViewProvider;
+            _highlighterForPlayerProvider = highlighterForPlayerProvider;
+            _timeViewForPlayerProvider = timeViewForPlayerProvider;
         }
         
         public IPlayerTimerView Create(Player player)
         {
-            var highlighter = _playerHighlighterProvider.GetHighlighter(player);
-            var timeView = _playerTimeViewProvider.GetTimeView(player);
+            var highlighter = _highlighterForPlayerProvider.GetHighlighter(player);
+            var timeView = _timeViewForPlayerProvider.GetTimeView(player);
             var timer = player.Timer;
             return new PlayerTimerView(timeView, highlighter, timer);
         }
