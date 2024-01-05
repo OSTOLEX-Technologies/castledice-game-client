@@ -13,6 +13,6 @@ namespace Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend.Service
         public int ExpiresIn { get; private set; }
         
         [JsonProperty("issued_at")]
-        public int IssuedAt { get; private set; }
+        public int IssuedAt { get; protected set; }
     }
 }

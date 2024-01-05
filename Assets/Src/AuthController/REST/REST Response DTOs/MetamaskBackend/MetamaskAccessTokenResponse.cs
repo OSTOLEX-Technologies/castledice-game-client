@@ -8,7 +8,7 @@ namespace Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend
     public class MetamaskAccessTokenResponse
     {
         [JsonProperty("exp")]
-        public int ExpiresIn { get; private set; }
+        public int ExpiresIn { get; protected set; }
         
         [JsonProperty("uid")]
         public int UniqueId { get; private set; }
@@ -23,9 +23,9 @@ namespace Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend
         public string Address { get; private set; }
         
         [JsonProperty("encoded_jwt")]
-        public string EncodedJwt { get; private set; }
+        public string EncodedJwt { get; protected set; }
         
         [JsonProperty("refresh_token")]
-        public MetamaskBackendRefreshToken RefreshToken { get; private set; }
+        public MetamaskBackendRefreshToken RefreshToken { get; protected set; }
     }
 }

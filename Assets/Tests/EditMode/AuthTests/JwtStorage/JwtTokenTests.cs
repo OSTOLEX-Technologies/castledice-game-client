@@ -2,7 +2,7 @@ using System;
 using NUnit.Framework;
 using Src.AuthController.JwtManagement.Tokens;
 
-namespace Tests.EditMode.AuthTests
+namespace Tests.EditMode.AuthTests.JwtStorage
 {
     public class JwtTokenTests
     {

@@ -27,7 +27,6 @@ namespace Src.AuthController.CredentialProviders.Metamask
         {
             if (_tokensStore == null)
             {
-
                 if (!IMetamaskWalletFacade.WalletConnected)
                 {
                     await WaitForWalletConnect();
@@ -40,10 +39,15 @@ namespace Src.AuthController.CredentialProviders.Metamask
 
                 return _tokensStore.AccessToken.GetToken();
             }
+            
+            if (!_tokensStore.AccessToken.Valid)
+            {
+                var refreshResponse = await RefreshTokens();
+                _tokensStore = MetamaskJwtConverter.FromMetamaskRefreshResponse(refreshResponse);
 
-            var refreshResponse = await RefreshTokens();
-            _tokensStore = MetamaskJwtConverter.FromMetamaskRefreshResponse(refreshResponse);
-
+                return _tokensStore.AccessToken.GetToken();
+            }
+            
             return _tokensStore.AccessToken.GetToken();
         }
 

@@ -1,6 +1,7 @@
 using System;
 using Src.AuthController.JwtManagement.Tokens;
 using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
+using UnityEngine;
 
 namespace Src.AuthController.JwtManagement.Converters
 {
@@ -8,12 +9,13 @@ namespace Src.AuthController.JwtManagement.Converters
     {
         public static JwtStore FromMetamaskAuthResponse(MetamaskAccessTokenResponse response)
         {
+            Debug.Log(response.EncodedJwt + " " + response.ExpiresIn + " " + response.RefreshToken.IssuedAt );
             var accessToken = new JwtToken(response.EncodedJwt,
                 response.ExpiresIn,
-                Convert.ToDateTime(TimeSpan.FromSeconds(response.RefreshToken.IssuedAt)));
+                DateTime.Now);
             var refreshToken = new JwtToken(response.RefreshToken.Token,
                 response.RefreshToken.ExpiresIn,
-                Convert.ToDateTime(TimeSpan.FromSeconds(response.RefreshToken.IssuedAt)));
+                DateTime.Now);
             
             return new JwtStore(
                 accessToken,
@@ -24,10 +26,10 @@ namespace Src.AuthController.JwtManagement.Converters
         {
             var accessToken = new JwtToken(response.EncodedJwt,
                 response.ExpiresIn,
-                Convert.ToDateTime(TimeSpan.FromSeconds(response.RefreshToken.IssuedAt)));
+                DateTime.Now);
             var refreshToken = new JwtToken(response.RefreshToken.Token,
                 response.RefreshToken.ExpiresIn,
-                Convert.ToDateTime(TimeSpan.FromSeconds(response.RefreshToken.IssuedAt)));
+                DateTime.Now);
 
             return new JwtStore(
                 accessToken,
