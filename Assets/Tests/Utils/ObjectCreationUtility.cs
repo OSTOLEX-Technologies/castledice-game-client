@@ -228,6 +228,31 @@ namespace Tests
             return GetBoardConfig(playersToCastlesPositions);
         }
         
+        public static List<Player> GetPlayersList(int length)
+        {
+            var players = new List<Player>();
+            for (int i = 0; i < length; i++)
+            {
+                players.Add(GetPlayer(id: i));
+            }
+            return players;
+        }
+        
+        public static List<PlayerData> GetPlayersDataList(int length)
+        {
+            var playersData = new List<PlayerData>();
+            for (int i = 0; i < length; i++)
+            {
+                playersData.Add(GetPlayerData(id: i));
+            }
+            return playersData;
+        }
+        
+        
+        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), List<PlacementType> placementTypes = null)
+        {
+            return new PlayerData(id, placementTypes ?? new List<PlacementType>(), timeSpan);
+        }
         
         public static BoardConfig GetBoardConfig(Dictionary<Player, Vector2Int> playersToCastlesPositions)
         {
