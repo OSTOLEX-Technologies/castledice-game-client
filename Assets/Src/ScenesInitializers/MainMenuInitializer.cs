@@ -78,7 +78,7 @@ public class MainMenuInitializer : MonoBehaviour
         var placeablesConfigProvider = new PlaceablesConfigCreator();
         var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
         var gameCreator = new GameCreator(null, boardConfigProvider, placeablesConfigProvider, 
-            turnSwitchConditionsConfigProvider);
+            turnSwitchConditionsConfigProvider, null);
         _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
         
         //Setting up error handling

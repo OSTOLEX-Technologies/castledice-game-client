@@ -13,13 +13,15 @@ namespace Src.GameplayPresenter.GameCreation
         private readonly IBoardConfigCreator _boardConfigCreator;
         private readonly IPlaceablesConfigCreator _placeablesConfigCreator;
         private readonly ITurnSwitchConditionsConfigCreator _turnSwitchConditionsConfigCreator;
+        private readonly IGameBuilder _gameBuilder;
         
-        public GameCreator(IPlayersListCreator playersListCreator, IBoardConfigCreator boardConfigCreator, IPlaceablesConfigCreator placeablesConfigCreator, ITurnSwitchConditionsConfigCreator turnSwitchConditionsConfigCreator)
+        public GameCreator(IPlayersListCreator playersListCreator, IBoardConfigCreator boardConfigCreator, IPlaceablesConfigCreator placeablesConfigCreator, ITurnSwitchConditionsConfigCreator turnSwitchConditionsConfigCreator, IGameBuilder gameBuilder)
         {
             _playersListCreator = playersListCreator;
             _boardConfigCreator = boardConfigCreator;
             _placeablesConfigCreator = placeablesConfigCreator;
             _turnSwitchConditionsConfigCreator = turnSwitchConditionsConfigCreator;
+            _gameBuilder = gameBuilder;
         }
         
         public Game CreateGame(GameStartData gameData)
@@ -28,8 +30,11 @@ namespace Src.GameplayPresenter.GameCreation
             var boardConfig = _boardConfigCreator.GetBoardConfig(gameData.BoardData, playersList);
             var placeablesConfig = _placeablesConfigCreator.GetPlaceablesConfig(gameData.PlaceablesConfigData);
             var turnSwitchConditionsConfig = _turnSwitchConditionsConfigCreator.GetTurnSwitchConditionsConfig(gameData.TscConfigData);
-            var game = new Game(playersList, boardConfig, placeablesConfig, turnSwitchConditionsConfig);
-            return game;
+            return _gameBuilder.BuildPlayersList(playersList)
+                .BuildBoardConfig(boardConfig)
+                .BuildPlaceablesConfig(placeablesConfig)
+                .BuildTurnSwitchConditionsConfig(turnSwitchConditionsConfig)
+                .Build();
         }
     }
 }
