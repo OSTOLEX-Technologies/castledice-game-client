@@ -15,7 +15,7 @@ namespace Tests.EditMode.AuthTests.TokenProviders
             var expectedAccessTokenResponse = new MetamaskAccessTokenResponse();
             var credentialProviderMock = new Mock<IMetamaskBackendCredentialProvider>();
             credentialProviderMock.Setup(a => a.GetCredentialAsync())
-                .ReturnsAsync(expectedAccessTokenResponse);
+                .ReturnsAsync(expectedAccessTokenResponse.EncodedJwt);
 
             var metamaskTokenProvider = new MetamaskTokenProvider(credentialProviderMock.Object);
             var res = await metamaskTokenProvider.GetAccessTokenAsync();
