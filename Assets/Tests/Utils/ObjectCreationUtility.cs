@@ -45,6 +45,13 @@ namespace Tests
         }
 #endif
         
+        public static TimeSpan GetRandomTimeSpan()
+        {
+            var random = new System.Random();
+            var ticks = random.Next(1, 1000);
+            return new TimeSpan(ticks);
+        }
+        
         public static SoundPlayer GetSoundPlayer()
         {
             return new GameObject().AddComponent<AudioSourceSoundPlayer>();

@@ -25,7 +25,6 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
             
             var actualPlayers = playersListCreator.GetPlayersList(playersData);
             
-            Debug.Log("Test");
             Assert.AreEqual(expectedPlayers, actualPlayers);
         }
     }
