@@ -1,5 +1,6 @@
 ﻿using castledice_game_data_logic;
 using castledice_game_logic;
+using castledice_game_logic.ActionPointsLogic;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators
 {
@@ -14,7 +15,9 @@ namespace Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators
 
         public Player GetPlayer(PlayerData playerData)
         {
-            throw new System.NotImplementedException();
+            var timer = _playerTimerCreator.GetPlayerTimer(playerData.TimeSpan);
+            var actionPoints = new PlayerActionPoints();
+            return new Player(actionPoints, timer, playerData.AvailablePlacements, playerData.PlayerId);
         }
     }
 }

@@ -1,4 +1,5 @@
-﻿using castledice_game_logic.Time;
+﻿using System;
+using castledice_game_logic.Time;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
@@ -9,8 +10,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
     public class PlayerCreatorTests
     {
         [Test]
-        public void CreatedPlayer_ShouldHaveId_FromPlayerData([Random(1, 100, 1)]int id)
+        public void CreatedPlayer_ShouldHaveId_FromPlayerData()
         {
+            var id = new Random().Next();
             var playerData = GetPlayerData(id);
             var playerCreator = new PlayerCreator(new Mock<IPlayerTimerCreator>().Object);
             
@@ -27,7 +29,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
             
             var player = playerCreator.GetPlayer(playerData);
             
-            Assert.AreEqual(0, player.ActionPoints);
+            Assert.AreEqual(0, player.ActionPoints.Amount);
         }
         
         [Test]

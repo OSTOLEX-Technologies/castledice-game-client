@@ -4,14 +4,16 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using UnityEngine;
+using Random = System.Random;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.PlayersListCreatorsTests
 {
     public class PlayersListCreatorTests
     {
         [Test]
-        public void GetPlayersList_ShouldCreatePlayers_ByPassingPlayerDataToPlayerCreator([Random(1, 100, 10)]int playersCount)
+        public void GetPlayersList_ShouldCreatePlayers_ByPassingPlayerDataToPlayerCreator()
         {
+            var playersCount = new Random().Next(1, 100);
             var playersData = GetPlayersDataList(playersCount);
             var expectedPlayers = GetPlayersList(playersCount);
             var playerCreatorMock = new Mock<IPlayerCreator>();
