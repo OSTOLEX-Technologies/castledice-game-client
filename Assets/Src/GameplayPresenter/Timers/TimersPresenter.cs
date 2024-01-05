@@ -21,12 +21,12 @@ namespace Src.GameplayPresenter.Timers
             player.Timer.SetTimeLeft(timeLeft);
             if (switchTo)
             {
-                _timersView.StartTimerForPlayer(player);
+                _timersView.StartTimer(player);
                 player.Timer.Start();
             }
             else
             {
-                _timersView.StopTimerForPlayer(player);
+                _timersView.StopTimer(player);
                 player.Timer.Stop();
             }
         }

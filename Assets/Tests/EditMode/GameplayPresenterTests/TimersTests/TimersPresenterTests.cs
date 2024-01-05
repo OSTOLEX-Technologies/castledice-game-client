@@ -83,7 +83,7 @@ namespace Tests.EditMode.GameplayPresenterTests.TimersTests
             
             presenter.SwitchTimerForPlayer(playerId, TimeSpan.Zero, false);
             
-            timersViewMock.Verify(v => v.StopTimerForPlayer(player), Times.Once);
+            timersViewMock.Verify(v => v.StopTimer(player), Times.Once);
         }
         
         [Test]
@@ -103,7 +103,7 @@ namespace Tests.EditMode.GameplayPresenterTests.TimersTests
             
             presenter.SwitchTimerForPlayer(playerId, TimeSpan.Zero, true);
             
-            timersViewMock.Verify(v => v.StartTimerForPlayer(player), Times.Once);
+            timersViewMock.Verify(v => v.StartTimer(player), Times.Once);
         }
 
         private class TimersPresenterBuilder

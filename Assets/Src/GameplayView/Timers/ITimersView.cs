@@ -4,7 +4,7 @@ namespace Src.GameplayView.Timers
 {
     public interface ITimersView
     {
-        void StartTimerForPlayer(Player player);
-        void StopTimerForPlayer(Player player);
+        void StartTimer(Player player);
+        void StopTimer(Player player);
     }
 }
