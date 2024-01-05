@@ -10,7 +10,7 @@ namespace Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests
     {
         private const string HighlighterFieldName = "_highlighter";
         private const string TimeViewFieldName = "_timeView";
-        private const string TimerFieldName = "_timer";
+        private const string TimerFieldName = "_playerTimer";
         
         [Test]
         public void Create_ShouldReturnPlayerTimerView_WithHighlighterFromProvider()

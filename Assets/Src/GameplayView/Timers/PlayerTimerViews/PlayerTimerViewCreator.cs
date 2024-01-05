@@ -16,7 +16,10 @@ namespace Src.GameplayView.Timers.PlayerTimerViews
         
         public IPlayerTimerView Create(Player player)
         {
-            throw new System.NotImplementedException();
+            var highlighter = _playerHighlighterProvider.GetHighlighter(player);
+            var timeView = _playerTimeViewProvider.GetTimeView(player);
+            var timer = player.Timer;
+            return new PlayerTimerView(timeView, highlighter, timer);
         }
     }
 }
