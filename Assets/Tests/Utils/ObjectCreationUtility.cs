@@ -35,15 +35,7 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
-#if UNITY_EDITOR
-        public static void AddObjectReferenceValueToSerializedProperty<U, T>(U gameObject, string propertyName, T value) where T : Object 
-            where U: Object
-        {
-            var serializedObject = new SerializedObject(gameObject);
-            serializedObject.FindProperty(propertyName).objectReferenceValue = value;
-            serializedObject.ApplyModifiedProperties();
-        }
-#endif
+
         
         public static TimeSpan GetRandomTimeSpan()
         {
@@ -235,7 +227,7 @@ namespace Tests
             return GetBoardConfig(playersToCastlesPositions);
         }
         
-        public static List<Player> GetPlayersList(int length)
+        public static List<Player> GetPlayersList(int length = 1)
         {
             var players = new List<Player>();
             for (int i = 0; i < length; i++)
@@ -245,7 +237,7 @@ namespace Tests
             return players;
         }
         
-        public static List<PlayerData> GetPlayersDataList(int length)
+        public static List<PlayerData> GetPlayersDataList(int length = 1)
         {
             var playersData = new List<PlayerData>();
             for (int i = 0; i < length; i++)
