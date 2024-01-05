@@ -10,6 +10,7 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
@@ -73,12 +74,12 @@ public class MainMenuInitializer : MonoBehaviour
         var contentToCoordinateProvider = new ContentToCoordinateCreator();
         var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
         var boardConfigProvider = new BoardConfigCreator(spawnersProvider, cellsGeneratorProvider);
-        //TODO: Create players list provider here
-        //var playersListProvider = new PlayersListCreator();
+        var playersListProvider = new PlayersListCreator(new PlayerCreator(new StopwatchPlayerTimerCreator()));
         var placeablesConfigProvider = new PlaceablesConfigCreator();
+        var gameBuilder = new GameBuilder(new GameConstructorWrapper());
         var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
-        var gameCreator = new GameCreator(null, boardConfigProvider, placeablesConfigProvider, 
-            turnSwitchConditionsConfigProvider, null);
+        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
+            turnSwitchConditionsConfigProvider, gameBuilder);
         _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
         
         //Setting up error handling

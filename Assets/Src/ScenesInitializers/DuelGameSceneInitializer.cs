@@ -17,6 +17,7 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
+using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
@@ -156,14 +157,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpGame()
     {
         _gameStartData = Singleton<GameStartData>.Instance;
-        //TODO: Create players list creator here
-        //var playersListCreator = new PlayersListCreator();
+        var playersListCreator = new PlayersListCreator(new PlayerCreator(new StopwatchPlayerTimerCreator()));
         var coordinateSpawnerCreator = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
         var matrixCellsGeneratorCreator = new MatrixCellsGeneratorCreator();
         var boardConfigCreator = new BoardConfigCreator(coordinateSpawnerCreator, matrixCellsGeneratorCreator);
         var placeablesConfigCreator = new PlaceablesConfigCreator();
         var turnSwitchConditionsConfigCreator = new TurnSwitchConditionsConfigCreator();
-        var gameCreator = new GameCreator(null, boardConfigCreator, placeablesConfigCreator, turnSwitchConditionsConfigCreator, null);
+        var gameBuilder = new GameBuilder(new GameConstructorWrapper());
+        var gameCreator = new GameCreator(playersListCreator, boardConfigCreator, placeablesConfigCreator, turnSwitchConditionsConfigCreator, gameBuilder);
         _game = gameCreator.CreateGame(_gameStartData);
     }
 
