@@ -310,11 +310,11 @@ namespace Tests
             return new Tree(1, false);
         }
         
-        public static Player GetPlayer(int id = 1, int actionPointsCount = 6)
+        public static Player GetPlayer(int id = 1, int actionPointsCount = 6, IPlayerTimer timer = null)
         {
             var actionPoints = new PlayerActionPoints();
             actionPoints.IncreaseActionPoints(actionPointsCount);
-            var timer = new Mock<IPlayerTimer>().Object;
+            timer ??= new Mock<IPlayerTimer>().Object;
             return new Player(actionPoints, timer, new List<PlacementType> { PlacementType.Knight }, id);
         }
 
