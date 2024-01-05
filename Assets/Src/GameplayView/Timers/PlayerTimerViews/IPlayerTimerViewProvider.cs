@@ -1,7 +1,6 @@
 ﻿using castledice_game_logic;
-using Src.GameplayView.Timers.PlayerTimerViews;
 
-namespace Src.GameplayView.Timers
+namespace Src.GameplayView.Timers.PlayerTimerViews
 {
     public interface IPlayerTimerViewProvider
     {
