@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Runtime.Serialization;
 using Newtonsoft.Json;
 
 namespace Src.AuthController.REST.REST_Request_Proxies.Firebase.Google
@@ -36,5 +37,10 @@ namespace Src.AuthController.REST.REST_Request_Proxies.Firebase.Google
                 { "grant_type", GrantType }
             };
         }
+    }
+
+    public interface Ia : ISerializable
+    {
+        
     }
 }
