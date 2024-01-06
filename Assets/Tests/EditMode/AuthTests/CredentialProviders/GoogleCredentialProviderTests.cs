@@ -4,7 +4,9 @@ using Moq;
 using NUnit.Framework;
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
-using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
+using Src.AuthController.JwtManagement;
+using Src.AuthController.JwtManagement.Converters.Google;
+using Src.AuthController.JwtManagement.Tokens;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
 using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
@@ -17,9 +19,20 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
         [Test]
         public async Task GetCredentialAsync_ShouldCreateCredentials_IfThereIsNoSavedAccessToken()
         {
-            var expectedGoogleIdResponse = new GoogleIdTokenResponse();
+            var expectedGoogleCredentials = new GoogleJwtStore(
+                new JwtToken("id", Int32.MaxValue, DateTime.Now),
+                new JwtToken("access", Int32.MaxValue, DateTime.Now),
+                new JwtToken("refresh", Int32.MaxValue, DateTime.Now)
+            );
+            var googleIdResponseStub = new GoogleIdTokenResponse()
+            {
+                AccessToken = expectedGoogleCredentials.AccessToken.GetToken(),
+                ExpiresInSeconds = Int32.MaxValue
+            };
 
-            var googleAccessTokenValidatorMock = new Mock<IGoogleAccessTokenValidator>();
+            var jwtConverterMock = new Mock<IGoogleJwtConverter>();
+            jwtConverterMock.Setup(a => a.FromGoogleAuthResponse(googleIdResponseStub)).
+                Returns(expectedGoogleCredentials);
             
             //Adapter always marks passed TCS as completed and gives it expected response as a result
             var googleRestRequestsAdapterMock = new Mock<IGoogleRestRequestsAdapter>();
@@ -28,7 +41,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                         It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
                 .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
-                    (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
+                    (dict, tcs) => tcs.SetResult(googleIdResponseStub));
             
             var oAuthUrlMock = new Mock<IUrlOpener>();
             
@@ -39,31 +52,40 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             //Test object
             var googleCredentialProvider = new GoogleCredentialProvider(
-                googleAccessTokenValidatorMock.Object,
                 googleRestRequestsAdapterMock.Object,
                 oAuthUrlMock.Object,
-                localHttpPortListenerMock.Object);
+                localHttpPortListenerMock.Object,
+                jwtConverterMock.Object);
 
             var result = await googleCredentialProvider.GetCredentialAsync();
-            Assert.AreSame(expectedGoogleIdResponse, result);
+            Assert.AreEqual(expectedGoogleCredentials, result);
         }
         
         [Test]
         public async Task GetCredentialAsync_ShouldRefreshCredentials_IfThereExistsSavedExpiredAccessToken()
         {
-            var expectedGoogleIdResponse = new GoogleIdTokenResponse();
-            var usedGoogleRefreshResponse = new GoogleRefreshTokenResponse
+            var expectedGoogleCredentials = new GoogleJwtStore(
+                new JwtToken("id", Int32.MaxValue, DateTime.Now),
+                new JwtToken("access", 0, DateTime.Now),
+                new JwtToken("refresh", Int32.MaxValue, DateTime.Now)
+            );
+            var googleIdResponseStub = new GoogleIdTokenResponse()
             {
-                AccessToken = expectedGoogleIdResponse.AccessToken,
-                ExpiresInSeconds = expectedGoogleIdResponse.ExpiresInSeconds
+                AccessToken = expectedGoogleCredentials.AccessToken.GetToken(),
+                ExpiresInSeconds = 0
             };
+
+            var usedGoogleRefreshResponse = new GoogleRefreshTokenResponse();
+
             
-            //Validator always returns false whilst token validation
-            var googleAccessTokenValidatorMock = new Mock<IGoogleAccessTokenValidator>();
-            googleAccessTokenValidatorMock.Setup(a => a.ValidateAccessToken(
-                It.IsAny<GoogleIdTokenResponse>(),
-                It.IsAny<float>())).Returns(false);
-            
+            var jwtConverterMock = new Mock<IGoogleJwtConverter>();
+            jwtConverterMock.Setup(a => a.FromGoogleAuthResponse(googleIdResponseStub)).
+                Returns(expectedGoogleCredentials);
+            jwtConverterMock.Setup(a => a.FromGoogleRefreshResponse(
+                It.IsAny<GoogleJwtStore>(), 
+                usedGoogleRefreshResponse)).
+                Returns(expectedGoogleCredentials);
+
             //Adapter always marks passed TCS as completed and gives it expected response as a result
             var googleRestRequestsAdapterMock = new Mock<IGoogleRestRequestsAdapter>();
             googleRestRequestsAdapterMock.Setup(
@@ -71,7 +93,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                         It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
                 .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
-                    (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
+                    (dict, tcs) => tcs.SetResult(googleIdResponseStub));
             googleRestRequestsAdapterMock.Setup(
                     (a => a.RefreshAccessToken(
                         It.IsAny<GoogleRefreshTokenRequestDtoProxy>(),
@@ -88,10 +110,10 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             //Test object
             var googleCredentialProvider = new GoogleCredentialProvider(
-                googleAccessTokenValidatorMock.Object,
                 googleRestRequestsAdapterMock.Object,
                 oAuthUrlMock.Object,
-                localHttpPortListenerMock.Object);
+                localHttpPortListenerMock.Object,
+                jwtConverterMock.Object);
 
             //Retrieve initial response (by calling GetAuthData()) 
             await googleCredentialProvider.GetCredentialAsync();
@@ -99,19 +121,27 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             //Try to refresh token
             var result = await googleCredentialProvider.GetCredentialAsync();
 
-            Assert.AreEqual(expectedGoogleIdResponse, result);
+            Assert.AreEqual(expectedGoogleCredentials, result);
         }
         
         [Test]
         public async Task GetCredentialAsync_ShouldNotRefreshCredentials_IfThereExistsSavedValidAccessToken()
         {
-            var expectedGoogleIdResponse = new GoogleIdTokenResponse();
+            var expectedGoogleCredentials = new GoogleJwtStore(
+                new JwtToken("id", Int32.MaxValue, DateTime.Now),
+                new JwtToken("access", Int32.MaxValue, DateTime.Now),
+                new JwtToken("refresh", Int32.MaxValue, DateTime.Now)
+            );
+            var googleIdResponseStub = new GoogleIdTokenResponse()
+            {
+                AccessToken = expectedGoogleCredentials.AccessToken.GetToken(),
+                ExpiresInSeconds = Int32.MaxValue
+            };
 
-            //Validator always returns true whilst token validation
-            var googleAccessTokenValidatorMock = new Mock<IGoogleAccessTokenValidator>();
-            googleAccessTokenValidatorMock.Setup(a => a.ValidateAccessToken(
-                It.IsAny<GoogleIdTokenResponse>(),
-                It.IsAny<float>())).Returns(true);
+            
+            var jwtConverterMock = new Mock<IGoogleJwtConverter>();
+            jwtConverterMock.Setup(a => a.FromGoogleAuthResponse(googleIdResponseStub)).
+                Returns(expectedGoogleCredentials);
             
             //Adapter always marks passed TCS as completed and gives it expected response as a result
             var googleRestRequestsAdapterMock = new Mock<IGoogleRestRequestsAdapter>();
@@ -120,7 +150,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                         It.IsAny<GoogleIdTokenRequestDtoProxy>(),
                         It.IsAny<TaskCompletionSource<GoogleIdTokenResponse>>()))
                 .Callback<GoogleIdTokenRequestDtoProxy, TaskCompletionSource<GoogleIdTokenResponse>>(
-                    (dict, tcs) => tcs.SetResult(expectedGoogleIdResponse));
+                    (dict, tcs) => tcs.SetResult(googleIdResponseStub));
             
             var oAuthUrlMock = new Mock<IUrlOpener>();
             
@@ -131,10 +161,10 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             //Test object
             var googleCredentialProvider = new GoogleCredentialProvider(
-                googleAccessTokenValidatorMock.Object,
                 googleRestRequestsAdapterMock.Object,
                 oAuthUrlMock.Object,
-                localHttpPortListenerMock.Object);
+                localHttpPortListenerMock.Object,
+                jwtConverterMock.Object);
 
             //Retrieve initial response (by calling GetAuthData()) 
             await googleCredentialProvider.GetCredentialAsync();
@@ -142,7 +172,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             //Try to get existing valid token
             var result = await googleCredentialProvider.GetCredentialAsync();
 
-            Assert.AreSame(expectedGoogleIdResponse, result);
+            Assert.AreEqual(expectedGoogleCredentials, result);
         }
     }
 }

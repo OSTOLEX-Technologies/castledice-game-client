@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
-using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
+using Src.AuthController.JwtManagement;
+using Src.AuthController.JwtManagement.Converters.Google;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
 using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
@@ -11,78 +12,73 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
     public class GoogleCredentialProvider : IGoogleCredentialProvider
     {
-        private readonly IGoogleAccessTokenValidator _accessTokenValidator;
         private readonly IGoogleRestRequestsAdapter _restRequestsAdapter;
         private readonly IUrlOpener _oAuthUrlOpener;
         private readonly ILocalHttpPortListener _localHttpPortListener;
+        private readonly IGoogleJwtConverter _jwtConverter;
+//
+        private GoogleJwtStore _tokenStore;
 
-        private string _authCode;
-        
-        private GoogleIdTokenResponse _googleApiResponse;
-        private float _googleApiResponseIssueTime;
-
-        public GoogleCredentialProvider(IGoogleAccessTokenValidator accessTokenValidator, IGoogleRestRequestsAdapter restRequestsAdapter, IUrlOpener oAuthUrlOpener, ILocalHttpPortListener localHttpPortListener)
+        public GoogleCredentialProvider(
+            IGoogleRestRequestsAdapter restRequestsAdapter, 
+            IUrlOpener oAuthUrlOpener, 
+            ILocalHttpPortListener localHttpPortListener,
+            IGoogleJwtConverter jwtConverter)
         {
-            _accessTokenValidator = accessTokenValidator;
             _restRequestsAdapter = restRequestsAdapter;
             _oAuthUrlOpener = oAuthUrlOpener;
             _localHttpPortListener = localHttpPortListener;
+            _jwtConverter = jwtConverter;
         }
         
-        public async Task<GoogleIdTokenResponse> GetCredentialAsync()
+        public async Task<GoogleJwtStore> GetCredentialAsync()
         {
-            if (_googleApiResponse != null)
-            {
-                if (_accessTokenValidator.ValidateAccessToken(_googleApiResponse, _googleApiResponseIssueTime))
-                {
-                    return _googleApiResponse;
-                }
-
-                var responseTcs = new TaskCompletionSource<GoogleRefreshTokenResponse>();
-                
-                RefreshAccessToken(responseTcs);
-                
-                await responseTcs.Task;
-                var response = responseTcs.Task.Result;
-                
-                _googleApiResponse.AccessToken = response.AccessToken;
-                _googleApiResponse.ExpiresInSeconds = response.ExpiresInSeconds;
-                
-                return _googleApiResponse;
-            }
-            else
+            if (_tokenStore == null)
             {
                 var responseTcs = new TaskCompletionSource<GoogleIdTokenResponse>();
                 
                 GetAuthData(responseTcs);
                 
-                await responseTcs.Task;
-                
-                _googleApiResponse = responseTcs.Task.Result;
-                
-                return _googleApiResponse;
+                var authResponse = await responseTcs.Task;
+
+                _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
+
+                return _tokenStore;
             }
+
+            if (!_tokenStore.AccessToken.Valid)
+            {
+                var responseTcs = new TaskCompletionSource<GoogleRefreshTokenResponse>();
+                
+                RefreshAccessToken(responseTcs);
+                
+                var refreshResponse = await responseTcs.Task;
+                
+                _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
+
+                return _tokenStore;
+            }
+
+            return _tokenStore;
         }
 
         private void GetAuthData(TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
             _oAuthUrlOpener.Open(GoogleAuthConfig.GoogleOAuthUrl);
-            _localHttpPortListener.StartListening(code =>
+            _localHttpPortListener.StartListening(authCode =>
             {
-                _authCode = code;
-                
-                ExchangeAuthCodeWithIdToken(tcs);
+                ExchangeAuthCodeWithIdToken(tcs, authCode);
                 
                 _localHttpPortListener.StopListening();
             });
         }
         
-        private void ExchangeAuthCodeWithIdToken(TaskCompletionSource<GoogleIdTokenResponse> tcs)
+        private void ExchangeAuthCodeWithIdToken(TaskCompletionSource<GoogleIdTokenResponse> tcs, string authCode)
         {
             var requestParamsDto = new GoogleIdTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
-                _authCode,
+                authCode,
                 GoogleAuthConfig.Verifier,
                 GoogleAuthConfig.RedirectUri);
             
@@ -94,7 +90,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             var requestParamsDto = new GoogleRefreshTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
-                _googleApiResponse.RefreshToken);
+                _tokenStore.RefreshToken.GetToken());
             
             _restRequestsAdapter.RefreshAccessToken(requestParamsDto, tcs);
         }

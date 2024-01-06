@@ -1,7 +1,7 @@
 ﻿using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
-using Src.AuthController.CredentialProviders.Firebase.Google.TokenValidator;
+using Src.AuthController.JwtManagement.Converters.Google;
 using Src.AuthController.REST;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.PortListener.ListenerContextInterpretation;
@@ -15,7 +15,6 @@ namespace Src.AuthController.CredentialProviders.Firebase
         public IGoogleCredentialProvider CreateGoogleCredentialProvider()
         {
             return new GoogleCredentialProvider(
-                new GoogleAccessTokenValidator(),
                 new GoogleRestRequestsAdapter(
                     new HttpClientRequestAdapter()),
                 new UrlOpener(),
@@ -25,7 +24,8 @@ namespace Src.AuthController.CredentialProviders.Firebase
                         new HttpListenerContextInterpreter(),
                         GoogleAuthConfig.AuthCodeQueryKeyName,
                         new HttpListenerContextResponse(),
-                        GoogleAuthConfig.ResponseHtml)));
+                        GoogleAuthConfig.ResponseHtml)),
+                new GoogleJwtConverter());
         }
     }
 }
