@@ -16,6 +16,12 @@ namespace Src.AuthController.JwtManagement
         [JsonPropertyName("refresh_token")]
         public IJwtToken RefreshToken;
 
+        public JwtStore()
+        {
+            AccessToken = new JwtToken();
+            RefreshToken = new JwtToken();
+        }
+
         public JwtStore(IJwtToken accessToken, IJwtToken refreshToken)
         {
             AccessToken = accessToken;

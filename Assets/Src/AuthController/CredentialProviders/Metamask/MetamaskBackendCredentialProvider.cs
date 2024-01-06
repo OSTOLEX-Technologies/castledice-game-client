@@ -3,7 +3,7 @@ using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
 using Src.AuthController.JwtManagement;
-using Src.AuthController.JwtManagement.Converters;
+using Src.AuthController.JwtManagement.Converters.Metamask;
 using Src.AuthController.REST.REST_Request_Proxies.Metamask;
 using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
 
@@ -14,13 +14,19 @@ namespace Src.AuthController.CredentialProviders.Metamask
         private readonly IMetamaskWalletFacade _walletFacade;
         private readonly IMetamaskSignerFacade _signerFacade;
         private readonly IMetamaskRestRequestsAdapter _metamaskRestRequestsAdapter;
+        private readonly IMetamaskJwtConverter _jwtConverter;
         private JwtStore _tokensStore;
 
-        public MetamaskBackendCredentialProvider(IMetamaskWalletFacade walletFacade, IMetamaskSignerFacade signerFacade, IMetamaskRestRequestsAdapter metamaskRestRequestsAdapter)
+        public MetamaskBackendCredentialProvider(
+            IMetamaskWalletFacade walletFacade, 
+            IMetamaskSignerFacade signerFacade, 
+            IMetamaskRestRequestsAdapter metamaskRestRequestsAdapter,
+            IMetamaskJwtConverter jwtConverter)
         {
             _walletFacade = walletFacade;
             _signerFacade = signerFacade;
             _metamaskRestRequestsAdapter = metamaskRestRequestsAdapter;
+            _jwtConverter = jwtConverter;
         }
 
         public async Task<string> GetCredentialAsync()
@@ -35,15 +41,15 @@ namespace Src.AuthController.CredentialProviders.Metamask
                 var signedNonce = await ObtainAndSignNonce();
                 var accessResponse = await Auth(signedNonce);
                 
-                _tokensStore = MetamaskJwtConverter.FromMetamaskAuthResponse(accessResponse);
-
+                _tokensStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
+                
                 return _tokensStore.AccessToken.GetToken();
             }
             
             if (!_tokensStore.AccessToken.Valid)
             {
                 var refreshResponse = await RefreshTokens();
-                _tokensStore = MetamaskJwtConverter.FromMetamaskRefreshResponse(refreshResponse);
+                _tokensStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
 
                 return _tokensStore.AccessToken.GetToken();
             }
