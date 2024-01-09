@@ -143,15 +143,17 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private TimersView _timersView;
 
     [Header("Updater")]
+    [SerializeField] private FixedUpdaterBehaviour fixedUpdaterBehaviour;
     [SerializeField] private UpdaterBehaviour updaterBehaviour;
     private readonly Updater _updater = new();
+    private readonly Updater _fixedUpdater = new();
     
     private Game _game;
     private GameStartData _gameStartData;
 
     private void Start()
     {
-        SetUpUpdater();
+        SetUpUpdaters();
         SetUpGame();
         SetUpInput();
         SetUpGrid();
@@ -171,9 +173,10 @@ public class DuelGameSceneInitializer : MonoBehaviour
         NotifyPlayerIsReady();
     }
 
-    private void SetUpUpdater()
+    private void SetUpUpdaters()
     {
         updaterBehaviour.Init(_updater);
+        fixedUpdaterBehaviour.Init(_fixedUpdater);
     }
 
     private void SetUpTimers()
@@ -194,7 +197,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpGame()
     {
         _gameStartData = Singleton<GameStartData>.Instance;
-        var playersListCreator = new PlayersListCreator(new PlayerCreator(new UpdatablePlayerTimerCreator(new TimeDeltaProvider(), _updater)));
+        var playersListCreator = new PlayersListCreator(new PlayerCreator(new UpdatablePlayerTimerCreator(new FixedTimeDeltaProvider(), _fixedUpdater)));
         var coordinateSpawnerCreator = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
         var matrixCellsGeneratorCreator = new MatrixCellsGeneratorCreator();
         var boardConfigCreator = new BoardConfigCreator(coordinateSpawnerCreator, matrixCellsGeneratorCreator);

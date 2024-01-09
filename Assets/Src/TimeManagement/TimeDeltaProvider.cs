@@ -6,10 +6,5 @@
         {
             return UnityEngine.Time.deltaTime;
         }
-        
-        public float GetFixedDeltaTime()
-        {
-            return UnityEngine.Time.fixedDeltaTime;
-        }
     }
 }
