@@ -10,9 +10,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.
     public class PlayerCreatorTests
     {
         [Test]
-        public void CreatedPlayer_ShouldHaveId_FromPlayerData([Random(1, 100, 10)]int id)
+        public void CreatedPlayer_ShouldHaveId_FromPlayerData()
         {
-            //var id = new Random().Next();
+            var id = new Random().Next();
             var playerData = GetPlayerData(id);
             var playerCreator = new PlayerCreator(new Mock<IPlayerTimerCreator>().Object);
             

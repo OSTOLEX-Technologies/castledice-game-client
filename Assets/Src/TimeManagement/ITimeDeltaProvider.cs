@@ -3,5 +3,6 @@
     public interface ITimeDeltaProvider
     {
         float GetDeltaTime();
+        float GetFixedDeltaTime();
     }
 }

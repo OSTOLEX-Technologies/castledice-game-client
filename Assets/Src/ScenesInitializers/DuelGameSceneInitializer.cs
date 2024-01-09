@@ -52,6 +52,7 @@ using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
+using Src.TimeManagement;
 using TMPro;
 using UnityEngine;
 
@@ -193,7 +194,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpGame()
     {
         _gameStartData = Singleton<GameStartData>.Instance;
-        var playersListCreator = new PlayersListCreator(new PlayerCreator(new StopwatchPlayerTimerCreator()));
+        var playersListCreator = new PlayersListCreator(new PlayerCreator(new UpdatablePlayerTimerCreator(new TimeDeltaProvider(), _updater)));
         var coordinateSpawnerCreator = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
         var matrixCellsGeneratorCreator = new MatrixCellsGeneratorCreator();
         var boardConfigCreator = new BoardConfigCreator(coordinateSpawnerCreator, matrixCellsGeneratorCreator);
