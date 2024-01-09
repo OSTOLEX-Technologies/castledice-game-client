@@ -49,6 +49,21 @@ namespace Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests
             
             playerTimerView.Update();
             
+            timeViewMock.Verify(timeView => timeView.SetTime(playerTimer.GetTimeLeft()), Times.Exactly(2)); // Once in constructor, once in update
+        }
+        
+        [Test]
+        public void Constructor_ShouldSetTimeLeftFromTimer_ToTimeView()
+        {
+            var timeViewMock = new Mock<TimeView>();
+            var playerTimerMock = new Mock<IPlayerTimer>();
+            var playerTimer = playerTimerMock.Object;
+            var playerTimerView = new PlayerTimerViewBuilder
+            {
+                TimeView = timeViewMock.Object,
+                PlayerTimer = playerTimer
+            }.Build();
+            
             timeViewMock.Verify(timeView => timeView.SetTime(playerTimer.GetTimeLeft()), Times.Once);
         }
         

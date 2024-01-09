@@ -13,6 +13,7 @@ namespace Src.GameplayView.Timers.PlayerTimerViews
             _timeView = timeView;
             _highlighter = highlighter;
             _playerTimer = playerTimer;
+            _timeView.SetTime(_playerTimer.GetTimeLeft());
         }
 
         public void Update()

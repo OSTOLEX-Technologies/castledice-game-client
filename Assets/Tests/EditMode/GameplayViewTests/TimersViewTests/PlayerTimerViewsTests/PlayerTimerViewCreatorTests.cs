@@ -1,4 +1,5 @@
-﻿using castledice_game_logic.Time;
+﻿using castledice_game_logic;
+using castledice_game_logic.Time;
 using Moq;
 using NUnit.Framework;
 using static Tests.ObjectCreationUtility;
@@ -61,8 +62,23 @@ namespace Tests.EditMode.GameplayViewTests.TimersViewTests.PlayerTimerViewsTests
         
         private class PlayerTimerViewCreatorBuilder
         {
-            public IHighlighterForPlayerProvider HighlighterForPlayerProvider { get; set; } = new Mock<IHighlighterForPlayerProvider>().Object;
-            public ITimeViewForPlayerProvider TimeViewForPlayerProvider { get; set; } = new Mock<ITimeViewForPlayerProvider>().Object;
+            public IHighlighterForPlayerProvider HighlighterForPlayerProvider { get; set; }
+            public ITimeViewForPlayerProvider TimeViewForPlayerProvider { get; set; }
+            
+            public PlayerTimerViewCreatorBuilder()
+            {
+                var highlighterForPlayerProviderMock = new Mock<IHighlighterForPlayerProvider>();
+                var highlightMock = new Mock<Highlighter>();
+                highlighterForPlayerProviderMock.Setup(provider => provider.GetHighlighter(It.IsAny<Player>()))
+                    .Returns(highlightMock.Object);
+                HighlighterForPlayerProvider = highlighterForPlayerProviderMock.Object;
+                
+                var timeViewForPlayerProviderMock = new Mock<ITimeViewForPlayerProvider>();
+                var timeViewMock = new Mock<TimeView>();
+                timeViewForPlayerProviderMock.Setup(provider => provider.GetTimeView(It.IsAny<Player>()))
+                    .Returns(timeViewMock.Object);
+                TimeViewForPlayerProvider = timeViewForPlayerProviderMock.Object;
+            }
             
             public PlayerTimerViewCreator Build()
             {
