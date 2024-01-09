@@ -35,12 +35,12 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
-
         
-        public static TimeSpan GetRandomTimeSpan()
+        
+        public static TimeSpan GetRandomTimeSpan(int min = 1, int max = 1000)
         {
             var random = new System.Random();
-            var ticks = random.Next(1, 1000);
+            var ticks = random.Next(min, max);
             return new TimeSpan(ticks);
         }
         
@@ -227,6 +227,25 @@ namespace Tests
             return GetBoardConfig(playersToCastlesPositions);
         }
         
+        public static BoardConfig GetBoardConfig(Dictionary<Player, Vector2Int> playersToCastlesPositions)
+        {
+
+            var castleConfig = new CastleConfig(3, 1, 1);
+            var castlesFactory = new CastlesFactory(castleConfig);
+            var castlesSpawner = new CastlesSpawner(playersToCastlesPositions, castlesFactory);
+
+            var contentSpawners = new List<IContentSpawner>()
+            {
+                castlesSpawner
+            };
+
+            var cellsGenerator = new RectCellsGenerator(10, 10);
+            
+            var boardConfig = new BoardConfig(contentSpawners, cellsGenerator, CellType.Square);
+            
+            return boardConfig;
+        }
+        
         public static List<Player> GetPlayersList(int length = 1)
         {
             var players = new List<Player>();
@@ -253,24 +272,7 @@ namespace Tests
             return new PlayerData(id, placementTypes ?? new List<PlacementType>(), timeSpan);
         }
         
-        public static BoardConfig GetBoardConfig(Dictionary<Player, Vector2Int> playersToCastlesPositions)
-        {
 
-            var castleConfig = new CastleConfig(3, 1, 1);
-            var castlesFactory = new CastlesFactory(castleConfig);
-            var castlesSpawner = new CastlesSpawner(playersToCastlesPositions, castlesFactory);
-
-            var contentSpawners = new List<IContentSpawner>()
-            {
-                castlesSpawner
-            };
-
-            var cellsGenerator = new RectCellsGenerator(10, 10);
-            
-            var boardConfig = new BoardConfig(contentSpawners, cellsGenerator, CellType.Square);
-            
-            return boardConfig;
-        }
         
         public static Board GetFullNByNBoard(int size)
         {
