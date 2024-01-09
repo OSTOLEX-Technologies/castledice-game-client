@@ -16,165 +16,192 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 {
     public class MetamaskBackendCredentialProviderTests
     {
-        private class WalletFacadeMock : IMetamaskWalletFacade
-        {
-            private static string PublicAddressStub = "address";
-            
-            public void Connect()
-            {
-                OnConnected?.Invoke(this, EventArgs.Empty);
-            }
-
-            public string GetPublicAddress()
-            {
-                return PublicAddressStub;
-            }
-
-            public event EventHandler OnConnected;
-        }
-        
-        private static string _validDeterminator = "valid";
-        private static string _invalidDeterminator = "invalid";
-        
-
         [Test]
         public async Task GetCredentialAsync_ShouldCreateCredentials_IfThereIsNoSavedAccessToken()
         {
-            var usedResponse = new MetamaskAccessTokenResponse();
-
-            var walletFacadeMock = new WalletFacadeMock();
-            var signerMock = new Mock<IMetamaskSignerFacade>();
-            signerMock.Setup(a => a.Sign(It.IsAny<string>())).ReturnsAsync("");
-
-            var expectedMetamaskCredentials = new JwtStore(
-                new JwtToken(_validDeterminator, Int32.MaxValue, DateTime.Now),
-                new JwtToken("refresh", Int32.MaxValue, DateTime.Now)
-            );
-
-            var jwtConverterMock = new Mock<IMetamaskJwtConverter>();
-            jwtConverterMock.Setup(a => a.FromMetamaskAuthResponse(usedResponse)).
-                Returns(expectedMetamaskCredentials);
-            
-            //Adapter always marks passed TCS as completed and gives it expected response as a result
-            var metamaskRestRequestsAdapterMock = new Mock<IMetamaskRestRequestsAdapter>();
-            metamaskRestRequestsAdapterMock.Setup(
-                    a => a.GetNonce(
-                        It.IsAny<MetamaskNonceRequestDtoProxy>(),
-                        It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()))
-                .Callback<MetamaskNonceRequestDtoProxy, TaskCompletionSource<MetamaskNonceResponse>>(
-                    (_, tcs) => tcs.SetResult(new MetamaskNonceResponse()));
-            metamaskRestRequestsAdapterMock.Setup(
-                    a => a.AuthenticateAndGetTokens(
-                        It.IsAny<MetamaskAuthRequestDtoProxy>(),
-                        It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()))
-                .Callback<MetamaskAuthRequestDtoProxy, TaskCompletionSource<MetamaskAccessTokenResponse>>(
-                    (_, tcs) => tcs.SetResult(usedResponse));
-
-            var metamaskBackendCredentialProvider = new MetamaskBackendCredentialProvider(
-                walletFacadeMock, 
-                signerMock.Object,
-                metamaskRestRequestsAdapterMock.Object,
-                jwtConverterMock.Object);
+            var director = new MetamaskCredentialProviderDirector();
+            var metamaskBackendCredentialProvider = director.ConstructProviderWithNoAccessToken();
 
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
-            Assert.AreSame(expectedMetamaskCredentials.AccessToken.GetToken(), result);
+            Assert.AreSame(
+                MetamaskCredentialProviderDirector.NoSavedTokensCredentials.AccessToken.GetToken(), 
+                result);
         }
         
         [Test]
         public async Task GetCredentialAsync_ShouldRefreshCredentials_IfThereExistsSavedExpiredAccessToken()
         {
-            var usedResponse = new MetamaskAccessTokenResponse();
-            var usedRefreshResponse = new MetamaskRefreshTokenResponse();
+            var director = new MetamaskCredentialProviderDirector();
+            var metamaskBackendCredentialProvider = director.ConstructProviderWithInvalidAccessToken();
 
-            var walletFacadeMock = new WalletFacadeMock();
-            var signerMock = new Mock<IMetamaskSignerFacade>();
-            signerMock.Setup(a => a.Sign(It.IsAny<string>())).ReturnsAsync("");
-
-            var expectedMetamaskCredentials = new JwtStore(
-                new JwtToken(_invalidDeterminator, -10, DateTime.Now),
-                new JwtToken("refresh", Int32.MaxValue, DateTime.Now)
-            );
-
-            var jwtConverterMock = new Mock<IMetamaskJwtConverter>();
-            jwtConverterMock.Setup(a => a.FromMetamaskAuthResponse(usedResponse)).
-                Returns(expectedMetamaskCredentials);
-            jwtConverterMock.Setup(a => a.FromMetamaskRefreshResponse(usedRefreshResponse)).
-                Returns(expectedMetamaskCredentials);
-
-            //Adapter always marks passed TCS as completed and gives it expected response as a result
-            var metamaskRestRequestsAdapterMock = new Mock<IMetamaskRestRequestsAdapter>();
-            metamaskRestRequestsAdapterMock.Setup(
-                    a => a.GetNonce(
-                        It.IsAny<MetamaskNonceRequestDtoProxy>(),
-                        It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()))
-                .Callback<MetamaskNonceRequestDtoProxy, TaskCompletionSource<MetamaskNonceResponse>>(
-                    (_, tcs) => tcs.SetResult(new MetamaskNonceResponse()));
-            metamaskRestRequestsAdapterMock.Setup(
-                    a => a.AuthenticateAndGetTokens(
-                        It.IsAny<MetamaskAuthRequestDtoProxy>(),
-                        It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()))
-                .Callback<MetamaskAuthRequestDtoProxy, TaskCompletionSource<MetamaskAccessTokenResponse>>(
-                    (_, tcs) => tcs.SetResult(usedResponse));
-            metamaskRestRequestsAdapterMock.Setup(
-                a => a.RefreshAccessTokens(
-                    It.IsAny<MetamaskRefreshRequestDtoProxy>(),
-                    It.IsAny<TaskCompletionSource<MetamaskRefreshTokenResponse>>()))
-                .Callback<MetamaskRefreshRequestDtoProxy, TaskCompletionSource<MetamaskRefreshTokenResponse>>(
-                    (_, tcs) => tcs.SetResult(usedRefreshResponse));
-
-            var metamaskBackendCredentialProvider = new MetamaskBackendCredentialProvider(
-                walletFacadeMock, 
-                signerMock.Object,
-                metamaskRestRequestsAdapterMock.Object,
-                jwtConverterMock.Object);
-
-            await metamaskBackendCredentialProvider.GetCredentialAsync();
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
-            Assert.AreSame(expectedMetamaskCredentials.AccessToken.GetToken(), result);
+            Assert.AreSame(
+                MetamaskCredentialProviderDirector.ExpiredTokenCredentials.AccessToken.GetToken(), 
+                result);
         }
         
         [Test]
         public async Task GetCredentialAsync_ShouldNotRefreshCredentials_IfThereExistsSavedValidAccessToken()
         {
-            var usedResponse = new MetamaskAccessTokenResponse();
+            var director = new MetamaskCredentialProviderDirector();
+            var metamaskBackendCredentialProvider = director.ConstructProviderWithValidAccessToken();
 
-            var walletFacadeMock = new WalletFacadeMock();
-            var signerMock = new Mock<IMetamaskSignerFacade>();
-            signerMock.Setup(a => a.Sign(It.IsAny<string>())).ReturnsAsync("");
-
-            var expectedMetamaskCredentials = new JwtStore(
-                new JwtToken(_validDeterminator, Int32.MaxValue, DateTime.Now),
-                new JwtToken("refresh", Int32.MaxValue, DateTime.Now)
-            );
-
-            var jwtConverterMock = new Mock<IMetamaskJwtConverter>();
-            jwtConverterMock.Setup(a => a.FromMetamaskAuthResponse(usedResponse)).
-                Returns(expectedMetamaskCredentials);
-            
-            //Adapter always marks passed TCS as completed and gives it expected response as a result
-            var metamaskRestRequestsAdapterMock = new Mock<IMetamaskRestRequestsAdapter>();
-            metamaskRestRequestsAdapterMock.Setup(
-                    a => a.GetNonce(
-                        It.IsAny<MetamaskNonceRequestDtoProxy>(),
-                        It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()))
-                .Callback<MetamaskNonceRequestDtoProxy, TaskCompletionSource<MetamaskNonceResponse>>(
-                    (_, tcs) => tcs.SetResult(new MetamaskNonceResponse()));
-            metamaskRestRequestsAdapterMock.Setup(
-                    a => a.AuthenticateAndGetTokens(
-                        It.IsAny<MetamaskAuthRequestDtoProxy>(),
-                        It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()))
-                .Callback<MetamaskAuthRequestDtoProxy, TaskCompletionSource<MetamaskAccessTokenResponse>>(
-                    (_, tcs) => tcs.SetResult(usedResponse));
-
-            var metamaskBackendCredentialProvider = new MetamaskBackendCredentialProvider(
-                walletFacadeMock, 
-                signerMock.Object,
-                metamaskRestRequestsAdapterMock.Object,
-                jwtConverterMock.Object);
-
-            await metamaskBackendCredentialProvider.GetCredentialAsync();
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
-            Assert.AreSame(expectedMetamaskCredentials.AccessToken.GetToken(), result);
+            Assert.AreSame(
+                MetamaskCredentialProviderDirector.ValidTokenCredentials.AccessToken.GetToken(), 
+                result);
+        }
+        
+        private class MetamaskBackendCredentialProviderBuilder
+        {
+            private MetamaskBackendCredentialProvider _provider;
+
+            private readonly MetamaskAccessTokenResponse _usedResponse;
+            private readonly MetamaskRefreshTokenResponse _usedRefreshResponse;
+            
+            private Mock<IMetamaskWalletFacade> _walletFacade;
+            private Mock<IMetamaskSignerFacade> _signerFacade;
+            private Mock<IMetamaskRestRequestsAdapter> _metamaskRestRequestsAdapter;
+            private Mock<IMetamaskJwtConverter> _jwtConverter;
+
+            internal MetamaskBackendCredentialProviderBuilder()
+            {
+                _usedResponse = new MetamaskAccessTokenResponse();
+                _usedRefreshResponse = new MetamaskRefreshTokenResponse();
+                
+                Reset();
+            }
+
+            public void Reset()
+            {
+                _walletFacade = new Mock<IMetamaskWalletFacade>();
+                _signerFacade = new Mock<IMetamaskSignerFacade>();
+                _metamaskRestRequestsAdapter = new Mock<IMetamaskRestRequestsAdapter>();
+                _jwtConverter = new Mock<IMetamaskJwtConverter>();
+            }
+            
+            public void SetRequestWalletFacade()
+            {
+                _walletFacade.Setup(a => a.Connect()).Raises(
+                    a => a.OnConnected += null, _walletFacade.Object, EventArgs.Empty);
+            }
+            public void SetRequestSignerFacade()
+            {
+                _signerFacade.Setup(a => a.Sign(It.IsAny<string>())).ReturnsAsync("");
+            }
+            public void SetRequestAdapterNonce()
+            {
+                _metamaskRestRequestsAdapter.Setup(
+                        a => a.GetNonce(
+                            It.IsAny<MetamaskNonceRequestDtoProxy>(),
+                            It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()))
+                    .Callback<MetamaskNonceRequestDtoProxy, TaskCompletionSource<MetamaskNonceResponse>>(
+                        (_, tcs) => tcs.SetResult(new MetamaskNonceResponse()));
+            }
+            public void SetRequestAdapterAuth()
+            {
+                _metamaskRestRequestsAdapter.Setup(
+                        a => a.AuthenticateAndGetTokens(
+                            It.IsAny<MetamaskAuthRequestDtoProxy>(),
+                            It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()))
+                    .Callback<MetamaskAuthRequestDtoProxy, TaskCompletionSource<MetamaskAccessTokenResponse>>(
+                        (_, tcs) => tcs.SetResult(_usedResponse));
+            }
+            public void SetRequestAdapterRefresh()
+            {
+                _metamaskRestRequestsAdapter.Setup(
+                        a => a.RefreshAccessTokens(
+                            It.IsAny<MetamaskRefreshRequestDtoProxy>(),
+                            It.IsAny<TaskCompletionSource<MetamaskRefreshTokenResponse>>()))
+                    .Callback<MetamaskRefreshRequestDtoProxy, TaskCompletionSource<MetamaskRefreshTokenResponse>>(
+                        (_, tcs) => tcs.SetResult(_usedRefreshResponse));
+            }
+            
+            public void SetJwtConverterAuth(JwtStore expectedCredentials)
+            {
+                _jwtConverter.Setup(a => a.FromMetamaskAuthResponse(_usedResponse)).
+                    Returns(expectedCredentials);
+            }
+            public void SetJwtConverterRefresh(JwtStore expectedCredentials)
+            {
+                _jwtConverter.Setup(a => a.FromMetamaskRefreshResponse(_usedRefreshResponse)).
+                    Returns(expectedCredentials);
+            }
+            
+            public MetamaskBackendCredentialProvider GetProvider()
+            {
+                return new MetamaskBackendCredentialProvider(
+                    _walletFacade.Object,
+                    _signerFacade.Object,
+                    _metamaskRestRequestsAdapter.Object,
+                    _jwtConverter.Object);
+            }
+        }
+
+        private class MetamaskCredentialProviderDirector
+        {
+            public static readonly JwtStore NoSavedTokensCredentials = new(
+                new JwtToken(ValidIdentifier, Int32.MaxValue, DateTime.Now), 
+                new JwtToken(RefreshIdentifier, Int32.MaxValue, DateTime.Now));
+            public static readonly JwtStore ExpiredTokenCredentials = new(
+                new JwtToken(InvalidIdentifier, -10, DateTime.Now),
+                new JwtToken(RefreshIdentifier, Int32.MaxValue, DateTime.Now));
+            public static readonly JwtStore ValidTokenCredentials = new(
+                new JwtToken(ValidIdentifier, Int32.MaxValue, DateTime.Now),
+                new JwtToken(RefreshIdentifier, Int32.MaxValue, DateTime.Now));
+
+            private const string ValidIdentifier = "valid";
+            private const string InvalidIdentifier = "invalid";
+            private const string RefreshIdentifier = "refresh";
+            
+            private readonly MetamaskBackendCredentialProviderBuilder _builder;
+
+            public MetamaskCredentialProviderDirector()
+            {
+                _builder = new MetamaskBackendCredentialProviderBuilder();
+            }
+
+            public MetamaskBackendCredentialProvider ConstructProviderWithNoAccessToken()
+            {
+                _builder.Reset();
+                _builder.SetRequestWalletFacade();
+                _builder.SetRequestSignerFacade();
+                
+                _builder.SetRequestAdapterNonce();
+                _builder.SetRequestAdapterAuth();
+                
+                _builder.SetJwtConverterAuth(NoSavedTokensCredentials);
+
+                return _builder.GetProvider();
+            }
+            public MetamaskBackendCredentialProvider ConstructProviderWithInvalidAccessToken()
+            {
+                _builder.Reset();
+                _builder.SetRequestWalletFacade();
+                _builder.SetRequestSignerFacade();
+                
+                _builder.SetRequestAdapterNonce();
+                _builder.SetRequestAdapterAuth();
+                _builder.SetRequestAdapterRefresh();
+                
+                _builder.SetJwtConverterAuth(ExpiredTokenCredentials);
+                _builder.SetJwtConverterRefresh(ExpiredTokenCredentials);
+
+                return _builder.GetProvider();
+            }
+            public MetamaskBackendCredentialProvider ConstructProviderWithValidAccessToken()
+            {
+                _builder.Reset();
+                _builder.SetRequestWalletFacade();
+                _builder.SetRequestSignerFacade();
+                
+                _builder.SetRequestAdapterNonce();
+                _builder.SetRequestAdapterAuth();
+                
+                _builder.SetJwtConverterAuth(ValidTokenCredentials);
+
+                return _builder.GetProvider();
+            }
         }
     }
 }
