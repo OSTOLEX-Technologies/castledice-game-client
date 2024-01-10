@@ -22,7 +22,7 @@ namespace Tests.EditMode.AuthTests.JwtStorage
         {
             var jwt = new JwtToken(TokenStub, 0, DateTime.Now);
             
-            Assert.AreEqual(TokenStub, jwt.GetToken());
+            Assert.AreEqual(TokenStub, jwt.Token);
         }
         
         [Test]
@@ -31,7 +31,7 @@ namespace Tests.EditMode.AuthTests.JwtStorage
             var jwt = new JwtToken(TokenStub, 0, DateTime.Now);
             jwt.UpdateToken(TokenReplacementStub);
             
-            Assert.AreEqual(TokenReplacementStub, jwt.GetToken());
+            Assert.AreEqual(TokenReplacementStub, jwt.Token);
         }
     }
 }

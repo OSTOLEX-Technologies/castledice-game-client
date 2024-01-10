@@ -3,7 +3,8 @@ namespace Src.AuthController.JwtManagement.Tokens
     public interface IJwtToken
     {
         public bool Valid { get; }
-        public string GetToken();
+        
+        public string Token { get; }
 
         public void UpdateToken(string token);
     }

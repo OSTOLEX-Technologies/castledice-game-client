@@ -90,7 +90,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             var requestParamsDto = new GoogleRefreshTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
-                _tokenStore.RefreshToken.GetToken());
+                _tokenStore.RefreshToken.Token);
             
             _restRequestsAdapter.RefreshAccessToken(requestParamsDto, responseTcs);
             var response = await responseTcs.Task;

@@ -6,12 +6,14 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Sig
 {
     public class MetamaskSignerFacade : IMetamaskSignerFacade
     {
+        private const string PersonalSignMethodName = "personal_sign";
+
         public async Task<string> Sign(string message)
         {
             var wallet = MetaMaskUnity.Instance.Wallet;
             var request = new MetaMaskEthereumRequest
             {
-                Method = "personal_sign",
+                Method = PersonalSignMethodName,
                 Parameters = new object[]
                 {
                     message,

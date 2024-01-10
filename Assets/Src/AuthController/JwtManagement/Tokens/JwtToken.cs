@@ -6,13 +6,15 @@ namespace Src.AuthController.JwtManagement.Tokens
     [Serializable]
     public class JwtToken : IJwtToken
     {
-        public bool Valid => DateTime.Now < IssuedAt + TimeSpan.FromSeconds(ExpiresInSeconds);
+        public bool Valid => DateTime.Now < _issuedAt + TimeSpan.FromSeconds(_expiresInSeconds);
+        public string Token => _token;
+        
 
-        [JsonProperty("token")] public string Token { get; private set; }
+        [JsonProperty("token")] private string _token;
 
-        [JsonProperty("expires_in")] public int ExpiresInSeconds { get; private set; }
+        [JsonProperty("expires_in")] private int _expiresInSeconds;
 
-        [JsonProperty("issued_at")] public DateTime IssuedAt { get; private set; }
+        [JsonProperty("issued_at")] private DateTime _issuedAt;
 
         public JwtToken()
         {
@@ -20,19 +22,14 @@ namespace Src.AuthController.JwtManagement.Tokens
 
         public JwtToken(string token, int expiresInSeconds, DateTime issuedAt)
         {
-            Token = token;
-            ExpiresInSeconds = expiresInSeconds;
-            IssuedAt = issuedAt;
-        }
-
-        public string GetToken()
-        {
-            return Token;
+            _token = token;
+            _expiresInSeconds = expiresInSeconds;
+            _issuedAt = issuedAt;
         }
 
         public void UpdateToken(string token)
         {
-            Token = token;
+            _token = token;
         }
     }
 }

@@ -134,7 +134,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             );
             private static readonly GoogleIdTokenResponse NoSavedTokensResponseStub = new()
             {
-                AccessToken = NoSavedTokensCredentials.AccessToken.GetToken(),
+                AccessToken = NoSavedTokensCredentials.AccessToken.Token,
                 ExpiresInSeconds = Int32.MaxValue
             };
 
@@ -145,7 +145,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             );
             private static readonly GoogleIdTokenResponse ExpiredTokenResponseStub = new()
             {
-                AccessToken = ExpiredTokenCredentials.AccessToken.GetToken(),
+                AccessToken = ExpiredTokenCredentials.AccessToken.Token,
                 ExpiresInSeconds = 0
             };
 
@@ -156,7 +156,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             );
             private static readonly GoogleIdTokenResponse ValidTokenResponseStub = new()
             {
-                AccessToken = ValidTokenCredentials.AccessToken.GetToken(),
+                AccessToken = ValidTokenCredentials.AccessToken.Token,
                 ExpiresInSeconds = Int32.MaxValue
             };
             

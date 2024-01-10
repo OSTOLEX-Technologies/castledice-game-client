@@ -8,8 +8,8 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google.CredentialForma
         public Credential FormatCredentials(GoogleJwtStore googleCredentials)
         {
             return GoogleAuthProvider.GetCredential(
-                googleCredentials.IdToken.GetToken(), 
-                googleCredentials.AccessToken.GetToken());
+                googleCredentials.IdToken.Token, 
+                googleCredentials.AccessToken.Token);
         }
     }
 }

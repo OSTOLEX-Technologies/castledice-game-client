@@ -45,7 +45,7 @@ namespace Src.AuthController.CredentialProviders.Metamask
                 
                 _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
                 
-                return _tokenStore.AccessToken.GetToken();
+                return _tokenStore.AccessToken.Token;
             }
             
             if (!_tokenStore.AccessToken.Valid)
@@ -53,10 +53,10 @@ namespace Src.AuthController.CredentialProviders.Metamask
                 var refreshResponse = await RefreshTokens();
                 _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
 
-                return _tokenStore.AccessToken.GetToken();
+                return _tokenStore.AccessToken.Token;
             }
             
-            return _tokenStore.AccessToken.GetToken();
+            return _tokenStore.AccessToken.Token;
         }
 
         private async Task WaitForWalletConnect()
@@ -96,7 +96,7 @@ namespace Src.AuthController.CredentialProviders.Metamask
         {
             var authTcs = new TaskCompletionSource<MetamaskRefreshTokenResponse>();
             _metamaskRestRequestsAdapter.RefreshAccessTokens(
-                new MetamaskRefreshRequestDtoProxy(_tokenStore.RefreshToken.GetToken()),
+                new MetamaskRefreshRequestDtoProxy(_tokenStore.RefreshToken.Token),
                 authTcs);
             var refreshResponse = await authTcs.Task;
 
