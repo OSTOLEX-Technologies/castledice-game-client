@@ -10,7 +10,7 @@ namespace Tests.EditMode.AuthTests.JwtStorage
         const string TokenReplacementStub = "cba";
         
         [Test]
-        public void Valid_ShouldRecognizeContainingData([Values(360, 5000, 28000)] int issued, [Values(600, 150, 5002)] int expires)
+        public void Valid_ShouldTellCheckIfIssuedTimeIsLessThanExpiresTime([Values(360, 5000, 28000)] int issued, [Values(600, 150, 5002)] int expires)
         {
             var jwt = new JwtToken(TokenStub, expires, DateTime.Now - TimeSpan.FromSeconds(issued));
             
@@ -18,7 +18,7 @@ namespace Tests.EditMode.AuthTests.JwtStorage
         }
         
         [Test]
-        public void GetToken_ShouldDetectContainingToken()
+        public void GetToken_ShouldReturnContainingToken()
         {
             var jwt = new JwtToken(TokenStub, 0, DateTime.Now);
             
@@ -26,7 +26,7 @@ namespace Tests.EditMode.AuthTests.JwtStorage
         }
         
         [Test]
-        public void UpdateToken_ShouldDetectChangesInContainingToken()
+        public void UpdateToken_ShouldReplaceContainingToken_WithNewOne()
         {
             var jwt = new JwtToken(TokenStub, 0, DateTime.Now);
             jwt.UpdateToken(TokenReplacementStub);
