@@ -4,11 +4,11 @@ using Src.AuthController.CredentialProviders.Firebase;
 
 namespace Src.AuthController.TokenProviders.TokenProvidersFactory
 {
-    public class FirebaseTokenProvidersFactory : IFirebaseTokenProvidersFactory
+    public class FirebaseTokenProvidersCreator : IFirebaseTokenProvidersCreator
     {
         private readonly IFirebaseCredentialProvider _credentialProvider;
         private readonly FirebaseAuth _auth;
-        public FirebaseTokenProvidersFactory(IFirebaseCredentialProvider credentialProvider)
+        public FirebaseTokenProvidersCreator(IFirebaseCredentialProvider credentialProvider)
         {
             _credentialProvider = credentialProvider;
             _auth = FirebaseAuth.DefaultInstance;

@@ -2,7 +2,7 @@
 
 namespace Src.AuthController.CredentialProviders.Firebase
 {
-    public interface IFirebaseInternalCredentialProviderFactory
+    public interface IFirebaseInternalCredentialProviderCreator
     {
         public IGoogleCredentialProvider CreateGoogleCredentialProvider();
     }

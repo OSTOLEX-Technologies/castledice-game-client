@@ -20,9 +20,9 @@ namespace Tests.Manual
             _singletonCacher = new SingletonCacher();
             _authController = new AuthController(
                 new GeneralAccessTokenProvidersStrategy(
-                    new FirebaseTokenProvidersFactory(
+                    new FirebaseTokenProvidersCreator(
                         new FirebaseCredentialProvider(
-                            new FirebaseInternalCredentialProviderFactory(),
+                            new FirebaseInternalCredentialProviderCreator(),
                             new FirebaseCredentialFormatter())), 
                     new SampleMetamaskProviderStub()),
                 _singletonCacher, 

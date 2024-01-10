@@ -3,11 +3,11 @@ using Src.AuthController.CredentialProviders.Metamask;
 
 namespace Src.AuthController.TokenProviders.TokenProvidersFactory
 {
-    public class MetamaskTokenProvidersFactory : IMetamaskTokenProvidersFactory
+    public class MetamaskTokenProvidersCreator : IMetamaskTokenProvidersCreator
     {
         private readonly IMetamaskBackendCredentialProvider _backendCredentialProvider;
 
-        public MetamaskTokenProvidersFactory(IMetamaskBackendCredentialProvider backendCredentialProvider)
+        public MetamaskTokenProvidersCreator(IMetamaskBackendCredentialProvider backendCredentialProvider)
         {
             _backendCredentialProvider = backendCredentialProvider;
         }

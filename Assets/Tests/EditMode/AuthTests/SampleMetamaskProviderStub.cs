@@ -4,7 +4,7 @@ using Src.AuthController.TokenProviders.TokenProvidersFactory;
 
 namespace Tests.EditMode.AuthTests
 {
-    public class SampleMetamaskProviderStub : IMetamaskTokenProvidersFactory
+    public class SampleMetamaskProviderStub : IMetamaskTokenProvidersCreator
     {
         public Task<MetamaskTokenProvider> GetTokenProviderAsync()
         {

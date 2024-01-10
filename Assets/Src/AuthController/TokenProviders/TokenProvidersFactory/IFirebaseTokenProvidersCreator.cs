@@ -2,7 +2,7 @@
 
 namespace Src.AuthController.TokenProviders.TokenProvidersFactory
 {
-    public interface IFirebaseTokenProvidersFactory
+    public interface IFirebaseTokenProvidersCreator
     {
         public Task<FirebaseTokenProvider> GetTokenProviderAsync(FirebaseAuthProviderType authProviderType);
     }

@@ -2,7 +2,7 @@
 
 namespace Src.AuthController.TokenProviders.TokenProvidersFactory
 {
-    public interface IMetamaskTokenProvidersFactory
+    public interface IMetamaskTokenProvidersCreator
     {
         public Task<MetamaskTokenProvider> GetTokenProviderAsync();
     }

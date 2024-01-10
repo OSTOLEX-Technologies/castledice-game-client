@@ -10,7 +10,7 @@ using Src.AuthController.UrlOpening;
 
 namespace Src.AuthController.CredentialProviders.Firebase
 {
-    public class FirebaseInternalCredentialProviderFactory : IFirebaseInternalCredentialProviderFactory
+    public class FirebaseInternalCredentialProviderCreator : IFirebaseInternalCredentialProviderCreator
     {
         public IGoogleCredentialProvider CreateGoogleCredentialProvider()
         {

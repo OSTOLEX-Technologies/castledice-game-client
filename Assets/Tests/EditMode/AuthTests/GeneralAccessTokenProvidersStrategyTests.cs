@@ -24,10 +24,10 @@ namespace Tests.EditMode.AuthTests
             var expectedFirebaseTokenProvider = new FirebaseTokenProvider(firebaseUserStub);
             var expectedMetamaskTokenProvider = new MetamaskTokenProvider(metamaskBackendCredentialsProviderMock.Object);
 
-            var firebaseTokenProviderFactoryMock = new Mock<IFirebaseTokenProvidersFactory>();
+            var firebaseTokenProviderFactoryMock = new Mock<IFirebaseTokenProvidersCreator>();
             firebaseTokenProviderFactoryMock.Setup(s => 
                 s.GetTokenProviderAsync(FirebaseAuthProviderType.Google)).ReturnsAsync(expectedFirebaseTokenProvider);
-            var metamaskTokenProviderFactoryMock = new Mock<IMetamaskTokenProvidersFactory>();
+            var metamaskTokenProviderFactoryMock = new Mock<IMetamaskTokenProvidersCreator>();
             metamaskTokenProviderFactoryMock.Setup(s => 
                 s.GetTokenProviderAsync()).ReturnsAsync(expectedMetamaskTokenProvider);
 

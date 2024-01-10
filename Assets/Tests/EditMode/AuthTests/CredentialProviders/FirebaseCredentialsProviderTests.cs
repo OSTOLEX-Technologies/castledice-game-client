@@ -35,7 +35,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                     var googleCredentialProviderMock = new Mock<IGoogleCredentialProvider>();
                     googleCredentialProviderMock.Setup(
                         a => a.GetCredentialAsync()).ReturnsAsync(googleCredentials);
-                    var firebaseInternalCredentialProviderFactoryMock = new Mock<IFirebaseInternalCredentialProviderFactory>();
+                    var firebaseInternalCredentialProviderFactoryMock = new Mock<IFirebaseInternalCredentialProviderCreator>();
                     firebaseInternalCredentialProviderFactoryMock.Setup(
                         a => a.CreateGoogleCredentialProvider()).Returns(googleCredentialProviderMock.Object);
                     var firebaseCredentialFormatterMock =
