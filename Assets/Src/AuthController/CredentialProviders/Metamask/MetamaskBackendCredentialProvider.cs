@@ -11,11 +11,13 @@ namespace Src.AuthController.CredentialProviders.Metamask
 {
     public class MetamaskBackendCredentialProvider : IMetamaskBackendCredentialProvider
     {
+        private bool TokenIsStored => _tokenStore != null;
+        
         private readonly IMetamaskWalletFacade _walletFacade;
         private readonly IMetamaskSignerFacade _signerFacade;
         private readonly IMetamaskRestRequestsAdapter _metamaskRestRequestsAdapter;
         private readonly IMetamaskJwtConverter _jwtConverter;
-        private JwtStore _tokensStore;
+        private JwtStore _tokenStore;
 
         public MetamaskBackendCredentialProvider(
             IMetamaskWalletFacade walletFacade, 
@@ -31,7 +33,7 @@ namespace Src.AuthController.CredentialProviders.Metamask
 
         public async Task<string> GetCredentialAsync()
         {
-            if (_tokensStore == null)
+            if (!TokenIsStored)
             {
                 if (!IMetamaskWalletFacade.WalletConnected)
                 {
@@ -41,20 +43,20 @@ namespace Src.AuthController.CredentialProviders.Metamask
                 var signedNonce = await ObtainAndSignNonce();
                 var accessResponse = await Auth(signedNonce);
                 
-                _tokensStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
+                _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
                 
-                return _tokensStore.AccessToken.GetToken();
+                return _tokenStore.AccessToken.GetToken();
             }
             
-            if (!_tokensStore.AccessToken.Valid)
+            if (!_tokenStore.AccessToken.Valid)
             {
                 var refreshResponse = await RefreshTokens();
-                _tokensStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
+                _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
 
-                return _tokensStore.AccessToken.GetToken();
+                return _tokenStore.AccessToken.GetToken();
             }
             
-            return _tokensStore.AccessToken.GetToken();
+            return _tokenStore.AccessToken.GetToken();
         }
 
         private async Task WaitForWalletConnect()
@@ -94,7 +96,7 @@ namespace Src.AuthController.CredentialProviders.Metamask
         {
             var authTcs = new TaskCompletionSource<MetamaskRefreshTokenResponse>();
             _metamaskRestRequestsAdapter.RefreshAccessTokens(
-                new MetamaskRefreshRequestDtoProxy(_tokensStore.RefreshToken.GetToken()),
+                new MetamaskRefreshRequestDtoProxy(_tokenStore.RefreshToken.GetToken()),
                 authTcs);
             var refreshResponse = await authTcs.Task;
 

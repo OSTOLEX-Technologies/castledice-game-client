@@ -12,11 +12,13 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
     public class GoogleCredentialProvider : IGoogleCredentialProvider
     {
+        private bool TokenIsStored => _tokenStore != null;
+        
         private readonly IGoogleRestRequestsAdapter _restRequestsAdapter;
         private readonly IUrlOpener _oAuthUrlOpener;
         private readonly ILocalHttpPortListener _localHttpPortListener;
         private readonly IGoogleJwtConverter _jwtConverter;
-//
+
         private GoogleJwtStore _tokenStore;
 
         public GoogleCredentialProvider(
@@ -33,7 +35,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         
         public async Task<GoogleJwtStore> GetCredentialAsync()
         {
-            if (_tokenStore == null)
+            if (!TokenIsStored)
             {
                 var authResponse = await GetAuthData();;
 
