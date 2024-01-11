@@ -89,10 +89,8 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             {
                 _googleRestRequestsAdapter.Setup(
                         (a => a.RefreshAccessToken(
-                            It.IsAny<GoogleRefreshTokenRequestDtoProxy>(),
-                            It.IsAny<TaskCompletionSource<GoogleRefreshTokenResponse>>())))
-                    .Callback<GoogleRefreshTokenRequestDtoProxy, TaskCompletionSource<GoogleRefreshTokenResponse>>(
-                        (dict, tcs) => tcs.SetResult(refreshResponseStub));
+                            It.IsAny<GoogleRefreshTokenRequestDtoProxy>())))
+                    .ReturnsAsync(refreshResponseStub);
             }
             
             public void SetHttpListener()

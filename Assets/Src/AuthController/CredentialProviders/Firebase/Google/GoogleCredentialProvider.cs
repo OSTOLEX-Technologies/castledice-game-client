@@ -86,14 +86,12 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         
         private async Task<GoogleRefreshTokenResponse> RefreshAccessToken()
         {
-            var responseTcs = new TaskCompletionSource<GoogleRefreshTokenResponse>();
             var requestParamsDto = new GoogleRefreshTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
                 _tokenStore.RefreshToken.Token);
             
-            _restRequestsAdapter.RefreshAccessToken(requestParamsDto, responseTcs);
-            var response = await responseTcs.Task;
+            var response = await _restRequestsAdapter.RefreshAccessToken(requestParamsDto);
 
             return response;
         }
