@@ -16,10 +16,6 @@ namespace Src.AuthController.JwtManagement.Tokens
 
         [JsonProperty("issued_at")] private DateTime _issuedAt;
 
-        public JwtToken()
-        {
-        }
-
         public JwtToken(string token, int expiresInSeconds, DateTime issuedAt)
         {
             _token = token;
