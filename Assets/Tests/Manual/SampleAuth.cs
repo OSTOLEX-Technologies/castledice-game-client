@@ -6,6 +6,7 @@ using Src.AuthController.CredentialProviders.Metamask;
 using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
+using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
 using Src.AuthController.JwtManagement.Converters.Metamask;
 using Src.AuthController.REST;
 using Src.AuthController.TokenProviders;
@@ -35,7 +36,8 @@ namespace Tests.Manual
                             new MetamaskWalletFacade(),
                             new MetamaskSignerFacade(),
                             new MetamaskRestRequestsAdapter(
-                                new HttpClientRequestAdapter()),
+                                new HttpClientRequestAdapter(),
+                                new MetamaskBackendUrlProvider()),
                             new MetamaskJwtConverter()))),
                 _singletonCacher, 
                 this);
