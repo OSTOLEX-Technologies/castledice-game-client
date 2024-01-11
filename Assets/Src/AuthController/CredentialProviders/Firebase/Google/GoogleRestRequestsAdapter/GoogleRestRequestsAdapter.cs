@@ -1,9 +1,7 @@
 ﻿using System.Net.Http;
 using System.Threading.Tasks;
 using Src.AuthController.REST;
-using Src.AuthController.REST.REST_Request_Proxies;
 using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
-using Src.AuthController.REST.REST_Response_DTOs;
 using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter
@@ -18,16 +16,18 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestReque
             _httpClientRequestAdapter = httpClientRequestAdapter;
         }
         
-        public void ExchangeAuthCodeWithIdToken(GoogleIdTokenRequestDtoProxy requestParams,TaskCompletionSource<GoogleIdTokenResponse> tcs)
+        public void ExchangeAuthCodeWithIdToken(GoogleIdTokenRequestDtoProxy requestParams, TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
             _httpClientRequestAdapter.Request(HttpMethod.Post, TokenAccessUri, 
                 requestParams.AsDictionary(), tcs);
         }
         
-        public void RefreshAccessToken(GoogleRefreshTokenRequestDtoProxy requestParams, TaskCompletionSource<GoogleRefreshTokenResponse> tcs)
+        public async Task<GoogleRefreshTokenResponse> RefreshAccessToken(GoogleRefreshTokenRequestDtoProxy requestParams)
         {
+            var tcs = new TaskCompletionSource<GoogleRefreshTokenResponse>();
             _httpClientRequestAdapter.Request(HttpMethod.Post, TokenAccessUri,
                 requestParams.AsDictionary(), tcs);
+            return await tcs.Task;
         }
     }
 }

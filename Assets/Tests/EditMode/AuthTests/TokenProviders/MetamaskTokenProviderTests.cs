@@ -10,16 +10,17 @@ namespace Tests.EditMode.AuthTests.TokenProviders
     public class MetamaskTokenProviderTests
     {
         [Test]
-        public async Task GetAccessTokenAsync_ShouldObtainCorrectToken([Random(1000000, 10000000, 5)] int tokenStub)
+        public async Task GetAccessTokenAsync_ShouldObtainCorrectToken()
         {
+            var expectedAccessTokenResponse = new MetamaskAccessTokenResponse();
             var credentialProviderMock = new Mock<IMetamaskBackendCredentialProvider>();
             credentialProviderMock.Setup(a => a.GetCredentialAsync())
-                .ReturnsAsync(new MetamaskAccessTokenResponse(tokenStub.ToString()));
+                .ReturnsAsync(expectedAccessTokenResponse.EncodedJwt);
 
             var metamaskTokenProvider = new MetamaskTokenProvider(credentialProviderMock.Object);
             var res = await metamaskTokenProvider.GetAccessTokenAsync();
             
-            Assert.AreEqual(tokenStub.ToString(), res);
+            Assert.AreEqual(expectedAccessTokenResponse.EncodedJwt, res);
         }
     }
 }

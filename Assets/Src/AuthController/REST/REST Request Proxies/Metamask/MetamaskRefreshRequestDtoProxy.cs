@@ -7,19 +7,19 @@ namespace Src.AuthController.REST.REST_Request_Proxies.Metamask
     [Serializable]
     public class MetamaskRefreshRequestDtoProxy
     {
-        [JsonProperty("wallet_id")]
-        public string WalletID { get; private set; }
+        [JsonProperty("refresh_token")]
+        public string RefreshToken { get; private set; }
 
-        public MetamaskRefreshRequestDtoProxy(string walletID)
+        public MetamaskRefreshRequestDtoProxy(string refreshToken)
         {
-            WalletID = walletID;
+            RefreshToken = refreshToken;
         }
 
         public Dictionary<string, string> AsDictionary()
         {
             return new Dictionary<string, string>
             {
-                { "wallet_id", WalletID },
+                { "refresh_token", RefreshToken },
             };
         }
     }

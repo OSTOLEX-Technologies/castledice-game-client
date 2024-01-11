@@ -2,6 +2,13 @@
 using Src.AuthController;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
+using Src.AuthController.CredentialProviders.Metamask;
+using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
+using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
+using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
+using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
+using Src.AuthController.JwtManagement.Converters.Metamask;
+using Src.AuthController.REST;
 using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
@@ -20,11 +27,18 @@ namespace Tests.Manual
             _singletonCacher = new SingletonCacher();
             _authController = new AuthController(
                 new GeneralAccessTokenProvidersStrategy(
-                    new FirebaseTokenProvidersFactory(
+                    new FirebaseTokenProvidersCreator(
                         new FirebaseCredentialProvider(
-                            new FirebaseInternalCredentialProviderFactory(),
+                            new FirebaseInternalCredentialProviderCreator(),
                             new FirebaseCredentialFormatter())), 
-                    new SampleMetamaskProviderStub()),
+                    new MetamaskTokenProvidersCreator(
+                        new MetamaskBackendCredentialProvider(
+                            new MetamaskWalletFacade(),
+                            new MetamaskSignerFacade(),
+                            new MetamaskRestRequestsAdapter(
+                                new HttpClientRequestAdapter(),
+                                new MetamaskBackendUrlProvider()),
+                            new MetamaskJwtConverter()))),
                 _singletonCacher, 
                 this);
         }
@@ -32,7 +46,7 @@ namespace Tests.Manual
         private void Start()
         {
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
-            AuthTypeChosen?.Invoke(this, AuthType.Google);
+            AuthTypeChosen?.Invoke(this, AuthType.Metamask);
         }
 
         public void ShowSignInResult()

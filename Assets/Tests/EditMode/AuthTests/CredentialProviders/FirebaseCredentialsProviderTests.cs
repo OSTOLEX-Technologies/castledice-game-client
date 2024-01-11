@@ -8,7 +8,8 @@ using Src.AuthController;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
-using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
+using Src.AuthController.JwtManagement;
+using Src.AuthController.JwtManagement.Tokens;
 
 namespace Tests.EditMode.AuthTests.CredentialProviders
 {
@@ -18,7 +19,11 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
         [TestCaseSource(nameof(GetAuthTypes))]
         public async Task GetCredentialAsync_ShouldGetValidCredentials(FirebaseAuthProviderType firebaseAuthProviderType)
         {
-            var googleIdResponse = new GoogleIdTokenResponse();
+            var googleCredentials = new GoogleJwtStore(
+                new JwtToken("id", Int32.MaxValue, DateTime.Now),
+                new JwtToken("access", Int32.MaxValue, DateTime.Now),
+                new JwtToken("refresh", Int32.MaxValue, DateTime.Now)
+                );
             var expectedCredentials = new Credential();
 
             //Test object
@@ -29,14 +34,14 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                 case FirebaseAuthProviderType.Google:
                     var googleCredentialProviderMock = new Mock<IGoogleCredentialProvider>();
                     googleCredentialProviderMock.Setup(
-                        a => a.GetCredentialAsync()).ReturnsAsync(googleIdResponse);
-                    var firebaseInternalCredentialProviderFactoryMock = new Mock<IFirebaseInternalCredentialProviderFactory>();
+                        a => a.GetCredentialAsync()).ReturnsAsync(googleCredentials);
+                    var firebaseInternalCredentialProviderFactoryMock = new Mock<IFirebaseInternalCredentialProviderCreator>();
                     firebaseInternalCredentialProviderFactoryMock.Setup(
                         a => a.CreateGoogleCredentialProvider()).Returns(googleCredentialProviderMock.Object);
                     var firebaseCredentialFormatterMock =
                         new Mock<IFirebaseCredentialFormatter>();
                     firebaseCredentialFormatterMock.Setup(
-                        a => a.FormatCredentials(googleIdResponse)).Returns(expectedCredentials);
+                        a => a.FormatCredentials(googleCredentials)).Returns(expectedCredentials);
             
                     firebaseCredentialProvider = new FirebaseCredentialProvider(
                         firebaseInternalCredentialProviderFactoryMock.Object, 

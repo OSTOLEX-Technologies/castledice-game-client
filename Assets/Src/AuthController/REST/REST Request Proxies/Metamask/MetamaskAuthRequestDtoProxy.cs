@@ -7,19 +7,24 @@ namespace Src.AuthController.REST.REST_Request_Proxies.Metamask
     [Serializable]
     public class MetamaskAuthRequestDtoProxy
     {
-        [JsonProperty("wallet_id")]
-        public string WalletID { get; private set; }
+        [JsonProperty("public_address")]
+        public string PublicAddress { get; private set; }
+        
+        [JsonProperty("signed_message")]
+        public string SignedMessage { get; private set; }
 
-        public MetamaskAuthRequestDtoProxy(string walletID)
+        public MetamaskAuthRequestDtoProxy(string publicAddress, string signedMessage)
         {
-            WalletID = walletID;
+            PublicAddress = publicAddress;
+            SignedMessage = signedMessage;
         }
 
         public Dictionary<string, string> AsDictionary()
         {
             return new Dictionary<string, string>
             {
-                { "wallet_id", WalletID },
+                { "public_address", PublicAddress },
+                { "signed_message", SignedMessage },
             };
         }
     }

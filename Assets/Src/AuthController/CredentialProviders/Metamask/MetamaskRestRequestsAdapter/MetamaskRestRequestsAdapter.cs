@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
-using Src.AuthController.AuthKeys;
+using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
 using Src.AuthController.REST;
 using Src.AuthController.REST.REST_Request_Proxies.Metamask;
 using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
@@ -11,37 +10,45 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAd
     public class MetamaskRestRequestsAdapter : IMetamaskRestRequestsAdapter
     {
         private readonly IHttpClientRequestAdapter _httpClientRequestAdapter;
+        private readonly IMetamaskBackendUrlProvider _urlProvider;
 
-        public MetamaskRestRequestsAdapter(IHttpClientRequestAdapter httpClientRequestAdapter)
+        public MetamaskRestRequestsAdapter(IHttpClientRequestAdapter httpClientRequestAdapter, IMetamaskBackendUrlProvider urlProvider)
         {
             _httpClientRequestAdapter = httpClientRequestAdapter;
+            _urlProvider = urlProvider;
         }
 
-        public void GetNonce(TaskCompletionSource<MetamaskNonceResponse> tcs)
+        public async Task<MetamaskNonceResponse> GetNonce(MetamaskNonceRequestDtoProxy requestParams)
         {
+            var tcs = new TaskCompletionSource<MetamaskNonceResponse>();
             _httpClientRequestAdapter.Request(
                 HttpMethod.Get, 
-                $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.NonceGetterUrl}", 
-                new Dictionary<string, string>(), 
+                _urlProvider.GetNonceUrl,
+                requestParams.AsDictionary(), 
                 tcs);
+            return await tcs.Task;
         }
 
-        public void AuthenticateAndGetTokens(MetamaskAuthRequestDtoProxy requestParams, TaskCompletionSource<MetamaskAccessTokenResponse> tcs)
+        public async Task<MetamaskAccessTokenResponse> AuthenticateAndGetTokens(MetamaskAuthRequestDtoProxy requestParams)
         {
+            var tcs = new TaskCompletionSource<MetamaskAccessTokenResponse>();
             _httpClientRequestAdapter.Request(
                 HttpMethod.Get, 
-                $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.AuthUrl}", 
+                _urlProvider.GetAuthUrl,
                 requestParams.AsDictionary(),
                 tcs);
+            return await tcs.Task;
         }
 
-        public void RefreshAccessTokens(MetamaskRefreshRequestDtoProxy requestParams, TaskCompletionSource<MetamaskRefreshTokenResponse> tcs)
+        public async Task<MetamaskRefreshTokenResponse> RefreshAccessTokens(MetamaskRefreshRequestDtoProxy requestParams)
         {
+            var tcs = new TaskCompletionSource<MetamaskRefreshTokenResponse>();
             _httpClientRequestAdapter.Request(
                 HttpMethod.Get, 
-                $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.RefreshUrl}", 
+                _urlProvider.GetRefreshUrl,
                 requestParams.AsDictionary(),
                 tcs);
+            return await tcs.Task;
         }
     }
 }

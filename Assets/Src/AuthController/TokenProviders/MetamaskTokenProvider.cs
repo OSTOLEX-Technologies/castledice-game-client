@@ -15,7 +15,7 @@ namespace Src.AuthController.TokenProviders
         public async Task<string> GetAccessTokenAsync()
         {
             var response = await _credentialProvider.GetCredentialAsync();
-            return response.AccessToken;
+            return response;
         }
     }
 }
