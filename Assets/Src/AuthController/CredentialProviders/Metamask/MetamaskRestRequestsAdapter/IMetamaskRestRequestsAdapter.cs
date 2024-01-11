@@ -6,9 +6,8 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAd
 {
     public interface IMetamaskRestRequestsAdapter
     {
-        public void GetNonce(MetamaskNonceRequestDtoProxy requestParams,
-            TaskCompletionSource<MetamaskNonceResponse> tcs);
-        public void AuthenticateAndGetTokens(MetamaskAuthRequestDtoProxy requestParams, TaskCompletionSource<MetamaskAccessTokenResponse> tcs);
-        public void RefreshAccessTokens(MetamaskRefreshRequestDtoProxy requestParams, TaskCompletionSource<MetamaskRefreshTokenResponse> tcs);
+        public Task<MetamaskNonceResponse> GetNonce(MetamaskNonceRequestDtoProxy requestParams);
+        public Task<MetamaskAccessTokenResponse> AuthenticateAndGetTokens(MetamaskAuthRequestDtoProxy requestParams);
+        public Task<MetamaskRefreshTokenResponse> RefreshAccessTokens(MetamaskRefreshRequestDtoProxy requestParams);
     }
 }

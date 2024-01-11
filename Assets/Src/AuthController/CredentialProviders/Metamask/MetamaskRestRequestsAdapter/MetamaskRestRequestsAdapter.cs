@@ -16,31 +16,37 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAd
             _httpClientRequestAdapter = httpClientRequestAdapter;
         }
 
-        public void GetNonce(MetamaskNonceRequestDtoProxy requestParams, TaskCompletionSource<MetamaskNonceResponse> tcs)
+        public async Task<MetamaskNonceResponse> GetNonce(MetamaskNonceRequestDtoProxy requestParams)
         {
+            var tcs = new TaskCompletionSource<MetamaskNonceResponse>();
             _httpClientRequestAdapter.Request(
                 HttpMethod.Get, 
                 $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.NonceGetterUrl}", 
                 requestParams.AsDictionary(), 
                 tcs);
+            return await tcs.Task;
         }
 
-        public void AuthenticateAndGetTokens(MetamaskAuthRequestDtoProxy requestParams, TaskCompletionSource<MetamaskAccessTokenResponse> tcs)
+        public async Task<MetamaskAccessTokenResponse> AuthenticateAndGetTokens(MetamaskAuthRequestDtoProxy requestParams)
         {
+            var tcs = new TaskCompletionSource<MetamaskAccessTokenResponse>();
             _httpClientRequestAdapter.Request(
                 HttpMethod.Get, 
                 $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.AuthUrl}", 
                 requestParams.AsDictionary(),
                 tcs);
+            return await tcs.Task;
         }
 
-        public void RefreshAccessTokens(MetamaskRefreshRequestDtoProxy requestParams, TaskCompletionSource<MetamaskRefreshTokenResponse> tcs)
+        public async Task<MetamaskRefreshTokenResponse> RefreshAccessTokens(MetamaskRefreshRequestDtoProxy requestParams)
         {
+            var tcs = new TaskCompletionSource<MetamaskRefreshTokenResponse>();
             _httpClientRequestAdapter.Request(
                 HttpMethod.Get, 
                 $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.RefreshUrl}", 
                 requestParams.AsDictionary(),
                 tcs);
+            return await tcs.Task;
         }
     }
 }

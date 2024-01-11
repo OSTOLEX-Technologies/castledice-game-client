@@ -69,36 +69,26 @@ namespace Src.AuthController.CredentialProviders.Metamask
 
         private async Task<string> ObtainAndSignNonce()
         {
-            var nonceTcs = new TaskCompletionSource<MetamaskNonceResponse>();
+            var nonce = await _metamaskRestRequestsAdapter.GetNonce(
+                new MetamaskNonceRequestDtoProxy(_walletFacade.GetPublicAddress()));
 
-            _metamaskRestRequestsAdapter.GetNonce(
-                new MetamaskNonceRequestDtoProxy(_walletFacade.GetPublicAddress()),
-                nonceTcs);
-            var nonce = await nonceTcs.Task;
-            
             return await _signerFacade.Sign(nonce.Nonce);
         }
 
         private async Task<MetamaskAccessTokenResponse> Auth(string signedNonce)
         {
-            var authTcs = new TaskCompletionSource<MetamaskAccessTokenResponse>();
-            _metamaskRestRequestsAdapter.AuthenticateAndGetTokens(
+            var accessResponse = await _metamaskRestRequestsAdapter.AuthenticateAndGetTokens(
                 new MetamaskAuthRequestDtoProxy(
                     _walletFacade.GetPublicAddress(),
-                    signedNonce),
-                authTcs);
-            var accessResponse = await authTcs.Task;
+                    signedNonce));
 
             return accessResponse;
         }
         
         private async Task<MetamaskRefreshTokenResponse> RefreshTokens()
         {
-            var authTcs = new TaskCompletionSource<MetamaskRefreshTokenResponse>();
-            _metamaskRestRequestsAdapter.RefreshAccessTokens(
-                new MetamaskRefreshRequestDtoProxy(_tokenStore.RefreshToken.Token),
-                authTcs);
-            var refreshResponse = await authTcs.Task;
+            var refreshResponse = await _metamaskRestRequestsAdapter.RefreshAccessTokens(
+                new MetamaskRefreshRequestDtoProxy(_tokenStore.RefreshToken.Token));
 
             return refreshResponse;
         }

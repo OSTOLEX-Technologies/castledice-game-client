@@ -26,20 +26,17 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
             var nonceRequestParamsStub = new MetamaskNonceRequestDtoProxy(address);
             
             var httpClientRequestAdapterMock = new Mock<IHttpClientRequestAdapter>();
-            var tcs = new TaskCompletionSource<MetamaskNonceResponse>();
 
             httpClientRequestAdapterMock.Setup(a => a.Request(
                 HttpMethod.Get,
                 It.IsAny<string>(),
                 nonceRequestParamsStub.AsDictionary(),
-                tcs
+                It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()
             )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskNonceResponse>>
             ((_, _, _, tcs) => tcs.SetResult(expectedNonceResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object);
-            restRequestsAdapter.GetNonce(nonceRequestParamsStub, tcs);
-
-            var res = await tcs.Task;
+            var res = await restRequestsAdapter.GetNonce(nonceRequestParamsStub);
 
             Assert.AreEqual(expectedNonceResponse, res);
         }
@@ -53,21 +50,18 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
             var authRequestParamsStub = new MetamaskAuthRequestDtoProxy(address, message);
             
             var httpClientRequestAdapterMock = new Mock<IHttpClientRequestAdapter>();
-            var tcs = new TaskCompletionSource<MetamaskAccessTokenResponse>();
-            
+
             httpClientRequestAdapterMock.Setup(a => a.Request(
                 HttpMethod.Get,
                 It.IsAny<string>(),
                 authRequestParamsStub.AsDictionary(),
-                tcs
+                It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()
             )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskAccessTokenResponse>>
                 ((_, _, _, tcs) => tcs.SetResult(expectedAuthResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object);
-            restRequestsAdapter.AuthenticateAndGetTokens(authRequestParamsStub, tcs);
-            
-            var res = await tcs.Task;
-            
+            var res = await restRequestsAdapter.AuthenticateAndGetTokens(authRequestParamsStub);
+
             Assert.AreEqual(expectedAuthResponse, res);
         }
         
@@ -78,21 +72,18 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
             var authRequestParamsStub = new MetamaskRefreshRequestDtoProxy(token);
             
             var httpClientRequestAdapterMock = new Mock<IHttpClientRequestAdapter>();
-            var tcs = new TaskCompletionSource<MetamaskRefreshTokenResponse>();
-            
+
             httpClientRequestAdapterMock.Setup(a => a.Request(
                 HttpMethod.Get,
                 It.IsAny<string>(),
                 authRequestParamsStub.AsDictionary(),
-                tcs
+                It.IsAny<TaskCompletionSource<MetamaskRefreshTokenResponse>>()
             )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskRefreshTokenResponse>>
                 ((_, _, _, tcs) => tcs.SetResult(expectedRefreshResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object);
-            restRequestsAdapter.RefreshAccessTokens(authRequestParamsStub, tcs);
-            
-            var res = await tcs.Task;
-            
+            var res = await restRequestsAdapter.RefreshAccessTokens(authRequestParamsStub);
+
             Assert.AreEqual(expectedRefreshResponse, res);
         }
     }

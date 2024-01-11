@@ -93,28 +93,22 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             {
                 _metamaskRestRequestsAdapter.Setup(
                         a => a.GetNonce(
-                            It.IsAny<MetamaskNonceRequestDtoProxy>(),
-                            It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()))
-                    .Callback<MetamaskNonceRequestDtoProxy, TaskCompletionSource<MetamaskNonceResponse>>(
-                        (_, tcs) => tcs.SetResult(new MetamaskNonceResponse()));
+                            It.IsAny<MetamaskNonceRequestDtoProxy>()))
+                            .ReturnsAsync(new MetamaskNonceResponse());
             }
             public void SetRequestAdapterAuth()
             {
                 _metamaskRestRequestsAdapter.Setup(
                         a => a.AuthenticateAndGetTokens(
-                            It.IsAny<MetamaskAuthRequestDtoProxy>(),
-                            It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()))
-                    .Callback<MetamaskAuthRequestDtoProxy, TaskCompletionSource<MetamaskAccessTokenResponse>>(
-                        (_, tcs) => tcs.SetResult(_usedResponse));
+                            It.IsAny<MetamaskAuthRequestDtoProxy>()))
+                    .ReturnsAsync(_usedResponse);
             }
             public void SetRequestAdapterRefresh()
             {
                 _metamaskRestRequestsAdapter.Setup(
                         a => a.RefreshAccessTokens(
-                            It.IsAny<MetamaskRefreshRequestDtoProxy>(),
-                            It.IsAny<TaskCompletionSource<MetamaskRefreshTokenResponse>>()))
-                    .Callback<MetamaskRefreshRequestDtoProxy, TaskCompletionSource<MetamaskRefreshTokenResponse>>(
-                        (_, tcs) => tcs.SetResult(_usedRefreshResponse));
+                            It.IsAny<MetamaskRefreshRequestDtoProxy>()))
+                    .ReturnsAsync(_usedRefreshResponse);
             }
             
             public void SetJwtConverterAuth(JwtStore expectedCredentials)
