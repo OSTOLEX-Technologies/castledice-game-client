@@ -1,6 +1,7 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
+using Src.AuthController.DeepLinking;
 using Src.AuthController.JwtManagement;
 using Src.AuthController.JwtManagement.Converters.Google;
 using Src.AuthController.REST.PortListener;
@@ -79,7 +80,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.ClientSecret,
                 authCode,
                 GoogleAuthConfig.Verifier,
-                GoogleAuthConfig.RedirectUri);
+                DeepLinkConfig.GoogleAuthRedirectUri);
             
             _restRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto, idResponseTcs);
         }
