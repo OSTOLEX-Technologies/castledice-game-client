@@ -3148,23 +3148,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1499284214413035473, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Mode
-      value: 1
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 1499284214413035473, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
-      objectReference: {fileID: 227222422}
+      objectReference: {fileID: 1499284214915866589}
     - target: {fileID: 1499284214413035473, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_CallState
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 1499284214413035473, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_MethodName
-      value: ChooseCreateGame
+      value: LoadScene
       objectReference: {fileID: 0}
     - target: {fileID: 1499284214413035473, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_TargetAssemblyTypeName
-      value: Src.GameplayView.GameCreation.UnityGameCreationView, Src
+      value: SceneLoader, Src
+      objectReference: {fileID: 0}
+    - target: {fileID: 1499284214413035473, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_StringArgument
+      value: DuelGame
       objectReference: {fileID: 0}
     - target: {fileID: 1499284214413035473, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Arguments.m_ObjectArgumentAssemblyTypeName
@@ -3264,10 +3268,31 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6150103937022189213, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
       propertyPath: m_text
-      value: Play
+      value: PVA (Play versus aboba)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6150103937022189213, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
+      propertyPath: m_fontSize
+      value: 69.5
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
+--- !u!1 &1499284214915866588 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1499284214413035475, guid: 639c57c745e0e9146a51655d4f7bd189, type: 3}
+  m_PrefabInstance: {fileID: 1499284214915866587}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1499284214915866589
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1499284214915866588}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ff0927c617b8b5f49a36e7ffbe791f83, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &1646989329371746194
 PrefabInstance:
   m_ObjectHideFlags: 0

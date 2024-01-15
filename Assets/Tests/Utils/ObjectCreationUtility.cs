@@ -329,9 +329,9 @@ namespace Tests
             return mock.Object;
         }
         
-        public static IPossibleMovesListProvider GetPossibleMovesListProvider()
+        public static IPossiblePositionMovesProvider GetPossibleMovesListProvider()
         {
-            var mock = new Mock<IPossibleMovesListProvider>();
+            var mock = new Mock<IPossiblePositionMovesProvider>();
             mock.Setup(x => x.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(new List<AbstractMove>());
             return mock.Object;
         }

@@ -6,11 +6,11 @@ using Src.GameplayPresenter.ClientMoves;
 
 namespace Src.GameplayPresenter.GameWrappers
 {
-    public class PossibleMovesListProvider : IPossibleMovesListProvider
+    public class PossiblePositionMovesProvider : IPossiblePositionMovesProvider
     {
         private readonly Game _game;
         
-        public PossibleMovesListProvider(Game game)
+        public PossiblePositionMovesProvider(Game game)
         {
             _game = game;
         }

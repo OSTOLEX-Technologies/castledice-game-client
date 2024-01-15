@@ -1,8 +1,17 @@
+using System;
 using System.Collections.Generic;
 using castledice_game_data_logic;
+using castledice_game_data_logic.ConfigsData;
+using castledice_game_data_logic.Content;
 using castledice_game_data_logic.MoveConverters;
+using castledice_game_data_logic.Moves;
+using castledice_game_data_logic.TurnSwitchConditions;
 using castledice_game_logic;
+using castledice_game_logic.GameConfiguration;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
+using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
+using Moq;
 using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsCount;
@@ -52,107 +61,124 @@ using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
+using Src.PVE;
 using Src.TimeManagement;
 using TMPro;
 using UnityEngine;
 
 public class DuelGameSceneInitializer : MonoBehaviour
 {
-    [Header("Camera")]
-    [SerializeField] private Camera camera;
+    [Header("Camera")] [SerializeField] private Camera camera;
     [SerializeField] private Transform secondPlayerCameraPosition;
 
-    [Header("Game over")]
-    [SerializeField] private GameObject blueWinnerScreen;
+    [Header("Game over")] [SerializeField] private GameObject blueWinnerScreen;
     [SerializeField] private GameObject redWinnerScreen;
     [SerializeField] private GameObject drawScreen;
     private GameOverPresenter _gameOverPresenter;
     private GameOverView _gameOverView;
-    
-    [Header("Clicks detection")]
-    [SerializeField] private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
+
+    [Header("Clicks detection")] [SerializeField]
+    private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
+
     [SerializeField] private UnityCellClickDetectorsFactory cellClickDetectorsFactory;
     private List<ICellClickDetector> _cellClickDetectors;
     private TouchInputHandler _touchInputHandler;
     private PlayerInputReader _inputReader;
-    
-    [Header("Grid")]
-    [SerializeField] private UnityGrid grid;
+
+    [Header("Grid")] [SerializeField] private UnityGrid grid;
     [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
     private SquareGridGenerator _gridGenerator;
-    
-    [Header("Cells")]
-    [SerializeField] private UnitySquareCellsFactory cellsFactory;
+
+    [Header("Cells")] [SerializeField] private UnitySquareCellsFactory cellsFactory;
     [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
     private SquareCellsViewGenerator3D _cellsViewGenerator;
-    
-    [Header("Content configs")]
-    [SerializeField] private ScriptablePlayerOrderRotationConfig playerOrderRotations;
-    [Header("Knight configs")]
-    [SerializeField] private KnightSoundsConfig knightSoundsConfig;
+
+    [Header("Content configs")] [SerializeField]
+    private ScriptablePlayerOrderRotationConfig playerOrderRotations;
+
+    [Header("Knight configs")] [SerializeField]
+    private KnightSoundsConfig knightSoundsConfig;
+
     [SerializeField] private SoundPlayerKnightAudio knightAudioPrefab;
     [SerializeField] private KnightView knightViewPrefab;
     [SerializeField] private KnightModelPrefabConfig knightModelPrefabConfig;
-    [Header("Tree config")]
-    [SerializeField] private TreeView treeViewPrefab;
+
+    [Header("Tree config")] [SerializeField]
+    private TreeView treeViewPrefab;
+
     [SerializeField] private TreeModelPrefabsConfig treeModelPrefabConfig;
-    [Header("Castle config")]
-    [SerializeField] private CastleSoundsConfig castleSoundsConfig;
+
+    [Header("Castle config")] [SerializeField]
+    private CastleSoundsConfig castleSoundsConfig;
+
     [SerializeField] private CastleView castleViewPrefab;
     [SerializeField] private SoundPlayerCastleAudio castleAudioPrefab;
     [SerializeField] private CastleModelPrefabConfig castleModelPrefabConfig;
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
-    
+
     //Moves
     private ClientMovesView _clientMovesView;
     private ClientMovesPresenter _clientMovesPresenter;
-    private ServerMovesPresenter _serverMovesPresenter;
-    
-    [Header("Action points giving")]
-    [SerializeField] private int popupDisappearTimeMilliseconds;
+
+    [Header("Action points giving")] [SerializeField]
+    private int popupDisappearTimeMilliseconds;
+
     [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
     [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
     private ActionPointsGivingPresenter _actionPointsGivingPresenter;
     private ActionPointsGivingView _actionPointsGivingView;
-    
-    [Header("Action points count")]
-    [SerializeField] private TextMeshProUGUI actionPointsLabel;
+
+    [Header("Action points count")] [SerializeField]
+    private TextMeshProUGUI actionPointsLabel;
+
     [SerializeField] private TextMeshProUGUI actionPointsText;
     private ActionPointsCountPresenter _actionPointsCountPresenter;
     private ActionPointsCountView _actionPointsCountView;
-    
-    [Header("Move highlights")]
-    [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
+
+    [Header("Move highlights")] [SerializeField]
+    private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
+
     [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
     private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
     private CellMovesHighlightView _cellMovesHighlightView;
 
-    [Header("Current player label")] 
-    [SerializeField] private GameObject bluePlayerLabel;
+    [Header("Current player label")] [SerializeField]
+    private GameObject bluePlayerLabel;
+
     [SerializeField] private GameObject redPlayerLabel;
     private CurrentPlayerPresenter _currentPlayerPresenter;
     private CurrentPlayerView _currentPlayerView;
-    
-    [Header("Timers")]
-    [SerializeField] private TimeView redPlayerTimeView;
+
+    [Header("Timers")] [SerializeField] private TimeView redPlayerTimeView;
     [SerializeField] private TimeView bluePlayerTimeView;
     [SerializeField] private Highlighter redPlayerHighlighter;
     [SerializeField] private Highlighter bluePlayerHighlighter;
     private TimersPresenter _timersPresenter;
     private TimersView _timersView;
 
-    [Header("Updater")]
-    [SerializeField] private FixedUpdaterBehaviour fixedUpdaterBehaviour;
+    [Header("Updater")] [SerializeField] private FixedUpdaterBehaviour fixedUpdaterBehaviour;
     [SerializeField] private UpdaterBehaviour updaterBehaviour;
     private readonly Updater _updater = new();
     private readonly Updater _fixedUpdater = new();
-    
+
     private Game _game;
     private GameStartData _gameStartData;
+    private Bot _bot;
+    private readonly NegentropyRandomNumberGenerator _firstPlayerRandomNumberGenerator = new(1, 7, 1000);
+    private readonly NegentropyRandomNumberGenerator _secondPlayerRandomNumberGenerator = new(1, 7, 2000);
 
     private void Start()
     {
+        var playerDataProviderMock = new Mock<IPlayerDataProvider>();
+        playerDataProviderMock.Setup(provider => provider.GetId()).Returns(1);
+        playerDataProviderMock.Setup(provider => provider.GetAccessToken()).Returns("token");
+        if (Singleton<IPlayerDataProvider>.Registered)
+        {
+            Singleton<IPlayerDataProvider>.Unregister();
+        }
+
+        Singleton<IPlayerDataProvider>.Register(playerDataProviderMock.Object);
         SetUpUpdaters();
         SetUpGame();
         SetUpInput();
@@ -161,7 +187,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpCells();
         SetUpClickDetectors();
         SetUpClientMoves();
-        SetUpServerMoves();
+        SetUpBot();
         SetUpActionPointsGiving();
         SetUpCamera();
         SetUpCellMovesHighlights();
@@ -170,10 +196,25 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpCurrentPlayerLabel();
         SetUpGameOver();
         SetUpTimers();
-        NotifyPlayerIsReady();
+        GiveActionPointsToCurrentPlayer();
     }
 
-    private void SetUpUpdaters()
+    private void GiveActionPointsToCurrentPlayer()
+    {
+        var currentPlayer = _game.GetCurrentPlayer();
+        if (currentPlayer.Id == 1)
+        {
+            var actionPoints = _firstPlayerRandomNumberGenerator.GetNextRandom();
+            _actionPointsGivingPresenter.GiveActionPoints(currentPlayer.Id, actionPoints);
+        }
+        else
+        {
+            var actionPoints = _secondPlayerRandomNumberGenerator.GetNextRandom();
+            _actionPointsGivingPresenter.GiveActionPoints(currentPlayer.Id, actionPoints);
+        }
+    }
+
+private void SetUpUpdaters()
     {
         updaterBehaviour.Init(_updater);
         fixedUpdaterBehaviour.Init(_fixedUpdater);
@@ -190,13 +231,41 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var playerTimerViewsProvider = new CachingPlayerTimerViewProvider(playerTimerViewCreator);
         _timersView = new TimersView(playerTimerViewsProvider, _updater);
         _timersPresenter = new TimersPresenter(_timersView, _game);
-        var switchTimerDTOAccepter = new SwitchTimerAccepter(_timersPresenter);
-        SwitchTimerMessageHandler.SetAccepter(switchTimerDTOAccepter);
+        _game.TurnSwitched += SwitchTimer;
     }
+
+    private void SwitchTimer(object sender, Game e)
+    {
+        var currentPlayer = _game.GetCurrentPlayer();
+        var previousPlayer = _game.GetPreviousPlayer();
+        _timersPresenter.SwitchTimerForPlayer(previousPlayer.Id, previousPlayer.Timer.GetTimeLeft(), false);
+        _timersPresenter.SwitchTimerForPlayer(currentPlayer.Id, currentPlayer.Timer.GetTimeLeft(), true);
+    }
+
 
     private void SetUpGame()
     {
-        _gameStartData = Singleton<GameStartData>.Instance;
+        var cellsPresence = new bool[10, 10];
+        for (int i = 0; i < cellsPresence.GetLength(0); i++)
+        {
+            for (int j = 0; j < cellsPresence.GetLength(1); j++)
+            {
+                cellsPresence[i, j] = true;
+            }
+        }
+        var boardData = new BoardData(10,  10, CellType.Square, cellsPresence, new List<ContentData>
+        {
+            new CastleData((0, 0), 1, 1, 3, 3, 1),
+            new CastleData((9, 9), 1, 1, 3, 3, 2),
+        });
+        var placeablesConfigData = new PlaceablesConfigData(new KnightConfigData(1, 2));
+        var turnSwitchConditionsConfigData = new TscConfigData(new List<TscType> { TscType.SwitchByActionPoints });
+        var playersData = new List<PlayerData>
+        {
+            new PlayerData(1, new List<PlacementType> { PlacementType.Knight }, TimeSpan.FromMinutes(5)),
+            new PlayerData(2, new List<PlacementType> { PlacementType.Knight }, TimeSpan.FromMinutes(5)),
+        };
+        _gameStartData = new GameStartData("1.0.0", boardData, placeablesConfigData, turnSwitchConditionsConfigData, playersData);
         var playersListCreator = new PlayersListCreator(new PlayerCreator(new UpdatablePlayerTimerCreator(new FixedTimeDeltaProvider(), _fixedUpdater)));
         var coordinateSpawnerCreator = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
         var matrixCellsGeneratorCreator = new MatrixCellsGeneratorCreator();
@@ -291,20 +360,21 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         _clientMovesView = new ClientMovesView(_cellClickDetectors);
         var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        var serverMovesApplier = new ServerMoveApplier(ClientsHolder.GetClient(ClientType.GameServerClient));
-        ApproveMoveMessageHandler.SetDTOAccepter(serverMovesApplier);
+        var serverMovesApplierMock = new Mock<IServerMoveApplier>();
+        serverMovesApplierMock.Setup(applier => applier.ApplyMoveAsync(It.IsAny<MoveData>(), It.IsAny<string>()))
+            .ReturnsAsync(MoveApplicationResult.Applied);
         var localMovesApplier = new LocalMovesApplier(_game);
-        var possibleMovesProvider = new PossibleMovesListProvider(_game);
-        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider,
+        var possibleMovesProvider = new PossiblePositionMovesProvider(_game);
+        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplierMock.Object, possibleMovesProvider,
             localMovesApplier, new MoveToDataConverter(), _clientMovesView);
     }
 
-    private void SetUpServerMoves()
+    private void SetUpBot()
     {
-        _serverMovesPresenter = new ServerMovesPresenter(new LocalMovesApplier(_game),
-            new DataToMoveConverter(_game.PlaceablesFactory), new PlayerProvider(_game));
-        var movesAccepter = new ServerMoveAccepter(_serverMovesPresenter);
-        MoveFromServerMessageHandler.SetDTOAccepter(movesAccepter);
+        var localMoveApplier = new LocalMovesApplier(_game);
+        var totalPossibleMovesProvider = new TotalPossibleMovesProvider(_game);
+        var bestMoveSearcher = new DuelAggressiveMoveSearcher(_game.GetBoard(), (0, 0), (9, 9), 2, 3);
+        _bot = new Bot(localMoveApplier, totalPossibleMovesProvider, bestMoveSearcher, _game, 2);
     }
 
     private void SetUpActionPointsGiving()
@@ -316,8 +386,12 @@ public class DuelGameSceneInitializer : MonoBehaviour
                 popupDemonstrator);
         _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
             new ActionPointsGiver(_game), _actionPointsGivingView);
-        var actionPointsGivingAccepter = new GiveActionPointsAccepter(_actionPointsGivingPresenter);
-        GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
+        _game.TurnSwitched += GiveActionPointsToCurrentPlayer;
+    }
+
+    private void GiveActionPointsToCurrentPlayer(object sender, Game e)
+    {
+        GiveActionPointsToCurrentPlayer();
     }
 
     private void SetUpActionPointsCount()
@@ -346,13 +420,5 @@ public class DuelGameSceneInitializer : MonoBehaviour
             bluePlayerLabel, redPlayerLabel);
         _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
         _currentPlayerPresenter.ShowCurrentPlayer();
-    }
-
-    private void NotifyPlayerIsReady()
-    {
-        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
-        var playerToken = playerDataCreator.GetAccessToken();
-        var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
-        playerReadinessSender.SendPlayerReadiness(playerToken);
     }
 }

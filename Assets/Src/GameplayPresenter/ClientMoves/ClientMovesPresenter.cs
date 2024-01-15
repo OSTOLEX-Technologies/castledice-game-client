@@ -12,16 +12,16 @@ namespace Src.GameplayPresenter.ClientMoves
     {
         private readonly IPlayerDataProvider _playerDataProvider;
         private readonly IServerMoveApplier _serverMoveApplier;
-        private readonly IPossibleMovesListProvider _possibleMovesListProvider;
+        private readonly IPossiblePositionMovesProvider _possiblePositionMovesProvider;
         private readonly ILocalMoveApplier _localMoveApplier;
         private readonly IMoveToDataConverter _moveToDataConverter;
         private readonly IClientMovesView _view;
 
-        public ClientMovesPresenter(IPlayerDataProvider playerDataProvider, IServerMoveApplier serverMoveApplier, IPossibleMovesListProvider possibleMovesListProvider, ILocalMoveApplier localMoveApplier, IMoveToDataConverter moveToDataConverter, IClientMovesView view)
+        public ClientMovesPresenter(IPlayerDataProvider playerDataProvider, IServerMoveApplier serverMoveApplier, IPossiblePositionMovesProvider possiblePositionMovesProvider, ILocalMoveApplier localMoveApplier, IMoveToDataConverter moveToDataConverter, IClientMovesView view)
         {
             _playerDataProvider = playerDataProvider;
             _serverMoveApplier = serverMoveApplier;
-            _possibleMovesListProvider = possibleMovesListProvider;
+            _possiblePositionMovesProvider = possiblePositionMovesProvider;
             _localMoveApplier = localMoveApplier;
             _moveToDataConverter = moveToDataConverter;
             _view = view;
@@ -42,7 +42,7 @@ namespace Src.GameplayPresenter.ClientMoves
         public virtual void ShowMovesForPosition(Vector2Int position)
         {
             var playerId = _playerDataProvider.GetId();
-            var moves = _possibleMovesListProvider.GetPossibleMoves(position, playerId);
+            var moves = _possiblePositionMovesProvider.GetPossibleMoves(position, playerId);
             _view.ShowMovesList(moves);
         }
 

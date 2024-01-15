@@ -23,11 +23,11 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
         [Test]
         public void ShowMovesForPosition_ShouldPassGivenPosition_ToGivenPossibleMovesListProvider([ValueSource(nameof(Positions))]Vector2Int position)
         {
-            var possibleMovesListProviderMock = new Mock<IPossibleMovesListProvider>();
+            var possibleMovesListProviderMock = new Mock<IPossiblePositionMovesProvider>();
             possibleMovesListProviderMock.Setup(p => p.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(new List<AbstractMove>());
             var presenter = new ClientMovesPresenterBuilder
             {
-                PossibleMovesListProvider = possibleMovesListProviderMock.Object
+                PossiblePositionMovesProvider = possibleMovesListProviderMock.Object
             }.Build();
             
             presenter.ShowMovesForPosition(position);
@@ -40,12 +40,12 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
         {
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
             playerDataProviderMock.Setup(p => p.GetId()).Returns(id);
-            var possibleMovesListProviderMock = new Mock<IPossibleMovesListProvider>();
+            var possibleMovesListProviderMock = new Mock<IPossiblePositionMovesProvider>();
             possibleMovesListProviderMock.Setup(p => p.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(new List<AbstractMove>());
             var presenter = new ClientMovesPresenterBuilder
             {
                 PlayerDataProvider = playerDataProviderMock.Object,
-                PossibleMovesListProvider = possibleMovesListProviderMock.Object
+                PossiblePositionMovesProvider = possibleMovesListProviderMock.Object
             }.Build();
             
             presenter.ShowMovesForPosition((1, 1));
@@ -57,12 +57,12 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
         public void ShowMovesForPosition_ShouldPassMovesListFromGivenPossibleMovesListProvider_ToGivenClientMovesView()
         {
             var movesList = new List<AbstractMove>();
-            var possibleMovesListProviderMock = new Mock<IPossibleMovesListProvider>();
+            var possibleMovesListProviderMock = new Mock<IPossiblePositionMovesProvider>();
             possibleMovesListProviderMock.Setup(p => p.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(movesList);
             var viewMock = new Mock<IClientMovesView>();
             var presenter = new ClientMovesPresenterBuilder
             {
-                PossibleMovesListProvider = possibleMovesListProviderMock.Object,
+                PossiblePositionMovesProvider = possibleMovesListProviderMock.Object,
                 View = viewMock.Object
             }.Build();
             
@@ -185,14 +185,14 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
         {
             public IPlayerDataProvider PlayerDataProvider { get; set; } = GetPlayerDataProvider();
             public IServerMoveApplier ServerMoveApplier { get; set; } = new Mock<IServerMoveApplier>().Object;
-            public IPossibleMovesListProvider PossibleMovesListProvider { get; set; } = GetPossibleMovesListProvider();
+            public IPossiblePositionMovesProvider PossiblePositionMovesProvider { get; set; } = GetPossibleMovesListProvider();
             public ILocalMoveApplier LocalMoveApplier { get; set; } = new Mock<ILocalMoveApplier>().Object;
             public IMoveToDataConverter MoveToDataConverter { get; set; } = new Mock<IMoveToDataConverter>().Object;
             public IClientMovesView View { get; set; } = new Mock<IClientMovesView>().Object;
             
             public ClientMovesPresenter Build()
             {
-                return new ClientMovesPresenter(PlayerDataProvider, ServerMoveApplier, PossibleMovesListProvider, LocalMoveApplier, MoveToDataConverter, View);
+                return new ClientMovesPresenter(PlayerDataProvider, ServerMoveApplier, PossiblePositionMovesProvider, LocalMoveApplier, MoveToDataConverter, View);
             }
         }
 
