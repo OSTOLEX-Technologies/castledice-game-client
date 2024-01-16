@@ -82,3 +82,6 @@ crashlytics-build.properties
 CodeCoverage/
 Assets/Src/AuthController/AuthKeys/*.cs
 Assets/Src/AuthController/AuthKeys/*.meta
+
+# Metamask
+.DS_Store
