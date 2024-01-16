@@ -1,4 +1,5 @@
 using System;
+using Src.AuthController.DeepLinking.Config;
 
 namespace Src.AuthController.DeepLinking.LinkResolver.LinkFormatter
 {

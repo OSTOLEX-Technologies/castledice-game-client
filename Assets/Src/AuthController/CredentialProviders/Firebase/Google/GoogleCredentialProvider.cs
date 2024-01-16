@@ -1,7 +1,8 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
-using Src.AuthController.DeepLinking;
+using Src.AuthController.DeepLinking.Config;
+using Src.AuthController.DeepLinking.LinkResolver.LinkFormatter;
 using Src.AuthController.JwtManagement;
 using Src.AuthController.JwtManagement.Converters.Google;
 using Src.AuthController.REST.PortListener;
@@ -18,6 +19,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         private readonly IGoogleRestRequestsAdapter _restRequestsAdapter;
         private readonly IUrlOpener _oAuthUrlOpener;
         private readonly ILocalHttpPortListener _localHttpPortListener;
+        private readonly IDeepLinkFormatter _linkFormatter;
         private readonly IGoogleJwtConverter _jwtConverter;
 
         private GoogleJwtStore _tokenStore;
@@ -26,11 +28,13 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             IGoogleRestRequestsAdapter restRequestsAdapter, 
             IUrlOpener oAuthUrlOpener, 
             ILocalHttpPortListener localHttpPortListener,
+            IDeepLinkFormatter linkFormatter,
             IGoogleJwtConverter jwtConverter)
         {
             _restRequestsAdapter = restRequestsAdapter;
             _oAuthUrlOpener = oAuthUrlOpener;
             _localHttpPortListener = localHttpPortListener;
+            _linkFormatter = linkFormatter;
             _jwtConverter = jwtConverter;
         }
         
@@ -80,7 +84,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.ClientSecret,
                 authCode,
                 GoogleAuthConfig.Verifier,
-                DeepLinkConfig.GoogleAuthRedirectUri);
+                _linkFormatter.FormatLink(DeepLinkConfig.GoogleAuthRedirectUri));
             
             _restRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto, idResponseTcs);
         }

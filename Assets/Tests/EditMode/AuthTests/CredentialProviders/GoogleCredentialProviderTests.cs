@@ -4,6 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
+using Src.AuthController.DeepLinking.LinkResolver.LinkFormatter;
 using Src.AuthController.JwtManagement;
 using Src.AuthController.JwtManagement.Converters.Google;
 using Src.AuthController.JwtManagement.Tokens;
@@ -60,6 +61,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             private Mock<IGoogleRestRequestsAdapter> _googleRestRequestsAdapter;
             private Mock<IUrlOpener> _authUrlOpener;
             private Mock<ILocalHttpPortListener> _localHttpListener;
+            private Mock<IDeepLinkFormatter> _linkFormatter;
             private Mock<IGoogleJwtConverter> _jwtConverter;
 
             internal GoogleCredentialProviderBuilder()
@@ -72,6 +74,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                 _googleRestRequestsAdapter = new Mock<IGoogleRestRequestsAdapter>();
                 _authUrlOpener = new Mock<IUrlOpener>();
                 _localHttpListener = new Mock<ILocalHttpPortListener>();
+                _linkFormatter = new Mock<IDeepLinkFormatter>();
                 _jwtConverter = new Mock<IGoogleJwtConverter>();
             }
             
@@ -119,6 +122,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                     _googleRestRequestsAdapter.Object,
                     _authUrlOpener.Object,
                     _localHttpListener.Object,
+                    _linkFormatter.Object,
                     _jwtConverter.Object);
             }
         }

@@ -1,6 +1,7 @@
 ﻿using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
+using Src.AuthController.DeepLinking.LinkResolver.LinkFormatter;
 using Src.AuthController.JwtManagement.Converters.Google;
 using Src.AuthController.REST;
 using Src.AuthController.REST.PortListener;
@@ -25,6 +26,7 @@ namespace Src.AuthController.CredentialProviders.Firebase
                         GoogleAuthConfig.AuthCodeQueryKeyName,
                         new HttpListenerContextResponse(),
                         GoogleAuthConfig.ResponseHtml)),
+                new DeepLinkFormatter(),
                 new GoogleJwtConverter());
         }
     }

@@ -1,3 +1,4 @@
+using Src.AuthController.DeepLinking.Config;
 using Src.AuthController.DeepLinking.LinkResolver;
 using Src.AuthController.DeepLinking.LinkResolver.LinkFormatter;
 using Src.AuthController.DeepLinking.LinkResolver.ParametersExtractor;
@@ -32,6 +33,8 @@ namespace Src.AuthController.DeepLinking
 
         private void OnDeepLinkActivated(string url)
         {
+            Debug.Log("DeepLink activated!");
+            
             try
             {
                 var linkName = _linkResolver.TryResolveLink(url);
