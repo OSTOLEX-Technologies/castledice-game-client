@@ -5,16 +5,14 @@ namespace Src.AuthController.DeepLinking.LinkResolver.LinkFormatter
 {
     public class DeepLinkFormatter : IDeepLinkFormatter
     {
-        private static string SchemeProtocolDivider => "://";
-
         public string FormatLink(string link)
         {
-            return $"{DeepLinkConfig.GlobalDeepLinkSchemeName}{SchemeProtocolDivider}{link}";
+            return $"{DeepLinkConfig.GlobalDeepLinkSchemeName}{DeepLinkConfig.DefaultSchemeProtocolDivider}{link}";
         }
 
         public string GetLinkWithoutScheme(string link)
         {
-            return link.Split(SchemeProtocolDivider, StringSplitOptions.RemoveEmptyEntries)[1];
+            return link.Split(DeepLinkConfig.DefaultSchemeProtocolDivider, StringSplitOptions.RemoveEmptyEntries)[1];
         }
     }
 }

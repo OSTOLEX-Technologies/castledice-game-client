@@ -82,3 +82,4 @@ crashlytics-build.properties
 CodeCoverage/
 Assets/Src/AuthController/AuthKeys/
 Assets/Src/AuthController/DeepLinking/Config/
+Assets/Plugins/Android/FirebaseApp.androidlib/res/values/google-services.xml

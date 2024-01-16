@@ -9,6 +9,7 @@ using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
 using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
 using Src.AuthController.UrlOpening;
+using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
@@ -64,7 +65,9 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         private async Task<GoogleIdTokenResponse> GetAuthData()
         {
             var idResponseTcs = new TaskCompletionSource<GoogleIdTokenResponse>();
+
             _oAuthUrlOpener.Open(GoogleAuthConfig.GoogleOAuthUrl);
+            
             _localHttpPortListener.StartListening(authCode =>
             {
                 ExchangeAuthCodeWithIdToken(idResponseTcs, authCode);
@@ -79,6 +82,8 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         
         private void ExchangeAuthCodeWithIdToken(TaskCompletionSource<GoogleIdTokenResponse> idResponseTcs, string authCode)
         {
+            Debug.Log(_linkFormatter.FormatLink(DeepLinkConfig.GoogleAuthRedirectUri));
+            
             var requestParamsDto = new GoogleIdTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,

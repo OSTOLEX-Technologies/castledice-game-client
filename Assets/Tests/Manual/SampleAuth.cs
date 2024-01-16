@@ -46,7 +46,7 @@ namespace Tests.Manual
         private void Start()
         {
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
-            AuthTypeChosen?.Invoke(this, AuthType.Metamask);
+            AuthTypeChosen?.Invoke(this, AuthType.Google);
         }
 
         public void ShowSignInResult()
