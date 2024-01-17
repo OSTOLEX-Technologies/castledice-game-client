@@ -10,6 +10,7 @@ using castledice_game_logic;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
+using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.PlayerColoredContentVisualFieldNames;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
@@ -21,6 +22,8 @@ using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.Audio;
+using Src.GameplayView.ContentVisuals;
+using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
 using Src.GameplayView.PlayersColors;
 using Tests.Utils.Mocks;
 using UnityEditor;
@@ -368,5 +371,42 @@ namespace Tests
             };
             return material;
         }
+        
+        public static KnightVisual GetKnightVisual()
+        {
+            var visual = new GameObject().AddComponent<KnightVisual>();
+            var meshRenderer = visual.gameObject.AddComponent<MeshRenderer>();
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, new List<Renderer>
+            {
+                meshRenderer
+            });
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>
+            {
+                meshRenderer
+            });
+            return visual;
+        }
+        
+        public static List<TreeVisual> GetTreeVisualsList(int count)
+        {
+            var visuals = new List<TreeVisual>();
+            for (var i = 0; i < count; i++)
+            {
+                visuals.Add(GetTreeVisual());
+            }
+            return visuals;
+        }
+        
+        public static TreeVisual GetTreeVisual()
+        {
+            var visual = new GameObject().AddComponent<TreeVisual>();
+            var renderer = new GameObject().AddComponent<MeshRenderer>();
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>
+            {
+                renderer
+            });
+            return visual;
+        }
+        
     }
 }

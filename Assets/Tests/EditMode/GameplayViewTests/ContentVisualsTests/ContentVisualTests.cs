@@ -5,14 +5,13 @@ using NUnit.Framework;
 using Src.GameplayView.ContentVisuals;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests
 {
     public class ContentVisualTests
     {
-        private const string TransparencyAffectedRenderersFieldName = "transparencyAffectedRenderers";
-        
         [Test]
         public void TransparencyProperty_ShouldReturnAlphaValueOfColor_FromRenderersMaterials()
         {
