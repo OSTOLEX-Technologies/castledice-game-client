@@ -111,7 +111,7 @@ namespace Tests.PlayMode
             grid.AddCell(gamePosition, scenePosition);
             var cellGameObject = (grid.GetCell(gamePosition) as UnityGridCell).gameObject;
             grid.RemoveCell(gamePosition);
-            yield return new WaitForEndOfFrame();
+            yield return null;
 
             Assert.True(cellGameObject == null);
         }
