@@ -341,5 +341,32 @@ namespace Tests
             var mock = new Mock<AbstractMove>(GetPlayer(), new Vector2Int(0, 0));
             return mock.Object;
         }
+        
+        public static List<Renderer> GetRenderersListWithMaterial(Material material, int count)
+        {
+            var renderers = new List<Renderer>();
+            for (var i = 0; i < count; i++)
+            {
+                renderers.Add(GetRendererWithMaterial(material));
+            }
+            return renderers;
+        }
+        
+        public static Renderer GetRendererWithMaterial(Material material)
+        {
+            var gameObject = new GameObject();
+            var renderer = gameObject.AddComponent<MeshRenderer>();
+            renderer.material = material;
+            return renderer;
+        }
+        
+        public static Material GetMaterialWithColor(Color color)
+        {
+            var material = new Material(Shader.Find("Standard"))
+            {
+                color = color
+            };
+            return material;
+        }
     }
 }

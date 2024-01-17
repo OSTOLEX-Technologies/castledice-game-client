@@ -5,6 +5,7 @@ using NUnit.Framework;
 using Src.GameplayView.ContentVisuals;
 using UnityEngine;
 using Random = UnityEngine.Random;
+using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests
 {
@@ -60,33 +61,6 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests
             float value = 0;
             
             Assert.Throws<InvalidOperationException>(() =>  value = contentVisual.Transparency );
-        }
-        
-        private static List<Renderer> GetRenderersListWithMaterial(Material material, int count)
-        {
-            var renderers = new List<Renderer>();
-            for (var i = 0; i < count; i++)
-            {
-                renderers.Add(GetRendererWithMaterial(material));
-            }
-            return renderers;
-        }
-        
-        private static Renderer GetRendererWithMaterial(Material material)
-        {
-            var gameObject = new GameObject();
-            var renderer = gameObject.AddComponent<MeshRenderer>();
-            renderer.material = material;
-            return renderer;
-        }
-        
-        private static Material GetMaterialWithColor(Color color)
-        {
-            var material = new Material(Shader.Find("Standard"))
-            {
-                color = color
-            };
-            return material;
         }
     }
 }
