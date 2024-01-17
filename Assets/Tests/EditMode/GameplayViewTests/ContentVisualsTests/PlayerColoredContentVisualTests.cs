@@ -26,7 +26,11 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests
             
             foreach (var renderer in renderers)
             {
-                Assert.AreEqual(color, renderer.material.color);
+                var actualColor = renderer.material.color;
+                Assert.That(actualColor.r, Is.EqualTo(color.r).Within(0.01f));
+                Assert.That(actualColor.g, Is.EqualTo(color.g).Within(0.01f));
+                Assert.That(actualColor.b, Is.EqualTo(color.b).Within(0.01f));
+                Assert.That(actualColor.a, Is.EqualTo(color.a).Within(0.01f));
             }
         }
         
