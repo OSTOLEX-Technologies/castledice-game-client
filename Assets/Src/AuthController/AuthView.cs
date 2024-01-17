@@ -1,5 +1,4 @@
 ﻿using System;
-using System.Threading;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.AuthController.CredentialProviders.Metamask;
@@ -50,30 +49,10 @@ namespace Src.AuthController
                 _singletonCacher, 
                 this);
         }
-
-
-        private Thread thr;
+        
         private void Start()
         {
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
-            thr = new Thread(
-                Ping);
-            thr.Start();
-        }
-
-        private void OnDestroy()
-        {
-            thr?.Abort();
-        }
-
-
-        private static void Ping()
-        {
-            while (true)
-            {
-                Debug.Log("ping...");
-                Thread.Sleep(500);
-            }
         }
 
         public void ShowSignInResult()
