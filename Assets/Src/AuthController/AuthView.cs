@@ -1,5 +1,5 @@
 ﻿using System;
-using Src.AuthController;
+using System.Threading;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.AuthController.CredentialProviders.Metamask;
@@ -12,16 +12,24 @@ using Src.AuthController.REST;
 using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
-using Tests.EditMode.AuthTests;
 using UnityEngine;
 
-namespace Tests.Manual
+namespace Src.AuthController
 {
-    public class SampleAuth : MonoBehaviour, IAuthView
+    public class AuthView : MonoBehaviour, IAuthView
     {
         private AuthController _authController;
         private SingletonCacher _singletonCacher;
 
+        public void LoginWithGoogle()
+        {
+            AuthTypeChosen?.Invoke(this, AuthType.Google);
+        }
+        public void LoginWithMetamask()
+        {
+            AuthTypeChosen?.Invoke(this, AuthType.Metamask);
+        }
+        
         private void Awake()
         {
             _singletonCacher = new SingletonCacher();
@@ -43,10 +51,29 @@ namespace Tests.Manual
                 this);
         }
 
+
+        private Thread thr;
         private void Start()
         {
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
-            AuthTypeChosen?.Invoke(this, AuthType.Google);
+            thr = new Thread(
+                Ping);
+            thr.Start();
+        }
+
+        private void OnDestroy()
+        {
+            thr?.Abort();
+        }
+
+
+        private static void Ping()
+        {
+            while (true)
+            {
+                Debug.Log("ping...");
+                Thread.Sleep(500);
+            }
         }
 
         public void ShowSignInResult()
@@ -57,9 +84,7 @@ namespace Tests.Manual
         private async void OnTokenProviderLoaded(object sender, EventArgs e)
         {
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
-            Debug.Log(token);
         }
-        
 
         public event EventHandler<AuthType> AuthTypeChosen;
     }
