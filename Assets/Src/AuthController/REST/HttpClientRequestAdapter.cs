@@ -17,7 +17,7 @@ namespace Src.AuthController.REST
         }
 
         public async void Request<T>(HttpMethod requestMethodType, string uri,
-            Dictionary<string, string> requestParams, TaskCompletionSource<T> tcs)
+            IEnumerable<KeyValuePair<string, string>> requestParams, TaskCompletionSource<T> tcs)
         {
             var encodedParams = new FormUrlEncodedContent(requestParams);
             var request = new HttpRequestMessage(requestMethodType, uri);

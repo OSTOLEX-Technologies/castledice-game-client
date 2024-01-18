@@ -14,7 +14,7 @@ namespace Src.AuthController.JwtManagement
 
         public GoogleJwtStore(IJwtToken idToken, IJwtToken accessToken, IJwtToken refreshToken) : base(accessToken, refreshToken)
         {
-            IdToken = IdToken;
+            IdToken = idToken;
         }
     }
 }

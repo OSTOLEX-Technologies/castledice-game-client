@@ -9,7 +9,6 @@ using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
 using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
 using Src.AuthController.UrlOpening;
-using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
@@ -44,7 +43,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             if (!TokenIsStored)
             {
                 var authResponse = await GetAuthData();;
-
+                
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
 
                 return _tokenStore;
@@ -66,24 +65,24 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         {
             var idResponseTcs = new TaskCompletionSource<GoogleIdTokenResponse>();
 
-            _oAuthUrlOpener.Open(GoogleAuthConfig.GoogleOAuthUrl);
-            
             _localHttpPortListener.StartListening(authCode =>
             {
                 ExchangeAuthCodeWithIdToken(idResponseTcs, authCode);
                 
                 _localHttpPortListener.StopListening();
             });
-
+            
+            _oAuthUrlOpener.Open(GoogleAuthConfig.GoogleOAuthUrl);
+            
             var idResponse = await idResponseTcs.Task;
+
+            _oAuthUrlOpener.Open(_linkFormatter.FormatLink(DeepLinkConfig.GoogleAuthRedirectUri));
 
             return idResponse;
         }
         
         private void ExchangeAuthCodeWithIdToken(TaskCompletionSource<GoogleIdTokenResponse> idResponseTcs, string authCode)
         {
-            Debug.Log(_linkFormatter.FormatLink(DeepLinkConfig.GoogleAuthRedirectUri));
-            
             var requestParamsDto = new GoogleIdTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
