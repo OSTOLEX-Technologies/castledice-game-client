@@ -1,13 +1,12 @@
-﻿using System.Collections.Generic;
-using castledice_game_logic.Math;
+﻿using castledice_game_logic.Math;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
-using static Tests.ObjectCreationUtility;
 using UnityEngine;
+using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreation
+namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreationTests
 {
     public class RandomTreeVisualCreatorTests
     {

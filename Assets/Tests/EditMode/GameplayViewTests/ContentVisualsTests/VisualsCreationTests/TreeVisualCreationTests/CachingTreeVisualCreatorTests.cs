@@ -1,10 +1,10 @@
 ﻿using castledice_game_logic.GameObjects;
 using Moq;
 using NUnit.Framework;
-using static Tests.ObjectCreationUtility;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
+using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreation
+namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreationTests
 {
     public class CachingTreeVisualCreatorTests
     {

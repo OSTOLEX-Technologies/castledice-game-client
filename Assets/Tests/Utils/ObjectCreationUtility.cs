@@ -407,6 +407,20 @@ namespace Tests
             });
             return visual;
         }
-        
+
+        public static CastleVisual GetCastleVisual()
+        {
+            var visual = new GameObject().AddComponent<CastleVisual>();
+            var renderer = new GameObject().AddComponent<MeshRenderer>();
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>
+            {
+                renderer
+            });
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, new List<Renderer>
+            {
+                renderer
+            });
+            return visual;
+        }
     }
 }

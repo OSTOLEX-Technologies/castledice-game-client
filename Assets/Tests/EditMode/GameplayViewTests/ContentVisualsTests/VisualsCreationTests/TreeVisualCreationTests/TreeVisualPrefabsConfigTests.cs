@@ -1,9 +1,9 @@
 ﻿using NUnit.Framework;
-using static Tests.ObjectCreationUtility;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using UnityEngine;
+using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreation
+namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreationTests
 {
     public class TreeVisualPrefabsConfigTests
     {
