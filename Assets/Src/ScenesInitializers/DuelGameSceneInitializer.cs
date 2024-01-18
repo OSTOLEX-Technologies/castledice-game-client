@@ -272,7 +272,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
         
         var treeModelProvider = new RandomTreeModelProvider(new RangeRandomNumberGenerator(), treeModelPrefabConfig, instantiator);
-        var treeViewFactory = new TreeViewFactory(treeModelProvider, treeViewPrefab, instantiator);
+        var treeViewFactory = new TreeViewFactory(null, treeViewPrefab, instantiator);
 
         var knightModelProvider = new ColoredKnightModelProvider(playerColorProvider, knightModelPrefabConfig, instantiator);
         var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
@@ -280,7 +280,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
         var castleModelProvider = new ColoredCastleModelProvider(playerColorProvider, castleModelPrefabConfig, instantiator);
         var castleAudioFactory = new SoundPlayerCastleAudioFactory(castleSoundsConfig, castleAudioPrefab, instantiator);
-        var castleViewFactory = new CastleViewFactory(castleModelProvider, castleAudioFactory, castleViewPrefab, instantiator);
+        var castleViewFactory = new CastleViewFactory(null, castleAudioFactory, castleViewPrefab, instantiator);
         
         var contentViewProvider = new ContentViewProvider(treeViewFactory, knightViewFactory, castleViewFactory);
         _contentView = new CellsContentView(grid, contentViewProvider);

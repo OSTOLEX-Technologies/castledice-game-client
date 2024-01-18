@@ -1,6 +1,6 @@
 ﻿using castledice_game_logic.GameObjects;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
-using UnityEngine;
+using Src.GameplayView.ContentVisuals;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.GameplayView.CellsContent.ContentViews
@@ -9,17 +9,18 @@ namespace Src.GameplayView.CellsContent.ContentViews
     {
         private CastleGO _castle;
         private CastleAudio _audio;
-
+        private CastleVisual _visual;
+        
         public override Content Content => _castle;
 
-        public void Init(CastleGO castle, GameObject model, CastleAudio castleAudio)
+        public void Init(CastleGO castle, CastleVisual visual, CastleAudio audio)
         {
-            _audio = castleAudio;
+            _audio = audio;
             _castle = castle;
             _castle.Hit += OnHit;
-            var audioTransform = _audio.transform;
-            audioTransform.SetParent(transform);
-            audioTransform.localPosition = Vector3.zero;
+            _visual = visual;
+            SetAsChildAndCenter(visual.gameObject);
+            SetAsChildAndCenter(audio.gameObject);
         }
         
         public override void StartView()
@@ -35,7 +36,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
         public override void DestroyView()
         {
             _audio.PlayDestroySound();
-            Model.SetActive(false);
+            _visual.gameObject.SetActive(false);
         }
 
         private void OnHit(object sender, int damage)

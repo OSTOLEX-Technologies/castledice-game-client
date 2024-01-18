@@ -5,13 +5,11 @@ namespace Src.GameplayView.CellsContent
 {
     public abstract class ContentView : MonoBehaviour
     {
-        protected GameObject Model;
-        
         public abstract void StartView();
         public abstract void UpdateView();
         public abstract void DestroyView();
 
-        public abstract Content Content{ get; }
+        public abstract Content Content { get; }
         
         protected void SetAsChildAndCenter(GameObject target)
         {

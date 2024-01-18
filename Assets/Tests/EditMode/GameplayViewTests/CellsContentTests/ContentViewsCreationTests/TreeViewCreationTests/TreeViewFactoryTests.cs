@@ -3,7 +3,10 @@ using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
+using Src.GameplayView.ContentVisuals;
+using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using UnityEngine;
+using Tree = castledice_game_logic.GameObjects.Tree;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreationTests.TreeViewCreationTests
@@ -40,47 +43,47 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
         }
 
         [Test]
-        public void GetTreeView_ShouldReturnTreeView_WithModelFromProvider()
+        public void GetTreeView_ShouldReturnTreeView_WithVisualFromCreator()
         {
-            var expectedModel = new GameObject();
-            var modelProviderMock = new Mock<ITreeModelProvider>();
-            modelProviderMock.Setup(m => m.GetTreeModel()).Returns(expectedModel);
+            var expectedVisual = GetTreeVisual();
+            var visualCreatorMock = new Mock<ITreeVisualCreator>();
+            var tree = GetTree();
+            visualCreatorMock.Setup(m => m.GetTreeVisual(tree)).Returns(expectedVisual);
             var treeViewFactory = new TreeViewFactoryBuilder
             {
-                ModelProvider = modelProviderMock.Object
+                VisualCreator = visualCreatorMock.Object
             }.Build();
             
-            var treeView = treeViewFactory.GetTreeView(GetTree());
-            var fieldInfo = typeof(TreeView).GetField("Model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var actualModel = fieldInfo.GetValue(treeView) as GameObject;
+            var treeView = treeViewFactory.GetTreeView(tree);
+            var fieldInfo = typeof(TreeView).GetField("_visual", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var actualVisual = fieldInfo.GetValue(treeView) as TreeVisual;
             
-            Assert.AreSame(expectedModel, actualModel);
+            Assert.AreSame(expectedVisual, actualVisual);
         }
 
         private class TreeViewFactoryBuilder
         {
-            public ITreeModelProvider ModelProvider { get; set; }
+            public ITreeVisualCreator VisualCreator { get; set; }
             public TreeView Prefab { get; set; }
             public IInstantiator Instantiator { get; set; }
 
             public TreeViewFactoryBuilder()
             {
-                var model = new GameObject();
+                var visual = GetTreeVisual();
                 var prefab = new GameObject().AddComponent<TreeView>();
                 var instantiatorMock = new Mock<IInstantiator>();
                 instantiatorMock.Setup(i => i.Instantiate(prefab)).Returns(new GameObject().AddComponent<TreeView>());
-                var modelProviderMock = new Mock<ITreeModelProvider>();
-                modelProviderMock.Setup(m => m.GetTreeModel()).Returns(model);
+                var visualCreatorMock = new Mock<ITreeVisualCreator>();
+                visualCreatorMock.Setup(m => m.GetTreeVisual(It.IsAny<Tree>())).Returns(visual);
                 Instantiator = instantiatorMock.Object;
                 Prefab = prefab;
-                ModelProvider = modelProviderMock.Object;
+                VisualCreator = visualCreatorMock.Object;
             }
             
             public TreeViewFactory Build()
             {
-                return new TreeViewFactory(ModelProvider, Prefab, Instantiator);
+                return new TreeViewFactory(VisualCreator, Prefab, Instantiator);
             }
-            
         }
     }
 }

@@ -29,7 +29,8 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
             var view = _instantiator.Instantiate(_knightViewPrefab);
             var rotation = _rotationProvider.GetRotation(knight.GetOwner());
             var audio = _audioFactory.GetAudio(knight);
-            //view.Init(knight, model, rotation, audio);
+            var visual = _visualCreator.GetKnightVisual(knight);
+            view.Init(knight, visual, rotation, audio);
             return view;
         }
     }
