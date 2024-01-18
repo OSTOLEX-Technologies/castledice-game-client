@@ -2,16 +2,13 @@ using System;
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
-using Src;
 using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayPresenter.GameCreation.Creators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
-using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
@@ -77,12 +74,12 @@ public class MainMenuInitializer : MonoBehaviour
         var contentToCoordinateProvider = new ContentToCoordinateCreator();
         var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
         var boardConfigProvider = new BoardConfigCreator(spawnersProvider, cellsGeneratorProvider);
-        var playersListProvider = new PlayersListCreator();
+        var playersListProvider = new PlayersListCreator(new PlayerCreator(new StopwatchPlayerTimerCreator()));
         var placeablesConfigProvider = new PlaceablesConfigCreator();
-        var decksListProvider = new DecksListCreator();
+        var gameBuilder = new GameBuilder(new GameConstructorWrapper());
         var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
-            turnSwitchConditionsConfigProvider, decksListProvider);
+            turnSwitchConditionsConfigProvider, gameBuilder);
         _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
         
         //Setting up error handling

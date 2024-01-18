@@ -26,7 +26,9 @@ namespace Tests.EditMode.GameplayPresenterTests.CurrentPlayerTests
         [Test]
         public void ShowCurrentPlayer_ShouldBeCalled_WhenTurnSwitched()
         {
-            var testGame = GetTestGameMock().Object;
+            var gameMock = GetGameMock();
+            gameMock.Setup(g => g.SwitchTurn()).Raises(g => g.TurnSwitched += null, this, gameMock.Object);
+            var testGame = gameMock.Object;
             var viewMock = new Mock<ICurrentPlayerView>();
             var presenter = new CurrentPlayerPresenter(testGame, viewMock.Object);
             

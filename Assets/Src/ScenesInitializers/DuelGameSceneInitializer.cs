@@ -3,7 +3,6 @@ using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using castledice_game_logic.Math;
-using Src;
 using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsCount;
@@ -14,17 +13,16 @@ using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayPresenter.GameCreation.Creators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
-using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.ServerMoves;
+using Src.GameplayPresenter.Timers;
 using Src.GameplayView;
 using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
@@ -46,12 +44,15 @@ using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersNumbers;
-using Src.GameplayView.PlayersRotations.RotationsByColor;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
+using Src.GameplayView.Timers;
+using Src.GameplayView.Timers.PlayerTimerViews;
+using Src.GameplayView.Updatables;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
+using Src.TimeManagement;
 using TMPro;
 using UnityEngine;
 
@@ -132,13 +133,27 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private GameObject redPlayerLabel;
     private CurrentPlayerPresenter _currentPlayerPresenter;
     private CurrentPlayerView _currentPlayerView;
+    
+    [Header("Timers")]
+    [SerializeField] private TimeView redPlayerTimeView;
+    [SerializeField] private TimeView bluePlayerTimeView;
+    [SerializeField] private Highlighter redPlayerHighlighter;
+    [SerializeField] private Highlighter bluePlayerHighlighter;
+    private TimersPresenter _timersPresenter;
+    private TimersView _timersView;
 
-
+    [Header("Updater")]
+    [SerializeField] private FixedUpdaterBehaviour fixedUpdaterBehaviour;
+    [SerializeField] private UpdaterBehaviour updaterBehaviour;
+    private readonly Updater _updater = new();
+    private readonly Updater _fixedUpdater = new();
+    
     private Game _game;
     private GameStartData _gameStartData;
 
     private void Start()
     {
+        SetUpUpdaters();
         SetUpGame();
         SetUpInput();
         SetUpGrid();
@@ -148,28 +163,48 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpClientMoves();
         SetUpServerMoves();
         SetUpActionPointsGiving();
-        SetUpGameOverProcessing();
         SetUpCamera();
         SetUpCellMovesHighlights();
         SetUpActionPointsCount();
         SetUpCurrentPlayerLabel();
         SetUpCurrentPlayerLabel();
         SetUpGameOver();
+        SetUpTimers();
         NotifyPlayerIsReady();
+    }
+
+    private void SetUpUpdaters()
+    {
+        updaterBehaviour.Init(_updater);
+        fixedUpdaterBehaviour.Init(_fixedUpdater);
+    }
+
+    private void SetUpTimers()
+    {
+        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var highlighterForPlayerProvider = new PlayerColorHighlighterProvider(redPlayerHighlighter, bluePlayerHighlighter,
+            playerColorProvider);
+        var timeViewForPlayerProvider =
+            new PlayerColorTimeViewProvider(redPlayerTimeView, bluePlayerTimeView, playerColorProvider);
+        var playerTimerViewCreator = new PlayerTimerViewCreator(highlighterForPlayerProvider, timeViewForPlayerProvider);
+        var playerTimerViewsProvider = new CachingPlayerTimerViewProvider(playerTimerViewCreator);
+        _timersView = new TimersView(playerTimerViewsProvider, _updater);
+        _timersPresenter = new TimersPresenter(_timersView, _game);
+        var switchTimerDTOAccepter = new SwitchTimerAccepter(_timersPresenter);
+        SwitchTimerMessageHandler.SetAccepter(switchTimerDTOAccepter);
     }
 
     private void SetUpGame()
     {
         _gameStartData = Singleton<GameStartData>.Instance;
-        var playersListProvider = new PlayersListCreator();
-        var coordinateSpawnerProvider = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
-        var matrixCellsGeneratorProvider = new MatrixCellsGeneratorCreator();
-        var boardConfigProvider = new BoardConfigCreator(coordinateSpawnerProvider, matrixCellsGeneratorProvider);
-        var placeablesConfigProvider = new PlaceablesConfigCreator();
-        var decksListProvider = new DecksListCreator();
-        var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
-        var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, turnSwitchConditionsConfigProvider,
-            decksListProvider);
+        var playersListCreator = new PlayersListCreator(new PlayerCreator(new UpdatablePlayerTimerCreator(new FixedTimeDeltaProvider(), _fixedUpdater)));
+        var coordinateSpawnerCreator = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
+        var matrixCellsGeneratorCreator = new MatrixCellsGeneratorCreator();
+        var boardConfigCreator = new BoardConfigCreator(coordinateSpawnerCreator, matrixCellsGeneratorCreator);
+        var placeablesConfigCreator = new PlaceablesConfigCreator();
+        var turnSwitchConditionsConfigCreator = new TurnSwitchConditionsConfigCreator();
+        var gameBuilder = new GameBuilder(new GameConstructorWrapper());
+        var gameCreator = new GameCreator(playersListCreator, boardConfigCreator, placeablesConfigCreator, turnSwitchConditionsConfigCreator, gameBuilder);
         _game = gameCreator.CreateGame(_gameStartData);
     }
 
@@ -206,8 +241,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
         cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
         var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
         _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataProvider,
+        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
+        _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataCreator,
             new CellMovesListProvider(_game), _game, _cellMovesHighlightView);
     }
 
@@ -274,8 +309,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpActionPointsGiving()
     {
-        var popupsProvider = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
-        var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsProvider, popupDisappearTimeMilliseconds);
+        var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
+        var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
         _actionPointsGivingView =
             new ActionPointsGivingView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
                 popupDemonstrator);
@@ -291,31 +326,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _actionPointsCountView = new ActionPointsCountView(actionPointsText, actionPointsLabel);
         _actionPointsCountPresenter = new ActionPointsCountPresenter(playerDataProvider, _game,
             _actionPointsCountView);
-    }
-
-    //TODO: Refactor this and move game over logic into separate class
-    private void SetUpGameOverProcessing()
-    {
-        _game.Win += OnWin;
-        _game.Draw += OnDraw;
-    }
-
-    private void OnDraw(object sender, Game e)
-    {
-        drawScreen.SetActive(true);
-    }
-
-    private void OnWin(object sender, (Game game, Player player) e)
-    {
-        var colorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
-        if (colorProvider.GetPlayerColor(e.player) == PlayerColor.Blue)
-        {
-            blueWinnerScreen.SetActive(true);
-        }
-        else
-        {
-            redWinnerScreen.SetActive(true);
-        }
     }
 
     private void SetUpCamera()
@@ -340,8 +350,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void NotifyPlayerIsReady()
     {
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        var playerToken = playerDataProvider.GetAccessToken();
+        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
+        var playerToken = playerDataCreator.GetAccessToken();
         var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
         playerReadinessSender.SendPlayerReadiness(playerToken);
     }

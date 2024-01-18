@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using castledice_game_data_logic;
 using castledice_game_data_logic.ConfigsData;
@@ -14,6 +15,7 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories.Castles;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.Time;
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 using Src.GameplayPresenter;
@@ -33,15 +35,14 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
-#if UNITY_EDITOR
-        public static void AddObjectReferenceValueToSerializedProperty<U, T>(U gameObject, string propertyName, T value) where T : Object 
-            where U: Object
+        
+        
+        public static TimeSpan GetRandomTimeSpan(int min = 1, int max = 1000)
         {
-            var serializedObject = new SerializedObject(gameObject);
-            serializedObject.FindProperty(propertyName).objectReferenceValue = value;
-            serializedObject.ApplyModifiedProperties();
+            var random = new System.Random();
+            var ticks = random.Next(min, max);
+            return new TimeSpan(ticks);
         }
-#endif
         
         public static SoundPlayer GetSoundPlayer()
         {
@@ -76,7 +77,7 @@ namespace Tests
             {
                 {player, (0, 0)},
                 {secondPlayer, (9, 9)}
-            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object, GetTurnSwitchConditionsConfig());
+            }), GetPlaceablesConfig(), GetTurnSwitchConditionsConfig());
             gameMock.Setup(x => x.GetPlayer(It.IsAny<int>())).Returns(player);
             gameMock.Setup(x => x.GetAllPlayers()).Returns(playersList);
             gameMock.Setup(x => x.GetAllPlayersIds()).Returns(new List<int> { 1, 2 });
@@ -93,7 +94,7 @@ namespace Tests
             {
                 {player, (0, 0)},
                 {secondPlayer, (9, 9)}
-            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object, GetTurnSwitchConditionsConfig());
+            }), GetPlaceablesConfig(), GetTurnSwitchConditionsConfig());
             gameMock.Setup(x => x.GetPlayer(It.IsAny<int>())).Returns(player);
             gameMock.Setup(x => x.GetAllPlayers()).Returns(playersList);
             gameMock.Setup(x => x.GetAllPlayersIds()).Returns(new List<int> { 1, 2 });
@@ -120,17 +121,21 @@ namespace Tests
         public static GameStartData GetGameStartData()
         {
             var version = "1.0.0";
-            var playerIds = new List<int>() { 1, 2 };
             var boardData = GetBoardData();
             var placeablesConfigs = new PlaceablesConfigData(new KnightConfigData(1, 2));
-            var playerDecks = new List<PlayerDeckData>()
+            var playersData = new List<PlayerData>
             {
-                new(playerIds[0], new List<PlacementType> { PlacementType.Knight }),
-                new (playerIds[1], new List<PlacementType> { PlacementType.Knight })
+                GetPlayerData(id: 1),
+                GetPlayerData(id: 2)
             };
             var tscConfigData = GetTscConfigData();
-            var data = new GameStartData(version, boardData, placeablesConfigs, tscConfigData, playerIds, playerDecks);
+            var data = new GameStartData(version, boardData, placeablesConfigs, tscConfigData, playersData);
             return data;
+        }
+        
+        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), params PlacementType[] placementTypes)
+        {
+            return new PlayerData(id, placementTypes.ToList(), timeSpan);
         }
         
         public static TurnSwitchConditionsConfig GetTurnSwitchConditionsConfig()
@@ -179,8 +184,8 @@ namespace Tests
 
         public static Game GetGame()
         {
-            var firstPlayer = new Player(new PlayerActionPoints(), 1);
-            var secondPlayer = new Player(new PlayerActionPoints(), 2);
+            var firstPlayer = GetPlayer(id: 1);
+            var secondPlayer = GetPlayer(id: 2);
             var players = new List<Player>()
             {
                 firstPlayer,
@@ -196,14 +201,9 @@ namespace Tests
 
             var placeablesConfig = new PlaceablesConfig(new KnightConfig(1, 2));
 
-            var placementListProvider = new CommonDecksList(new List<PlacementType>()
-            {
-                PlacementType.Knight
-            });
-
             var turnSwitchConditionsConfig = GetTurnSwitchConditionsConfig();
             
-            var game = new Game(players, boardConfig, placeablesConfig, placementListProvider, turnSwitchConditionsConfig);
+            var game = new Game(players, boardConfig, placeablesConfig, turnSwitchConditionsConfig);
 
             return game;
         }
@@ -227,7 +227,6 @@ namespace Tests
             return GetBoardConfig(playersToCastlesPositions);
         }
         
-        
         public static BoardConfig GetBoardConfig(Dictionary<Player, Vector2Int> playersToCastlesPositions)
         {
 
@@ -246,6 +245,34 @@ namespace Tests
             
             return boardConfig;
         }
+        
+        public static List<Player> GetPlayersList(int length = 1)
+        {
+            var players = new List<Player>();
+            for (int i = 0; i < length; i++)
+            {
+                players.Add(GetPlayer(id: i));
+            }
+            return players;
+        }
+        
+        public static List<PlayerData> GetPlayersDataList(int length = 1)
+        {
+            var playersData = new List<PlayerData>();
+            for (int i = 0; i < length; i++)
+            {
+                playersData.Add(GetPlayerData(id: i));
+            }
+            return playersData;
+        }
+        
+        
+        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), List<PlacementType> placementTypes = null)
+        {
+            return new PlayerData(id, placementTypes ?? new List<PlacementType>(), timeSpan);
+        }
+        
+
         
         public static Board GetFullNByNBoard(int size)
         {
@@ -272,12 +299,12 @@ namespace Tests
         
         public static CastleGO GetCastle()
         {
-            return new CastleGO(new Player(new PlayerActionPoints(), 0), 3, 3, 1, 1);
+            return new CastleGO(GetPlayer(id: 1), 3, 3, 1, 1);
         }
         
         public static Knight GetKnight()
         {
-            return new Knight(new Player(new PlayerActionPoints(), 0), 1, 2);
+            return new Knight(GetPlayer(id: 1), 1, 2);
         }
         
         public static Tree GetTree()
@@ -285,11 +312,12 @@ namespace Tests
             return new Tree(1, false);
         }
         
-        public static Player GetPlayer(int id = 1, int actionPointsCount = 6)
+        public static Player GetPlayer(int id = 1, int actionPointsCount = 6, IPlayerTimer timer = null)
         {
             var actionPoints = new PlayerActionPoints();
             actionPoints.IncreaseActionPoints(actionPointsCount);
-            return new Player(actionPoints, id);
+            timer ??= new Mock<IPlayerTimer>().Object;
+            return new Player(actionPoints, timer, new List<PlacementType> { PlacementType.Knight }, id);
         }
 
         public static IPlayerDataProvider GetPlayerDataProvider(bool authorized = true, string token = "token", int id = 1)

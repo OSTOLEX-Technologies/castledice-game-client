@@ -10,18 +10,30 @@
       "castledice-riptide-message-extensions/1.0.0": {
         "dependencies": {
           "RiptideNetworking.Riptide": "2.0.0",
-          "castledice-game-data-logic": "0.0.1-dev4",
-          "castledice-game-logic": "0.0.1-dev3",
-          "castledice-events-logic": "1.0.0.0"
+          "castledice-events-logic": "0.0.1-dev3-timer-switch",
+          "castledice-game-data-logic": "0.0.1-dev5",
+          "castledice-game-logic": "0.0.1-dev5"
         },
         "runtime": {
           "castledice-riptide-message-extensions.dll": {}
         }
       },
-      "castledice-game-data-logic/0.0.1-dev4": {
+      "castledice-events-logic/0.0.1-dev3-timer-switch": {
+        "dependencies": {
+          "castledice-game-data-logic": "0.0.1-dev5",
+          "castledice-game-logic": "0.0.1-dev5"
+        },
+        "runtime": {
+          "lib/netstandard2.1/castledice-events-logic.dll": {
+            "assemblyVersion": "0.0.1.0",
+            "fileVersion": "0.0.1.0"
+          }
+        }
+      },
+      "castledice-game-data-logic/0.0.1-dev5": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3",
-          "castledice-game-logic": "0.0.1-dev3"
+          "castledice-game-logic": "0.0.1-dev5"
         },
         "runtime": {
           "lib/netstandard2.1/castledice-game-data-logic.dll": {
@@ -30,7 +42,7 @@
           }
         }
       },
-      "castledice-game-logic/0.0.1-dev3": {
+      "castledice-game-logic/0.0.1-dev5": {
         "dependencies": {
           "Newtonsoft.Json": "13.0.3"
         },
@@ -56,14 +68,6 @@
             "fileVersion": "2.0.0.0"
           }
         }
-      },
-      "castledice-events-logic/1.0.0.0": {
-        "runtime": {
-          "castledice-events-logic.dll": {
-            "assemblyVersion": "1.0.0.0",
-            "fileVersion": "1.0.0.0"
-          }
-        }
       }
     }
   },
@@ -73,19 +77,26 @@
       "serviceable": false,
       "sha512": ""
     },
-    "castledice-game-data-logic/0.0.1-dev4": {
+    "castledice-events-logic/0.0.1-dev3-timer-switch": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-Zv6q52afr2IRZv/MOR/zdYNdAaVCuQRGw9wUhlA7FKrg85hvU8kuFa1G2q4PC0nO8DR78FdhPp3hEdNW0xB9Vw==",
-      "path": "castledice-game-data-logic/0.0.1-dev4",
-      "hashPath": "castledice-game-data-logic.0.0.1-dev4.nupkg.sha512"
+      "sha512": "sha512-0OXeBQGTpHSv2AIW9QkVvv1Okm4BKN8U/lYmPN3qobEvzZHfepDkx3t5PpljvX4tveJDoanvcoCrFTo8I+IzlA==",
+      "path": "castledice-events-logic/0.0.1-dev3-timer-switch",
+      "hashPath": "castledice-events-logic.0.0.1-dev3-timer-switch.nupkg.sha512"
     },
-    "castledice-game-logic/0.0.1-dev3": {
+    "castledice-game-data-logic/0.0.1-dev5": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-hS7Mq5ly8X2Us4xb5TeddcnlcPxalPS+pnBDs0SYkNK+HSr8zWR0kplgqRvIYOH7Nd2RGbyxIgpjMHhPqHi2bA==",
-      "path": "castledice-game-logic/0.0.1-dev3",
-      "hashPath": "castledice-game-logic.0.0.1-dev3.nupkg.sha512"
+      "sha512": "sha512-H6hDNunWjjiuEAGH3ml3M2xu82j7OMYVwGHwzTYAErdQMOTUxQmPSfqjB9TbyWAltTuMdn8ZnioMSdSv/EW5nQ==",
+      "path": "castledice-game-data-logic/0.0.1-dev5",
+      "hashPath": "castledice-game-data-logic.0.0.1-dev5.nupkg.sha512"
+    },
+    "castledice-game-logic/0.0.1-dev5": {
+      "type": "package",
+      "serviceable": true,
+      "sha512": "sha512-GoFNy/mkvd0pm8IFndsziWYkW1fKNIDuOn+Qt6ZbBwG4mNVJh+euRfeq44zpKi13Xv0L/u0wBeUBxUUYLH3FcA==",
+      "path": "castledice-game-logic/0.0.1-dev5",
+      "hashPath": "castledice-game-logic.0.0.1-dev5.nupkg.sha512"
     },
     "Newtonsoft.Json/13.0.3": {
       "type": "package",
@@ -100,11 +111,6 @@
       "sha512": "sha512-xk5JdlK7A4m+aE8fclcLkjX4+NrZJVZ0woNx/PCUgkDbcYlE9d8PUzWg1KMy2+CgO29zu4jgCqlW9knI327V9Q==",
       "path": "riptidenetworking.riptide/2.0.0",
       "hashPath": "riptidenetworking.riptide.2.0.0.nupkg.sha512"
-    },
-    "castledice-events-logic/1.0.0.0": {
-      "type": "reference",
-      "serviceable": false,
-      "sha512": ""
     }
   }
 }
