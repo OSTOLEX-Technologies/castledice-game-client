@@ -14,7 +14,6 @@ namespace Src.GameplayView.CellsContent.ContentViews
 
         public void Init(CastleGO castle, GameObject model, CastleAudio castleAudio)
         {
-            Init(model);
             _audio = castleAudio;
             _castle = castle;
             _castle.Hit += OnHit;

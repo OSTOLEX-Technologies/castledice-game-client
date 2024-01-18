@@ -12,16 +12,11 @@ namespace Src.GameplayView.CellsContent
         public abstract void DestroyView();
 
         public abstract Content Content{ get; }
-
-        /// <summary>
-        /// This method should be called in the beginning of Init method of each child class.
-        /// </summary>
-        /// <param name="model"></param>
-        protected void Init(GameObject model)
+        
+        protected void SetAsChildAndCenter(GameObject target)
         {
-            Model = model;
-            Model.transform.SetParent(transform);
-            Model.transform.localPosition = Vector3.zero;
+            target.transform.SetParent(transform);
+            target.transform.localPosition = Vector3.zero;
         }
     }
 }

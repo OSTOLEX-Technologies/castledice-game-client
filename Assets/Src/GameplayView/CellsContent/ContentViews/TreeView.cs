@@ -13,7 +13,6 @@ namespace Src.GameplayView.CellsContent.ContentViews
         
         public void Init(Tree tree, GameObject model)
         {
-            Init(model);
             _tree = tree;
         }
         
