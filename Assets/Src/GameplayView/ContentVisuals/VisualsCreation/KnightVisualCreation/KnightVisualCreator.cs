@@ -21,7 +21,7 @@ namespace Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation
             var prefab = _prefabProvider.GetKnightVisualPrefab();
             var knightVisual = _instantiator.Instantiate(prefab);
             var color = _colorProvider.GetContentColor(knight.GetOwner());
-            knightVisual.Color = color;
+            knightVisual.SetColor(color);
             return knightVisual;
         }
     }

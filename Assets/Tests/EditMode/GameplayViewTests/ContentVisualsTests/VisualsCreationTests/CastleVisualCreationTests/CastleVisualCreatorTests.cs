@@ -2,6 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
+using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.ContentVisuals.ContentColor;
 using static Tests.ObjectCreationUtility;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
@@ -36,20 +37,20 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
         {
             var expectedColor = Random.ColorHSV();
             var castle = GetCastle();
+            var castleVisualMock = new Mock<CastleVisual>();
+            var instantiatorMock = new Mock<IInstantiator>();
+            instantiatorMock.Setup(i => i.Instantiate(It.IsAny<CastleVisual>())).Returns(castleVisualMock.Object);
             var colorProviderMock = new Mock<IPlayerContentColorProvider>();
             colorProviderMock.Setup(c => c.GetContentColor(castle.GetOwner())).Returns(expectedColor);
             var castleVisualCreator = new CastleVisualCreatorBuilder
             {
+                Instantiator = instantiatorMock.Object,
                 ColorProvider = colorProviderMock.Object
             }.Build();
 
             var createdCastleVisual = castleVisualCreator.GetCastleVisual(castle);
-            var actualColor = createdCastleVisual.Color;
-            
-            Assert.That(expectedColor.r, Is.EqualTo(actualColor.r).Within(0.01f));
-            Assert.That(expectedColor.g, Is.EqualTo(actualColor.g).Within(0.01f));
-            Assert.That(expectedColor.b, Is.EqualTo(actualColor.b).Within(0.01f));
-            Assert.That(expectedColor.a, Is.EqualTo(actualColor.a).Within(0.01f));
+
+            castleVisualMock.Verify(c => c.SetColor(expectedColor), Times.Once);
         }
         
         private class CastleVisualCreatorBuilder

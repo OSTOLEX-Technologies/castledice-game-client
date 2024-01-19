@@ -21,7 +21,7 @@ namespace Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation
             var prefab = _prefabProvider.GetCastleVisualPrefab();
             var visual = _instantiator.Instantiate(prefab);
             var color = _colorProvider.GetContentColor(castle.GetOwner());
-            visual.Color = color;
+            visual.SetColor(color);
             return visual;
         }
     }

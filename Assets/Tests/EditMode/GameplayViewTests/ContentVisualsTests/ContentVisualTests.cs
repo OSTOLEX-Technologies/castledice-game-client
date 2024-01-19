@@ -1,11 +1,7 @@
-﻿using System;
-using System.Collections.Generic;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ContentVisuals;
-using UnityEngine;
 using Random = UnityEngine.Random;
-using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests
@@ -13,53 +9,25 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests
     public class ContentVisualTests
     {
         [Test]
-        public void TransparencyProperty_ShouldReturnAlphaValueOfColor_FromRenderersMaterials()
+        public void SetTransparency_ShouldSetTransparency_OnTransparencyAffectedCompoundRenderer()
         {
-            var expectedAlpha = Random.value;
-            var material = GetMaterialWithColor(new Color(0, 0, 0, expectedAlpha));
-            var renderer = GetRendererWithMaterial(material);
-            var contentVisual = new Mock<ContentVisual>() { CallBase = true }.Object; //By setting CallBase to true, we can real implementation of Transparency property
-            contentVisual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer> { renderer });
+            var expectedTransparency = Random.value;
+            var renderers = GetRenderersList(Random.Range(1, 10));
+            var compoundRenderer = GetCompoundRenderer(renderers);
+            var contentVisualMock = new Mock<ContentVisual>() { CallBase = true };
+            var contentVisual = contentVisualMock.Object;
+            contentVisual.SetPrivateField("transparencyAffectedRenderers", compoundRenderer);
             
-            var actualAlpha = contentVisual.Transparency;
+            contentVisual.SetTransparency(expectedTransparency);
             
-            Assert.AreEqual(expectedAlpha, actualAlpha);
-        }
-
-        [Test]
-        public void TransparencyProperty_ShouldSetAlphaValueForColors_FromRenderersMaterials()
-        {
-            var expectedAlpha = Random.value;
-            var renderers = GetRenderersListWithMaterial(GetMaterialWithColor(new Color(0, 0, 0, 0)), Random.Range(1, 10));
-            var contentVisual = new Mock<ContentVisual>() { CallBase = true }.Object; //By setting CallBase to true, we can real implementation of Transparency property
-           contentVisual.SetPrivateField(TransparencyAffectedRenderersFieldName, renderers);
-
-           contentVisual.Transparency = expectedAlpha;
-
-           foreach (var renderer in renderers)
-           {
-                Assert.AreEqual(expectedAlpha, renderer.material.color.a);
-           }
-        }
-        
-        [Test]
-        public void TransparencySet_ShouldThrowInvalidOperationException_IfRenderersListIsEmpty()
-        {
-            var contentVisual = new Mock<ContentVisual>() { CallBase = true }.Object; //By setting CallBase to true, we can real implementation of Transparency property
-            contentVisual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>());
-
-            Assert.Throws<InvalidOperationException>(() => contentVisual.Transparency = Random.value);
-        }
-        
-        [Test]
-        public void TransparencyGet_ShouldThrowInvalidOperationException_IfRenderersListIsEmpty()
-        {
-            var contentVisual = new Mock<ContentVisual>() { CallBase = true }.Object; //By setting CallBase to true, we can real implementation of Transparency property
-            contentVisual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>());
-
-            float value = 0;
-            
-            Assert.Throws<InvalidOperationException>(() =>  value = contentVisual.Transparency );
+            foreach (var renderer in renderers)
+            {
+                foreach (var material in renderer.materials)
+                {
+                    var actualTransparency = material.color.a;
+                    Assert.That(actualTransparency, Is.EqualTo(expectedTransparency).Within(0.01f));
+                }
+            }
         }
     }
 }

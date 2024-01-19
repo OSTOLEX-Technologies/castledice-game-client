@@ -34,24 +34,24 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
         }
 
         [Test]
-        public void GetKnightVisual_ShouldReturnKnightVisual_WithColorFromProvider()
+        public void GetKnightVisual_ShouldSetKnightVisualColor_WithColorFromProvider()
         {
             var knight = GetKnight();
             var expectedColor = Random.ColorHSV();
+            var knightVisualMock = new Mock<KnightVisual>();
+            var instantiatorMock = new Mock<IInstantiator>();
+            instantiatorMock.Setup(x => x.Instantiate(It.IsAny<KnightVisual>())).Returns(knightVisualMock.Object);
             var playerContentColorProviderMock = new Mock<IPlayerContentColorProvider>();
             playerContentColorProviderMock.Setup(x => x.GetContentColor(knight.GetOwner())).Returns(expectedColor);
             var knightVisualCreator = new KnightVisualCreatorBuilder
             {
+                Instantiator = instantiatorMock.Object,
                 ColorProvider = playerContentColorProviderMock.Object
             }.Build();
             
             var actualKnightVisual = knightVisualCreator.GetKnightVisual(knight);
-            var actualColor = actualKnightVisual.Color;
-            
-            Assert.That(actualColor.r, Is.EqualTo(expectedColor.r).Within(0.01f));
-            Assert.That(actualColor.g, Is.EqualTo(expectedColor.g).Within(0.01f));
-            Assert.That(actualColor.b, Is.EqualTo(expectedColor.b).Within(0.01f));
-            Assert.That(actualColor.a, Is.EqualTo(expectedColor.a).Within(0.01f));
+
+            knightVisualMock.Verify(x => x.SetColor(expectedColor), Times.Once);
         }
         
         private class KnightVisualCreatorBuilder

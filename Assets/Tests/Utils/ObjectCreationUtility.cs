@@ -386,14 +386,14 @@ namespace Tests
         {
             var visual = new GameObject().AddComponent<KnightVisual>();
             var meshRenderer = visual.gameObject.AddComponent<MeshRenderer>();
-            visual.SetPrivateField(ColoringAffectedRenderersFieldName, new List<Renderer>
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
             {
                 meshRenderer
-            });
-            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>
+            }));
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
             {
                 meshRenderer
-            });
+            }));
             return visual;
         }
         
@@ -411,10 +411,10 @@ namespace Tests
         {
             var visual = new GameObject().AddComponent<TreeVisual>();
             var renderer = new GameObject().AddComponent<MeshRenderer>();
-            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
             {
                 renderer
-            });
+            }));
             return visual;
         }
 
@@ -422,14 +422,14 @@ namespace Tests
         {
             var visual = new GameObject().AddComponent<CastleVisual>();
             var renderer = new GameObject().AddComponent<MeshRenderer>();
-            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, new List<Renderer>
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
             {
                 renderer
-            });
-            visual.SetPrivateField(ColoringAffectedRenderersFieldName, new List<Renderer>
+            }));
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
             {
                 renderer
-            });
+            }));
             return visual;
         }
 

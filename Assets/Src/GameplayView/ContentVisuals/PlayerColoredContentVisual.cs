@@ -1,40 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using Src.Constants;
-using UnityEngine;
+﻿using UnityEngine;
 
 namespace Src.GameplayView.ContentVisuals
 {
     public abstract class PlayerColoredContentVisual : ContentVisual
     {
-        [SerializeField] protected List<Renderer> coloringAffectedRenderers = new();
+        [SerializeField] protected CompoundRenderer coloringAffectedRenderers = new();
         
-        private bool RenderersListIsEmpty => coloringAffectedRenderers.Count == 0;
 
-        /// <summary>
-        /// This property sets color for all renderers in <see cref="coloringAffectedRenderers"/> list
-        /// </summary>
-        public virtual Color Color
+        public virtual void SetColor(Color color)
         {
-            get
-            {
-                if (RenderersListIsEmpty)
-                {
-                    throw new InvalidOperationException("ColoringAffectedRenderers list is empty");
-                }
-                return coloringAffectedRenderers[0].material.color;
-            }
-            set
-            {
-                if (RenderersListIsEmpty)
-                {
-                    throw new InvalidOperationException("ColoringAffectedRenderers list is empty");
-                }
-                foreach (var rend in coloringAffectedRenderers)
-                {
-                    rend.material.SetColor(ShadersPropertiesNames.Color, value);
-                }
-            }
+            coloringAffectedRenderers.SetColor(color);
         }
     }
 }
