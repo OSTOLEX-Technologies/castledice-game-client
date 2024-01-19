@@ -7,7 +7,7 @@ namespace Src.AuthController.DeepLinking.LinkResolver.LinkFormatter
     {
         public string FormatLink(string link)
         {
-            return $"{DeepLinkConfig.GlobalDeepLinkSchemeName}{DeepLinkConfig.DefaultSchemeProtocolDivider}{link}";
+            return $"{DeepLinkConfig.GlobalSchemeName}{DeepLinkConfig.DefaultSchemeProtocolDivider}{link}";
         }
 
         public string GetLinkWithoutScheme(string link)
