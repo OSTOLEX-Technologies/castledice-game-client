@@ -67,7 +67,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             var fieldInfo = view.GetType().GetField("_visual", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             var actualVisual = fieldInfo.GetValue(view) as GameObject;
             
-            Assert.AreSame(actualVisual, actualVisual);
+            Assert.AreSame(expectedVisual, actualVisual);
         }
 
         private class CastleViewFactoryBuilder
