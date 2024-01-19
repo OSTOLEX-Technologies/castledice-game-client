@@ -363,6 +363,16 @@ namespace Tests
             return renderer;
         }
         
+        public static List<Material> GetMaterialsList(int count)
+        {
+            var materials = new List<Material>();
+            for (var i = 0; i < count; i++)
+            {
+                materials.Add(GetMaterialWithColor(UnityEngine.Random.ColorHSV()));
+            }
+            return materials;
+        }
+        
         public static Material GetMaterialWithColor(Color color)
         {
             var material = new Material(Shader.Find("Standard"))
@@ -421,6 +431,23 @@ namespace Tests
                 renderer
             });
             return visual;
+        }
+
+        public static CompoundRenderer GetCompoundRenderer(List<Renderer> renderers)
+        {
+            var compoundRenderer = new CompoundRenderer();
+            compoundRenderer.SetPrivateField("renderers", renderers);
+            return compoundRenderer;
+        }
+        
+        public static List<Renderer> GetRenderersList(int count)
+        {
+            var renderers = new List<Renderer>();
+            for (var i = 0; i < count; i++)
+            {
+                renderers.Add(new GameObject().AddComponent<MeshRenderer>());
+            }
+            return renderers;
         }
     }
 }
