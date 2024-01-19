@@ -38,6 +38,10 @@ using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
 using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
+using Src.GameplayView.ContentVisuals.ContentColor;
+using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
+using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
+using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
@@ -92,15 +96,17 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private KnightSoundsConfig knightSoundsConfig;
     [SerializeField] private SoundPlayerKnightAudio knightAudioPrefab;
     [SerializeField] private KnightView knightViewPrefab;
-    [SerializeField] private KnightModelPrefabConfig knightModelPrefabConfig;
+    [SerializeField] private KnightVisualPrefabConfig knightVisualPrefabConfig;
+    [SerializeField] private PlayerContentColorConfig knightColorConfig;
     [Header("Tree config")]
     [SerializeField] private TreeView treeViewPrefab;
-    [SerializeField] private TreeModelPrefabsConfig treeModelPrefabConfig;
+    [SerializeField] private TreeVisualPrefabsConfig treeVisualPrefabConfig;
     [Header("Castle config")]
     [SerializeField] private CastleSoundsConfig castleSoundsConfig;
     [SerializeField] private CastleView castleViewPrefab;
     [SerializeField] private SoundPlayerCastleAudio castleAudioPrefab;
-    [SerializeField] private CastleModelPrefabConfig castleModelPrefabConfig;
+    [SerializeField] private CastleVisualPrefabConfig castleVisualPrefabConfig;
+    [SerializeField] private PlayerContentColorConfig castleColorConfig;
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
     
@@ -271,16 +277,19 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var playerNumberProvider = new PlayerNumberProvider(playersList);
         var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
         
-        var treeModelProvider = new RandomTreeModelProvider(new RangeRandomNumberGenerator(), treeModelPrefabConfig, instantiator);
-        var treeViewFactory = new TreeViewFactory(null, treeViewPrefab, instantiator);
+        var randomTreeVisualCreator = new RandomTreeVisualCreator(new RangeRandomNumberGenerator(), treeVisualPrefabConfig, instantiator);
+        var cachingTreeVisualCreator = new CachingTreeVisualCreator(randomTreeVisualCreator);
+        var treeViewFactory = new TreeViewFactory(cachingTreeVisualCreator, treeViewPrefab, instantiator);
 
-        var knightModelProvider = new ColoredKnightModelProvider(playerColorProvider, knightModelPrefabConfig, instantiator);
+        var knightColorProvider = new PlayerContentColorProvider(knightColorConfig, playerColorProvider);
+        var knightVisualCreator = new KnightVisualCreator(knightVisualPrefabConfig, knightColorProvider, instantiator);
         var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
-        var knightViewFactory = new KnightViewFactory(playerRotationProvider, null, knightAudioFactory, knightViewPrefab, instantiator);
+        var knightViewFactory = new KnightViewFactory(playerRotationProvider, knightVisualCreator, knightAudioFactory, knightViewPrefab, instantiator);
 
-        var castleModelProvider = new ColoredCastleModelProvider(playerColorProvider, castleModelPrefabConfig, instantiator);
+        var castleColorProvider = new PlayerContentColorProvider(castleColorConfig, playerColorProvider);
+        var castleVisualCreator = new CastleVisualCreator(castleVisualPrefabConfig, castleColorProvider, instantiator);
         var castleAudioFactory = new SoundPlayerCastleAudioFactory(castleSoundsConfig, castleAudioPrefab, instantiator);
-        var castleViewFactory = new CastleViewFactory(null, castleAudioFactory, castleViewPrefab, instantiator);
+        var castleViewFactory = new CastleViewFactory(castleVisualCreator, castleAudioFactory, castleViewPrefab, instantiator);
         
         var contentViewProvider = new ContentViewProvider(treeViewFactory, knightViewFactory, castleViewFactory);
         _contentView = new CellsContentView(grid, contentViewProvider);

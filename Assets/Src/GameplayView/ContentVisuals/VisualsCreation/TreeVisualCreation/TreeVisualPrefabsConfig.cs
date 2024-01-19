@@ -3,7 +3,7 @@ using UnityEngine;
 
 namespace Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation
 {
-    [CreateAssetMenu(fileName = "TreeVisualPrefabsConfig", menuName = "ContentVisuals/TreeVisualPrefabsConfig")]
+    [CreateAssetMenu(fileName = "TreeVisualPrefabsConfig", menuName = "Configs/ContentVisuals/TreeVisualPrefabsConfig")]
     public class TreeVisualPrefabsConfig : ScriptableObject, ITreeVisualPrefabsListProvider
     {
         [SerializeField] private List<TreeVisual> treeVisualPrefabs = new();

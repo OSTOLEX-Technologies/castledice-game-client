@@ -995,13 +995,15 @@ MonoBehaviour:
   knightSoundsConfig: {fileID: 11400000, guid: 485eb9cf476b15846a9daa2cc5f3fd51, type: 2}
   knightAudioPrefab: {fileID: 9031346945946173860, guid: abb0e1d6dcd916b4cbcd0a662fdec3a6, type: 3}
   knightViewPrefab: {fileID: 8287254654038348272, guid: fec35469feb64db409bb0570e44ff1ae, type: 3}
-  knightModelPrefabConfig: {fileID: 11400000, guid: 3eb0bf1400b768348a21e9c386b86dbb, type: 2}
+  knightVisualPrefabConfig: {fileID: 11400000, guid: c44ea10e9a3e6c94b824c5c0d09251ca, type: 2}
+  knightColorConfig: {fileID: 11400000, guid: 711e8d7fa4e69164f83437761d9069e1, type: 2}
   treeViewPrefab: {fileID: 6641248664255995534, guid: 89c5eb029b6403f41a5c1af3cd1c0e23, type: 3}
-  treeModelPrefabConfig: {fileID: 11400000, guid: 5de1aa0ca1a4f6447b49b8b83ae81fa9, type: 2}
+  treeVisualPrefabConfig: {fileID: 11400000, guid: 3334c42dee8183e4eaa3d218ef93101f, type: 2}
   castleSoundsConfig: {fileID: 11400000, guid: da329f08e63390a4bbcfcb6c496a1916, type: 2}
   castleViewPrefab: {fileID: 7926198696129808440, guid: 8fd36fd32163a4e489e348d9dca9a4ca, type: 3}
   castleAudioPrefab: {fileID: 312714061503171999, guid: 8efee6a2294d5fc4dba083eb75ad1003, type: 3}
-  castleModelPrefabConfig: {fileID: 11400000, guid: 0f61c6e54b735274c8922b3926ba91cd, type: 2}
+  castleVisualPrefabConfig: {fileID: 11400000, guid: 890a5dc2d4b52694d94c48061122b580, type: 2}
+  castleColorConfig: {fileID: 11400000, guid: 076d5a78144da404c8d07244e340ec63, type: 2}
   popupDisappearTimeMilliseconds: 1500
   redActionPointsPopup: {fileID: 1306602971}
   blueActionPointsPopup: {fileID: 1856468401}
