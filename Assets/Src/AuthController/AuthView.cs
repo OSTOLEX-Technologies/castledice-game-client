@@ -11,12 +11,20 @@ using Src.AuthController.REST;
 using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
+using TMPro;
 using UnityEngine;
+using UnityEngine.Serialization;
+using UnityEngine.UI;
 
 namespace Src.AuthController
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
+        [SerializeField, InspectorName("Sign in Message Panel")]
+        private RectTransform signInMessagePanel;
+        [SerializeField, InspectorName("Sign in Message Text Field")]
+        private TextMeshProUGUI signInMessageText;
+        
         private AuthController _authController;
         private SingletonCacher _singletonCacher;
 
@@ -55,9 +63,9 @@ namespace Src.AuthController
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
         }
 
-        public void ShowSignInResult()
+        public void ShowSignInMessage(bool bShow, string signInMessage)
         {
-            throw new NotImplementedException();
+            
         }
         
         private async void OnTokenProviderLoaded(object sender, EventArgs e)

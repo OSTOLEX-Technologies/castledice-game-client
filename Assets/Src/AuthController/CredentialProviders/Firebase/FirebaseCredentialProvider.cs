@@ -25,9 +25,9 @@ namespace Src.AuthController.CredentialProviders.Firebase
                 case FirebaseAuthProviderType.Google:
                     var googleCredentialProvider = _internalCredentialProviderCreator.CreateGoogleCredentialProvider();
                     var googleCredentials = await googleCredentialProvider.GetCredentialAsync();
-                    Credential credential = _firebaseCredentialFormatter.FormatCredentials(googleCredentials);
-                    return credential;
-                default:
+                        Credential credential = _firebaseCredentialFormatter.FormatCredentials(googleCredentials);
+                        return credential; 
+                default: 
                     throw new FirebaseCredentialProviderNotFoundException(authProviderType);
             }
         }

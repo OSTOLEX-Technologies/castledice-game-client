@@ -88,7 +88,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 GoogleAuthConfig.ClientSecret,
                 authCode,
                 GoogleAuthConfig.Verifier,
-                _linkFormatter.FormatLink(DeepLinkConfig.GoogleAuthRedirectUri));
+                GoogleAuthConfig.RedirectUri);
             
             _restRequestsAdapter.ExchangeAuthCodeWithIdToken(requestParamsDto, idResponseTcs);
         }

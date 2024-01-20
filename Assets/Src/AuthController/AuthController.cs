@@ -1,7 +1,10 @@
 ﻿using System;
+using Src.AuthController.Exceptions.Authorization;
+using Src.AuthController.Exceptions.HttpRequests;
 using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
+using UnityEngine;
 
 namespace Src.AuthController
 {
@@ -28,9 +31,29 @@ namespace Src.AuthController
         
         private async void OnAuthTypeChosenAsync(object sender, AuthType authType)
         {
-            IAccessTokenProvider tokenProvider = await _tokenProvidersStrategy.GetAccessTokenProviderAsync(authType);
-            _cacher.CacheObject(tokenProvider);
-            TokenProviderLoaded?.Invoke(this, EventArgs.Empty);
+            try
+            {
+                IAccessTokenProvider tokenProvider =
+                    await _tokenProvidersStrategy.GetAccessTokenProviderAsync(authType);
+                _cacher.CacheObject(tokenProvider);
+                TokenProviderLoaded?.Invoke(this, EventArgs.Empty);
+            }
+            catch (HttpNetworkNotReachableException networkNotReachableException)
+            {
+                Debug.Log("Network: " + networkNotReachableException.Message);
+            }
+            catch (AuthCancelledException cancelledException)
+            {
+                Debug.Log("Cancelled: " + cancelledException.Message);
+            }
+            catch (AuthFailedException failedException)
+            {
+                Debug.Log("Failed: " + failedException.Message + ", Reason was: " + failedException.Reason);
+            }
+            catch (AuthUnhandledException unhandledException)
+            {
+                Debug.Log("Unhandled: " + unhandledException.Message);
+            }
         }
     }
 }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Net;
 
-namespace Src.AuthController.Exceptions
+namespace Src.AuthController.Exceptions.HttpRequests
 {
     [Serializable]
     public class HttpClientRequestException : Exception
