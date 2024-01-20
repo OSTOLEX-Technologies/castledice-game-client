@@ -40,19 +40,19 @@ namespace Src.AuthController
             }
             catch (HttpNetworkNotReachableException networkNotReachableException)
             {
-                Debug.Log("Network: " + networkNotReachableException.Message);
+                _view.ShowSignInMessage(AuthErrorMessagesConfig.NetworkError);
             }
             catch (AuthCancelledException cancelledException)
             {
-                Debug.Log("Cancelled: " + cancelledException.Message);
+                _view.ShowSignInMessage(AuthErrorMessagesConfig.CancellationError);
             }
             catch (AuthFailedException failedException)
             {
-                Debug.Log("Failed: " + failedException.Message + ", Reason was: " + failedException.Reason);
+                _view.ShowSignInMessage(AuthErrorMessagesConfig.FailureError);
             }
             catch (AuthUnhandledException unhandledException)
             {
-                Debug.Log("Unhandled: " + unhandledException.Message);
+                _view.ShowSignInMessage(AuthErrorMessagesConfig.UnhandledError);
             }
         }
     }

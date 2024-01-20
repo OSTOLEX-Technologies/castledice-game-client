@@ -19,7 +19,7 @@ namespace Src.AuthController
     public class AuthView : MonoBehaviour, IAuthView
     {
         [SerializeField, InspectorName("Sign in Message Panel")]
-        private RectTransform signInMessagePanel;
+        private Canvas signInMessageCanvas;
         [SerializeField, InspectorName("Sign in Message Text Field")]
         private TextMeshProUGUI signInMessageText;
         
@@ -66,9 +66,10 @@ namespace Src.AuthController
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
         }
 
-        public void ShowSignInMessage(bool bShow, string signInMessage)
+        public void ShowSignInMessage(string signInMessage)
         {
-            
+            signInMessageText.SetText(signInMessage);
+            signInMessageCanvas.gameObject.SetActive(true);
         }
         
         private async void OnTokenProviderLoaded(object sender, EventArgs e)
