@@ -10,18 +10,18 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
     public class CastleViewTests
     {
         [Test]
-        public void Init_ShouldSetGivenModelAsChildObjectWithZeroLocalPosition()
+        public void Init_ShouldSetGivenVisualAsChildObjectWithZeroLocalPosition()
         {
-            var model = new GameObject();
-            model.transform.position = Random.insideUnitSphere;
+            var visual = GetCastleVisual();
+            visual.transform.position = Random.insideUnitSphere;
             var audio = new GameObject().AddComponent<CastleAudioForTests>();
             var castleView = new GameObject().AddComponent<CastleView>();
             var castle = GetCastle();
             
-            castleView.Init(castle, model, audio);
+            castleView.Init(castle, visual, audio);
             
-            Assert.AreSame(castleView.transform, model.transform.parent);
-            Assert.AreEqual(Vector3.zero, model.transform.localPosition);
+            Assert.AreSame(castleView.transform, visual.transform.parent);
+            Assert.AreEqual(Vector3.zero, visual.transform.localPosition);
         }
         
         [Test]
@@ -29,11 +29,10 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         {
             var audio = new GameObject().AddComponent<CastleAudioForTests>();
             audio.transform.position = Random.insideUnitSphere;
-            var model = new GameObject();
             var castleView = new GameObject().AddComponent<CastleView>();
             var castle = GetCastle();
             
-            castleView.Init(castle, model, audio);
+            castleView.Init(castle, GetCastleVisual(), audio);
             
             Assert.AreSame(castleView.transform, audio.transform.parent);
             Assert.AreEqual(Vector3.zero, audio.transform.localPosition);
@@ -44,7 +43,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         {
             var castleView = new GameObject().AddComponent<CastleView>();
             var audio = castleView.gameObject.AddComponent<CastleAudioForTests>();
-            castleView.Init(GetCastle(), new GameObject(), audio);
+            castleView.Init(GetCastle(), GetCastleVisual(), audio);
             
             castleView.DestroyView();
             
@@ -52,16 +51,16 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         }
 
         [Test]
-        public void DestroyView_ShouldSetModelInactive()
+        public void DestroyView_ShouldSetVisualInactive()
         {
-            var model = new GameObject();
-            model.SetActive(true);
+            var visual = GetCastleVisual();
+            visual.gameObject.SetActive(true);
             var castleView = new GameObject().AddComponent<CastleView>();
-            castleView.Init(GetCastle(), model, new GameObject().AddComponent<CastleAudioForTests>());
+            castleView.Init(GetCastle(), visual, new GameObject().AddComponent<CastleAudioForTests>());
             
             castleView.DestroyView();
             
-            Assert.IsFalse(model.activeSelf);
+            Assert.IsFalse(visual.gameObject.activeSelf);
         }
         
         [Test]
@@ -70,7 +69,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             var castleView = new GameObject().AddComponent<CastleView>();
             var audio = castleView.gameObject.AddComponent<CastleAudioForTests>();
             var castle = GetCastle();
-            castleView.Init(castle, new GameObject(), audio);
+            castleView.Init(castle, GetCastleVisual(), audio);
             
             Assert.AreSame(castle, castleView.Content);
         }
@@ -81,7 +80,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             var castleView = new GameObject().AddComponent<CastleView>();
             var audio = castleView.gameObject.AddComponent<CastleAudioForTests>();
             var castle = GetCastle();
-            castleView.Init(castle, new GameObject(), audio);
+            castleView.Init(castle, GetCastleVisual(), audio);
             
             castle.CaptureHit(GetPlayer(actionPointsCount: 6));
             

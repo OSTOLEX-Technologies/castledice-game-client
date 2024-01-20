@@ -1,5 +1,6 @@
 ﻿using castledice_game_logic.GameObjects;
 using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
+using Src.GameplayView.ContentVisuals;
 using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentViews
@@ -7,19 +8,19 @@ namespace Src.GameplayView.CellsContent.ContentViews
     public class KnightView : ContentView
     {
         private KnightAudio _audio;
+        private KnightVisual _visual;
         private Knight _knight;
         
         public override Content Content => _knight;
 
-        public void Init(Knight knight, GameObject model, Vector3 rotation, KnightAudio knightAudio)
+        public void Init(Knight knight, KnightVisual visual, Vector3 rotation, KnightAudio audio)
         {
-            Init(model);
             _knight = knight;
-            Model.transform.localEulerAngles = rotation;
-            _audio = knightAudio;
-            var audioTransform = knightAudio.transform;
-            audioTransform.SetParent(transform);
-            audioTransform.localPosition = Vector3.zero;
+            _visual = visual;
+            _audio = audio;
+            SetAsChildAndCenter(visual.gameObject);
+            SetAsChildAndCenter(audio.gameObject);
+            _visual.transform.localEulerAngles = rotation;
         }
         
         public override void StartView()
@@ -35,7 +36,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
         public override void DestroyView()
         {
             _audio.PlayDestroySound();
-            Model.SetActive(false);
+            _visual.gameObject.SetActive(false);
         }
     }
 }

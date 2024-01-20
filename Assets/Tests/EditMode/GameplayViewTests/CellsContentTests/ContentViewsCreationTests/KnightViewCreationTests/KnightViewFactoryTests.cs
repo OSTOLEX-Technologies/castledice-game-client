@@ -6,6 +6,8 @@ using Src.GameplayView;
 using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
+using Src.GameplayView.ContentVisuals;
+using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.PlayersRotations;
 using Tests.Utils.Mocks;
 using UnityEngine;
@@ -46,26 +48,26 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
 
 
         [Test]
-        public void GetKnightView_ShouldReturnView_WithAppropriateModel()
+        public void GetKnightView_ShouldReturnView_WithAppropriateVisual()
         {
             var knight = GetKnight();
-            var expectedModel = new GameObject();
-            var modelProviderMock = new Mock<IKnightModelProvider>();
-            modelProviderMock.Setup(p => p.GetKnightModel(knight)).Returns(expectedModel);
+            var expectedVisual = GetKnightVisual();
+            var visualCreatorMock = new Mock<IKnightVisualCreator>();
+            visualCreatorMock.Setup(c => c.GetKnightVisual(knight)).Returns(expectedVisual);
             var factory = new KnightViewFactoryBuilder
             {
-                ModelProvider = modelProviderMock.Object
+                VisualCreator = visualCreatorMock.Object
             }.Build();
             
             var knightView = factory.GetKnightView(knight);
-            var fieldInfo = typeof(KnightView).GetField("Model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var actualModel = fieldInfo?.GetValue(knightView);
+            var fieldInfo = typeof(KnightView).GetField("_visual", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var actualVisual = fieldInfo?.GetValue(knightView);
             
-            Assert.AreSame(expectedModel, actualModel);
+            Assert.AreSame(expectedVisual, actualVisual);
         }
 
         [Test]
-        public void GetKnightView_ShouldReturnView_WithAppropriateModelRotation()
+        public void GetKnightView_ShouldReturnView_WithAppropriateVisualRotation()
         {
             var knight = GetKnight();
             var expectedRotation = new Vector3(Random.value, Random.value, Random.value); //We pass Vector3 with only positive values because Unity normalizes rotation values to be between 0 and 360 and it may ruin the test.
@@ -77,9 +79,9 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             }.Build();
             
             var knightView = factory.GetKnightView(knight);
-            var fieldInfo = typeof(KnightView).GetField("Model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var model = fieldInfo?.GetValue(knightView);
-            var actualRotation = ((GameObject) model).transform.localRotation.eulerAngles;
+            var fieldInfo = typeof(KnightView).GetField("_visual", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var visual = fieldInfo?.GetValue(knightView);
+            var actualRotation = ((KnightVisual) visual).transform.localRotation.eulerAngles;
             
             Assert.AreEqual(expectedRotation.x, actualRotation.x, 0.0001f);
             Assert.AreEqual(expectedRotation.y, actualRotation.y, 0.0001f);
@@ -109,7 +111,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
         private class KnightViewFactoryBuilder
         {
             public IPlayerRotationProvider RotationProvider { get; set; }
-            public IKnightModelProvider ModelProvider { get; set; }
+            public IKnightVisualCreator VisualCreator { get; set; }
             public IKnightAudioFactory AudioFactory { get; set; }
             public KnightView KnightViewPrefab { get; set; }
             public IInstantiator Instantiator { get; set; }
@@ -125,9 +127,9 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
                 var rotationProviderMock = new Mock<IPlayerRotationProvider>();
                 rotationProviderMock.Setup(provider => provider.GetRotation(It.IsAny<Player>())).Returns(Random.insideUnitSphere);
                 RotationProvider = rotationProviderMock.Object;
-                var modelProviderMock = new Mock<IKnightModelProvider>();
-                modelProviderMock.Setup(provider => provider.GetKnightModel(It.IsAny<Knight>())).Returns(new GameObject());
-                ModelProvider = modelProviderMock.Object;
+                var visualCreatorMock = new Mock<IKnightVisualCreator>();
+                visualCreatorMock.Setup(c => c.GetKnightVisual(It.IsAny<Knight>())).Returns(GetKnightVisual());
+                VisualCreator = visualCreatorMock.Object;
                 var audioFactoryMock = new Mock<IKnightAudioFactory>();
                 var audio = new GameObject().AddComponent<KnightAudioForTests>();;
                 audioFactoryMock.Setup(factory => factory.GetAudio(It.IsAny<Knight>())).Returns(audio);
@@ -136,7 +138,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             
             public KnightViewFactory Build()
             {
-                return new KnightViewFactory(RotationProvider, ModelProvider, AudioFactory, KnightViewPrefab, Instantiator);
+                return new KnightViewFactory(RotationProvider, VisualCreator, AudioFactory, KnightViewPrefab, Instantiator);
             }
         }
     }

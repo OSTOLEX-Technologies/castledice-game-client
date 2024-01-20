@@ -10,6 +10,7 @@ using castledice_game_logic;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
+using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.PlayerColoredContentVisualFieldNames;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
@@ -21,6 +22,8 @@ using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.Audio;
+using Src.GameplayView.ContentVisuals;
+using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
 using Src.GameplayView.PlayersColors;
 using Tests.Utils.Mocks;
 using UnityEditor;
@@ -340,6 +343,111 @@ namespace Tests
         {
             var mock = new Mock<AbstractMove>(GetPlayer(), new Vector2Int(0, 0));
             return mock.Object;
+        }
+        
+        public static List<Renderer> GetRenderersListWithMaterial(Material material, int count)
+        {
+            var renderers = new List<Renderer>();
+            for (var i = 0; i < count; i++)
+            {
+                renderers.Add(GetRendererWithMaterial(material));
+            }
+            return renderers;
+        }
+        
+        public static Renderer GetRendererWithMaterial(Material material)
+        {
+            var gameObject = new GameObject();
+            var renderer = gameObject.AddComponent<MeshRenderer>();
+            renderer.material = material;
+            return renderer;
+        }
+        
+        public static List<Material> GetMaterialsList(int count)
+        {
+            var materials = new List<Material>();
+            for (var i = 0; i < count; i++)
+            {
+                materials.Add(GetMaterialWithColor(UnityEngine.Random.ColorHSV()));
+            }
+            return materials;
+        }
+        
+        public static Material GetMaterialWithColor(Color color)
+        {
+            var material = new Material(Shader.Find("Standard"))
+            {
+                color = color
+            };
+            return material;
+        }
+        
+        public static KnightVisual GetKnightVisual()
+        {
+            var visual = new GameObject().AddComponent<KnightVisual>();
+            var meshRenderer = visual.gameObject.AddComponent<MeshRenderer>();
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                meshRenderer
+            }));
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                meshRenderer
+            }));
+            return visual;
+        }
+        
+        public static List<TreeVisual> GetTreeVisualsList(int count)
+        {
+            var visuals = new List<TreeVisual>();
+            for (var i = 0; i < count; i++)
+            {
+                visuals.Add(GetTreeVisual());
+            }
+            return visuals;
+        }
+        
+        public static TreeVisual GetTreeVisual()
+        {
+            var visual = new GameObject().AddComponent<TreeVisual>();
+            var renderer = new GameObject().AddComponent<MeshRenderer>();
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                renderer
+            }));
+            return visual;
+        }
+
+        public static CastleVisual GetCastleVisual()
+        {
+            var visual = new GameObject().AddComponent<CastleVisual>();
+            var renderer = new GameObject().AddComponent<MeshRenderer>();
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                renderer
+            }));
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                renderer
+            }));
+            return visual;
+        }
+
+        public static CompoundRenderer GetCompoundRenderer(List<Renderer> renderers)
+        {
+            var compoundRenderer = new CompoundRenderer();
+            compoundRenderer.SetPrivateField("renderers", renderers);
+            return compoundRenderer;
+        }
+        
+        public static List<Renderer> GetRenderersList(int count)
+        {
+            var renderers = new List<Renderer>();
+            for (var i = 0; i < count; i++)
+            {
+                renderers.Add(new GameObject().AddComponent<MeshRenderer>());
+            }
+            return renderers;
         }
     }
 }

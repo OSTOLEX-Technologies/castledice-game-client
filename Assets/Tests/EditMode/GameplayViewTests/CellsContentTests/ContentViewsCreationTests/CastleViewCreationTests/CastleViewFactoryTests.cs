@@ -5,6 +5,7 @@ using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using static Tests.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation;
+using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Tests.Utils.Mocks;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 using UnityEngine;
@@ -51,37 +52,37 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
         }
 
         [Test]
-        public void GetCastleView_ShouldReturnViewWithModel_FromGivenProvider()
+        public void GetCastleView_ShouldReturnViewWithVisual_FromGivenCreator()
         {
-            var expectedModel = new GameObject();
-            var modelProviderMock = new Mock<ICastleModelProvider>();
+            var expectedVisual = GetCastleVisual();
+            var visualCreatorMock = new Mock<ICastleVisualCreator>();
             var castle = GetCastle();
-            modelProviderMock.Setup(provider => provider.GetCastleModel(castle)).Returns(expectedModel);
+            visualCreatorMock.Setup(c => c.GetCastleVisual(castle)).Returns(expectedVisual);
             var factory = new CastleViewFactoryBuilder
             {
-                CastleModelProvider = modelProviderMock.Object
+                VisualCreator = visualCreatorMock.Object
             }.Build();
             
             var view = factory.GetCastleView(castle);
-            var fieldInfo = view.GetType().GetField("Model", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var actualModel = fieldInfo.GetValue(view) as GameObject;
+            var fieldInfo = view.GetType().GetField("_visual", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var actualVisual = fieldInfo.GetValue(view) as GameObject;
             
-            Assert.AreSame(expectedModel, actualModel);
+            Assert.AreSame(expectedVisual, actualVisual);
         }
 
         private class CastleViewFactoryBuilder
         {
-            public ICastleModelProvider CastleModelProvider { get; set; }
+            public ICastleVisualCreator VisualCreator { get; set; }
             public ICastleAudioFactory CastleAudioFactory { get; set; }
             public CastleView CastleViewPrefab { get; set; }
             public IInstantiator Instantiator { get; set; }
 
             public CastleViewFactoryBuilder()
             {
-                var model = new GameObject();
-                var modelProviderMock = new Mock<ICastleModelProvider>();
-                modelProviderMock.Setup(provider => provider.GetCastleModel(It.IsAny<CastleGO>())).Returns(model);
-                CastleModelProvider = modelProviderMock.Object;
+                var visual = GetCastleVisual();
+                var visualCreatorMock = new Mock<ICastleVisualCreator>();
+                visualCreatorMock.Setup(provider => provider.GetCastleVisual(It.IsAny<CastleGO>())).Returns(visual);
+                VisualCreator = visualCreatorMock.Object;
                 var audio = new GameObject().AddComponent<CastleAudioForTests>();
                 var audioFactoryMock = new Mock<ICastleAudioFactory>();
                 audioFactoryMock.Setup(factory => factory.GetAudio(It.IsAny<CastleGO>())).Returns(audio);
@@ -96,7 +97,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             
             public CastleViewFactory Build()
             {
-                return new CastleViewFactory(CastleModelProvider, CastleAudioFactory, CastleViewPrefab, Instantiator);
+                return new CastleViewFactory(VisualCreator, CastleAudioFactory, CastleViewPrefab, Instantiator);
             }
         }
     }

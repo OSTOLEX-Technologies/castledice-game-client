@@ -1,5 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
-using UnityEngine;
+using Src.GameplayView.ContentVisuals;
 using Tree = castledice_game_logic.GameObjects.Tree;
 
 namespace Src.GameplayView.CellsContent.ContentViews
@@ -7,14 +7,15 @@ namespace Src.GameplayView.CellsContent.ContentViews
     public class TreeView : ContentView
     {
         private Tree _tree;
-        private GameObject _model;
+        private TreeVisual _visual;
         
         public override Content Content => _tree;
         
-        public void Init(Tree tree, GameObject model)
+        public void Init(Tree tree, TreeVisual visual)
         {
-            Init(model);
             _tree = tree;
+            _visual = visual;
+            SetAsChildAndCenter(_visual.gameObject);
         }
         
         public override void StartView()
