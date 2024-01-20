@@ -13,8 +13,6 @@ using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using TMPro;
 using UnityEngine;
-using UnityEngine.Serialization;
-using UnityEngine.UI;
 
 namespace Src.AuthController
 {
@@ -30,11 +28,16 @@ namespace Src.AuthController
 
         public void LoginWithGoogle()
         {
-            AuthTypeChosen?.Invoke(this, AuthType.Google);
+            Login(AuthType.Google);
         }
         public void LoginWithMetamask()
         {
-            AuthTypeChosen?.Invoke(this, AuthType.Metamask);
+            Login(AuthType.Metamask);
+        }
+
+        public void Login(AuthType authType)
+        {
+            AuthTypeChosen?.Invoke(this, authType);
         }
         
         private void Awake()

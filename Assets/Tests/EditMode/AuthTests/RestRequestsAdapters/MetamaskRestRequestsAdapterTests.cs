@@ -34,7 +34,7 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
                 It.IsAny<string>(),
                 nonceRequestParamsStub.AsDictionary(),
                 It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()
-            )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskNonceResponse>>
+            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskNonceResponse>>
             ((_, _, _, tcs) => tcs.SetResult(expectedNonceResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
@@ -59,7 +59,7 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
                 It.IsAny<string>(),
                 authRequestParamsStub.AsDictionary(),
                 It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()
-            )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskAccessTokenResponse>>
+            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskAccessTokenResponse>>
                 ((_, _, _, tcs) => tcs.SetResult(expectedAuthResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
@@ -82,7 +82,7 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
                 It.IsAny<string>(),
                 authRequestParamsStub.AsDictionary(),
                 It.IsAny<TaskCompletionSource<MetamaskRefreshTokenResponse>>()
-            )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskRefreshTokenResponse>>
+            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskRefreshTokenResponse>>
                 ((_, _, _, tcs) => tcs.SetResult(expectedRefreshResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
