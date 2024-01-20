@@ -8,21 +8,30 @@ using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapte
 using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
 using Src.AuthController.JwtManagement.Converters.Metamask;
 using Src.AuthController.REST;
-using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using TMPro;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 namespace Src.AuthController
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
-        [SerializeField, InspectorName("Sign in Message Panel")]
+        [SerializeField, InspectorName("Sign in Canvas")]
+        private Canvas signInCanvas;
+        
+        [SerializeField, InspectorName("Sign in Message Canvas")]
         private Canvas signInMessageCanvas;
         [SerializeField, InspectorName("Sign in Message Text Field")]
         private TextMeshProUGUI signInMessageText;
         
+        [SerializeField, InspectorName("Play Button Canvas")]
+        private Canvas playCanvas;
+        
+        [SerializeField, InspectorName("Sign in Canvas")]
+        private MetamaskConnectionHandlePreserver metamaskConnectionHandlePreserver;
+
         private AuthController _authController;
         private SingletonCacher _singletonCacher;
 
@@ -33,6 +42,12 @@ namespace Src.AuthController
         public void LoginWithMetamask()
         {
             Login(AuthType.Metamask);
+        }
+
+        public void Play()
+        {
+            metamaskConnectionHandlePreserver.DisposeMetamaskServices();
+            SceneManager.LoadSceneAsync("MainMenu");
         }
 
         public void Login(AuthType authType)
@@ -72,9 +87,10 @@ namespace Src.AuthController
             signInMessageCanvas.gameObject.SetActive(true);
         }
         
-        private async void OnTokenProviderLoaded(object sender, EventArgs e)
+        private void OnTokenProviderLoaded(object sender, EventArgs e)
         {
-            var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
+            playCanvas.gameObject.SetActive(true);
+            signInCanvas.gameObject.SetActive(false);
         }
 
         public event EventHandler<AuthType> AuthTypeChosen;

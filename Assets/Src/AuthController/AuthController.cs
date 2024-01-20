@@ -4,7 +4,6 @@ using Src.AuthController.Exceptions.HttpRequests;
 using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
-using UnityEngine;
 
 namespace Src.AuthController
 {

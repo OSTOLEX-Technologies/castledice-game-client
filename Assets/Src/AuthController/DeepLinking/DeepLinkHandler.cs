@@ -33,8 +33,6 @@ namespace Src.AuthController.DeepLinking
 
         private void OnDeepLinkActivated(string url)
         {
-            Debug.Log("DeepLink activated!");
-            
             try
             {
                 var linkName = _linkResolver.TryResolveLink(url);

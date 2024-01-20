@@ -1,14 +1,13 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.AuthKeys;
 using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
-using Src.AuthController.DeepLinking.Config;
-using Src.AuthController.DeepLinking.LinkResolver.LinkFormatter;
 using Src.AuthController.JwtManagement;
 using Src.AuthController.JwtManagement.Converters.Google;
 using Src.AuthController.REST.PortListener;
 using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
 using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
 using Src.AuthController.UrlOpening;
+using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders.Firebase.Google
 {
@@ -19,7 +18,6 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         private readonly IGoogleRestRequestsAdapter _restRequestsAdapter;
         private readonly IUrlOpener _oAuthUrlOpener;
         private readonly ILocalHttpPortListener _localHttpPortListener;
-        private readonly IDeepLinkFormatter _linkFormatter;
         private readonly IGoogleJwtConverter _jwtConverter;
 
         private GoogleJwtStore _tokenStore;
@@ -28,20 +26,20 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             IGoogleRestRequestsAdapter restRequestsAdapter, 
             IUrlOpener oAuthUrlOpener, 
             ILocalHttpPortListener localHttpPortListener,
-            IDeepLinkFormatter linkFormatter,
             IGoogleJwtConverter jwtConverter)
         {
             _restRequestsAdapter = restRequestsAdapter;
             _oAuthUrlOpener = oAuthUrlOpener;
             _localHttpPortListener = localHttpPortListener;
-            _linkFormatter = linkFormatter;
             _jwtConverter = jwtConverter;
         }
         
         public async Task<GoogleJwtStore> GetCredentialAsync()
         {
+            Debug.Log("||| CHECK STARTED |||");
             if (!TokenIsStored)
             {
+                Debug.Log("TOKEN ISNT STORED");
                 var authResponse = await GetAuthData();;
                 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
@@ -51,6 +49,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
 
             if (!_tokenStore.AccessToken.Valid)
             {
+                Debug.Log("TOKEN INVALID");
                 var refreshResponse = await RefreshAccessToken();
 
                 _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
@@ -58,6 +57,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 return _tokenStore;
             }
 
+            Debug.Log("TOKEN VALID");
             return _tokenStore;
         }
 
@@ -75,9 +75,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             _oAuthUrlOpener.Open(GoogleAuthConfig.GoogleOAuthUrl);
             
             var idResponse = await idResponseTcs.Task;
-
-            _oAuthUrlOpener.Open(_linkFormatter.FormatLink(DeepLinkConfig.GoogleAuthRedirectUri));
-
+            
             return idResponse;
         }
         
