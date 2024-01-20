@@ -17,6 +17,7 @@ namespace Tests.Utils.Mocks
         public override void  PlayDestroySound()
         {
             PlayDestroySoundCalled = true;
+            DestroySoundPlayed?.Invoke();
         }
 
         public override event Action DestroySoundPlayed;

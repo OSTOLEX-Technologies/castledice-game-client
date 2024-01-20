@@ -16,6 +16,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
         public void Init(CastleGO castle, CastleVisual visual, CastleAudio audio)
         {
             _audio = audio;
+            _audio.DestroySoundPlayed += OnDestroySoundPlayed;
             _castle = castle;
             _castle.Hit += OnHit;
             _visual = visual;
@@ -42,6 +43,12 @@ namespace Src.GameplayView.CellsContent.ContentViews
         private void OnHit(object sender, int damage)
         {
             _audio.PlayHitSound();
+        }
+        
+        private void OnDestroySoundPlayed()
+        {
+            _audio.DestroySoundPlayed -= OnDestroySoundPlayed;
+            Destroy(gameObject);
         }
     }
 }
