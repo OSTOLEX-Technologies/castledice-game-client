@@ -1,4 +1,5 @@
-﻿using Src.GameplayView.Audio;
+﻿using System;
+using Src.GameplayView.Audio;
 using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentAudio.CastleAudio
@@ -23,6 +24,14 @@ namespace Src.GameplayView.CellsContent.ContentAudio.CastleAudio
         public override void PlayDestroySound()
         {
             soundPlayer.PlaySound(_destroySound);
+            Invoke(nameof(FireDestroySoundPlayed), _destroySound.Clip.length);
         }
+
+        private void FireDestroySoundPlayed()
+        {
+            DestroySoundPlayed?.Invoke();
+        }
+
+        public override event Action DestroySoundPlayed;
     }
 }

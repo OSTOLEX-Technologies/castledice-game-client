@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Src.GameplayView.CellsContent.ContentAudio.CastleAudio
 {
@@ -6,5 +7,6 @@ namespace Src.GameplayView.CellsContent.ContentAudio.CastleAudio
     {
        public abstract void PlayHitSound();
        public abstract void PlayDestroySound();
+       public abstract event Action DestroySoundPlayed;
     }
 }
