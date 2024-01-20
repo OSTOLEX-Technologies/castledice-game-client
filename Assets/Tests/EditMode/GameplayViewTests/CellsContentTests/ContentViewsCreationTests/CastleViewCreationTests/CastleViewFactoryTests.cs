@@ -5,6 +5,7 @@ using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using static Tests.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation;
+using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Tests.Utils.Mocks;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
@@ -65,7 +66,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             
             var view = factory.GetCastleView(castle);
             var fieldInfo = view.GetType().GetField("_visual", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var actualVisual = fieldInfo.GetValue(view) as GameObject;
+            var actualVisual = fieldInfo.GetValue(view) as CastleVisual;
             
             Assert.AreSame(expectedVisual, actualVisual);
         }
