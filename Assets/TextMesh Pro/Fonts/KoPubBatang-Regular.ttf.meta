@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 1319c6be530a6d649a2d3979c49ab48a
+guid: 9b15fae02f85cdf4b87cedd147995bb9
 TrueTypeFontImporter:
   externalObjects: {}
   serializedVersion: 4
@@ -10,7 +10,8 @@ TrueTypeFontImporter:
   includeFontData: 1
   fontNames:
   - KoPub Batang
-  fallbackFontReferences: []
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 46471a12e962fb54f88615addee4d40e, type: 3}
   customCharacters: 
   fontRenderingMode: 0
   ascentCalculationMode: 1

@@ -56,8 +56,7 @@ Material:
   m_PrefabAsset: {fileID: 0}
   m_Name: Bitter-Regular SDF Material
   m_Shader: {fileID: 4800000, guid: 68e6db2ebdc24f95958faec2be5558d6, type: 3}
-  m_ValidKeywords:
-  - UNDERLAY_ON
+  m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
   m_EnableInstancingVariants: 0
@@ -120,7 +119,7 @@ Material:
     - _Reflectivity: 10
     - _ScaleRatioA: 0.8333333
     - _ScaleRatioB: 0.6770833
-    - _ScaleRatioC: 0.6770833
+    - _ScaleRatioC: 0.41437167
     - _ScaleX: 1
     - _ScaleY: 1
     - _ShaderFlags: 0
@@ -135,7 +134,7 @@ Material:
     - _TextureWidth: 512
     - _UnderlayDilate: -0.366
     - _UnderlayOffsetX: 0
-    - _UnderlayOffsetY: 0
+    - _UnderlayOffsetY: -1
     - _UnderlaySoftness: 1
     - _VertexOffsetX: 0
     - _VertexOffsetY: 0
@@ -144,7 +143,7 @@ Material:
     m_Colors:
     - _ClipRect: {r: -32767, g: -32767, b: 32767, a: 32767}
     - _EnvMatrixRotation: {r: 0, g: 0, b: 0, a: 0}
-    - _FaceColor: {r: 1, g: 1, b: 1, a: 0}
+    - _FaceColor: {r: 1, g: 1, b: 1, a: 1}
     - _GlowColor: {r: 0, g: 1, b: 0, a: 0.5}
     - _MaskCoord: {r: 0, g: 0, b: 32767, a: 32767}
     - _OutlineColor: {r: 0, g: 0, b: 0, a: 1}
@@ -163,11 +162,11 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 71c1514a6bd24e1e882cebbe1904ce04, type: 3}
-  m_Name: Bitter-Regular-Shadow SDF
+  m_Name: Bitter-Regular-Plus SDF 1
   m_EditorClassIdentifier: 
-  hashCode: -600111535
+  hashCode: -1936366771
   material: {fileID: -1290588194519223200}
-  materialHashCode: 1737295313
+  materialHashCode: -1387566003
   m_Version: 1.1.0
   m_SourceFontFileGUID: 5a7343ae1b292db4990a860a9f9b2e39
   m_SourceFontFile_EditorRef: {fileID: 12800000, guid: 5a7343ae1b292db4990a860a9f9b2e39, type: 3}
