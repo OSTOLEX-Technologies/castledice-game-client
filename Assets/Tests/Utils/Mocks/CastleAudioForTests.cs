@@ -1,4 +1,5 @@
-﻿using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
+﻿using System;
+using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using UnityEngine;
 
 namespace Tests.Utils.Mocks
@@ -16,6 +17,9 @@ namespace Tests.Utils.Mocks
         public override void  PlayDestroySound()
         {
             PlayDestroySoundCalled = true;
+            DestroySoundPlayed?.Invoke();
         }
+
+        public override event Action DestroySoundPlayed;
     }
 }

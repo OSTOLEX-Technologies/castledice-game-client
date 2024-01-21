@@ -1,8 +1,10 @@
-﻿using Moq;
+﻿using System.Collections;
+using Moq;
 using NUnit.Framework;
 using Src.GameplayView.Audio;
 using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using UnityEngine;
+using UnityEngine.TestTools;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.KnightAudioTests
@@ -49,6 +51,23 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.K
             soundPlayerKnightAudio.PlayDestroySound();
             
             soundPlayerMock.Verify(soundPlayer => soundPlayer.PlaySound(expectedDestroySound), Times.Once);
+        }
+        
+        [UnityTest]
+        public IEnumerator PlayDestroySound_ShouldInvokeDestroySoundPlayedEvent_AfterAudioClipIsPlayed()
+        {
+            var soundPlayerMock = new Mock<SoundPlayer>();
+            var destroySound = GetSound();
+            var audio = new GameObject().AddComponent<SoundPlayerKnightAudio>();
+            SetPrivateFieldValue(soundPlayerMock.Object, audio, "soundPlayer");
+            audio.Init(GetSound(), GetSound(), destroySound);
+            var eventInvoked = false;
+            audio.DestroySoundPlayed += () => eventInvoked = true;
+            
+            audio.PlayDestroySound();
+            yield return new WaitForSeconds(destroySound.Clip.length * 2);
+            
+            Assert.IsTrue(eventInvoked);
         }
     }
 }

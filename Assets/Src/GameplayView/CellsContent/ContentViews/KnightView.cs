@@ -18,6 +18,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
             _knight = knight;
             _visual = visual;
             _audio = audio;
+            _audio.DestroySoundPlayed += OnDestroySoundPlayed;
             SetAsChildAndCenter(visual.gameObject);
             SetAsChildAndCenter(audio.gameObject);
             _visual.transform.localEulerAngles = rotation;
@@ -37,6 +38,12 @@ namespace Src.GameplayView.CellsContent.ContentViews
         {
             _audio.PlayDestroySound();
             _visual.gameObject.SetActive(false);
+        }
+        
+        private void OnDestroySoundPlayed()
+        {
+            _audio.DestroySoundPlayed -= OnDestroySoundPlayed;
+            Destroy(gameObject);
         }
     }
 }

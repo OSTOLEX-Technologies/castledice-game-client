@@ -1,4 +1,5 @@
-﻿using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
+﻿using System;
+using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 
 namespace Tests.Utils.Mocks
 {
@@ -22,6 +23,9 @@ namespace Tests.Utils.Mocks
         public override void PlayDestroySound()
         {
             PlayDestroySoundWasCalled = true;
+            DestroySoundPlayed?.Invoke();
         }
+
+        public override event Action DestroySoundPlayed;
     }
 }

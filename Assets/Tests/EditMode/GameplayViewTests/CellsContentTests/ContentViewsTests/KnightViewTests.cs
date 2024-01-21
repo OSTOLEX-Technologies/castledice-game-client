@@ -1,8 +1,10 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using NUnit.Framework;
 using static Tests.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
 using Tests.Utils.Mocks;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
 {
@@ -92,6 +94,19 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             var actualKnight = knightView.Content;
             
             Assert.AreSame(expectedKnight, actualKnight);
+        }
+        
+        [UnityTest]
+        public IEnumerator KnightView_ShouldDestroyItself_AfterDestroySoundIsPlayed()
+        {
+            var knightView = new GameObject().AddComponent<KnightView>();
+            var audio = new GameObject().AddComponent<KnightAudioForTests>();
+            knightView.Init(GetKnight(), GetKnightVisual(), Vector3.zero, audio);
+            
+            audio.PlayDestroySound();
+            yield return new WaitForEndOfFrame();
+            
+            Assert.IsTrue(knightView == null);
         }
     }
 }

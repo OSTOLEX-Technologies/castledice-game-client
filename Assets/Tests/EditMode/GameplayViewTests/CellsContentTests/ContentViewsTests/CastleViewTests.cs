@@ -1,9 +1,13 @@
-﻿using NUnit.Framework;
+﻿using System.Collections;
+using Moq;
+using NUnit.Framework;
+using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using Src.GameplayView.CellsContent.ContentViews;
 using Tests.Utils.Mocks;
 using UnityEditor;
 using static Tests.ObjectCreationUtility;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
 {
@@ -85,6 +89,19 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             castle.CaptureHit(GetPlayer(actionPointsCount: 6));
             
             Assert.IsTrue(audio.PlayHitSoundCalled);
+        }
+
+        [UnityTest]
+        public IEnumerator CastleView_ShouldDestroyItself_AfterDestroySoundPlayedEventIsInvoked()
+        {
+            var castleView = new GameObject().AddComponent<CastleView>();
+            var audio = new GameObject().AddComponent<CastleAudioForTests>();
+            castleView.Init(GetCastle(), GetCastleVisual(), audio);
+            
+            audio.PlayDestroySound();
+            yield return new WaitForEndOfFrame();
+            
+            Assert.IsTrue(castleView == null);
         }
     }
 }
