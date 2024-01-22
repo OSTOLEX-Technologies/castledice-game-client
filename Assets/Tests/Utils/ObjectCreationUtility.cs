@@ -459,13 +459,18 @@ namespace Tests
             }
             return list;
         }
-        
-        public static Vector2Int GetRandomVector2Int(int minCoordinateValue, int maxCoordinateValue)
+
+        public static Vector2Int GetRandomVector2Int(int minCoordinateValue = 0, int maxCoordinateValue = 10)
         {
             var random = new System.Random();
             var x = random.Next(minCoordinateValue, maxCoordinateValue);
             var y = random.Next(minCoordinateValue, maxCoordinateValue);
             return new Vector2Int(x, y);
+        }
+
+        public static ContentVisual GetContentVisual()
+        {
+            return GetTreeVisual();
         }
         
         public static List<Content> GetCellContentList(int count)
