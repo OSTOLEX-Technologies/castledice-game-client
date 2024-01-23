@@ -6,6 +6,7 @@ using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.ContentVisuals.ContentColor;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.PlayersRotations;
+using Tests.Utils.Mocks;
 using UnityEngine;
 using static Tests.ObjectCreationUtility;
 using Color = UnityEngine.Color;
@@ -40,9 +41,9 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
         {
             var knight = GetKnight();
             var expectedColor = Random.ColorHSV();
-            var knightVisualMock = new Mock<KnightVisual>();
+            var knightVisual = new GameObject().AddComponent<KnightVisualForTests>();
             var instantiatorMock = new Mock<IInstantiator>();
-            instantiatorMock.Setup(x => x.Instantiate(It.IsAny<KnightVisual>())).Returns(knightVisualMock.Object);
+            instantiatorMock.Setup(x => x.Instantiate(It.IsAny<KnightVisual>())).Returns(knightVisual);
             var playerContentColorProviderMock = new Mock<IPlayerContentColorProvider>();
             playerContentColorProviderMock.Setup(x => x.GetContentColor(knight.GetOwner())).Returns(expectedColor);
             var knightVisualCreator = new KnightVisualCreatorBuilder
@@ -52,8 +53,8 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
             }.Build();
             
             var actualKnightVisual = knightVisualCreator.GetKnightVisual(knight);
-
-            knightVisualMock.Verify(x => x.SetColor(expectedColor), Times.Once);
+            
+            Assert.AreEqual(expectedColor, knightVisual.Color);
         }
         
         [Test]
@@ -98,6 +99,9 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
                 var instantiatorMock = new Mock<IInstantiator>();
                 instantiatorMock.Setup(x => x.Instantiate(It.IsAny<KnightVisual>())).Returns(GetKnightVisual());
                 Instantiator = instantiatorMock.Object;
+                var rotationProviderMock = new Mock<IPlayerRotationProvider>();
+                rotationProviderMock.Setup(x => x.GetRotation(It.IsAny<Player>())).Returns(Vector3.zero);
+                RotationProvider = rotationProviderMock.Object;
             }
             
             public KnightVisualCreator Build()

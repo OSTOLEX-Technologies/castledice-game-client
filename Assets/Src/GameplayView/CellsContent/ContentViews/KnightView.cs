@@ -13,7 +13,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
         
         public override Content Content => _knight;
 
-        public void Init(Knight knight, KnightVisual visual, Vector3 rotation, KnightAudio audio)
+        public void Init(Knight knight, KnightVisual visual, KnightAudio audio)
         {
             _knight = knight;
             _visual = visual;
@@ -21,7 +21,6 @@ namespace Src.GameplayView.CellsContent.ContentViews
             _audio.DestroySoundPlayed += OnDestroySoundPlayed;
             SetAsChildAndCenter(visual.gameObject);
             SetAsChildAndCenter(audio.gameObject);
-            _visual.transform.localEulerAngles = rotation;
         }
         
         public override void StartView()

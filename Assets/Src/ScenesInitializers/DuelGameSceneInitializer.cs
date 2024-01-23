@@ -292,8 +292,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var knightColorProvider = new PlayerContentColorProvider(knightColorConfig, playerColorProvider);
         var knightVisualCreator = new KnightVisualCreator(knightVisualPrefabConfig, knightColorProvider, instantiator, playerRotationProvider);
         var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
-        var knightViewFactory = new KnightViewFactory(playerRotationProvider, knightVisualCreator, knightAudioFactory, knightViewPrefab, instantiator);
-
+        var knightViewFactory = new KnightViewFactory(knightVisualCreator, knightAudioFactory, knightViewPrefab, instantiator);
         var castleColorProvider = new PlayerContentColorProvider(castleColorConfig, playerColorProvider);
         var castleVisualCreator = new CastleVisualCreator(castleVisualPrefabConfig, castleColorProvider, instantiator);
         var castleAudioFactory = new SoundPlayerCastleAudioFactory(castleSoundsConfig, castleAudioPrefab, instantiator);

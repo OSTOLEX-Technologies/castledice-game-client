@@ -6,7 +6,6 @@ using Src.GameplayView;
 using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
-using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.PlayersRotations;
 using Tests.Utils.Mocks;
@@ -66,28 +65,6 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             Assert.AreSame(expectedVisual, actualVisual);
         }
 
-        [Test]
-        public void GetKnightView_ShouldReturnView_WithAppropriateVisualRotation()
-        {
-            var knight = GetKnight();
-            var expectedRotation = new Vector3(Random.value, Random.value, Random.value); //We pass Vector3 with only positive values because Unity normalizes rotation values to be between 0 and 360 and it may ruin the test.
-            var rotationProviderMock = new Mock<IPlayerRotationProvider>();
-            rotationProviderMock.Setup(p => p.GetRotation(knight.GetOwner())).Returns(expectedRotation);
-            var factory = new KnightViewFactoryBuilder
-            {
-                RotationProvider = rotationProviderMock.Object
-            }.Build();
-            
-            var knightView = factory.GetKnightView(knight);
-            var fieldInfo = typeof(KnightView).GetField("_visual", System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
-            var visual = fieldInfo?.GetValue(knightView);
-            var actualRotation = ((KnightVisual) visual).transform.localRotation.eulerAngles;
-            
-            Assert.AreEqual(expectedRotation.x, actualRotation.x, 0.0001f);
-            Assert.AreEqual(expectedRotation.y, actualRotation.y, 0.0001f);
-            Assert.AreEqual(expectedRotation.z, actualRotation.z, 0.0001f);
-        }
-
         //In this test word "appropriate" means that the audio corresponds to knight, that is, obtained from the audio factory by passing Knight from view to it.
         [Test]
         public void GetKnightView_ShouldReturnView_WithAppropriateKnightAudio()
@@ -110,7 +87,6 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
 
         private class KnightViewFactoryBuilder
         {
-            public IPlayerRotationProvider RotationProvider { get; set; }
             public IKnightVisualCreator VisualCreator { get; set; }
             public IKnightAudioFactory AudioFactory { get; set; }
             public KnightView KnightViewPrefab { get; set; }
@@ -126,7 +102,6 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
                 Instantiator = instantiatorMock.Object;
                 var rotationProviderMock = new Mock<IPlayerRotationProvider>();
                 rotationProviderMock.Setup(provider => provider.GetRotation(It.IsAny<Player>())).Returns(Random.insideUnitSphere);
-                RotationProvider = rotationProviderMock.Object;
                 var visualCreatorMock = new Mock<IKnightVisualCreator>();
                 visualCreatorMock.Setup(c => c.GetKnightVisual(It.IsAny<Knight>())).Returns(GetKnightVisual());
                 VisualCreator = visualCreatorMock.Object;
@@ -138,7 +113,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreatio
             
             public KnightViewFactory Build()
             {
-                return new KnightViewFactory(RotationProvider, VisualCreator, AudioFactory, KnightViewPrefab, Instantiator);
+                return new KnightViewFactory(VisualCreator, AudioFactory, KnightViewPrefab, Instantiator);
             }
         }
     }

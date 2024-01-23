@@ -8,16 +8,14 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
 {
     public class KnightViewFactory : IKnightViewFactory
     {
-        private readonly IPlayerRotationProvider _rotationProvider;
         private readonly IKnightVisualCreator _visualCreator;
         private readonly IKnightAudioFactory _audioFactory;
         private readonly KnightView _knightViewPrefab;
         private readonly IInstantiator _instantiator;
 
-        public KnightViewFactory(IPlayerRotationProvider rotationProvider, IKnightVisualCreator visualCreator, IKnightAudioFactory audioFactory,
+        public KnightViewFactory(IKnightVisualCreator visualCreator, IKnightAudioFactory audioFactory,
             KnightView knightViewPrefab, IInstantiator instantiator)
         {
-            _rotationProvider = rotationProvider;
             _audioFactory = audioFactory;
             _knightViewPrefab = knightViewPrefab;
             _instantiator = instantiator;
@@ -27,10 +25,9 @@ namespace Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation
         public KnightView GetKnightView(Knight knight)
         {
             var view = _instantiator.Instantiate(_knightViewPrefab);
-            var rotation = _rotationProvider.GetRotation(knight.GetOwner());
             var audio = _audioFactory.GetAudio(knight);
             var visual = _visualCreator.GetKnightVisual(knight);
-            view.Init(knight, visual, rotation, audio);
+            view.Init(knight, visual, audio);
             return view;
         }
     }
