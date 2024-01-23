@@ -2,6 +2,7 @@
 using castledice_game_logic;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
+using castledice_game_logic.MovesLogic;
 using Src.GameplayView.DestroyedContent;
 
 namespace Src.GameplayPresenter.DestroyedContent
@@ -24,6 +25,7 @@ namespace Src.GameplayPresenter.DestroyedContent
             _game = game;
             _view = view;
             _game.TurnSwitched += OnTurnSwitched;
+            _game.MoveApplied += OnMoveApplied;
             foreach (var cell in _game.GetBoard())
             {
                 cell.ContentRemoved += OnContentRemoved;
@@ -39,17 +41,28 @@ namespace Src.GameplayPresenter.DestroyedContent
 
         private void OnTurnSwitched(object sender, Game game)
         {
+            foreach (var contentToPosition in _destroyedContent)
+            {
+                if (CellOnPositionHasContent(contentToPosition.Position)) continue;
+                _view.ShowDestroyedContent(contentToPosition.Position, contentToPosition.Content);
+                _shownDestroyedContent.Add(contentToPosition);
+            }
+            _destroyedContent.Clear();
+        }
+        
+        private bool CellOnPositionHasContent(Vector2Int position)
+        {
+            var cell = _game.GetBoard()[position];
+            return cell.HasContent();
+        }
+
+        private void OnMoveApplied(object sender, AbstractMove move)
+        {
             foreach (var contentToPosition in _shownDestroyedContent)
             {
                 _view.RemoveDestroyedContent(contentToPosition.Position, contentToPosition.Content);
             }
             _shownDestroyedContent.Clear();
-            foreach (var contentToPosition in _destroyedContent)
-            {
-                _view.ShowDestroyedContent(contentToPosition.Position, contentToPosition.Content);
-                _shownDestroyedContent.Add(contentToPosition);
-            }
-            _destroyedContent.Clear();
         }
     }
 }

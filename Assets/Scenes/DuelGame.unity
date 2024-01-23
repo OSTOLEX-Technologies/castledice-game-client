@@ -1013,6 +1013,7 @@ MonoBehaviour:
   cellMoveHighlightsFactory: {fileID: 2095275312}
   bluePlayerLabel: {fileID: 2064774226}
   redPlayerLabel: {fileID: 2064774225}
+  destroyedContentTransparencyConfig: {fileID: 11400000, guid: 2fd7fa23a869bc444af0e322e630c70f, type: 2}
   redPlayerTimeView: {fileID: 669943075}
   bluePlayerTimeView: {fileID: 7013085729349448138}
   redPlayerHighlighter: {fileID: 669943074}

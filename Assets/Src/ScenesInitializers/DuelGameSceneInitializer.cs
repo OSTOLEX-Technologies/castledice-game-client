@@ -12,6 +12,7 @@ using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.CurrentPlayer;
+using Src.GameplayPresenter.DestroyedContent;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
@@ -39,10 +40,12 @@ using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
 using Src.GameplayView.ContentVisuals.ContentColor;
+using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using Src.GameplayView.CurrentPlayer;
+using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
@@ -139,6 +142,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private GameObject redPlayerLabel;
     private CurrentPlayerPresenter _currentPlayerPresenter;
     private CurrentPlayerView _currentPlayerView;
+    
+    [Header("Destroyed content")]
+    [SerializeField] private TransparencyConfig destroyedContentTransparencyConfig;
+    private DestroyedContentView _destroyedContentView;
+    private DestroyedContentPresenter _destroyedContentPresenter;
     
     [Header("Timers")]
     [SerializeField] private TimeView redPlayerTimeView;
@@ -292,8 +300,13 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var castleViewFactory = new CastleViewFactory(castleVisualCreator, castleAudioFactory, castleViewPrefab, instantiator);
         
         var contentViewProvider = new ContentViewProvider(treeViewFactory, knightViewFactory, castleViewFactory);
+        
         _contentView = new CellsContentView(grid, contentViewProvider);
         _cellContentPresenter = new CellsContentPresenter(_contentView, _game.GetBoard());
+        
+        var contentVisualsCreator = new VisitorContentVisualCreator(knightVisualCreator, cachingTreeVisualCreator, castleVisualCreator);
+        _destroyedContentView = new DestroyedContentView(grid, contentVisualsCreator, destroyedContentTransparencyConfig);
+        _destroyedContentPresenter = new DestroyedContentPresenter(_game, _destroyedContentView);
     }
 
     private void SetUpClientMoves()
