@@ -30,7 +30,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1549718013772806237}
-  - {fileID: 8958301559443312055}
+  - {fileID: 7997216543323428120}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -48,10 +48,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   transparencyAffectedRenderers:
     renderers:
-    - {fileID: 2001837653840751867}
+    - {fileID: 679587660719993940}
   coloringAffectedRenderers:
     renderers:
-    - {fileID: 2001837653840751867}
+    - {fileID: 679587660719993940}
 --- !u!1 &7567865871989380525
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,7 +150,7 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
---- !u!1001 &111375357029762976
+--- !u!1001 &1378728830535212815
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -231,13 +231,13 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 9199261849990390558, guid: a25d366ed04443b468ad84b40e27f933, type: 3}
---- !u!23 &2001837653840751867 stripped
+--- !u!23 &679587660719993940 stripped
 MeshRenderer:
   m_CorrespondingSourceObject: {fileID: -7328381400857433253, guid: a25d366ed04443b468ad84b40e27f933, type: 3}
-  m_PrefabInstance: {fileID: 111375357029762976}
+  m_PrefabInstance: {fileID: 1378728830535212815}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &8958301559443312055 stripped
+--- !u!4 &7997216543323428120 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 9068534970553698839, guid: a25d366ed04443b468ad84b40e27f933, type: 3}
-  m_PrefabInstance: {fileID: 111375357029762976}
+  m_PrefabInstance: {fileID: 1378728830535212815}
   m_PrefabAsset: {fileID: 0}

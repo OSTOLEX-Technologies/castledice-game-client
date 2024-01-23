@@ -290,7 +290,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var treeViewFactory = new TreeViewFactory(cachingTreeVisualCreator, treeViewPrefab, instantiator);
 
         var knightColorProvider = new PlayerContentColorProvider(knightColorConfig, playerColorProvider);
-        var knightVisualCreator = new KnightVisualCreator(knightVisualPrefabConfig, knightColorProvider, instantiator);
+        var knightVisualCreator = new KnightVisualCreator(knightVisualPrefabConfig, knightColorProvider, instantiator, playerRotationProvider);
         var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
         var knightViewFactory = new KnightViewFactory(playerRotationProvider, knightVisualCreator, knightAudioFactory, knightViewPrefab, instantiator);
 

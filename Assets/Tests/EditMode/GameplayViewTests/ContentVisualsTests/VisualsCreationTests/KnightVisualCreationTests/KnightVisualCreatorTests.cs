@@ -5,6 +5,8 @@ using Src.GameplayView;
 using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.ContentVisuals.ContentColor;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
+using Src.GameplayView.PlayersRotations;
+using UnityEngine;
 using static Tests.ObjectCreationUtility;
 using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
@@ -54,10 +56,35 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
             knightVisualMock.Verify(x => x.SetColor(expectedColor), Times.Once);
         }
         
+        [Test]
+        public void GetKnightVisual_ShouldSetKnightVisualRotation_WithRotationFromProvider()
+        {
+            var knight = GetKnight();
+            var expectedRotation = new Vector3(Random.value, Random.value, Random.value);
+            var knightVisual = GetKnightVisual();
+            var instantiatorMock = new Mock<IInstantiator>();
+            instantiatorMock.Setup(x => x.Instantiate(It.IsAny<KnightVisual>())).Returns(knightVisual);
+            var playerRotationProviderMock = new Mock<IPlayerRotationProvider>();
+            playerRotationProviderMock.Setup(x => x.GetRotation(knight.GetOwner())).Returns(expectedRotation);
+            var knightVisualCreator = new KnightVisualCreatorBuilder
+            {
+                Instantiator = instantiatorMock.Object,
+                RotationProvider = playerRotationProviderMock.Object
+            }.Build();
+            
+            var actualKnightVisual = knightVisualCreator.GetKnightVisual(knight);
+            var actualRotation = actualKnightVisual.transform.localEulerAngles;
+            
+            Assert.AreEqual(expectedRotation.x, actualRotation.x, 0.01f);
+            Assert.AreEqual(expectedRotation.y, actualRotation.y, 0.01f);
+            Assert.AreEqual(expectedRotation.z, actualRotation.z, 0.01f);
+        }
+        
         private class KnightVisualCreatorBuilder
         {
             public IKnightVisualPrefabProvider PrefabProvider { get; set; }
             public IPlayerContentColorProvider ColorProvider { get; set; }
+            public IPlayerRotationProvider RotationProvider { get; set; }
             public IInstantiator Instantiator { get; set; }
             
             public KnightVisualCreatorBuilder()
@@ -75,7 +102,7 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
             
             public KnightVisualCreator Build()
             {
-                return new KnightVisualCreator(PrefabProvider, ColorProvider, Instantiator);
+                return new KnightVisualCreator(PrefabProvider, ColorProvider, Instantiator, RotationProvider);
             }
         }
     }
