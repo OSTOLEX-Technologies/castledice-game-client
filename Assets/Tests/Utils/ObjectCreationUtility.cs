@@ -23,6 +23,7 @@ using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.Audio;
 using Src.GameplayView.ContentVisuals;
+using Src.GameplayView.Grid;
 using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
 using Src.GameplayView.PlayersColors;
 using Tests.Utils.Mocks;
@@ -492,6 +493,16 @@ namespace Tests
             for (var i = 0; i < count; i++)
             {
                 list.Add(GetCellContent());
+            }
+            return list;
+        }
+        
+        public static List<Mock<IGridCell>> GetGridCellMocksList(int count)
+        {
+            var list = new List<Mock<IGridCell>>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(new Mock<IGridCell>());
             }
             return list;
         }

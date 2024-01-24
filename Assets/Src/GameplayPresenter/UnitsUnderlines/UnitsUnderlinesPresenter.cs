@@ -6,14 +6,12 @@ namespace Src.GameplayPresenter.UnitsUnderlines
 {
     public class UnitsUnderlinesPresenter
     {
-        private readonly Board _board;
         private readonly IUnitsUnderlinesView _view;
         
         public UnitsUnderlinesPresenter(Board board, IUnitsUnderlinesView view)
         {
-            _board = board;
             _view = view;
-            foreach (var cell in _board)
+            foreach (var cell in board)
             {
                 cell.ContentAdded += OnContentAdded;
                 cell.ContentRemoved += OnContentRemoved;
