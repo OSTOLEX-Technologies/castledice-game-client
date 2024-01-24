@@ -1,5 +1,5 @@
 ﻿using castledice_game_logic.GameObjects;
-using Src.GameplayView.ContentVisuals.ContentColor;
+using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersRotations;
 
 namespace Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation
@@ -8,10 +8,10 @@ namespace Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation
     {
         private readonly IKnightVisualPrefabProvider _prefabProvider;
         private readonly IPlayerRotationProvider _rotationProvider;
-        private readonly IPlayerContentColorProvider _colorProvider;
+        private readonly IPlayerObjectsColorProvider _colorProvider;
         private readonly IInstantiator _instantiator;
 
-        public KnightVisualCreator(IKnightVisualPrefabProvider prefabProvider, IPlayerContentColorProvider colorProvider, IInstantiator instantiator, IPlayerRotationProvider rotationProvider)
+        public KnightVisualCreator(IKnightVisualPrefabProvider prefabProvider, IPlayerObjectsColorProvider colorProvider, IInstantiator instantiator, IPlayerRotationProvider rotationProvider)
         {
             _prefabProvider = prefabProvider;
             _colorProvider = colorProvider;
@@ -23,7 +23,7 @@ namespace Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation
         {
             var prefab = _prefabProvider.GetKnightVisualPrefab();
             var knightVisual = _instantiator.Instantiate(prefab);
-            var color = _colorProvider.GetContentColor(knight.GetOwner());
+            var color = _colorProvider.GetColor(knight.GetOwner());
             knightVisual.SetColor(color);
             var rotation = _rotationProvider.GetRotation(knight.GetOwner());
             knightVisual.transform.localEulerAngles = rotation;

@@ -1,9 +1,9 @@
 ﻿using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
-namespace Src.GameplayView.ContentVisuals.ContentColor
+namespace Src.GameplayView.PlayerObjectsColor
 {
-    public interface IPlayerContentColorConfig
+    public interface IPlayerObjectsColorConfig
     {
         Color GetColor(PlayerColor player);
     }

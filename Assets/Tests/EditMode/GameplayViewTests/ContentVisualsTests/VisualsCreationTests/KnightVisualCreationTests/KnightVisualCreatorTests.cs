@@ -3,8 +3,8 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.ContentVisuals;
-using Src.GameplayView.ContentVisuals.ContentColor;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
+using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersRotations;
 using Tests.Utils.Mocks;
 using UnityEngine;
@@ -44,8 +44,8 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
             var knightVisual = new GameObject().AddComponent<KnightVisualForTests>();
             var instantiatorMock = new Mock<IInstantiator>();
             instantiatorMock.Setup(x => x.Instantiate(It.IsAny<KnightVisual>())).Returns(knightVisual);
-            var playerContentColorProviderMock = new Mock<IPlayerContentColorProvider>();
-            playerContentColorProviderMock.Setup(x => x.GetContentColor(knight.GetOwner())).Returns(expectedColor);
+            var playerContentColorProviderMock = new Mock<IPlayerObjectsColorProvider>();
+            playerContentColorProviderMock.Setup(x => x.GetColor(knight.GetOwner())).Returns(expectedColor);
             var knightVisualCreator = new KnightVisualCreatorBuilder
             {
                 Instantiator = instantiatorMock.Object,
@@ -84,14 +84,14 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
         private class KnightVisualCreatorBuilder
         {
             public IKnightVisualPrefabProvider PrefabProvider { get; set; }
-            public IPlayerContentColorProvider ColorProvider { get; set; }
+            public IPlayerObjectsColorProvider ColorProvider { get; set; }
             public IPlayerRotationProvider RotationProvider { get; set; }
             public IInstantiator Instantiator { get; set; }
             
             public KnightVisualCreatorBuilder()
             {
-                var colorProviderMock = new Mock<IPlayerContentColorProvider>();
-                colorProviderMock.Setup(x => x.GetContentColor(It.IsAny<Player>())).Returns(Color.black);
+                var colorProviderMock = new Mock<IPlayerObjectsColorProvider>();
+                colorProviderMock.Setup(x => x.GetColor(It.IsAny<Player>())).Returns(Color.black);
                 ColorProvider = colorProviderMock.Object;
                 var prefabProviderMock = new Mock<IKnightVisualPrefabProvider>();
                 prefabProviderMock.Setup(x => x.GetKnightVisualPrefab()).Returns(GetKnightVisual());

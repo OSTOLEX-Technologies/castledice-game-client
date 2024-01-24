@@ -2,20 +2,20 @@
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
-namespace Src.GameplayView.ContentVisuals.ContentColor
+namespace Src.GameplayView.PlayerObjectsColor
 {
-    public class PlayerContentColorProvider : IPlayerContentColorProvider
+    public class PlayerObjectsColorProvider : IPlayerObjectsColorProvider
     {
-        private readonly IPlayerContentColorConfig _config;
+        private readonly IPlayerObjectsColorConfig _config;
         private readonly IPlayerColorProvider _playerColorProvider;
 
-        public PlayerContentColorProvider(IPlayerContentColorConfig config, IPlayerColorProvider playerColorProvider)
+        public PlayerObjectsColorProvider(IPlayerObjectsColorConfig config, IPlayerColorProvider playerColorProvider)
         {
             _config = config;
             _playerColorProvider = playerColorProvider;
         }
 
-        public Color GetContentColor(Player player)
+        public Color GetColor(Player player)
         {
             var playerColor = _playerColorProvider.GetPlayerColor(player);
             return _config.GetColor(playerColor);

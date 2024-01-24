@@ -3,9 +3,9 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.ContentVisuals;
-using Src.GameplayView.ContentVisuals.ContentColor;
 using static Tests.ObjectCreationUtility;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
+using Src.GameplayView.PlayerObjectsColor;
 using UnityEngine;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.CastleVisualCreationTests
@@ -40,8 +40,8 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
             var castleVisualMock = new Mock<CastleVisual>();
             var instantiatorMock = new Mock<IInstantiator>();
             instantiatorMock.Setup(i => i.Instantiate(It.IsAny<CastleVisual>())).Returns(castleVisualMock.Object);
-            var colorProviderMock = new Mock<IPlayerContentColorProvider>();
-            colorProviderMock.Setup(c => c.GetContentColor(castle.GetOwner())).Returns(expectedColor);
+            var colorProviderMock = new Mock<IPlayerObjectsColorProvider>();
+            colorProviderMock.Setup(c => c.GetColor(castle.GetOwner())).Returns(expectedColor);
             var castleVisualCreator = new CastleVisualCreatorBuilder
             {
                 Instantiator = instantiatorMock.Object,
@@ -56,7 +56,7 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
         private class CastleVisualCreatorBuilder
         {
             public ICastleVisualPrefabProvider PrefabProvider { get; set; }
-            public IPlayerContentColorProvider ColorProvider { get; set; }
+            public IPlayerObjectsColorProvider ColorProvider { get; set; }
             public IInstantiator Instantiator { get; set; }
 
             public CastleVisualCreatorBuilder()
@@ -65,8 +65,8 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTe
                 var prefabProviderMock = new Mock<ICastleVisualPrefabProvider>();
                 prefabProviderMock.Setup(p => p.GetCastleVisualPrefab()).Returns(prefab);
                 PrefabProvider = prefabProviderMock.Object;
-                var colorProviderMock = new Mock<IPlayerContentColorProvider>();
-                colorProviderMock.Setup(c => c.GetContentColor(It.IsAny<Player>())).Returns(Color.black);
+                var colorProviderMock = new Mock<IPlayerObjectsColorProvider>();
+                colorProviderMock.Setup(c => c.GetColor(It.IsAny<Player>())).Returns(Color.black);
                 ColorProvider = colorProviderMock.Object;
                 var instantiatedPrefab = GetCastleVisual();
                 var instantiatorMock = new Mock<IInstantiator>();

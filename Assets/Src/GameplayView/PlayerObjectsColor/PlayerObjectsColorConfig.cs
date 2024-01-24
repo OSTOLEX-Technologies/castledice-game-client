@@ -2,10 +2,10 @@
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
-namespace Src.GameplayView.ContentVisuals.ContentColor
+namespace Src.GameplayView.PlayerObjectsColor
 {
-    [CreateAssetMenu(fileName = "PlayerContentColorConfig", menuName = "Configs/ContentColor/PlayerContentColorConfig", order = 1)]
-    public class PlayerContentColorConfig : ScriptableObject, IPlayerContentColorConfig
+    [CreateAssetMenu(fileName = "PlayerContentColorConfig", menuName = "Configs/ObjectsColor/PlayerContentColorConfig", order = 1)]
+    public class PlayerObjectsColorConfig : ScriptableObject, IPlayerObjectsColorConfig
     {
         [SerializeField] private Color redPlayerColor;
         [SerializeField] private Color bluePlayerColor;

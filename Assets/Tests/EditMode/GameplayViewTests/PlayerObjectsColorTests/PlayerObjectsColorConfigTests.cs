@@ -1,13 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using Src.GameplayView.ContentVisuals.ContentColor;
+using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
-namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentColorTests
+namespace Tests.EditMode.GameplayViewTests.PlayerObjectsColorTests
 {
-    public class PlayerContentColorConfigTests
+    public class PlayerObjectsColorConfigTests
     {
         private const string RedColorFieldName = "redPlayerColor";
         private const string BlueColorFieldName = "bluePlayerColor";
@@ -16,7 +16,7 @@ namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentColorTests
         [TestCaseSource(nameof(GetPlayerColors))]
         public void GetColor_ShouldReturnColor_AccordingToPlayerColor(PlayerColor color)
         {
-            var config = ScriptableObject.CreateInstance<PlayerContentColorConfig>();
+            var config = ScriptableObject.CreateInstance<PlayerObjectsColorConfig>();
             var expectedColor = UnityEngine.Random.ColorHSV();
             var fieldName = GetFieldNameForColor(color);
             config.SetPrivateField(fieldName, expectedColor);

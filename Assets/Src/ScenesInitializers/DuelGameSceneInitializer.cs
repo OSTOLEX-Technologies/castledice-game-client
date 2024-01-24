@@ -39,7 +39,6 @@ using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
 using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
-using Src.GameplayView.ContentVisuals.ContentColor;
 using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
@@ -49,6 +48,7 @@ using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
+using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
@@ -100,7 +100,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private SoundPlayerKnightAudio knightAudioPrefab;
     [SerializeField] private KnightView knightViewPrefab;
     [SerializeField] private KnightVisualPrefabConfig knightVisualPrefabConfig;
-    [SerializeField] private PlayerContentColorConfig knightColorConfig;
+    [SerializeField] private PlayerObjectsColorConfig knightColorConfig;
     [Header("Tree config")]
     [SerializeField] private TreeView treeViewPrefab;
     [SerializeField] private TreeVisualPrefabsConfig treeVisualPrefabConfig;
@@ -109,7 +109,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private CastleView castleViewPrefab;
     [SerializeField] private SoundPlayerCastleAudio castleAudioPrefab;
     [SerializeField] private CastleVisualPrefabConfig castleVisualPrefabConfig;
-    [SerializeField] private PlayerContentColorConfig castleColorConfig;
+    [SerializeField] private PlayerObjectsColorConfig castleColorConfig;
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
     
@@ -289,11 +289,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var cachingTreeVisualCreator = new CachingTreeVisualCreator(randomTreeVisualCreator);
         var treeViewFactory = new TreeViewFactory(cachingTreeVisualCreator, treeViewPrefab, instantiator);
 
-        var knightColorProvider = new PlayerContentColorProvider(knightColorConfig, playerColorProvider);
+        var knightColorProvider = new PlayerObjectsColorProvider(knightColorConfig, playerColorProvider);
         var knightVisualCreator = new KnightVisualCreator(knightVisualPrefabConfig, knightColorProvider, instantiator, playerRotationProvider);
         var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
         var knightViewFactory = new KnightViewFactory(knightVisualCreator, knightAudioFactory, knightViewPrefab, instantiator);
-        var castleColorProvider = new PlayerContentColorProvider(castleColorConfig, playerColorProvider);
+        var castleColorProvider = new PlayerObjectsColorProvider(castleColorConfig, playerColorProvider);
         var castleVisualCreator = new CastleVisualCreator(castleVisualPrefabConfig, castleColorProvider, instantiator);
         var castleAudioFactory = new SoundPlayerCastleAudioFactory(castleSoundsConfig, castleAudioPrefab, instantiator);
         var castleViewFactory = new CastleViewFactory(castleVisualCreator, castleAudioFactory, castleViewPrefab, instantiator);
