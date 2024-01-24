@@ -295,6 +295,19 @@ namespace Tests
             return new Mock<ContentData>().Object;
         }
         
+        public static Content GetPlayerOwnedContent()
+        {
+            return GetPlayerOwnedContent(GetPlayer());
+        }
+
+        public static Content GetPlayerOwnedContent(Player owner)
+        {
+            var contentMock = new Mock<Content>();
+            var playerOwnedMock = contentMock.As<IPlayerOwned>();
+            playerOwnedMock.Setup(x => x.GetOwner()).Returns(owner);
+            return contentMock.Object;
+        }
+        
         public static Content GetCellContent()
         {
             return new ObstacleMock();
