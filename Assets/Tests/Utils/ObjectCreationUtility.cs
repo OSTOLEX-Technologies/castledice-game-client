@@ -377,6 +377,14 @@ namespace Tests
             return renderer;
         }
         
+        public static Renderer GetRendererWithMultipleMaterials(List<Material> materials)
+        {
+            var gameObject = new GameObject();
+            var renderer = gameObject.AddComponent<MeshRenderer>();
+            renderer.materials = materials.ToArray();
+            return renderer;
+        }
+        
         public static List<Material> GetMaterialsList(int count)
         {
             var materials = new List<Material>();
