@@ -24,6 +24,7 @@ using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayPresenter.Timers;
+using Src.GameplayPresenter.UnitsUnderlines;
 using Src.GameplayView;
 using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
@@ -54,6 +55,7 @@ using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.GameplayView.Timers;
 using Src.GameplayView.Timers.PlayerTimerViews;
+using Src.GameplayView.UnitsUnderlines;
 using Src.GameplayView.Updatables;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
@@ -156,11 +158,18 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private TimersPresenter _timersPresenter;
     private TimersView _timersView;
 
+    [Header("Underlines")]
+    [SerializeField] private UnderlinePrefabConfig underlinePrefabConfig;
+    [SerializeField] private PlayerObjectsColorConfig underlineColorConfig;
+    private UnitsUnderlinesView _unitsUnderlinesView;
+    private UnitsUnderlinesPresenter _unitsUnderlinesPresenter;
+    
     [Header("Updater")]
     [SerializeField] private FixedUpdaterBehaviour fixedUpdaterBehaviour;
     [SerializeField] private UpdaterBehaviour updaterBehaviour;
     private readonly Updater _updater = new();
     private readonly Updater _fixedUpdater = new();
+    
     
     private Game _game;
     private GameStartData _gameStartData;
@@ -176,6 +185,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpClickDetectors();
         SetUpClientMoves();
         SetUpServerMoves();
+        SetUpUnderlines();
         SetUpActionPointsGiving();
         SetUpCamera();
         SetUpCellMovesHighlights();
@@ -186,6 +196,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpTimers();
         NotifyPlayerIsReady();
     }
+
+
 
     private void SetUpUpdaters()
     {
@@ -328,6 +340,16 @@ public class DuelGameSceneInitializer : MonoBehaviour
         MoveFromServerMessageHandler.SetDTOAccepter(movesAccepter);
     }
 
+    private void SetUpUnderlines()
+    {
+        var instantiator = new Instantiator();
+        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var objectsColorProvider = new PlayerObjectsColorProvider(underlineColorConfig, playerColorProvider);
+        var underlineCreator = new UnderlineCreator(underlinePrefabConfig, instantiator);
+        _unitsUnderlinesView = new UnitsUnderlinesView(grid, underlineCreator, objectsColorProvider);
+        _unitsUnderlinesPresenter = new UnitsUnderlinesPresenter(_game.GetBoard(), _unitsUnderlinesView);
+    }
+    
     private void SetUpActionPointsGiving()
     {
         var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
