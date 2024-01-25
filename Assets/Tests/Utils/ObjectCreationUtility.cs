@@ -23,6 +23,7 @@ using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.Audio;
 using Src.GameplayView.ContentVisuals;
+using Src.GameplayView.Grid;
 using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
 using Src.GameplayView.PlayersColors;
 using Tests.Utils.Mocks;
@@ -30,6 +31,7 @@ using UnityEditor;
 using UnityEngine;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 using Object = UnityEngine.Object;
+using Random = System.Random;
 using Tree = castledice_game_logic.GameObjects.Tree;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -38,12 +40,11 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
-        
+        private static Random _random = new Random();
         
         public static TimeSpan GetRandomTimeSpan(int min = 1, int max = 1000)
         {
-            var random = new System.Random();
-            var ticks = random.Next(min, max);
+            var ticks = _random.Next(min, max);
             return new TimeSpan(ticks);
         }
         
@@ -295,6 +296,19 @@ namespace Tests
             return new Mock<ContentData>().Object;
         }
         
+        public static Content GetPlayerOwnedContent()
+        {
+            return GetPlayerOwnedContent(GetPlayer());
+        }
+
+        public static Content GetPlayerOwnedContent(Player owner)
+        {
+            var contentMock = new Mock<Content>();
+            var playerOwnedMock = contentMock.As<IPlayerOwned>();
+            playerOwnedMock.Setup(x => x.GetOwner()).Returns(owner);
+            return contentMock.Object;
+        }
+        
         public static Content GetCellContent()
         {
             return new ObstacleMock();
@@ -360,6 +374,14 @@ namespace Tests
             var gameObject = new GameObject();
             var renderer = gameObject.AddComponent<MeshRenderer>();
             renderer.material = material;
+            return renderer;
+        }
+        
+        public static Renderer GetRendererWithMultipleMaterials(List<Material> materials)
+        {
+            var gameObject = new GameObject();
+            var renderer = gameObject.AddComponent<MeshRenderer>();
+            renderer.materials = materials.ToArray();
             return renderer;
         }
         
@@ -448,6 +470,43 @@ namespace Tests
                 renderers.Add(new GameObject().AddComponent<MeshRenderer>());
             }
             return renderers;
+        }
+        
+        public static List<Vector2Int> GetRandomVector2IntList(int minCoordinateValue, int maxCoordinateValue, int count)
+        {
+            var list = new List<Vector2Int>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(GetRandomVector2Int(minCoordinateValue, maxCoordinateValue));
+            }
+            return list;
+        }
+
+        public static Vector2Int GetRandomVector2Int(int minCoordinateValue = 0, int maxCoordinateValue = 10)
+        {
+            var x = _random.Next(minCoordinateValue, maxCoordinateValue);
+            var y = _random.Next(minCoordinateValue, maxCoordinateValue);
+            return new Vector2Int(x, y);
+        }
+
+        public static ContentVisual GetContentVisual()
+        {
+            return GetTreeVisual();
+        }
+        
+        public static List<Content> GetCellContentList(int count)
+        {
+            return Enumerable.Repeat(GetCellContent(), count).ToList();
+        }
+        
+        public static List<Mock<IGridCell>> GetGridCellMocksList(int count)
+        {
+            var list = new List<Mock<IGridCell>>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(new Mock<IGridCell>());
+            }
+            return list;
         }
     }
 }
