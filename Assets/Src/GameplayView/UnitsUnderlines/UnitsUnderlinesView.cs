@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using Src.GameplayView.Grid;
@@ -26,14 +27,20 @@ namespace Src.GameplayView.UnitsUnderlines
 
         public void ShowUnderline(Vector2Int position, Player player)
         {
-            if (!_underlines.TryGetValue(position, out var underline)) return;
+            if (!_underlines.TryGetValue(position, out var underline))
+            {
+                throw new InvalidOperationException("No underline for this position " + position);
+            }
             underline.Show();
             underline.SetColor(_colorProvider.GetColor(player));
         }
 
         public void HideUnderline(Vector2Int position)
         {
-            if (!_underlines.TryGetValue(position, out var underline)) return;
+            if (!_underlines.TryGetValue(position, out var underline))
+            {
+                throw new InvalidOperationException("No underline for this position " + position);
+            }
             underline.Hide();
         }
     }

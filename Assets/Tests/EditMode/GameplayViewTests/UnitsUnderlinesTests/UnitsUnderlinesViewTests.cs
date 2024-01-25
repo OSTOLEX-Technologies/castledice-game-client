@@ -175,6 +175,20 @@ namespace Tests.EditMode.GameplayViewTests.UnitsUnderlinesTests
                 return underlineCreatorCallsCount == 1 ? firstUnderline : secondUnderline;
             }
         }
+
+        [Test]
+        public void ShowUnderline_ShouldThrowInvalidOperationException_IfNoUnderlineOnGivenPosition()
+        {
+            var view = new UnitsUnderlinesViewBuilder().Build();
+            Assert.Throws<InvalidOperationException>(() => view.ShowUnderline(new Vector2Int(0, 0), GetPlayer()));
+        }
+        
+        [Test]
+        public void HideUnderline_ShouldThrowInvalidOperationException_IfNoUnderlineOnGivenPosition()
+        {
+            var view = new UnitsUnderlinesViewBuilder().Build();
+            Assert.Throws<InvalidOperationException>(() => view.HideUnderline(new Vector2Int(0, 0)));
+        }
         
         private class UnitsUnderlinesViewBuilder
         {

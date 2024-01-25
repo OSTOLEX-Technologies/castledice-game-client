@@ -31,6 +31,7 @@ using UnityEditor;
 using UnityEngine;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 using Object = UnityEngine.Object;
+using Random = System.Random;
 using Tree = castledice_game_logic.GameObjects.Tree;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -39,12 +40,11 @@ namespace Tests
 {
     public static class ObjectCreationUtility
     {
-        
+        private static Random _random = new Random();
         
         public static TimeSpan GetRandomTimeSpan(int min = 1, int max = 1000)
         {
-            var random = new System.Random();
-            var ticks = random.Next(min, max);
+            var ticks = _random.Next(min, max);
             return new TimeSpan(ticks);
         }
         
@@ -484,9 +484,8 @@ namespace Tests
 
         public static Vector2Int GetRandomVector2Int(int minCoordinateValue = 0, int maxCoordinateValue = 10)
         {
-            var random = new System.Random();
-            var x = random.Next(minCoordinateValue, maxCoordinateValue);
-            var y = random.Next(minCoordinateValue, maxCoordinateValue);
+            var x = _random.Next(minCoordinateValue, maxCoordinateValue);
+            var y = _random.Next(minCoordinateValue, maxCoordinateValue);
             return new Vector2Int(x, y);
         }
 
@@ -497,12 +496,7 @@ namespace Tests
         
         public static List<Content> GetCellContentList(int count)
         {
-            var list = new List<Content>();
-            for (var i = 0; i < count; i++)
-            {
-                list.Add(GetCellContent());
-            }
-            return list;
+            return Enumerable.Repeat(GetCellContent(), count).ToList();
         }
         
         public static List<Mock<IGridCell>> GetGridCellMocksList(int count)

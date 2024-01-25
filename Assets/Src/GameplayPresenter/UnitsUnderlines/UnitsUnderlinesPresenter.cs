@@ -6,12 +6,14 @@ namespace Src.GameplayPresenter.UnitsUnderlines
 {
     public class UnitsUnderlinesPresenter
     {
+        private readonly Board _board;
         private readonly IUnitsUnderlinesView _view;
         
         public UnitsUnderlinesPresenter(Board board, IUnitsUnderlinesView view)
         {
+            _board = board;
             _view = view;
-            foreach (var cell in board)
+            foreach (var cell in _board)
             {
                 cell.ContentAdded += OnContentAdded;
                 cell.ContentRemoved += OnContentRemoved;
@@ -33,6 +35,15 @@ namespace Src.GameplayPresenter.UnitsUnderlines
             {
                 var cell = (Cell) sender;
                 _view.HideUnderline(cell.Position);
+            }
+        }
+        
+        ~UnitsUnderlinesPresenter()
+        {
+            foreach (var cell in _board)
+            {
+                cell.ContentAdded -= OnContentAdded;
+                cell.ContentRemoved -= OnContentRemoved;
             }
         }
     }
