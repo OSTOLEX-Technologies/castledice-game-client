@@ -8,19 +8,15 @@ namespace Src.GameplayView.UnitsUnderlines
 {
     public class UnitsUnderlinesView : IUnitsUnderlinesView
     {
-        private readonly IGrid _grid;
-        private readonly IUnderlineCreator _underlineCreator;
         private readonly IPlayerObjectsColorProvider _colorProvider;
         private readonly Dictionary<Vector2Int, Underline> _underlines = new();
 
         public UnitsUnderlinesView(IGrid grid, IUnderlineCreator underlineCreator, IPlayerObjectsColorProvider colorProvider)
         {
-            _grid = grid;
-            _underlineCreator = underlineCreator;
             _colorProvider = colorProvider;
-            foreach (var cell in _grid)
+            foreach (var cell in grid)
             {
-                var underline = _underlineCreator.GetUnderline();
+                var underline = underlineCreator.GetUnderline();
                 var position = cell.Position;
                 cell.AddChild(underline.gameObject);
                 underline.Hide();
