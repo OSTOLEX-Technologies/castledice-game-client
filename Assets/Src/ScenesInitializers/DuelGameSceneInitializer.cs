@@ -22,6 +22,7 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
+using Src.GameplayPresenter.NewUnitsHighlights;
 using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayPresenter.Timers;
@@ -50,6 +51,7 @@ using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.Highlights;
+using Src.GameplayView.NewUnitsHighlights;
 using Src.GameplayView.PlacedUnitsHighlights;
 using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersColors;
@@ -159,11 +161,17 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private TimersPresenter _timersPresenter;
     private TimersView _timersView;
 
-    [Header("Underlines")]
+    [Header("Placed units highlights")]
     [SerializeField] private ColoredHighlightPrefabConfig coloredHighlightPrefabConfig;
-    [SerializeField] private PlayerObjectsColorConfig underlineColorConfig;
+    [SerializeField] private PlayerObjectsColorConfig placedUnitsHighlightsColorConfig;
     private PlacedUnitsHighlightsView _placedUnitsHighlightsView;
     private PlacedUnitsHighlightsPresenter _placedUnitsHighlightsPresenter;
+    
+    [Header("New units highlights")]
+    [SerializeField] private ColoredHighlightPrefabConfig newUnitsHighlightsPrefabConfig;
+    [SerializeField] private PlayerObjectsColorConfig newUnitsHighlightsColorConfig;
+    private NewUnitsHighlightsView _newUnitsHighlightsView;
+    private NewUnitsHighlightsPresenter _newUnitsHighlightsPresenter;
     
     [Header("Updater")]
     [SerializeField] private FixedUpdaterBehaviour fixedUpdaterBehaviour;
@@ -186,7 +194,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpClickDetectors();
         SetUpClientMoves();
         SetUpServerMoves();
-        SetUpUnderlines();
+        SetUpPlacedUnitsHighlights();
+        SetUpNewUnitsHighlights();
         SetUpActionPointsGiving();
         SetUpCamera();
         SetUpCellMovesHighlights();
@@ -197,9 +206,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpTimers();
         NotifyPlayerIsReady();
     }
-
-
-
+    
     private void SetUpUpdaters()
     {
         updaterBehaviour.Init(_updater);
@@ -341,14 +348,24 @@ public class DuelGameSceneInitializer : MonoBehaviour
         MoveFromServerMessageHandler.SetDTOAccepter(movesAccepter);
     }
 
-    private void SetUpUnderlines()
+    private void SetUpPlacedUnitsHighlights()
     {
         var instantiator = new Instantiator();
         var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
-        var objectsColorProvider = new PlayerObjectsColorProvider(underlineColorConfig, playerColorProvider);
+        var objectsColorProvider = new PlayerObjectsColorProvider(placedUnitsHighlightsColorConfig, playerColorProvider);
         var underlineCreator = new ColoredHighlightCreator(coloredHighlightPrefabConfig, instantiator);
         _placedUnitsHighlightsView = new PlacedUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
         _placedUnitsHighlightsPresenter = new PlacedUnitsHighlightsPresenter(_game.GetBoard(), _placedUnitsHighlightsView);
+    }
+    
+    private void SetUpNewUnitsHighlights()
+    {
+        var instantiator = new Instantiator();
+        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var objectsColorProvider = new PlayerObjectsColorProvider(newUnitsHighlightsColorConfig, playerColorProvider);
+        var underlineCreator = new ColoredHighlightCreator(newUnitsHighlightsPrefabConfig, instantiator);
+        _newUnitsHighlightsView = new NewUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
+        _newUnitsHighlightsPresenter = new NewUnitsHighlightsPresenter(_game, _newUnitsHighlightsView);
     }
     
     private void SetUpActionPointsGiving()

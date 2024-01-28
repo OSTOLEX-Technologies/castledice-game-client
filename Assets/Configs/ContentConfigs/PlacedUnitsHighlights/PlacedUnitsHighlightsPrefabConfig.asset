@@ -10,6 +10,6 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 73f89fdf0d5c49e8b90f041f754b3cdf, type: 3}
-  m_Name: UnderlinePrefabConfig
+  m_Name: PlacedUnitsHighlightsPrefabConfig
   m_EditorClassIdentifier: 
-  underlinePrefab: {fileID: 2639643338913639117, guid: d8668efd8a150304cba0e203d312e063, type: 3}
+  coloredHighlightPrefab: {fileID: 2639643338913639117, guid: d8668efd8a150304cba0e203d312e063, type: 3}
