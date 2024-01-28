@@ -1,15 +1,15 @@
 ﻿using castledice_game_logic;
 using castledice_game_logic.GameObjects;
-using Src.GameplayView.UnitsUnderlines;
+using Src.GameplayView.PlacedUnitsHighlights;
 
-namespace Src.GameplayPresenter.UnitsUnderlines
+namespace Src.GameplayPresenter.PlacedUnitsHighlights
 {
-    public class UnitsUnderlinesPresenter
+    public class PlacedUnitsHighlightsPresenter
     {
         private readonly Board _board;
-        private readonly IUnitsUnderlinesView _view;
+        private readonly IPlacedUnitsHighlightsView _view;
         
-        public UnitsUnderlinesPresenter(Board board, IUnitsUnderlinesView view)
+        public PlacedUnitsHighlightsPresenter(Board board, IPlacedUnitsHighlightsView view)
         {
             _board = board;
             _view = view;
@@ -25,7 +25,7 @@ namespace Src.GameplayPresenter.UnitsUnderlines
             if (content is IPlayerOwned playerOwned)
             {
                 var cell = (Cell) sender;
-                _view.ShowUnderline(cell.Position, playerOwned.GetOwner());
+                _view.ShowHighlight(cell.Position, playerOwned.GetOwner());
             }
         }
 
@@ -34,11 +34,11 @@ namespace Src.GameplayPresenter.UnitsUnderlines
             if (content is IPlayerOwned playerOwned)
             {
                 var cell = (Cell) sender;
-                _view.HideUnderline(cell.Position);
+                _view.HideHighlight(cell.Position);
             }
         }
         
-        ~UnitsUnderlinesPresenter()
+        ~PlacedUnitsHighlightsPresenter()
         {
             foreach (var cell in _board)
             {

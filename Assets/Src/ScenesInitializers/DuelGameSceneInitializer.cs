@@ -22,9 +22,9 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
+using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayPresenter.Timers;
-using Src.GameplayPresenter.UnitsUnderlines;
 using Src.GameplayView;
 using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
@@ -49,13 +49,14 @@ using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
+using Src.GameplayView.Highlights;
+using Src.GameplayView.PlacedUnitsHighlights;
 using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.GameplayView.Timers;
 using Src.GameplayView.Timers.PlayerTimerViews;
-using Src.GameplayView.UnitsUnderlines;
 using Src.GameplayView.Updatables;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
@@ -159,10 +160,10 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private TimersView _timersView;
 
     [Header("Underlines")]
-    [SerializeField] private UnderlinePrefabConfig underlinePrefabConfig;
+    [SerializeField] private ColoredHighlightPrefabConfig coloredHighlightPrefabConfig;
     [SerializeField] private PlayerObjectsColorConfig underlineColorConfig;
-    private UnitsUnderlinesView _unitsUnderlinesView;
-    private UnitsUnderlinesPresenter _unitsUnderlinesPresenter;
+    private PlacedUnitsHighlightsView _placedUnitsHighlightsView;
+    private PlacedUnitsHighlightsPresenter _placedUnitsHighlightsPresenter;
     
     [Header("Updater")]
     [SerializeField] private FixedUpdaterBehaviour fixedUpdaterBehaviour;
@@ -345,9 +346,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var instantiator = new Instantiator();
         var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
         var objectsColorProvider = new PlayerObjectsColorProvider(underlineColorConfig, playerColorProvider);
-        var underlineCreator = new UnderlineCreator(underlinePrefabConfig, instantiator);
-        _unitsUnderlinesView = new UnitsUnderlinesView(grid, underlineCreator, objectsColorProvider);
-        _unitsUnderlinesPresenter = new UnitsUnderlinesPresenter(_game.GetBoard(), _unitsUnderlinesView);
+        var underlineCreator = new ColoredHighlightCreator(coloredHighlightPrefabConfig, instantiator);
+        _placedUnitsHighlightsView = new PlacedUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
+        _placedUnitsHighlightsPresenter = new PlacedUnitsHighlightsPresenter(_game.GetBoard(), _placedUnitsHighlightsView);
     }
     
     private void SetUpActionPointsGiving()

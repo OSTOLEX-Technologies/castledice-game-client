@@ -1,9 +1,9 @@
-﻿using Src.GameplayView.UnitsUnderlines;
+﻿using Src.GameplayView.Highlights;
 using UnityEngine;
 
 namespace Tests.Utils.Mocks
 {
-    public class UnderlineForTests : Underline
+    public class ColoredHighlightForTests : ColoredHighlight
     {
         public Color Color { get; private set; }
         public bool IsShown { get; private set; }

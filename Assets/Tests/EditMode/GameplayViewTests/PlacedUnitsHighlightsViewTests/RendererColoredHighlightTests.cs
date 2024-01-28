@@ -1,13 +1,13 @@
 ﻿using NUnit.Framework;
-using Src.GameplayView.UnitsUnderlines;
+using Src.GameplayView.Highlights;
 using UnityEngine;
 using static Tests.ObjectCreationUtility;
 
-namespace Tests.EditMode.GameplayViewTests.UnitsUnderlinesTests
+namespace Tests.EditMode.GameplayViewTests.PlacedUnitsHighlightsViewTests
 {
-    public class RendererUnderlineTests
+    public class RendererColoredHighlightTests
     {
-        private const string UnderlineRendererFieldName = "underlineRenderer";
+        private const string UnderlineRendererFieldName = "highlightRenderer";
         
         [Test]
         public void SetColor_ShouldSetColorToAllMaterials_InRenderer()
@@ -16,7 +16,7 @@ namespace Tests.EditMode.GameplayViewTests.UnitsUnderlinesTests
             var materialsCount = Random.Range(1, 10);
             var materials = GetMaterialsList(materialsCount);
             var renderer = GetRendererWithMultipleMaterials(materials);
-            var underline = new GameObject().AddComponent<RendererUnderline>();
+            var underline = new GameObject().AddComponent<RendererColoredHighlight>();
             underline.SetPrivateField(UnderlineRendererFieldName, renderer);
             
             underline.SetColor(expectedColor);
@@ -35,7 +35,7 @@ namespace Tests.EditMode.GameplayViewTests.UnitsUnderlinesTests
         {
             var renderer = new GameObject().AddComponent<MeshRenderer>();
             renderer.enabled = false;
-            var underline = new GameObject().AddComponent<RendererUnderline>();
+            var underline = new GameObject().AddComponent<RendererColoredHighlight>();
             underline.SetPrivateField(UnderlineRendererFieldName, renderer);
             
             underline.Show();
@@ -48,7 +48,7 @@ namespace Tests.EditMode.GameplayViewTests.UnitsUnderlinesTests
         {
             var renderer = new GameObject().AddComponent<MeshRenderer>();
             renderer.enabled = true;
-            var underline = new GameObject().AddComponent<RendererUnderline>();
+            var underline = new GameObject().AddComponent<RendererColoredHighlight>();
             underline.SetPrivateField(UnderlineRendererFieldName, renderer);
             
             underline.Hide();

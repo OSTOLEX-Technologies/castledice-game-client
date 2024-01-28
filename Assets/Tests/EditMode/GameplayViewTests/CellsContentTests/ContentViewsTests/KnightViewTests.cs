@@ -99,7 +99,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             knightView.Init(GetKnight(), GetKnightVisual(), audio);
             
             audio.PlayDestroySound();
-            yield return new WaitForEndOfFrame();
+            yield return null;
             
             Assert.IsTrue(knightView == null);
         }
