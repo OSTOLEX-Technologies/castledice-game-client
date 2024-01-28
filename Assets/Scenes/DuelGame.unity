@@ -1018,8 +1018,10 @@ MonoBehaviour:
   bluePlayerTimeView: {fileID: 7013085729349448138}
   redPlayerHighlighter: {fileID: 669943074}
   bluePlayerHighlighter: {fileID: 7013085729349448137}
-  underlinePrefabConfig: {fileID: 11400000, guid: b3f5d408d9be7094daf39ea825a93ad7, type: 2}
-  underlineColorConfig: {fileID: 11400000, guid: be9e8af516dc9474ebbf6b5f4fb5ec56, type: 2}
+  coloredHighlightPrefabConfig: {fileID: 11400000, guid: b3f5d408d9be7094daf39ea825a93ad7, type: 2}
+  placedUnitsHighlightsColorConfig: {fileID: 11400000, guid: be9e8af516dc9474ebbf6b5f4fb5ec56, type: 2}
+  newUnitsHighlightsPrefabConfig: {fileID: 11400000, guid: 18dd04590ed2db3429b5de54ef2339f7, type: 2}
+  newUnitsHighlightsColorConfig: {fileID: 11400000, guid: 8ababd8e40c3ac04f87b4ccaedd9c1b2, type: 2}
   fixedUpdaterBehaviour: {fileID: 396189204}
   updaterBehaviour: {fileID: 396189202}
 --- !u!1 &1765735282

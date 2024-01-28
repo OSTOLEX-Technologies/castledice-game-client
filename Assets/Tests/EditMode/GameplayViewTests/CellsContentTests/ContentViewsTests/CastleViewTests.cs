@@ -99,7 +99,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             castleView.Init(GetCastle(), GetCastleVisual(), audio);
             
             audio.PlayDestroySound();
-            yield return new WaitForEndOfFrame();
+            yield return null;
             
             Assert.IsTrue(castleView == null);
         }
