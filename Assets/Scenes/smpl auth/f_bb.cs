@@ -1,5 +1,4 @@
 using System;
-using Moq;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.AuthController.CredentialProviders.Metamask;
@@ -43,9 +42,38 @@ namespace Src.AuthController
         {
             AuthTypeChosen?.Invoke(this, authType);
         }
-        
+
+        public class ObjectCacherMock : IObjectCacher
+        {
+            public void CacheObject<T>(T obj)
+            {
+            }
+        }
+        public class WalletFacadeMock : IMetamaskWalletFacade
+        {
+            public void Connect()
+            {
+                throw new NotImplementedException();
+            }
+
+            public void Disconnect()
+            {
+                throw new NotImplementedException();
+            }
+
+            public string GetPublicAddress()
+            {
+                throw new NotImplementedException();
+            }
+
+            public event EventHandler OnConnected;
+            public event EventHandler OnDisconnected;
+        }
         private void Awake()
         {
+            var cacherMock = new ObjectCacherMock();
+            var walletFacadeMock = new WalletFacadeMock();
+            
             _authController = new AuthController(
                 new GeneralAccessTokenProvidersStrategy(
                     new FirebaseTokenProvidersCreator(
@@ -54,13 +82,13 @@ namespace Src.AuthController
                             new FirebaseCredentialFormatter())), 
                     new MetamaskTokenProvidersCreator(
                         new MetamaskBackendCredentialProvider(
-                            new Mock<IMetamaskWalletFacade>().Object,
+                            walletFacadeMock,
                             new MetamaskSignerFacade(),
                             new MetamaskRestRequestsAdapter(
                                 new HttpClientRequestAdapter(),
                                 new MetamaskBackendUrlProvider()),
                             new MetamaskJwtConverter()))),
-                new Mock<IObjectCacher>().Object, 
+                cacherMock, 
                 this);
         }
         
