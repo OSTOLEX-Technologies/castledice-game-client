@@ -35,9 +35,9 @@ namespace Src.AuthController.DeepLinking
         {
             try
             {
-                var linkName = _linkResolver.TryResolveLink(url);
+                var resolvedLink = _linkResolver.TryResolveLink(url);
 
-                switch (linkName.LinkName)
+                switch (resolvedLink.LinkName)
                 {
                     case DeepLinkConfig.GoogleAuthRedirectUri:
                         //TODO: disable google auth panel|canvas

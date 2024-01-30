@@ -1,5 +1,4 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Firebase.Auth;
 
 namespace Src.AuthController.TokenProviders
@@ -8,6 +7,9 @@ namespace Src.AuthController.TokenProviders
     {
         private readonly FirebaseUser _user;
         
+        public FirebaseTokenProvider()
+        {
+        }
         public FirebaseTokenProvider(FirebaseUser user)
         {
             _user = user;

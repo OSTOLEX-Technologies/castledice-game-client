@@ -7,7 +7,10 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wal
         public static bool WalletConnected { get; protected set; }
         
         public void Connect();
+        public void Disconnect();
         public string GetPublicAddress();
+        
         public event EventHandler OnConnected;
+        public event EventHandler OnDisconnected;
     }
 }

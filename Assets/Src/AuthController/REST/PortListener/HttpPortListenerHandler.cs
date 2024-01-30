@@ -14,10 +14,16 @@ namespace Src.AuthController.REST.PortListener
         private readonly IHttpListenerContextResponse _listenerContextResponse;
         private readonly HttpListener _listener;
         private Thread _listenerThread;
+        private HttpListenerContext _workingContext;
 
         public event Action<string> OnListenerFired;
-        
-        public HttpPortListenerHandler(int port, IHttpListenerContextInterpreter listenerContextInterpreter, string queryContextKey, IHttpListenerContextResponse listenerContextResponse, string responseHtml)
+
+        public HttpPortListenerHandler(
+            int port, 
+            IHttpListenerContextInterpreter listenerContextInterpreter, 
+            string queryContextKey, 
+            IHttpListenerContextResponse listenerContextResponse, 
+            string responseHtml)
         {
             _responseHtml = responseHtml;
             _listenerContextInterpreter = listenerContextInterpreter;
@@ -29,11 +35,6 @@ namespace Src.AuthController.REST.PortListener
             _listener.AuthenticationSchemes = AuthenticationSchemes.Anonymous;
         }
 
-        ~HttpPortListenerHandler()
-        {
-            OnListenerFired = null;
-        }
-        
         public void Start()
         {
             _listener.Start();
@@ -42,30 +43,30 @@ namespace Src.AuthController.REST.PortListener
             _listenerThread.Start();
         }
 
-        public void Stop()
+        public void Dispose()
         {
             _listener.Stop();
-            OnListenerFired = null;
-        }
-
-        private void ListeningThread()
-        {
-            while (_listener.IsListening)
-            {
-                var result = _listener.BeginGetContext(ListenerCallback, _listener);
-                result.AsyncWaitHandle.WaitOne();
-            }
-        }
-
-        private void ListenerCallback(IAsyncResult result)
-        {
-            var context = _listener.EndGetContext(result);
-
-            if (!_listenerContextInterpreter.Contains(context, _queryContextKey)) return;
+            _workingContext?.Response.Abort();
             
-            _listenerContextResponse.SendResponse(context, _responseHtml);
+            _listener.Abort();
+        }
+        
+        private async void ListeningThread()
+        {
+            if (!_listener.IsListening) return;
 
-            OnListenerFired?.Invoke(_listenerContextInterpreter.Get(context, _queryContextKey));
+            _workingContext = await _listener.GetContextAsync();
+
+            if (!_listenerContextInterpreter.Contains(_workingContext, _queryContextKey))
+            {
+                Dispose();
+                return;
+            }
+            var responseContextKeyValue = _listenerContextInterpreter.Get(_workingContext, _queryContextKey);
+
+            await _listenerContextResponse.SendResponse(_workingContext, _responseHtml);
+
+            OnListenerFired?.Invoke(responseContextKeyValue);
         }
     }
 }

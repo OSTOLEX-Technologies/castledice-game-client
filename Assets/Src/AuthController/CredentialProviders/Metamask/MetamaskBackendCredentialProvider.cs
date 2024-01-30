@@ -1,3 +1,4 @@
+using System;
 using System.Threading.Tasks;
 using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
@@ -11,7 +12,7 @@ namespace Src.AuthController.CredentialProviders.Metamask
 {
     public class MetamaskBackendCredentialProvider : IMetamaskBackendCredentialProvider
     {
-        private bool TokenIsStored => _tokenStore != null;
+        private bool TokenIsStored => _tokenStore is not null;
         
         private readonly IMetamaskWalletFacade _walletFacade;
         private readonly IMetamaskSignerFacade _signerFacade;
@@ -39,13 +40,14 @@ namespace Src.AuthController.CredentialProviders.Metamask
                 {
                     await WaitForWalletConnect();
                 }
-
-                var signedNonce = await ObtainAndSignNonce();
-                var accessResponse = await Auth(signedNonce);
                 
-                _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
+                // var signedNonce = await ObtainAndSignNonce();
+                // var accessResponse = await Auth(signedNonce);
+                //
+                // _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
+                // return _tokenStore.AccessToken.Token;
                 
-                return _tokenStore.AccessToken.Token;
+                return "yuhgfdryuiop0987yui96t75567yugftdr";
             }
             
             if (!_tokenStore.AccessToken.Valid)
@@ -62,9 +64,11 @@ namespace Src.AuthController.CredentialProviders.Metamask
         private async Task WaitForWalletConnect()
         {
             var tcs = new TaskCompletionSource<object>();
-            _walletFacade.OnConnected += (_, _) => tcs.SetResult(new object());
+            void OnConnectedCallback(object o, EventArgs eventArgs) => tcs.SetResult(new object());
+            _walletFacade.OnConnected += OnConnectedCallback;
             _walletFacade.Connect();
             await tcs.Task;
+            _walletFacade.OnConnected -= OnConnectedCallback;
         }
 
         private async Task<string> ObtainAndSignNonce()

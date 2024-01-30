@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Src.AuthController.CredentialProviders.Metamask;
+using UnityEngine;
 
 namespace Src.AuthController.TokenProviders
 {

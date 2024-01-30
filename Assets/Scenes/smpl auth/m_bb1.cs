@@ -1,7 +1,5 @@
-﻿using System;
-using Firebase;
-using Firebase.Auth;
-using MetaMask.Unity;
+using System;
+using System.Threading.Tasks;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.AuthController.CredentialProviders.Metamask;
@@ -11,80 +9,84 @@ using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapte
 using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
 using Src.AuthController.JwtManagement.Converters.Metamask;
 using Src.AuthController.REST;
+using Src.AuthController.TokenProviders;
 using Src.AuthController.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
-using TMPro;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Src.AuthController
 {
-    public class AuthView : MonoBehaviour, IAuthView
+    public class m_bb1 : MonoBehaviour, IAuthView
     {
-        [SerializeField, InspectorName("SceneLoader component")]
-        private SceneLoader sceneLoader;
-        
-        [SerializeField, InspectorName("Sign in Canvas")]
-        private Canvas signInCanvas;
-        
-        [SerializeField, InspectorName("Sign in Message Canvas")]
-        private Canvas signInMessageCanvas;
-        [SerializeField, InspectorName("Sign in Message Text Field")]
-        private TextMeshProUGUI signInMessageText;
-
         private AuthController _authController;
         private SingletonCacher _singletonCacher;
 
 
         private IMetamaskWalletFacade _metamaskWalletFacade;
 
-        public void LoginWithGoogle()
-        {
-            //_metamaskWalletFacade.OnDisconnected += MetamaskWalletDisconnected;
-            //_metamaskWalletFacade.Disconnect();
+        private Action _metamaskProviderDisconnected;
 
-            // if (MetaMaskUnity.Instance.Wallet.IsConnected)
-            // {
-            //     MetaMaskUnity.Instance.Wallet.Dispose();
-            //     MetaMaskUnity.Instance.gameObject.SetActive(false);
-            // }
-            Login(AuthType.Google);
-        }
-        private void MetamaskWalletDisconnected(object sender, EventArgs args)
+        public void MetamaskAuth()
         {
-            _metamaskWalletFacade.OnDisconnected -= MetamaskWalletDisconnected;
-            MetaMaskUnity.Instance.gameObject.SetActive(false);
-            
-            //Login(AuthType.Google);
-        }
-        
-        public void LoginWithMetamask()
-        {
-            MetaMaskUnity.Instance.gameObject.SetActive(true);
             Login(AuthType.Metamask);
         }
-
-        public void Play()
-        {
-            //MetaMaskUnity.Instance.Wallet?.Dispose();
-            Destroy(MetaMaskUnity.Instance.gameObject);
-            
-            //MetaMaskUnity.Instance.Disconnect();
-            Debug.Log("LOADING SCENE...");
-            SceneManager.LoadScene("Transition", LoadSceneMode.Single);
-            //sceneLoader.LoadScene("Transition");
-        }
-
         public void Login(AuthType authType)
         {
             AuthTypeChosen?.Invoke(this, authType);
         }
         
+        #region AuthControl
+        private async void SucceedAuth()
+        {
+            var token = await Caching.Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
+
+            void SceneLoading()
+            {
+                _metamaskProviderDisconnected -= SceneLoading;
+                LoadNextScene(true);
+            }
+            
+            _metamaskProviderDisconnected += SceneLoading;
+            DisconnectMetamaskProvider();
+        }
+        public void CancelAuth()
+        {
+            void SceneLoading()
+            {
+                _metamaskProviderDisconnected -= SceneLoading;
+                LoadNextScene(false);
+            }
+
+            _metamaskProviderDisconnected += SceneLoading;
+            DisconnectMetamaskProvider();
+        }
+
+        private async void LoadNextScene(bool bAuthSucceeded)
+        {
+            await Task.Delay(10000);
+            var sceneName = bAuthSucceeded ? "Transition" : "FAuth";
+            Debug.Log("LOADING SCENE... Scene: " + sceneName);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
+        #endregion
+        
+        private void DisconnectMetamaskProvider()
+        {
+            void OnMetamaskProviderDisconnected(object sender, EventArgs args)
+            {
+                _metamaskWalletFacade.OnDisconnected -= OnMetamaskProviderDisconnected;
+                _metamaskProviderDisconnected?.Invoke();
+            }
+            _metamaskWalletFacade.OnDisconnected += OnMetamaskProviderDisconnected;
+            _metamaskWalletFacade.Disconnect();
+        }
+
         private void Awake()
         {
             _singletonCacher = new SingletonCacher();
             _metamaskWalletFacade = new MetamaskWalletFacade();
-            
+
             _authController = new AuthController(
                 new GeneralAccessTokenProvidersStrategy(
                     new FirebaseTokenProvidersCreator(
@@ -110,16 +112,12 @@ namespace Src.AuthController
 
         public void ShowSignInMessage(string signInMessage)
         {
-            signInMessageText.SetText(signInMessage);
-            signInMessageCanvas.gameObject.SetActive(true);
         }
 
         private void OnTokenProviderLoaded(object sender, EventArgs e)
         {
-            Play();
-
-            //FirebaseAuth.DefaultInstance.Dispose();
-            //FirebaseApp.DefaultInstance.Dispose();
+            _authController.TokenProviderLoaded -= OnTokenProviderLoaded;
+            SucceedAuth();
         }
 
         public event EventHandler<AuthType> AuthTypeChosen;

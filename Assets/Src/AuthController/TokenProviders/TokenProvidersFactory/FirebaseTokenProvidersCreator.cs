@@ -6,19 +6,20 @@ namespace Src.AuthController.TokenProviders.TokenProvidersFactory
 {
     public class FirebaseTokenProvidersCreator : IFirebaseTokenProvidersCreator
     {
-        private readonly IFirebaseCredentialProvider _credentialProvider;
+        private readonly IFirebaseCredentialProvider _firebaseCredentialProvider;
         private readonly FirebaseAuth _auth;
-        public FirebaseTokenProvidersCreator(IFirebaseCredentialProvider credentialProvider)
+        public FirebaseTokenProvidersCreator(IFirebaseCredentialProvider firebaseCredentialProvider)
         {
-            _credentialProvider = credentialProvider;
+            _firebaseCredentialProvider = firebaseCredentialProvider;
             _auth = FirebaseAuth.DefaultInstance;
         }
         
         public async Task<FirebaseTokenProvider> GetTokenProviderAsync(FirebaseAuthProviderType authProviderType)
         {
-            var credentials = await _credentialProvider.GetCredentialAsync(authProviderType);
-            var user = await _auth.SignInAndRetrieveDataWithCredentialAsync(credentials);
-            return new FirebaseTokenProvider(user.User);
+            var credentials = await _firebaseCredentialProvider.GetCredentialAsync(authProviderType);
+            //var user = await _auth.SignInAndRetrieveDataWithCredentialAsync(credentials);
+            // return new FirebaseTokenProvider(user.User);
+            return new FirebaseTokenProvider();
         }
     }
 }

@@ -12,9 +12,9 @@ namespace Tests.Utils.Mocks
             OnListenerFired?.Invoke("");
         }
 
-        public void Stop()
+        public void Dispose()
         {
-            
+            throw new NotImplementedException();
         }
     }
 }

@@ -1,9 +1,10 @@
 ﻿using System.Net;
+using System.Threading.Tasks;
 
 namespace Src.AuthController.REST.PortListener.ListenerContextResponse
 {
     public interface IHttpListenerContextResponse
     {
-        public void SendResponse(HttpListenerContext context, string responseHtml);
+        public Task SendResponse(HttpListenerContext context, string responseHtml);
     }
 }
