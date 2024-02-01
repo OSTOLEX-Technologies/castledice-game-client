@@ -7,9 +7,6 @@ namespace Src.AuthController.TokenProviders
     {
         private readonly FirebaseUser _user;
         
-        public FirebaseTokenProvider()
-        {
-        }
         public FirebaseTokenProvider(FirebaseUser user)
         {
             _user = user;

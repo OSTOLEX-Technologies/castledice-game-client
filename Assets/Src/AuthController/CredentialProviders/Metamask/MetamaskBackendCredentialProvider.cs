@@ -7,6 +7,7 @@ using Src.AuthController.JwtManagement;
 using Src.AuthController.JwtManagement.Converters.Metamask;
 using Src.AuthController.REST.REST_Request_Proxies.Metamask;
 using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
+using UnityEngine;
 
 namespace Src.AuthController.CredentialProviders.Metamask
 {
@@ -38,6 +39,7 @@ namespace Src.AuthController.CredentialProviders.Metamask
             {
                 if (!IMetamaskWalletFacade.WalletConnected)
                 {
+                    Debug.Log("1");
                     await WaitForWalletConnect();
                 }
                 
@@ -66,6 +68,7 @@ namespace Src.AuthController.CredentialProviders.Metamask
             var tcs = new TaskCompletionSource<object>();
             void OnConnectedCallback(object o, EventArgs eventArgs) => tcs.SetResult(new object());
             _walletFacade.OnConnected += OnConnectedCallback;
+            Debug.Log("2");
             _walletFacade.Connect();
             await tcs.Task;
             _walletFacade.OnConnected -= OnConnectedCallback;

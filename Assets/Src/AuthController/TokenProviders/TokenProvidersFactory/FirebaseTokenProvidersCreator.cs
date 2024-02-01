@@ -17,9 +17,8 @@ namespace Src.AuthController.TokenProviders.TokenProvidersFactory
         public async Task<FirebaseTokenProvider> GetTokenProviderAsync(FirebaseAuthProviderType authProviderType)
         {
             var credentials = await _firebaseCredentialProvider.GetCredentialAsync(authProviderType);
-            //var user = await _auth.SignInAndRetrieveDataWithCredentialAsync(credentials);
-            // return new FirebaseTokenProvider(user.User);
-            return new FirebaseTokenProvider();
+            var user = await _auth.SignInAndRetrieveDataWithCredentialAsync(credentials); 
+            return new FirebaseTokenProvider(user.User);
         }
     }
 }

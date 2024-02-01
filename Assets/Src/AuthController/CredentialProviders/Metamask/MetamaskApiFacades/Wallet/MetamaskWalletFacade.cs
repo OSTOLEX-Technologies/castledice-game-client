@@ -1,5 +1,4 @@
 using System;
-using System.Threading.Tasks;
 using MetaMask;
 using MetaMask.Unity;
 using Object = UnityEngine.Object;
@@ -8,36 +7,31 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wal
 {
     public class MetamaskWalletFacade : IMetamaskWalletFacade
     {
-        private readonly MetaMaskWallet _wallet;
-
-        public MetamaskWalletFacade()
-        {
-            MetaMaskUnity.Instance.Initialize();
-            _wallet = MetaMaskUnity.Instance.Wallet;
-        }
+        private MetaMaskWallet _wallet;
 
         public void Connect()
         {
+            MetaMaskUnity.Instance.Initialize();
+            _wallet = MetaMaskUnity.Instance.Wallet;
+
             if (_wallet.IsConnected)
             {
                 OnWalletConnected(this, EventArgs.Empty);
                 return;
             }
             
-            // _wallet.WalletAuthorizedHandler += OnWalletConnected;
             _wallet.WalletConnectedHandler += OnWalletConnected;
             _wallet.Connect();
         }
 
         public void Disconnect()
         {
-            if (!_wallet.IsConnected)
+            if (_wallet is null || !_wallet.IsConnected)
             {
                 OnDisconnected?.Invoke(this, EventArgs.Empty);
                 return;
             }
             
-            // _wallet.WalletUnauthorizedHandler += OnWalletDisconnected;
             _wallet.WalletDisconnectedHandler += OnWalletDisconnected;
             _wallet.Dispose();
         }
@@ -49,7 +43,6 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wal
         
         private void OnWalletConnected(object sender, EventArgs args)
         {
-            // _wallet.WalletAuthorizedHandler -= OnWalletConnected;
             _wallet.WalletConnectedHandler -= OnWalletConnected;
             
             IMetamaskWalletFacade.WalletConnected = true;
@@ -58,7 +51,6 @@ namespace Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wal
 
         private void OnWalletDisconnected(object sender, EventArgs args)
         {
-            // _wallet.WalletUnauthorizedHandler -= OnWalletDisconnected;
             _wallet.WalletDisconnectedHandler -= OnWalletDisconnected;
             
             IMetamaskWalletFacade.WalletConnected = false;

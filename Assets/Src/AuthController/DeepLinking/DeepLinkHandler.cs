@@ -18,6 +18,7 @@ namespace Src.AuthController.DeepLinking
             if (Instance != null)
             {
                 Destroy(this);
+                return;
             }
 
             Instance = this;

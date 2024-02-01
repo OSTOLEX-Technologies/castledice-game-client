@@ -1,21 +1,35 @@
-using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
-public class SceneLoader : MonoBehaviour
+namespace Src.Components
 {
-    public static EventHandler<bool> OnSceneLoadingStarted;
-    
-    public void LoadScene(string sceneName, bool bAsyncMode = false)
+    public class SceneLoader : MonoBehaviour
     {
-        OnSceneLoadingStarted?.Invoke(this, bAsyncMode);
-        if (bAsyncMode)
+        private static string TransitionSceneName => "Transition";
+
+        public void LoadTransitionScene()
         {
-            SceneManager.LoadSceneAsync(sceneName);
+            LoadScene(TransitionSceneName);
         }
-        else
+        
+        public void LoadScene(string sceneName)
         {
-            SceneManager.LoadScene(sceneName);
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
+        }
+
+        public void LoadSceneAdditive(string sceneName)
+        {
+            SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
+        }
+
+        public AsyncOperation LoadSceneAsync(string sceneName)
+        {
+            return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
+        }
+
+        public AsyncOperation LoadSceneAsyncAdditive(string sceneName)
+        {
+            return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
     }
 }

@@ -65,14 +65,11 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         {
             var idResponseTcs = new TaskCompletionSource<GoogleIdTokenResponse>();
             
-            // _localHttpPortListener.StartListening(authCode => 
-            // // LocalHttpPortListener.Instance.StartListening(authCode =>
-            // {
-            //     Debug.Log("<CALLBACK>, code " + authCode);
-            //     //ExchangeAuthCodeWithIdToken(idResponseTcs, authCode);
-            //     idResponseTcs.SetResult(new GoogleIdTokenResponse());
-            // });
-            idResponseTcs.SetResult(new GoogleIdTokenResponse());
+            _localHttpPortListener.StartListening(authCode => 
+            {
+                Debug.Log("<CALLBACK>, code " + authCode);
+                ExchangeAuthCodeWithIdToken(idResponseTcs, authCode);
+            });
             
             _oAuthUrlOpener.Open(GoogleAuthConfig.GoogleOAuthUrl);
             
