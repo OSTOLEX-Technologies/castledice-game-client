@@ -4,8 +4,6 @@ namespace Src.AuthController.REST.PortListener
 {
     public class LocalHttpPortListener : ILocalHttpPortListener
     {
-        //public static LocalHttpPortListener Instance { get; private set; }
-        
         private IHttpPortListenerHandler _listenerHandler;
         private Action<string> _callback;
 
@@ -13,23 +11,6 @@ namespace Src.AuthController.REST.PortListener
         {
             _listenerHandler = listenerHandler;
         }
-
-        // private void Awake()
-        // {
-        //     if (Instance != null)
-        //     {
-        //         return;
-        //     }
-        //
-        //     Instance = this;
-        //
-        //     _listenerHandler = new HttpPortListenerHandler(
-        //         GoogleAuthConfig.LoopbackPort,
-        //         new HttpListenerContextInterpreter(),
-        //         GoogleAuthConfig.AuthCodeQueryKeyName,
-        //         new HttpListenerContextResponse(),
-        //         GoogleAuthConfig.ResponseHtml);
-        // }
 
         public void StartListening(Action<string> callback)
         {

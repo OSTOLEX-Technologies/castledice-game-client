@@ -1,7 +1,5 @@
 ﻿using System;
 using System.Threading.Tasks;
-using Firebase;
-using Firebase.Auth;
 using MetaMask.Transports.Unity.UI;
 using Src.AuthController.CredentialProviders.Firebase;
 using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
@@ -18,7 +16,6 @@ using Src.Caching;
 using Src.Components;
 using TMPro;
 using UnityEngine;
-using MetaMaskUnity = MetaMask.Unity.MetaMaskUnity;
 
 namespace Src.AuthController
 {
@@ -114,24 +111,13 @@ namespace Src.AuthController
             _authController.TokenProviderLoaded -= OnTokenProviderLoaded;
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
 
-            await EndAuthProcess();
+            await WaitUntilMetamaskDisconnects();
             sceneLoader.LoadTransitionScene();
         }
         #endregion
         
         
         #region AuthProcessEnding
-        private async Task EndAuthProcess()
-        {
-            //DisconnectFirebase();
-            await WaitUntilMetamaskDisconnects();
-        }
-
-        private void DisconnectFirebase()
-        {
-            FirebaseAuth.DefaultInstance.Dispose();
-            FirebaseApp.DefaultInstance.Dispose();
-        }
         private async Task WaitUntilMetamaskDisconnects()
         {
             var disconnectTsc = new TaskCompletionSource<object>();

@@ -36,10 +36,9 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
         
         public async Task<GoogleJwtStore> GetCredentialAsync()
         {
-            Debug.Log("||| CHECK STARTED |||");
             if (!TokenIsStored)
             {
-                Debug.Log("TOKEN ISNT STORED");
+                Debug.Log("GOOGLE TOKENS AREN'T STORED");
                 var authResponse = await GetAuthData();;
                 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
@@ -49,7 +48,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
 
             if (!_tokenStore.AccessToken.Valid)
             {
-                Debug.Log("TOKEN INVALID");
+                Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
                 var refreshResponse = await RefreshAccessToken();
 
                 _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
@@ -57,7 +56,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
                 return _tokenStore;
             }
 
-            Debug.Log("TOKEN VALID");
+            Debug.Log("GOOGLE TOKEN IS VALID");
             return _tokenStore;
         }
 
@@ -67,7 +66,7 @@ namespace Src.AuthController.CredentialProviders.Firebase.Google
             
             _localHttpPortListener.StartListening(authCode => 
             {
-                Debug.Log("<CALLBACK>, code " + authCode);
+                Debug.Log("<GOOGLE AUTH CODE RECEIVING CALLBACK>, code: " + authCode);
                 ExchangeAuthCodeWithIdToken(idResponseTcs, authCode);
             });
             

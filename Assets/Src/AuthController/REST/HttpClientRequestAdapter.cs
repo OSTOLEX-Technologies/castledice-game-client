@@ -4,7 +4,6 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Src.AuthController.Exceptions.HttpRequests;
-using UnityEngine;
 
 namespace Src.AuthController.REST
 {
@@ -33,7 +32,6 @@ namespace Src.AuthController.REST
             }
             else
             {
-                Debug.Log(await response.Content.ReadAsStringAsync());
                 throw new HttpClientRequestException(await response.Content.ReadAsStringAsync(), response.StatusCode);
             }
         }

@@ -31,7 +31,6 @@ namespace Tests.EditMode.AuthTests
             authViewMock.Object.Login(authType);
 
             Assert.IsTrue(bCached);
-            //cacherMock.Verify(c => c.CacheObject(usedTokenProvider), Times.Once);
         }
 
         public static IEnumerable<AuthType> GetAuthTypes()
