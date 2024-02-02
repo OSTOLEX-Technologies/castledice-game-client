@@ -33,7 +33,7 @@ namespace Src.Auth
         private TextMeshProUGUI signInMessageText;
 
         private AuthController _authController;
-        private SingletonCacher _singletonCacher;
+        private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
 
         private MetaMaskUnityUIHandler _qrCodeHandlerCanvas;
@@ -71,34 +71,18 @@ namespace Src.Auth
         #endregion
 
         
-        #region UnityMethods
-        private void Awake()
+        #region Init
+        public void Init(IObjectCacher cacher, IMetamaskWalletFacade metamaskWalletFacade, AuthController controller)
         {
-            _singletonCacher = new SingletonCacher();
-            _metamaskWalletFacade = new MetamaskWalletFacade();
-            
-            _authController = new AuthController(
-                new GeneralAccessTokenProvidersStrategy(
-                    new FirebaseTokenProvidersCreator(
-                        new FirebaseCredentialProvider(
-                            new FirebaseInternalCredentialProviderCreator(),
-                            new FirebaseCredentialFormatter())), 
-                    new MetamaskTokenProvidersCreator(
-                        new MetamaskBackendCredentialProvider(
-                            _metamaskWalletFacade,
-                            new MetamaskSignerFacade(),
-                            new MetamaskRestRequestsAdapter(
-                                new HttpClientRequestAdapter(),
-                                new MetamaskBackendUrlProvider()),
-                            new MetamaskJwtConverter()))),
-                _singletonCacher, 
-                this);
-            
+            _singletonCacher = cacher;
+            _metamaskWalletFacade = metamaskWalletFacade;
+            _authController = controller;
+
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
         }
         #endregion
 
-        
+
         #region ImplementedViewMethods
         public void ShowSignInMessage(string signInMessage)
         {
