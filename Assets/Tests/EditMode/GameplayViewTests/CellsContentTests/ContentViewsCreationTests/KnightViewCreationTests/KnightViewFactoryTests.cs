@@ -9,7 +9,7 @@ using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
 using Src.GameplayView.PlayersRotations;
 using Tests.Utils.Mocks;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreationTests.KnightViewCreationTests
 {

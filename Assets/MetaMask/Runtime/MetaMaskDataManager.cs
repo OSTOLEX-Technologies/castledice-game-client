@@ -2,13 +2,11 @@
 using System.IO;
 using System.Security.Cryptography;
 using System.Text;
-
-using MetaMask.IO;
-using MetaMask.Logging;
-
+using MetaMask.Runtime.Logging;
+using MetaMask.Runtime.Storage;
 using Newtonsoft.Json;
 
-namespace MetaMask
+namespace MetaMask.Runtime
 {
 
     /// <summary>

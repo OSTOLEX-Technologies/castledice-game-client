@@ -1,6 +1,6 @@
 using Nethereum.Hex.HexConvertors.Extensions;
 
-namespace evm.net.Models
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models
 {
     public class HexString : IConvertableType
     {

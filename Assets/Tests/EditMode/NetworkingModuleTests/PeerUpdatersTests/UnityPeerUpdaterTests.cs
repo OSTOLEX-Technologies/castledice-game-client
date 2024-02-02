@@ -6,7 +6,7 @@ using Src.NetworkingModule.PeerUpdaters;
 using UnityEngine;
 using UnityEngine.TestTools;
 
-namespace Tests.PlayMode
+namespace Tests.EditMode.NetworkingModuleTests.PeerUpdatersTests
 {
     public class PeerMock : Client
     {

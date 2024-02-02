@@ -3,8 +3,8 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text;
 using System.Threading.Tasks;
-using evm.net.Network;
-using MetaMask.Unity;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Network;
+using MetaMask.Scripts.Utilities;
 using UnityEngine;
 using UnityEngine.Networking;
 #if UNITY_WEBGL && !UNITY_EDITOR
@@ -15,7 +15,7 @@ using Newtonsoft.Json;
 using System.Runtime.InteropServices;
 #endif
 
-namespace MetaMask.IO
+namespace MetaMask.Scripts.IO
 {
     /// <summary>
     /// A Singleton class that handles all the network requests. It uses UnityWebRequest to make the requests.

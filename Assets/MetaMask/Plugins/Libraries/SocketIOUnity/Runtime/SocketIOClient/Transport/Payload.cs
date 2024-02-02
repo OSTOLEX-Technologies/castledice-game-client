@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MetaMask.SocketIOClient.Transport
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
 {
     public class Payload
     {

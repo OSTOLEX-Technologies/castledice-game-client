@@ -1,9 +1,8 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
-
 using UnityEngine;
 
-namespace MetaMask.NativeWebSocket
+namespace MetaMask.Plugins.Libraries.WebSocket
 {
 
     public class AndroidWebSocket : AndroidJavaProxy, IWebSocket

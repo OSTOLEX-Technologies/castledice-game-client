@@ -1,9 +1,7 @@
 ﻿using System.Text.Json.Serialization;
-
 using Newtonsoft.Json;
-using UnityEngine;
 
-namespace MetaMask.Models
+namespace MetaMask.Runtime.Models
 {
     public class MetaMaskOriginatorInfo
     {

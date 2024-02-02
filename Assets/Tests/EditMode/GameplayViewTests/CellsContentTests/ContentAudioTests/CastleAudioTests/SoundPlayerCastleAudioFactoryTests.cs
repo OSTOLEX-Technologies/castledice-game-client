@@ -1,7 +1,7 @@
 ﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using UnityEngine;

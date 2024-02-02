@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 
-namespace evm.net.Models
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models
 {
     public class Transaction
     {

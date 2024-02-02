@@ -1,9 +1,9 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController.DeepLinking.LinkResolver;
-using Src.AuthController.DeepLinking.LinkResolver.LinkFormatter;
-using Src.AuthController.DeepLinking.LinkResolver.ParametersExtractor;
+using Src.Auth.DeepLinking.LinkResolver;
+using Src.Auth.DeepLinking.LinkResolver.LinkFormatter;
+using Src.Auth.DeepLinking.LinkResolver.ParametersExtractor;
 
 namespace Tests.EditMode.AuthTests.DeepLinking
 {

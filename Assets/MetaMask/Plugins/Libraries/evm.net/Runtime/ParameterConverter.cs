@@ -4,10 +4,10 @@ using System.Linq;
 using System.Numerics;
 using System.Reflection;
 using System.Threading.Tasks;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
 using Nethereum.ABI;
-using evm.net.Models;
 
-namespace evm.net
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
 {
     public class ParameterConverter
     {

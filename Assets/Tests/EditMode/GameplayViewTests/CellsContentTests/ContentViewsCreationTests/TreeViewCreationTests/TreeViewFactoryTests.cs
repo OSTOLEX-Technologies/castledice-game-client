@@ -4,7 +4,7 @@ using Src.GameplayView;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreationTests.TreeViewCreationTests
 {

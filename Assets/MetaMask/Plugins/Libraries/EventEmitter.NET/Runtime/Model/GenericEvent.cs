@@ -1,7 +1,7 @@
 using System;
-using EventEmitter.NET.Interfaces;
+using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Interfaces;
 
-namespace EventEmitter.NET.Model
+namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Model
 {
     /// <summary>
     /// A generic implementation of the IEvent interface. Given a event data type T, store the data in-memory

@@ -2,7 +2,7 @@
 using Src.GameplayView.Audio;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.CastleAudioTests
 {

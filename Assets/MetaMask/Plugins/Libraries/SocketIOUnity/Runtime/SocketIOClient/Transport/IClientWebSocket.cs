@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MetaMask.SocketIOClient.Transport
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
 {
     public interface IClientWebSocket : IDisposable
     {

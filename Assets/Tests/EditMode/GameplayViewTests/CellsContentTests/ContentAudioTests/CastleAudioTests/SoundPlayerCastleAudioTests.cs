@@ -1,6 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.Audio;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using UnityEngine;

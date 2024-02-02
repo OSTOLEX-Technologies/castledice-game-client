@@ -1,4 +1,4 @@
-﻿﻿using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Dynamic;
 using System.Linq;
@@ -8,14 +8,14 @@ using System.Runtime.Serialization;
 using System.Text.Json;
 using System.Text.Json.Nodes;
 using System.Threading.Tasks;
-using evm.net.Factory;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Factory;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
 using Nethereum.ABI;
 using Nethereum.ABI.Model;
 using Nethereum.Hex.HexConvertors.Extensions;
-using evm.net.Models;
 using Newtonsoft.Json;
 
-namespace evm.net
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
 {
     public class Contract : DynamicObject
     {

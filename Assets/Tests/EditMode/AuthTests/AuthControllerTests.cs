@@ -2,9 +2,9 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController;
-using Src.AuthController.TokenProviders;
-using Src.AuthController.TokenProviders.TokenProvidersFactory;
+using Src.Auth;
+using Src.Auth.TokenProviders;
+using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 
 namespace Tests.EditMode.AuthTests

@@ -2,7 +2,7 @@
 using castledice_game_logic.MovesLogic;
 using NUnit.Framework;
 using Src.GameplayPresenter.CellMovesHighlights;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
 {

@@ -11,7 +11,7 @@ using Src.GameplayPresenter;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
 {

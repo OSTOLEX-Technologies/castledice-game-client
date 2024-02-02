@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Src.GameplayPresenter.Grid;
 using Src.GameplayView.Grid;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.GridTests
 {

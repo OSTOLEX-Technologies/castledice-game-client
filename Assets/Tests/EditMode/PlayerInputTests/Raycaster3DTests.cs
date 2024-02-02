@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Src.PlayerInput;
 using UnityEngine;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.PlayerInputTests
 {
     public interface ISomeInterface
     {

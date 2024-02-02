@@ -2,7 +2,7 @@
 using Src.GameplayView.CellsContent.ContentViews;
 using Tests.Utils.Mocks;
 using UnityEditor;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using UnityEngine;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests

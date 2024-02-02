@@ -5,10 +5,10 @@ using Firebase;
 using Firebase.Auth;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController;
-using Src.AuthController.CredentialProviders.Metamask;
-using Src.AuthController.TokenProviders;
-using Src.AuthController.TokenProviders.TokenProvidersFactory;
+using Src.Auth;
+using Src.Auth.CredentialProviders.Metamask;
+using Src.Auth.TokenProviders;
+using Src.Auth.TokenProviders.TokenProvidersFactory;
 
 namespace Tests.EditMode.AuthTests
 {

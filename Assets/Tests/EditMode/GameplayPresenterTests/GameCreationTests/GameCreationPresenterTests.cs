@@ -10,7 +10,7 @@ using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayView.GameCreation;
 using Tests.Utils.Mocks;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
 {

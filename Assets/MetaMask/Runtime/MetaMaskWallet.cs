@@ -2,19 +2,19 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
-using EventEmitter.NET;
-using EventEmitter.NET.Interfaces;
-using MetaMask.Cryptography;
-using MetaMask.Logging;
-using MetaMask.Models;
-using MetaMask.Sockets;
-using MetaMask.Transports;
-
+using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime;
+using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Interfaces;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
+using MetaMask.Runtime.Cryptography;
+using MetaMask.Runtime.Logging;
+using MetaMask.Runtime.Models;
+using MetaMask.Runtime.Models.Messages;
+using MetaMask.Runtime.Sockets;
+using MetaMask.Runtime.Transports;
 using Newtonsoft.Json;
-using evm.net;
-using evm.net.Models;
 
-namespace MetaMask
+namespace MetaMask.Runtime
 {
 
     /// <summary>

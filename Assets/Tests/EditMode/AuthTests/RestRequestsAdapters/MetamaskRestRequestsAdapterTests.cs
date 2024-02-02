@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
-using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
-using Src.AuthController.REST;
-using Src.AuthController.REST.REST_Request_Proxies.Metamask;
-using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
+using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
+using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
+using Src.Auth.REST;
+using Src.Auth.REST.REST_Request_Proxies.Metamask;
+using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
 
 namespace Tests.EditMode.AuthTests.RestRequestsAdapters
 {

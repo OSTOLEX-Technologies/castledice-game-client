@@ -5,10 +5,9 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MetaMask.Plugins.Libraries.WebSocket;
 
-using MetaMask.NativeWebSocket;
-
-namespace MetaMask.SocketIOClient.Transport
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
 {
     public class NativeClientWebSocket : IClientWebSocket
     {
@@ -19,7 +18,7 @@ namespace MetaMask.SocketIOClient.Transport
 #if (UNITY_ANDROID || UNITY_IOS) && !UNITY_EDITOR
         private BackgroundWebSocket bws;
 #else
-        private WebSocket ws;
+        private WebSocket.WebSocket ws;
 #endif
 
         private bool _disposed;
@@ -114,7 +113,7 @@ namespace MetaMask.SocketIOClient.Transport
             this.bws = new BackgroundWebSocket(uri.ToString());
             _ = this.bws.Connect();
 #else
-            this.ws = new WebSocket(uri.ToString(), this.defaultHeaders);
+            this.ws = new WebSocket.WebSocket(uri.ToString(), this.defaultHeaders);
             WebSocketDispatcher.Instance.AddWebSocket(this.ws);
             _ = this.ws.Connect();
 #endif

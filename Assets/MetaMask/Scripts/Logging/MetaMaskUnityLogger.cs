@@ -1,12 +1,9 @@
 using System;
-
-using MetaMask.Unity;
-
+using MetaMask.Runtime.Logging;
 using UnityEngine;
-
 using Object = System.Object;
 
-namespace MetaMask.Logging
+namespace MetaMask.Scripts.Logging
 {
     public class MetaMaskUnityLogger : IMetaMaskLogger
     {

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using NUnit.Framework;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation;
 using Src.GameplayView.PlayersColors;
 using UnityEngine;

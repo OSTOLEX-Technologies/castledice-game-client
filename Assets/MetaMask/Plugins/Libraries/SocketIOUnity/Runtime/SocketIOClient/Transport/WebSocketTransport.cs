@@ -1,12 +1,10 @@
 ﻿using System;
-using System.Reactive.Linq;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer;
 
-using MetaMask.SocketIOClient.JsonSerializer;
-
-namespace MetaMask.SocketIOClient.Transport
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
 {
     public class WebSocketTransport : BaseTransport
     {

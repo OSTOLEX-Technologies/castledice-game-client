@@ -1,8 +1,7 @@
 using System;
+using MetaMask.Runtime.Models;
 
-using MetaMask.Models;
-
-namespace MetaMask.Transports.Unity
+namespace MetaMask.Scripts.Transports.Unity
 {
 
     public interface IMetaMaskUnityTransportListener

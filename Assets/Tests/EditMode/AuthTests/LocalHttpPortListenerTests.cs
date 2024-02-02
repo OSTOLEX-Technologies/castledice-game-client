@@ -1,6 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using Src.AuthController.REST.PortListener;
+using Src.Auth.REST.PortListener;
 
 namespace Tests.EditMode.AuthTests
 {

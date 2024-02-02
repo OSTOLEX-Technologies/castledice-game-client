@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayView.CellsContent;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.CellsContentTests
 {

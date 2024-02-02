@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace evm.net.Models.ABI
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models.ABI
 {
     public class ABIParameter
     {

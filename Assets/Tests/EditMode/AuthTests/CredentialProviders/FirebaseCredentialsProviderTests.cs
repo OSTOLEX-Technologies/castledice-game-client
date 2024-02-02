@@ -4,12 +4,12 @@ using System.Threading.Tasks;
 using Firebase.Auth;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController;
-using Src.AuthController.CredentialProviders.Firebase;
-using Src.AuthController.CredentialProviders.Firebase.Google;
-using Src.AuthController.CredentialProviders.Firebase.Google.CredentialFormatter;
-using Src.AuthController.JwtManagement;
-using Src.AuthController.JwtManagement.Tokens;
+using Src.Auth;
+using Src.Auth.CredentialProviders.Firebase;
+using Src.Auth.CredentialProviders.Firebase.Google;
+using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
+using Src.Auth.JwtManagement;
+using Src.Auth.JwtManagement.Tokens;
 
 namespace Tests.EditMode.AuthTests.CredentialProviders
 {

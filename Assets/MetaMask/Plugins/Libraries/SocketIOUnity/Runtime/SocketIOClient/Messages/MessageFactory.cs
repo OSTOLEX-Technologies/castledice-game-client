@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MetaMask.SocketIOClient.Messages
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages
 {
     public static class MessageFactory
     {

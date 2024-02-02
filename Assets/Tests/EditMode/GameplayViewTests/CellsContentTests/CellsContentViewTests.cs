@@ -6,7 +6,7 @@ using Src.GameplayView.CellsContent.ContentViewsCreation;
 using Src.GameplayView.Grid;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests
 {

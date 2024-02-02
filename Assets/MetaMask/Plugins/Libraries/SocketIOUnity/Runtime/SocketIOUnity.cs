@@ -9,10 +9,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages;
 
-using MetaMask.SocketIOClient.Messages;
-
-namespace MetaMask.SocketIOClient
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime
 {
 
     public class SocketIOUnity : SocketIO

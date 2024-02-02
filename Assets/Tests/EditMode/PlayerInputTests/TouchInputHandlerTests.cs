@@ -5,7 +5,7 @@ using Src.GameplayView.ClickDetection;
 using Src.PlayerInput;
 using UnityEngine;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.PlayerInputTests
 {
     public class TouchInputHandlerTests
     {

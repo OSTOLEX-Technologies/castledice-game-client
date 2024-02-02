@@ -1,11 +1,9 @@
 ﻿using System;
-
-using MetaMask.Cryptography;
-using MetaMask.Models;
-
+using MetaMask.Runtime.Cryptography;
+using MetaMask.Runtime.Models.Messages;
 using Newtonsoft.Json;
 
-namespace MetaMask
+namespace MetaMask.Runtime
 {
 
     /// <summary>

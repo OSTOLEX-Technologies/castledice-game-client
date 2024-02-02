@@ -3,7 +3,7 @@ using castledice_game_logic.GameObjects;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
 using Src.GameplayView.PlayersColors;
 using UnityEngine;

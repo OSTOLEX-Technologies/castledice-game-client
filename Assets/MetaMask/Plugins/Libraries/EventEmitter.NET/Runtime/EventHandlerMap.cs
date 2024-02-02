@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace EventEmitter.NET
+namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime
 {
     /// <summary>
     /// A mapping of eventIds to EventHandler objects. This using a Dictionary as the backing datastore

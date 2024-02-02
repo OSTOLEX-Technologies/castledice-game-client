@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Text.Json;
 
-namespace MetaMask.SocketIOClient
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient
 {
     public delegate void OnAnyHandler(string eventName, SocketIOResponse response);
     public delegate void OnOpenedHandler(string sid, int pingInterval, int pingTimeout);

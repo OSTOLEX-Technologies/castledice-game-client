@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using NUnit.Framework;
 using Src.GameplayView.PlayersColors;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using UnityEngine;
 using Random = UnityEngine.Random;

@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Src.GameplayPresenter;
 using Src.GameplayView.PlayersColors;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.PlayersColorsTests
 {

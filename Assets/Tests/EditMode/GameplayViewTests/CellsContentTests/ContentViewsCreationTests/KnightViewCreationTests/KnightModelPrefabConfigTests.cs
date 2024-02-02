@@ -1,6 +1,6 @@
 ﻿using NUnit.Framework;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
 
