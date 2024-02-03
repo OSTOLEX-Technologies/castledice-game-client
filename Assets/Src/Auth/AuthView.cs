@@ -1,17 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MetaMask.Scripts.Transports.Unity.UGUI;
-using Src.Auth.CredentialProviders.Firebase;
-using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
-using Src.Auth.CredentialProviders.Metamask;
-using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
-using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
-using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
-using Src.Auth.JwtManagement.Converters.Metamask;
-using Src.Auth.REST;
 using Src.Auth.TokenProviders;
-using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using Src.Components;
 using TMPro;
@@ -96,7 +87,7 @@ namespace Src.Auth
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
 
             await WaitUntilMetamaskDisconnects();
-            sceneLoader.LoadTransitionScene();
+            sceneLoader.LoadSceneWithTransition("MainMenu");
         }
         #endregion
         
