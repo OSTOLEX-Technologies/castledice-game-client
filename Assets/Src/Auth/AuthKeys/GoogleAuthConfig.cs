@@ -6,10 +6,10 @@ namespace Src.Auth.AuthKeys
     {
         internal const string ClientId = "150757942999-dku1lgumktq12lp4k1uoftt7cvrhiicc.apps.googleusercontent.com";
 
-        internal const string ClientSecret = "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";
-        internal const string Verifier = "wKHYaY_OTlrHQHKzcfYFQQ-hhdOcwygaBbkl_v2EcIE";
+        internal const string ClientSecret = "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";
+        internal const string Verifier = "ZRm7RHaD9Co4oBDXIi3ffHcgFG-q1-XZpiqkLcDATSA";
         
-        internal const int LoopbackPort = 8080;
+        internal const int LoopbackPort = 3033;
         internal static readonly string RedirectUri = $"http://127.0.0.1:{LoopbackPort}/";
 
         internal const string AuthCodeQueryKeyName = "code";
@@ -20,7 +20,7 @@ namespace Src.Auth.AuthKeys
                                                        $"response_type={AuthCodeQueryKeyName}&" +
                                                        "scope=email";
         
-        private static readonly string AuthRedirectDeepLink = $"{DeepLinkConfig.GlobalSchemeName}" +
+        internal static readonly string AuthRedirectDeepLink = $"{DeepLinkConfig.GlobalSchemeName}" +
                                                               $"{DeepLinkConfig.DefaultSchemeProtocolDivider}" +
                                                               $"{DeepLinkConfig.GoogleAuthRedirectUri}";
 
