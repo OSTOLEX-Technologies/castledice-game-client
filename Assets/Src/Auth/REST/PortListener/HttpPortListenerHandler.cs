@@ -1,14 +1,16 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using Src.Auth.CredentialProviders.Firebase.Google.RedirectHtmlPageFormatter;
 using Src.Auth.REST.PortListener.ListenerContextInterpretation;
 using Src.Auth.REST.PortListener.ListenerContextResponse;
+using UnityEngine;
 
 namespace Src.Auth.REST.PortListener
 {
     public class HttpPortListenerHandler : IHttpPortListenerHandler
     {
-        private readonly string _responseHtml;
+        private readonly IRedirectHtmlPageFormatter _responseHtmlFormatter;
         private readonly IHttpListenerContextInterpreter _listenerContextInterpreter;
         private readonly string _queryContextKey;
         private readonly IHttpListenerContextResponse _listenerContextResponse;
@@ -23,9 +25,9 @@ namespace Src.Auth.REST.PortListener
             IHttpListenerContextInterpreter listenerContextInterpreter, 
             string queryContextKey, 
             IHttpListenerContextResponse listenerContextResponse, 
-            string responseHtml)
+            IRedirectHtmlPageFormatter responseHtmlFormatter)
         {
-            _responseHtml = responseHtml;
+            _responseHtmlFormatter = responseHtmlFormatter;
             _listenerContextInterpreter = listenerContextInterpreter;
             _queryContextKey = queryContextKey;
             _listenerContextResponse = listenerContextResponse;
@@ -64,7 +66,8 @@ namespace Src.Auth.REST.PortListener
             }
             var responseContextKeyValue = _listenerContextInterpreter.Get(_workingContext, _queryContextKey);
 
-            await _listenerContextResponse.SendResponse(_workingContext, _responseHtml);
+            Debug.Log(_responseHtmlFormatter.FormatPage());
+            await _listenerContextResponse.SendResponse(_workingContext, _responseHtmlFormatter.FormatPage());
 
             OnListenerFired?.Invoke(responseContextKeyValue);
         }

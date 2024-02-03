@@ -1,6 +1,7 @@
 ﻿using Src.Auth.AuthKeys;
 using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
+using Src.Auth.CredentialProviders.Firebase.Google.RedirectHtmlPageFormatter;
 using Src.Auth.Exceptions.Authorization;
 using Src.Auth.JwtManagement.Converters.Google;
 using Src.Auth.REST;
@@ -26,7 +27,7 @@ namespace Src.Auth.CredentialProviders.Firebase
                         new HttpListenerContextInterpreter(),
                         GoogleAuthConfig.AuthCodeQueryKeyName,
                         new HttpListenerContextResponse(),
-                        GoogleAuthConfig.ResponseHtml)),
+                        new GoogleAuthRedirectHtmlPageFormatter())),
                 new GoogleJwtConverter());
         }
     }
