@@ -16,6 +16,7 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
+using Src.LoadingScenes;
 using Src.NetworkingModule;
 using Src.NetworkingModule.ConnectionConfiguration;
 using Src.NetworkingModule.Errors;
@@ -29,7 +30,6 @@ namespace Src.ScenesInitializers
     public class MainMenuInitializer : MonoBehaviour
     {
         [SerializeField] private UnityErrorPopup errorPopup;
-        [SerializeField] private string duelModeSceneName;
         [SerializeField] private SceneLoader sceneLoader;
         [SerializeField] private GameServerConnectionConfig gameServerConnectionConfig;
         [SerializeField] private UnityGameCreationView gameCreationView;
@@ -98,7 +98,7 @@ namespace Src.ScenesInitializers
 
         private void OnGameCreated(object sender, EventArgs e)
         {
-            sceneLoader.LoadScene(duelModeSceneName);
+            sceneLoader.LoadScene(ESceneType.DuelGame);
         }
     }
 }

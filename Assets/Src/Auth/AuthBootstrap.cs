@@ -15,7 +15,8 @@ namespace Src.Auth
 {
     public class AuthBootstrap : MonoBehaviour
     {
-        [SerializeField] private AuthView authView;
+        [SerializeField, InspectorName("Auth View")]
+        private AuthView authView;
         
         private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
@@ -44,7 +45,7 @@ namespace Src.Auth
                 _singletonCacher, 
                 authView);
 
-            authView.Init(_singletonCacher, _metamaskWalletFacade, _authController);
+            authView.Init(_metamaskWalletFacade, _authController);
         }
     }
 }

@@ -635,6 +635,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0927c617b8b5f49a36e7ffbe791f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingScenesConfig: {fileID: 11400000, guid: edf14d89b07e34cc8abfc45aa7bf724a, type: 2}
 --- !u!4 &1486068123
 Transform:
   m_ObjectHideFlags: 0

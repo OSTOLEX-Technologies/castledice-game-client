@@ -5,8 +5,8 @@ using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.Caching;
 using Src.Components;
+using Src.LoadingScenes;
 using TMPro;
-using UnityEditor;
 using UnityEngine;
 
 namespace Src.Auth
@@ -15,9 +15,6 @@ namespace Src.Auth
     {
         [SerializeField, InspectorName("SceneLoader component")]
         private SceneLoader sceneLoader;
-
-        [SerializeField, InspectorName("Main menu Scene")]
-        private SceneAsset mainMenuScene;
         
         [SerializeField, InspectorName("Metamask Auth Cancellation Canvas")]
         private Canvas metamaskAuthCancellationCanvas;
@@ -28,7 +25,6 @@ namespace Src.Auth
         private TextMeshProUGUI signInMessageText;
 
         private AuthController _authController;
-        private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
 
         private MetaMaskUnityUIHandler _qrCodeHandlerCanvas;
@@ -67,9 +63,10 @@ namespace Src.Auth
 
         
         #region Init
-        public void Init(IObjectCacher cacher, IMetamaskWalletFacade metamaskWalletFacade, AuthController controller)
+        public void Init(
+            IMetamaskWalletFacade metamaskWalletFacade, 
+            AuthController controller)
         {
-            _singletonCacher = cacher;
             _metamaskWalletFacade = metamaskWalletFacade;
             _authController = controller;
 
@@ -91,7 +88,7 @@ namespace Src.Auth
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
 
             await WaitUntilMetamaskDisconnects();
-            sceneLoader.LoadSceneWithTransition(mainMenuScene.name);
+            sceneLoader.LoadSceneWithTransition(ESceneType.MainMenu);
         }
         #endregion
         

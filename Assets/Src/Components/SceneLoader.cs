@@ -1,3 +1,4 @@
+using Src.LoadingScenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
@@ -5,29 +6,54 @@ namespace Src.Components
 {
     public class SceneLoader : MonoBehaviour
     {
-        private static string TransitionSceneName => "Transition";
+        [SerializeField, InspectorName("LoadingScenes Config")]
+        private LoadingScenesConfig loadingScenesConfig;
 
         #region Transition Scene Loading
-        public void LoadSceneWithTransition(string sceneName)
+        public void LoadSceneWithTransition(ESceneType sceneType)
         {
-            UpdateTargetLoadScenePrefName(sceneName);
-            LoadScene(TransitionSceneName);
+            var loadingSceneName = ResolveSceneType(sceneType);
+            PlayerPrefs.SetString(SceneTransition.SceneToLoadPrefName, loadingSceneName);
+            LoadScene(loadingScenesConfig.TransitionSceneName);
         }
         
-        private void UpdateTargetLoadScenePrefName(string sceneName)
+        private string ResolveSceneType(ESceneType sceneType)
         {
-            PlayerPrefs.SetString(SceneTransition.SceneToLoadPrefName, sceneName);
+            return loadingScenesConfig.GetSceneName(sceneType);
         }
         #endregion
         
 
-        #region Loading Methods
-        public void LoadScene(string sceneName)
+        #region Public Loading Methods
+        public void LoadScene(ESceneType sceneType)
+        {
+            LoadScene(ResolveSceneType(sceneType));
+        }
+
+        public void LoadSceneAdditive(ESceneType sceneType)
+        {
+            LoadSceneAdditive(ResolveSceneType(sceneType));
+        }
+
+        public AsyncOperation LoadSceneAsync(ESceneType sceneType)
+        {
+            return LoadSceneAsync(ResolveSceneType(sceneType));
+        }
+
+        public AsyncOperation LoadSceneAsyncAdditive(ESceneType sceneType)
+        {
+            return LoadSceneAsyncAdditive(ResolveSceneType(sceneType));
+        }
+        #endregion
+
+
+        #region Low Level Loading Methods
+        private void LoadScene(string sceneName)
         {
             SceneManager.LoadScene(sceneName, LoadSceneMode.Single);
         }
 
-        public void LoadSceneAdditive(string sceneName)
+        private void LoadSceneAdditive(string sceneName)
         {
             SceneManager.LoadScene(sceneName, LoadSceneMode.Additive);
         }
@@ -37,7 +63,7 @@ namespace Src.Components
             return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Single);
         }
 
-        public AsyncOperation LoadSceneAsyncAdditive(string sceneName)
+        private AsyncOperation LoadSceneAsyncAdditive(string sceneName)
         {
             return SceneManager.LoadSceneAsync(sceneName, LoadSceneMode.Additive);
         }
