@@ -1448,6 +1448,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   sceneLoader: {fileID: 1265297901}
+  mainMenuScene: {fileID: 102900000, guid: 0d31c38b6d67a8446a329aff065256fe, type: 3}
   metamaskAuthCancellationCanvas: {fileID: 1222523650}
   signInMessageCanvas: {fileID: 1358323242}
   signInMessageText: {fileID: 460916634}

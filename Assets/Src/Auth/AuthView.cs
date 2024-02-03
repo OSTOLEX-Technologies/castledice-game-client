@@ -6,6 +6,7 @@ using Src.Auth.TokenProviders;
 using Src.Caching;
 using Src.Components;
 using TMPro;
+using UnityEditor;
 using UnityEngine;
 
 namespace Src.Auth
@@ -14,6 +15,9 @@ namespace Src.Auth
     {
         [SerializeField, InspectorName("SceneLoader component")]
         private SceneLoader sceneLoader;
+
+        [SerializeField, InspectorName("Main menu Scene")]
+        private SceneAsset mainMenuScene;
         
         [SerializeField, InspectorName("Metamask Auth Cancellation Canvas")]
         private Canvas metamaskAuthCancellationCanvas;
@@ -87,7 +91,7 @@ namespace Src.Auth
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
 
             await WaitUntilMetamaskDisconnects();
-            sceneLoader.LoadSceneWithTransition("MainMenu");
+            sceneLoader.LoadSceneWithTransition(mainMenuScene.name);
         }
         #endregion
         
