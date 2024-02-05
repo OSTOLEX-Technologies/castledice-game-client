@@ -4,6 +4,6 @@ namespace Src.LoadingScenes
     {
         public string TransitionSceneName { get; }
         
-        public string GetSceneName(ESceneType sceneType);
+        public string GetSceneName(SceneType sceneType);
     }
 }

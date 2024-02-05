@@ -13,7 +13,7 @@ namespace Src.LoadingScenes
         [Serializable]
         private struct SceneAssetInfo
         {
-            public ESceneType sceneType;
+            public SceneType sceneType;
             public SceneAsset sceneAsset;
         }
 
@@ -25,12 +25,12 @@ namespace Src.LoadingScenes
 
         public string TransitionSceneName => transitionSceneAsset.name;
 
-        public string GetSceneName(ESceneType sceneType)
+        public string GetSceneName(SceneType sceneType)
         {
             return FindSceneInList(sceneType).name;
         }
 
-        private SceneAsset FindSceneInList(ESceneType type)
+        private SceneAsset FindSceneInList(SceneType type)
         {
             var selected = scenesAssets.Where(asset => asset.sceneType == type).ToList();
 

@@ -1,3 +1,4 @@
+using System;
 using Src.Auth;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
@@ -10,6 +11,9 @@ using Src.Auth.JwtManagement.Converters.Metamask;
 using Src.Auth.REST;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
+using Src.Components;
+using Src.LoadingScenes;
+using Src.SceneTransitionCommands;
 using UnityEngine;
 
 namespace Src.ScenesInitializers
@@ -19,10 +23,14 @@ namespace Src.ScenesInitializers
         [SerializeField, InspectorName("Auth View")]
         private AuthView authView;
         
+        [SerializeField, InspectorName("Scene Loader")]
+        private SceneLoader sceneLoader;
+        
         private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
         
         private AuthController _authController;
+        private AuthSceneTransitionCommandHandler _transitionCommandHandler;
         
         private void Awake()
         {
@@ -46,7 +54,16 @@ namespace Src.ScenesInitializers
                 _singletonCacher, 
                 authView);
 
+            _transitionCommandHandler = new AuthSceneTransitionCommandHandler(sceneLoader, SceneType.MainMenu);
+            authView.AuthCompleted += UnsubscribeFromAuthCompleted;
+            authView.AuthCompleted += _transitionCommandHandler.HandleTransitionCommand;
+            
             authView.Init(_metamaskWalletFacade, _authController);
+        }
+
+        private void UnsubscribeFromAuthCompleted(object sender, EventArgs args)
+        {
+            authView.AuthCompleted -= _transitionCommandHandler.HandleTransitionCommand;
         }
     }
 }

@@ -10,14 +10,14 @@ namespace Src.Components
         private LoadingScenesConfig loadingScenesConfig;
 
         #region Transition Scene Loading
-        public void LoadSceneWithTransition(ESceneType sceneType)
+        public void LoadSceneWithTransition(SceneType sceneType)
         {
             var loadingSceneName = ResolveSceneType(sceneType);
             PlayerPrefs.SetString(SceneTransition.SceneToLoadPrefName, loadingSceneName);
             LoadScene(loadingScenesConfig.TransitionSceneName);
         }
         
-        private string ResolveSceneType(ESceneType sceneType)
+        private string ResolveSceneType(SceneType sceneType)
         {
             return loadingScenesConfig.GetSceneName(sceneType);
         }
@@ -25,22 +25,22 @@ namespace Src.Components
         
 
         #region Public Loading Methods
-        public void LoadScene(ESceneType sceneType)
+        public void LoadScene(SceneType sceneType)
         {
             LoadScene(ResolveSceneType(sceneType));
         }
 
-        public void LoadSceneAdditive(ESceneType sceneType)
+        public void LoadSceneAdditive(SceneType sceneType)
         {
             LoadSceneAdditive(ResolveSceneType(sceneType));
         }
 
-        public AsyncOperation LoadSceneAsync(ESceneType sceneType)
+        public AsyncOperation LoadSceneAsync(SceneType sceneType)
         {
             return LoadSceneAsync(ResolveSceneType(sceneType));
         }
 
-        public AsyncOperation LoadSceneAsyncAdditive(ESceneType sceneType)
+        public AsyncOperation LoadSceneAsyncAdditive(SceneType sceneType)
         {
             return LoadSceneAsyncAdditive(ResolveSceneType(sceneType));
         }

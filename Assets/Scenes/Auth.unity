@@ -1404,7 +1404,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0ac7204e23394f3db1e641b0c983548b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  sceneLoader: {fileID: 1265297901}
   metamaskAuthCancellationCanvas: {fileID: 1222523650}
   signInMessageCanvas: {fileID: 1358323242}
   signInMessageText: {fileID: 460916634}
@@ -2125,6 +2124,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   authView: {fileID: 1636276661}
+  sceneLoader: {fileID: 1265297901}
 --- !u!4 &2063030801
 Transform:
   m_ObjectHideFlags: 0

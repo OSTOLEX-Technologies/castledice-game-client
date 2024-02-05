@@ -4,8 +4,6 @@ using MetaMask.Scripts.Transports.Unity.UGUI;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.Caching;
-using Src.Components;
-using Src.LoadingScenes;
 using TMPro;
 using UnityEngine;
 
@@ -13,9 +11,6 @@ namespace Src.Auth
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
-        [SerializeField, InspectorName("SceneLoader component")]
-        private SceneLoader sceneLoader;
-        
         [SerializeField, InspectorName("Metamask Auth Cancellation Canvas")]
         private Canvas metamaskAuthCancellationCanvas;
         
@@ -90,7 +85,6 @@ namespace Src.Auth
             await WaitUntilMetamaskDisconnects();
             
             AuthCompleted?.Invoke(this, EventArgs.Empty);
-            sceneLoader.LoadSceneWithTransition(ESceneType.MainMenu);
         }
         #endregion
         
