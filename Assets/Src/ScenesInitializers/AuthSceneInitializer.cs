@@ -1,3 +1,4 @@
+using Src.Auth;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.Auth.CredentialProviders.Metamask;
@@ -11,9 +12,9 @@ using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using UnityEngine;
 
-namespace Src.Auth
+namespace Src.ScenesInitializers
 {
-    public class AuthBootstrap : MonoBehaviour
+    public class AuthSceneInitializer : MonoBehaviour
     {
         [SerializeField, InspectorName("Auth View")]
         private AuthView authView;

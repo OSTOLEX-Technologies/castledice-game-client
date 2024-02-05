@@ -21,7 +21,7 @@ namespace Tests.EditMode.AuthTests.DeepLinking
         {
             var expectedHash = url.GetHashCode().ToString();
             var expectedParams = new Dictionary<string, string>();
-            var expectedResolvedLink = new SResolvedDeepLink(expectedHash, expectedParams);
+            var expectedResolvedLink = new ResolvedDeepLink(expectedHash, expectedParams);
             
             var schemalessUrl = url.Substring(url.Length / 2);
             

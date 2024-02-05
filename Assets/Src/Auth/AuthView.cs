@@ -88,6 +88,8 @@ namespace Src.Auth
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
 
             await WaitUntilMetamaskDisconnects();
+            
+            AuthCompleted?.Invoke(this, EventArgs.Empty);
             sceneLoader.LoadSceneWithTransition(ESceneType.MainMenu);
         }
         #endregion
@@ -112,5 +114,7 @@ namespace Src.Auth
         
 
         public event EventHandler<AuthType> AuthTypeChosen;
+        
+        public event EventHandler AuthCompleted;
     }
 }
