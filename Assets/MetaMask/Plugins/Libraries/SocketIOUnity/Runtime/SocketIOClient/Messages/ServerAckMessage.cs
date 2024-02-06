@@ -1,9 +1,8 @@
 ﻿using System.Collections.Generic;
 using System.Text;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport;
 
-using MetaMask.SocketIOClient.Transport;
-
-namespace MetaMask.SocketIOClient.Messages
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages
 {
     /// <summary>
     /// The client calls the server's callback

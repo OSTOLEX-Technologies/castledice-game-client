@@ -1,12 +1,10 @@
 using System;
 using System.Collections;
-using MetaMask.Models;
-
+using MetaMask.Runtime.Models;
 using UnityEngine;
-using UnityEngine.Serialization;
 using UnityEngine.UI;
 
-namespace MetaMask.Transports.Unity.UI
+namespace MetaMask.Scripts.Transports.Unity.UGUI
 {
 
     public class MetaMaskUnityUIHandler : MonoBehaviour, IMetaMaskUnityTransportListener

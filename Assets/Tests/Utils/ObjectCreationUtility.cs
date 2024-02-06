@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
@@ -25,18 +25,15 @@ using Src.GameplayView.Audio;
 using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.Grid;
 using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
-using Src.GameplayView.PlayersColors;
 using Tests.Utils.Mocks;
-using UnityEditor;
 using UnityEngine;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
-using Object = UnityEngine.Object;
 using Random = System.Random;
 using Tree = castledice_game_logic.GameObjects.Tree;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 
-namespace Tests
+namespace Tests.Utils
 {
     public static class ObjectCreationUtility
     {

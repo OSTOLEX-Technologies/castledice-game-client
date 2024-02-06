@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using castledice_game_logic;
 using Moq;
 using NUnit.Framework;

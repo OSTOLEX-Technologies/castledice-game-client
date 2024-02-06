@@ -1,9 +1,8 @@
 ﻿using System;
-using MetaMask.Unity;
 using TMPro;
 using UnityEngine;
 
-namespace MetaMask.Transports.Unity.UI
+namespace MetaMask.Scripts.Transports.Unity.UGUI
 {
     public class MetaMaskOTPPanel : MonoBehaviour
     {

@@ -1,4 +1,4 @@
-namespace MetaMask.Models
+namespace MetaMask.Runtime.Models
 {
     public enum ConnectionContext
     {

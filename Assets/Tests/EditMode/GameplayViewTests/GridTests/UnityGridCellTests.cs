@@ -6,7 +6,7 @@ using UnityEngine;
 using UnityEngine.TestTools;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
-namespace Tests.PlayMode
+namespace Tests.EditMode.GameplayViewTests.GridTests
 {
     public class UnityGridCellTests
     {

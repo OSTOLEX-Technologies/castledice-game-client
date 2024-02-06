@@ -2,11 +2,10 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController;
-using Src.AuthController.TokenProviders;
-using Src.AuthController.TokenProviders.TokenProvidersFactory;
+using Src.Auth;
+using Src.Auth.TokenProviders;
+using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
-using Tests.Utils.Mocks;
 
 namespace Tests.EditMode.AuthTests
 {
@@ -16,17 +15,22 @@ namespace Tests.EditMode.AuthTests
         [TestCaseSource(nameof(GetAuthTypes))]
         public void OnAuthTypeChosen_ShouldCacheAccessTokenProvider_ObtainedFromStrategy(AuthType authType)
         {
-            var expectedTokenProvider = new Mock<IAccessTokenProvider>().Object;
+            bool bCached = false;
+            
+            var usedTokenProvider = new Mock<IAccessTokenProvider>().Object;
             var cacherMock = new Mock<IObjectCacher>();
+            cacherMock.Setup(a => a.CacheObject(usedTokenProvider))
+                .Callback<IAccessTokenProvider>((_) => bCached = true);
             var providersStrategyMock = new Mock<IAccessTokenProvidersStrategy>();
-            providersStrategyMock.Setup(s => s.GetAccessTokenProviderAsync(authType)).ReturnsAsync(expectedTokenProvider);
-            AuthViewMock viewMock = new AuthViewMock();
-            
-            
-            var controller = new AuthController(providersStrategyMock.Object, cacherMock.Object, viewMock);
-            viewMock.SelectAuthType(authType);
+            providersStrategyMock.Setup(s => s.GetAccessTokenProviderAsync(authType)).ReturnsAsync(usedTokenProvider);
+            var authViewMock = new Mock<IAuthView>();
+            authViewMock.Setup(a => a.Login(authType)).Raises(a => a.AuthTypeChosen += null, this, authType);
 
-            cacherMock.Verify(c => c.CacheObject(expectedTokenProvider), Times.Once);
+
+            var controller = new AuthController(providersStrategyMock.Object, cacherMock.Object, authViewMock.Object);
+            authViewMock.Object.Login(authType);
+
+            Assert.IsTrue(bCached);
         }
 
         public static IEnumerable<AuthType> GetAuthTypes()

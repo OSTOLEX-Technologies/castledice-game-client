@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayView.GameOver;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameOverTests
 {

@@ -1,9 +1,9 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController.CredentialProviders.Metamask;
-using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
-using Src.AuthController.TokenProviders;
+using Src.Auth.CredentialProviders.Metamask;
+using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
+using Src.Auth.TokenProviders;
 
 namespace Tests.EditMode.AuthTests.TokenProviders
 {

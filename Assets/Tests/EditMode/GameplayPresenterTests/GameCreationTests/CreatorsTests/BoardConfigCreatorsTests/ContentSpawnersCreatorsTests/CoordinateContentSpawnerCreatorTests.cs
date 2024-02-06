@@ -7,7 +7,7 @@ using castledice_game_logic.Math;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.BoardConfigCreatorsTests.ContentSpawnersCreatorsTests
 {

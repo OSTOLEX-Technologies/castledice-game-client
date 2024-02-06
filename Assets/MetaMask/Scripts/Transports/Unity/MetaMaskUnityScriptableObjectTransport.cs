@@ -1,11 +1,13 @@
 using System;
+using MetaMask.Runtime;
+using MetaMask.Runtime.Models;
+using MetaMask.Runtime.Transports;
+using UnityEngine;
 #if UNITY_WEBGL
 using System.Runtime.InteropServices;
 #endif
-using MetaMask.Models;
-using UnityEngine;
 
-namespace MetaMask.Transports.Unity
+namespace MetaMask.Scripts.Transports.Unity
 {
 
     public abstract class MetaMaskUnityScriptableObjectTransport : ScriptableObject, IMetaMaskTransport

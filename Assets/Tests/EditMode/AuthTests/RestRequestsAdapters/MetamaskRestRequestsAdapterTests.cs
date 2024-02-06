@@ -3,11 +3,11 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
-using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
-using Src.AuthController.REST;
-using Src.AuthController.REST.REST_Request_Proxies.Metamask;
-using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
+using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
+using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
+using Src.Auth.REST;
+using Src.Auth.REST.REST_Request_Proxies.Metamask;
+using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
 
 namespace Tests.EditMode.AuthTests.RestRequestsAdapters
 {
@@ -34,7 +34,7 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
                 It.IsAny<string>(),
                 nonceRequestParamsStub.AsDictionary(),
                 It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()
-            )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskNonceResponse>>
+            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskNonceResponse>>
             ((_, _, _, tcs) => tcs.SetResult(expectedNonceResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
@@ -59,7 +59,7 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
                 It.IsAny<string>(),
                 authRequestParamsStub.AsDictionary(),
                 It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()
-            )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskAccessTokenResponse>>
+            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskAccessTokenResponse>>
                 ((_, _, _, tcs) => tcs.SetResult(expectedAuthResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
@@ -82,7 +82,7 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
                 It.IsAny<string>(),
                 authRequestParamsStub.AsDictionary(),
                 It.IsAny<TaskCompletionSource<MetamaskRefreshTokenResponse>>()
-            )).Callback<HttpMethod, string, Dictionary<string, string>, TaskCompletionSource<MetamaskRefreshTokenResponse>>
+            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskRefreshTokenResponse>>
                 ((_, _, _, tcs) => tcs.SetResult(expectedRefreshResponse));
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);

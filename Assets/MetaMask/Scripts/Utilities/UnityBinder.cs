@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using Object = UnityEngine.Object;
 
-namespace MetaMask.Unity.Utils
+namespace MetaMask.Scripts.Utilities
 {
 	/// <summary>
 	/// UnityBinder entry class. Use this class to setup any Unity Object that has any

@@ -5,7 +5,7 @@ using Src.GameplayView.Grid.GridGeneration;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
-namespace Tests.PlayMode
+namespace Tests.EditMode.GameplayViewTests.GridTests.GridGenerationTests
 {
     public class SquareGridGeneratorTests
     {

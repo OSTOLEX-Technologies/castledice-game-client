@@ -5,7 +5,7 @@ using Tests.Utils.Mocks;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
 {
     public class CellClickDetectorsPlacerTests
     {

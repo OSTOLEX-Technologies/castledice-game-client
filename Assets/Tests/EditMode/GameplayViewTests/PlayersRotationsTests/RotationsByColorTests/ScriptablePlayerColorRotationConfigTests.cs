@@ -2,7 +2,7 @@
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersRotations.RotationsByColor;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.PlayersRotationsTests.RotationsByColorTests
 {

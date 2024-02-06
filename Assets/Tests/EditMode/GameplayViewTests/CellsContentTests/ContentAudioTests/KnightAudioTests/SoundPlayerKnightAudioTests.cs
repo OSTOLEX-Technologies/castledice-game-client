@@ -5,7 +5,7 @@ using Src.GameplayView.Audio;
 using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
 using UnityEngine;
 using UnityEngine.TestTools;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.KnightAudioTests
 {

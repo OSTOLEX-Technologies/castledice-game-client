@@ -4,7 +4,7 @@ using System.Text.Json;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MetaMask.SocketIOClient
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient
 {
     public class SocketIOResponse
     {

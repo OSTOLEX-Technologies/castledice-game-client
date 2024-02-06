@@ -2,7 +2,9 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.EventSystems;
 
-public class RotatableByHorizontalDrag : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
+namespace Src.Components
+{
+    public class RotatableByHorizontalDrag : MonoBehaviour, IDragHandler, IEndDragHandler, IPointerDownHandler, IPointerUpHandler
     {
         [SerializeField] private Rigidbody _toRotate;
         [SerializeField] private Vector3 _defaultAngularVelocity;
@@ -61,3 +63,4 @@ public class RotatableByHorizontalDrag : MonoBehaviour, IDragHandler, IEndDragHa
             StartCoroutine(OnSpeedStabilize());
         }
     }
+}

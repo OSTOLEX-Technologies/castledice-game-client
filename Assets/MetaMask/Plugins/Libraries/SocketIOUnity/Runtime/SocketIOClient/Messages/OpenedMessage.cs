@@ -1,10 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport;
 
-using MetaMask.SocketIOClient.Transport;
-
-namespace MetaMask.SocketIOClient.Messages
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages
 {
     public class OpenedMessage : IMessage
     {

@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MetaMask.Unity.Samples
+namespace MetaMask.Samples.Main.Scripts.Visuals
 {
     public class BackgroundShape : MonoBehaviour
     {

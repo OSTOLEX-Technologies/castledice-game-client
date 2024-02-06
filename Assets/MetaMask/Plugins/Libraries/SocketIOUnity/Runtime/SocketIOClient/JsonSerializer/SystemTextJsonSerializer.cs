@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Text.Json;
 
-namespace MetaMask.SocketIOClient.JsonSerializer
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer
 {
     public class SystemTextJsonSerializer : IJsonSerializer
     {

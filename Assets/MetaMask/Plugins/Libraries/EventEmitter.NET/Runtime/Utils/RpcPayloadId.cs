@@ -1,6 +1,6 @@
 using System;
 
-namespace EventEmitter.NET.Utils
+namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Utils
 {
     /// <summary>
     /// A static class that can generate random JSONRPC ids using the current time as a source of randomness 

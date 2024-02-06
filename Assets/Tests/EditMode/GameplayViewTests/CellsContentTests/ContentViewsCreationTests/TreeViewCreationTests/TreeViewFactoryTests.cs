@@ -7,7 +7,7 @@ using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using UnityEngine;
 using Tree = castledice_game_logic.GameObjects.Tree;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreationTests.TreeViewCreationTests
 {

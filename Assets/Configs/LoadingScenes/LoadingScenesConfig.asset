@@ -1,0 +1,26 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d26d1ed7b0944f0cb5e106bec72bc6fd, type: 3}
+  m_Name: LoadingScenesConfig
+  m_EditorClassIdentifier: 
+  transitionSceneAsset: {fileID: 102900000, guid: d0a5d8e5d8cd54b76ac43f3178cc493c, type: 3}
+  scenesAssets:
+  - sceneType: 0
+    sceneAsset: {fileID: 102900000, guid: 4e3b1132db2fc3544a2b0f4f163e9477, type: 3}
+  - sceneType: 1
+    sceneAsset: {fileID: 102900000, guid: 6f46eabc0f67bd5489695655eef865cd, type: 3}
+  - sceneType: 2
+    sceneAsset: {fileID: 102900000, guid: 0d31c38b6d67a8446a329aff065256fe, type: 3}
+  - sceneType: 3
+    sceneAsset: {fileID: 102900000, guid: f9f35d3494726984090906331e51d888, type: 3}
+  - sceneType: 4
+    sceneAsset: {fileID: 102900000, guid: 4c0d3ae4b72dae54097961785cc6389c, type: 3}

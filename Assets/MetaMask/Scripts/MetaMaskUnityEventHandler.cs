@@ -1,12 +1,13 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using MetaMask.SocketIOClient;
-using MetaMask.Unity.Utils;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime;
+using MetaMask.Runtime;
+using MetaMask.Scripts.Utilities;
 using UnityEngine;
 using UnityEngine.Events;
 
-namespace MetaMask.Unity
+namespace MetaMask.Scripts
 {
     public class MetaMaskUnityEventHandler : BindableMonoBehavior, IMetaMaskEventsHandler
     {

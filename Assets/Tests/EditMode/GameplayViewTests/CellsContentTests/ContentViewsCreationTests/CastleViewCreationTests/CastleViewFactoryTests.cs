@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
 using Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation;
 using Src.GameplayView.ContentVisuals;

@@ -12,7 +12,7 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
 {

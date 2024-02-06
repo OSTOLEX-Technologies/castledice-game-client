@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Riptide;
 using Src.NetworkingModule;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.NetworkingModuleTests
 {
     public class ClientsHolderTests
     {

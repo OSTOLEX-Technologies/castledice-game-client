@@ -3,10 +3,9 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-
 using UnityEngine.Networking;
 
-namespace MetaMask.SocketIOClient.Transport
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
 {
     public class Eio3HttpPollingHandler : HttpPollingHandler
     {

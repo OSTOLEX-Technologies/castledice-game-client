@@ -1,11 +1,10 @@
-﻿using System;
-using System.Numerics;
+﻿using System.Numerics;
 using System.Threading.Tasks;
-using MetaMask.Contracts;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
+using MetaMask.Runtime.Contracts;
 using UnityEngine;
-using evm.net.Models;
 
-namespace MetaMask.Unity.Contracts
+namespace MetaMask.Scripts.Contracts
 {
     [CreateAssetMenu(menuName = "MetaMask/Contract Templates/ERC721")]
     public class ScriptableERC721 : ScriptableContract<ERC721PresetMinterPauserAutoId>, ERC721PresetMinterPauserAutoId

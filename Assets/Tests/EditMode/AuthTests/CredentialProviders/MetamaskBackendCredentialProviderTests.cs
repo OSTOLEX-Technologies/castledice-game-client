@@ -2,15 +2,15 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController.CredentialProviders.Metamask;
-using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
-using Src.AuthController.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
-using Src.AuthController.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
-using Src.AuthController.JwtManagement;
-using Src.AuthController.JwtManagement.Converters.Metamask;
-using Src.AuthController.JwtManagement.Tokens;
-using Src.AuthController.REST.REST_Request_Proxies.Metamask;
-using Src.AuthController.REST.REST_Response_DTOs.MetamaskBackend;
+using Src.Auth.CredentialProviders.Metamask;
+using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
+using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
+using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
+using Src.Auth.JwtManagement;
+using Src.Auth.JwtManagement.Converters.Metamask;
+using Src.Auth.JwtManagement.Tokens;
+using Src.Auth.REST.REST_Request_Proxies.Metamask;
+using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
 
 namespace Tests.EditMode.AuthTests.CredentialProviders
 {
