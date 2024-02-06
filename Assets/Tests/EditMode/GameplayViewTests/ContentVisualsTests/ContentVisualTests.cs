@@ -2,7 +2,7 @@
 using NUnit.Framework;
 using Src.GameplayView.ContentVisuals;
 using Random = UnityEngine.Random;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests
 {

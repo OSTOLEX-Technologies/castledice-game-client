@@ -6,7 +6,7 @@ using NUnit.Framework;
 using Src.GameplayPresenter.NewUnitsHighlights;
 using Src.GameplayView.NewUnitsHighlights;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.EditMode.GameplayPresenterTests.NewUnitsHighlightsTests

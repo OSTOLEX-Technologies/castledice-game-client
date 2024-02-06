@@ -1,4 +1,4 @@
-﻿using static Tests.ObjectCreationUtility;
+﻿using static Tests.Utils.ObjectCreationUtility;
 using System;
 using castledice_game_logic.Time;
 using NUnit.Framework;

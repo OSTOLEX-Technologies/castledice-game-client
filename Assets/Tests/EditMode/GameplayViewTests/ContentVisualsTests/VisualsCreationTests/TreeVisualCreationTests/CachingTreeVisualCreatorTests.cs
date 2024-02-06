@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreationTests
 {

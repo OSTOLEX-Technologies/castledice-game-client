@@ -8,7 +8,7 @@ using Src.GameplayView.PlacedUnitsHighlights;
 using Src.GameplayView.PlayerObjectsColor;
 using Tests.Utils.Mocks;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Random = UnityEngine.Random;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 

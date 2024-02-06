@@ -8,7 +8,7 @@ using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersRotations;
 using Tests.Utils.Mocks;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Color = UnityEngine.Color;
 using Random = UnityEngine.Random;
 

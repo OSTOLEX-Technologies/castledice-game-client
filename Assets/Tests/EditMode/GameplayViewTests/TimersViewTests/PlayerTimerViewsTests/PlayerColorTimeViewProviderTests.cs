@@ -1,7 +1,7 @@
 ﻿using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.Timers.PlayerTimerViews;
 

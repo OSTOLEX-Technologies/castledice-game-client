@@ -1,6 +1,6 @@
 ﻿using Moq;
 using NUnit.Framework;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.Timers;
 using Src.GameplayView.Timers.PlayerTimerViews;
 using Src.GameplayView.Updatables;

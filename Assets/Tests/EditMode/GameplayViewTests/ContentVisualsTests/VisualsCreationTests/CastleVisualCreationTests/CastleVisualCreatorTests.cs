@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.ContentVisuals;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.PlayerObjectsColor;
 using UnityEngine;

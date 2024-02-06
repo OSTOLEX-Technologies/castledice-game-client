@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Src.GameplayView.Highlights;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.PlacedUnitsHighlightsViewTests
 {

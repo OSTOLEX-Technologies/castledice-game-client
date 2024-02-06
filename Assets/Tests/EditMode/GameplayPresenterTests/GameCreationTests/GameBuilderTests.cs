@@ -4,7 +4,7 @@ using castledice_game_logic;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.TurnsLogic;
 using Moq;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation;
 
