@@ -46,8 +46,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   transparencyAffectedRenderers:
-  - {fileID: 5533092925891382126}
-  - {fileID: 9119180691838063250}
+    renderers: []
 --- !u!1001 &4513828169827918969
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59,6 +58,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Tree
       objectReference: {fileID: 0}
+    - target: {fileID: -4600004497452468501, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 8a16734b29e9afe4bbb95fe8c3276ac1, type: 2}
     - target: {fileID: -3124914424127336872, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -103,20 +106,14 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8245291011384094487, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: dec65da22da952c40b99e94f45d8afda, type: 2}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 9199261849990390558, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}
---- !u!23 &5533092925891382126 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: 8245291011384094487, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}
-  m_PrefabInstance: {fileID: 4513828169827918969}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &7639868779485981217 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: -3124914424127336872, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}
-  m_PrefabInstance: {fileID: 4513828169827918969}
-  m_PrefabAsset: {fileID: 0}
---- !u!23 &9119180691838063250 stripped
-MeshRenderer:
-  m_CorrespondingSourceObject: {fileID: -4600004497452468501, guid: 134665792e901a94fb08c2db5b8535d6, type: 3}
   m_PrefabInstance: {fileID: 4513828169827918969}
   m_PrefabAsset: {fileID: 0}
