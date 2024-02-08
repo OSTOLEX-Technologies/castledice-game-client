@@ -14,32 +14,32 @@ namespace Src.LoadingScenes
         private struct SceneAssetInfo
         {
             public SceneType sceneType;
-            public SceneAsset sceneAsset;
+            public string sceneName;
         }
 
         [SerializeField, InspectorName("Transition Scene")]
         private SceneAsset transitionSceneAsset;
 
         [SerializeField, InspectorName("Scenes")]
-        private List<SceneAssetInfo> scenesAssets;
+        private List<SceneAssetInfo> sceneNames;
 
         public string TransitionSceneName => transitionSceneAsset.name;
 
         public string GetSceneName(SceneType sceneType)
         {
-            return FindSceneInList(sceneType).name;
+            return FindSceneInList(sceneType);
         }
 
-        private SceneAsset FindSceneInList(SceneType type)
+        private string FindSceneInList(SceneType type)
         {
-            var selected = scenesAssets.Where(asset => asset.sceneType == type).ToList();
+            var selected = sceneNames.Where(asset => asset.sceneType == type).ToList();
 
             if (!selected.Any())
             {
                 throw new InvalidOperationException("No scene assets was defined with such a type: " + type);
             }
 
-            return selected.First().sceneAsset;
+            return selected.First().sceneName;
         }
     }
 }
