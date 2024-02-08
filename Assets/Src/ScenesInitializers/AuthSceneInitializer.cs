@@ -30,7 +30,7 @@ namespace Src.ScenesInitializers
         private IMetamaskWalletFacade _metamaskWalletFacade;
         
         private AuthController _authController;
-        private AuthSceneTransitionCommandHandler _transitionCommandHandler;
+        private AuthSceneTransitionHandler _transitionHandler;
         
         private void Awake()
         {
@@ -54,16 +54,16 @@ namespace Src.ScenesInitializers
                 _singletonCacher, 
                 authView);
 
-            _transitionCommandHandler = new AuthSceneTransitionCommandHandler(sceneLoader, SceneType.MainMenu);
+            _transitionHandler = new AuthSceneTransitionHandler(sceneLoader, SceneType.MainMenu);
             authView.AuthCompleted += UnsubscribeFromAuthCompleted;
-            authView.AuthCompleted += _transitionCommandHandler.HandleTransitionCommand;
+            authView.AuthCompleted += _transitionHandler.HandleTransitionCommand;
             
             authView.Init(_metamaskWalletFacade, _authController);
         }
 
         private void UnsubscribeFromAuthCompleted(object sender, EventArgs args)
         {
-            authView.AuthCompleted -= _transitionCommandHandler.HandleTransitionCommand;
+            authView.AuthCompleted -= _transitionHandler.HandleTransitionCommand;
         }
     }
 }

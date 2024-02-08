@@ -2,7 +2,7 @@ using System;
 
 namespace Src.SceneTransitionCommands
 {
-    public interface ISceneTransitionCommand
+    public interface ISceneTransitionHandler
     {
         public void HandleTransitionCommand(object signalSender, EventArgs args);
     }
