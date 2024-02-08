@@ -1,6 +1,8 @@
 ﻿using Src.Auth.AuthKeys;
 using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
+using Src.Auth.DeepLinking.DeepLinkTextInjector;
+using Src.Auth.DeepLinking.LinkResolver.LinkFormatter;
 using Src.Auth.Exceptions.Authorization;
 using Src.Auth.JwtManagement.Converters.Google;
 using Src.Auth.REST;
@@ -34,7 +36,9 @@ namespace Src.Auth.CredentialProviders.Firebase
                         new HttpListenerContextInterpreter(),
                         GoogleAuthConfig.AuthCodeQueryKeyName,
                         new HttpListenerContextResponse(),
-                        _textAssetResourceLoader)),
+                        _textAssetResourceLoader,
+                        new DeepLinkTextInjector(
+                            new DeepLinkFormatter()))),
                 new GoogleJwtConverter());
         }
     }

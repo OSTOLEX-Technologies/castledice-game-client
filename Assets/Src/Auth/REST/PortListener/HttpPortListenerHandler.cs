@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
+using Src.Auth.DeepLinking.Config;
+using Src.Auth.DeepLinking.DeepLinkTextInjector;
 using Src.Auth.REST.PortListener.ListenerContextInterpretation;
 using Src.Auth.REST.PortListener.ListenerContextResponse;
 using Src.Components;
 using Src.TextAssetLoading;
-using UnityEngine;
 
 namespace Src.Auth.REST.PortListener
 {
@@ -14,27 +15,32 @@ namespace Src.Auth.REST.PortListener
         private readonly IHttpListenerContextInterpreter _listenerContextInterpreter;
         private readonly string _queryContextKey;
         private readonly IHttpListenerContextResponse _listenerContextResponse;
-        private readonly TextAssetResourceLoader _textAssetResourceLoader;
+
         private readonly HttpListener _listener;
         private Thread _listenerThread;
         private HttpListenerContext _workingContext;
 
         public event Action<string> OnListenerFired;
 
-        private string _httpResponseText;
+        private readonly string _httpResponseTextFormatted;
 
         public HttpPortListenerHandler(
             int port, 
             IHttpListenerContextInterpreter listenerContextInterpreter, 
             string queryContextKey, 
             IHttpListenerContextResponse listenerContextResponse,
-            TextAssetResourceLoader textAssetResourceLoader)
+            TextAssetResourceLoader textAssetResourceLoader,
+            IDeepLinkTextInjector textInjector)
         {
             _listenerContextInterpreter = listenerContextInterpreter;
             _queryContextKey = queryContextKey;
             _listenerContextResponse = listenerContextResponse;
-            _textAssetResourceLoader = textAssetResourceLoader;
-            _httpResponseText = _textAssetResourceLoader.GetAssetContent(TextAssetType.GoogleAuthResponsePage);
+
+            var httpResponseText = textAssetResourceLoader.GetAssetContent(TextAssetType.GoogleAuthResponsePage);
+            _httpResponseTextFormatted = textInjector.InjectLink(
+                httpResponseText, 
+                DeepLinkConfig.GoogleAuthRedirectUri);
+            
             _listener = new HttpListener();
             _listener.Prefixes.Add($"http://localhost:{port}/");
             _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
@@ -70,9 +76,7 @@ namespace Src.Auth.REST.PortListener
             }
 
             var responseContextKeyValue = _listenerContextInterpreter.Get(_workingContext, _queryContextKey);
-            Debug.Log("{}");
-            await _listenerContextResponse.SendResponse(_workingContext, _httpResponseText);
-            Debug.Log("{}{}{}{}");
+            await _listenerContextResponse.SendResponse(_workingContext, _httpResponseTextFormatted);
 
             OnListenerFired?.Invoke(responseContextKeyValue);
         }
