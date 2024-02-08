@@ -22,9 +22,12 @@ namespace Src.ScenesInitializers
     {
         [SerializeField, InspectorName("Auth View")]
         private AuthView authView;
-        
+
         [SerializeField, InspectorName("Scene Loader")]
         private SceneLoader sceneLoader;
+        
+        [SerializeField, InspectorName("Text asset Resource Loader")]
+        private TextAssetResourceLoader textAssetResourceLoader;
         
         private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
@@ -41,7 +44,7 @@ namespace Src.ScenesInitializers
                 new GeneralAccessTokenProvidersStrategy(
                     new FirebaseTokenProvidersCreator(
                         new FirebaseCredentialProvider(
-                            new FirebaseInternalCredentialProviderCreator(),
+                            new FirebaseInternalCredentialProviderCreator(textAssetResourceLoader),
                             new FirebaseCredentialFormatter())), 
                     new MetamaskTokenProvidersCreator(
                         new MetamaskBackendCredentialProvider(

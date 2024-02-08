@@ -20,35 +20,26 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter
 
         public async Task<MetamaskNonceResponse> GetNonce(MetamaskNonceRequestDtoProxy requestParams)
         {
-            var tcs = new TaskCompletionSource<MetamaskNonceResponse>();
-            _httpClientRequestAdapter.Request(
+            return await _httpClientRequestAdapter.Request<MetamaskNonceResponse>(
                 HttpMethod.Get, 
                 _urlProvider.GetNonceUrl,
-                requestParams.AsDictionary(), 
-                tcs);
-            return await tcs.Task;
+                requestParams.AsDictionary());
         }
 
         public async Task<MetamaskAccessTokenResponse> AuthenticateAndGetTokens(MetamaskAuthRequestDtoProxy requestParams)
         {
-            var tcs = new TaskCompletionSource<MetamaskAccessTokenResponse>();
-            _httpClientRequestAdapter.Request(
+            return await _httpClientRequestAdapter.Request<MetamaskAccessTokenResponse>(
                 HttpMethod.Get, 
                 _urlProvider.GetAuthUrl,
-                requestParams.AsDictionary(),
-                tcs);
-            return await tcs.Task;
+                requestParams.AsDictionary());
         }
 
         public async Task<MetamaskRefreshTokenResponse> RefreshAccessTokens(MetamaskRefreshRequestDtoProxy requestParams)
         {
-            var tcs = new TaskCompletionSource<MetamaskRefreshTokenResponse>();
-            _httpClientRequestAdapter.Request(
+            return await _httpClientRequestAdapter.Request<MetamaskRefreshTokenResponse>(
                 HttpMethod.Get, 
                 _urlProvider.GetRefreshUrl,
-                requestParams.AsDictionary(),
-                tcs);
-            return await tcs.Task;
+                requestParams.AsDictionary());
         }
     }
 }

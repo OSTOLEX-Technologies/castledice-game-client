@@ -16,6 +16,7 @@ namespace Src.Auth
         
         [SerializeField, InspectorName("Sign in Message Canvas")]
         private Canvas signInMessageCanvas;
+
         [SerializeField, InspectorName("Sign in Message Text Field")]
         private TextMeshProUGUI signInMessageText;
 

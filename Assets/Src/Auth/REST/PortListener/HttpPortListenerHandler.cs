@@ -1,36 +1,40 @@
 ﻿using System;
 using System.Net;
 using System.Threading;
-using Src.Auth.CredentialProviders.Firebase.Google.RedirectHtmlPageFormatter;
 using Src.Auth.REST.PortListener.ListenerContextInterpretation;
 using Src.Auth.REST.PortListener.ListenerContextResponse;
+using Src.Components;
+using Src.TextAssetLoading;
 using UnityEngine;
 
 namespace Src.Auth.REST.PortListener
 {
     public class HttpPortListenerHandler : IHttpPortListenerHandler
     {
-        private readonly IRedirectHtmlPageFormatter _responseHtmlFormatter;
         private readonly IHttpListenerContextInterpreter _listenerContextInterpreter;
         private readonly string _queryContextKey;
         private readonly IHttpListenerContextResponse _listenerContextResponse;
+        private readonly TextAssetResourceLoader _textAssetResourceLoader;
         private readonly HttpListener _listener;
         private Thread _listenerThread;
         private HttpListenerContext _workingContext;
 
         public event Action<string> OnListenerFired;
 
+        private string _httpResponseText;
+
         public HttpPortListenerHandler(
             int port, 
             IHttpListenerContextInterpreter listenerContextInterpreter, 
             string queryContextKey, 
-            IHttpListenerContextResponse listenerContextResponse, 
-            IRedirectHtmlPageFormatter responseHtmlFormatter)
+            IHttpListenerContextResponse listenerContextResponse,
+            TextAssetResourceLoader textAssetResourceLoader)
         {
-            _responseHtmlFormatter = responseHtmlFormatter;
             _listenerContextInterpreter = listenerContextInterpreter;
             _queryContextKey = queryContextKey;
             _listenerContextResponse = listenerContextResponse;
+            _textAssetResourceLoader = textAssetResourceLoader;
+            _httpResponseText = _textAssetResourceLoader.GetAssetContent(TextAssetType.GoogleAuthResponsePage);
             _listener = new HttpListener();
             _listener.Prefixes.Add($"http://localhost:{port}/");
             _listener.Prefixes.Add($"http://127.0.0.1:{port}/");
@@ -56,7 +60,7 @@ namespace Src.Auth.REST.PortListener
         private async void ListeningThread()
         {
             if (!_listener.IsListening) return;
-
+            
             _workingContext = await _listener.GetContextAsync();
 
             if (!_listenerContextInterpreter.Contains(_workingContext, _queryContextKey))
@@ -64,10 +68,11 @@ namespace Src.Auth.REST.PortListener
                 Dispose();
                 return;
             }
-            var responseContextKeyValue = _listenerContextInterpreter.Get(_workingContext, _queryContextKey);
 
-            Debug.Log(_responseHtmlFormatter.FormatPage());
-            await _listenerContextResponse.SendResponse(_workingContext, _responseHtmlFormatter.FormatPage());
+            var responseContextKeyValue = _listenerContextInterpreter.Get(_workingContext, _queryContextKey);
+            Debug.Log("{}");
+            await _listenerContextResponse.SendResponse(_workingContext, _httpResponseText);
+            Debug.Log("{}{}{}{}");
 
             OnListenerFired?.Invoke(responseContextKeyValue);
         }

@@ -16,24 +16,22 @@ namespace Src.Auth.REST
             _httpClient ??= new HttpClient();
         }
 
-        public async void Request<T>(HttpMethod requestMethodType, string uri,
-            IEnumerable<KeyValuePair<string, string>> requestParams, TaskCompletionSource<T> tcs)
+        public async Task<T> Request<T>(HttpMethod requestMethodType, string uri,
+            IEnumerable<KeyValuePair<string, string>> requestParams)
         {
             var encodedParams = new FormUrlEncodedContent(requestParams);
             var request = new HttpRequestMessage(requestMethodType, uri);
             request.Content = encodedParams;
-            
+
             var response = await _httpClient.SendAsync(request);
             if (response.StatusCode == HttpStatusCode.OK)
             {
                 var responseContent = await response.Content.ReadAsStringAsync();
                 var data = JsonConvert.DeserializeObject<T>(responseContent);
-                tcs.SetResult(data);
+                return data;
             }
-            else
-            {
-                throw new HttpClientRequestException(await response.Content.ReadAsStringAsync(), response.StatusCode);
-            }
+
+            throw new HttpClientRequestException(await response.Content.ReadAsStringAsync(), response.StatusCode);
         }
     }
 }
