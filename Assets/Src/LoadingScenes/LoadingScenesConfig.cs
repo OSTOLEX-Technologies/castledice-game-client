@@ -17,13 +17,10 @@ namespace Src.LoadingScenes
             public string sceneName;
         }
 
-        [SerializeField, InspectorName("Transition Scene")]
-        private SceneAsset transitionSceneAsset;
-
         [SerializeField, InspectorName("Scenes")]
         private List<SceneAssetInfo> sceneNames;
 
-        public string TransitionSceneName => transitionSceneAsset.name;
+        public string TransitionSceneName => "Transition";
 
         public string GetSceneName(SceneType sceneType)
         {
