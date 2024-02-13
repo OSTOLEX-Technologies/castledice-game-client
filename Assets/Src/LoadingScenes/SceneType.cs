@@ -1,6 +1,6 @@
 namespace Src.LoadingScenes
 {
-    public enum ESceneType
+    public enum SceneType
     {
         Intro,
         Auth,

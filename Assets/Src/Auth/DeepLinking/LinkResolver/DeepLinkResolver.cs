@@ -14,10 +14,10 @@ namespace Src.Auth.DeepLinking.LinkResolver
             _detailsExtractor = detailsExtractor;
         }
 
-        public SResolvedDeepLink TryResolveLink(string link)
+        public ResolvedDeepLink TryResolveLink(string link)
         {
             var linkWithoutScheme = _linkFormatter.GetLinkWithoutScheme(link);
-            return new SResolvedDeepLink(_detailsExtractor.GetLinkName(linkWithoutScheme), _detailsExtractor.TryGetParameters(linkWithoutScheme));
+            return new ResolvedDeepLink(_detailsExtractor.GetLinkName(linkWithoutScheme), _detailsExtractor.TryGetParameters(linkWithoutScheme));
         }
     }
 }

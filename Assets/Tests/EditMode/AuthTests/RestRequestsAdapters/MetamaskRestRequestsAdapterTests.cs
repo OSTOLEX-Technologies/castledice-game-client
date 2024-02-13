@@ -1,4 +1,3 @@
-using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Moq;
@@ -29,13 +28,11 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
             var httpClientRequestAdapterMock = new Mock<IHttpClientRequestAdapter>();
             var urlProviderMock = new Mock<IMetamaskBackendUrlProvider>();
 
-            httpClientRequestAdapterMock.Setup(a => a.Request(
+            httpClientRequestAdapterMock.Setup(a => a.Request<MetamaskNonceResponse>(
                 HttpMethod.Get,
                 It.IsAny<string>(),
-                nonceRequestParamsStub.AsDictionary(),
-                It.IsAny<TaskCompletionSource<MetamaskNonceResponse>>()
-            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskNonceResponse>>
-            ((_, _, _, tcs) => tcs.SetResult(expectedNonceResponse));
+                nonceRequestParamsStub.AsDictionary()
+            )).ReturnsAsync(expectedNonceResponse);
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
             var res = await restRequestsAdapter.GetNonce(nonceRequestParamsStub);
@@ -54,13 +51,11 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
             var httpClientRequestAdapterMock = new Mock<IHttpClientRequestAdapter>();
             var urlProviderMock = new Mock<IMetamaskBackendUrlProvider>();
 
-            httpClientRequestAdapterMock.Setup(a => a.Request(
+            httpClientRequestAdapterMock.Setup(a => a.Request<MetamaskAccessTokenResponse>(
                 HttpMethod.Get,
                 It.IsAny<string>(),
-                authRequestParamsStub.AsDictionary(),
-                It.IsAny<TaskCompletionSource<MetamaskAccessTokenResponse>>()
-            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskAccessTokenResponse>>
-                ((_, _, _, tcs) => tcs.SetResult(expectedAuthResponse));
+                authRequestParamsStub.AsDictionary()
+            )).ReturnsAsync(expectedAuthResponse);
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
             var res = await restRequestsAdapter.AuthenticateAndGetTokens(authRequestParamsStub);
@@ -77,13 +72,11 @@ namespace Tests.EditMode.AuthTests.RestRequestsAdapters
             var httpClientRequestAdapterMock = new Mock<IHttpClientRequestAdapter>();
             var urlProviderMock = new Mock<IMetamaskBackendUrlProvider>();
 
-            httpClientRequestAdapterMock.Setup(a => a.Request(
+            httpClientRequestAdapterMock.Setup(a => a.Request<MetamaskRefreshTokenResponse>(
                 HttpMethod.Get,
                 It.IsAny<string>(),
-                authRequestParamsStub.AsDictionary(),
-                It.IsAny<TaskCompletionSource<MetamaskRefreshTokenResponse>>()
-            )).Callback<HttpMethod, string, IEnumerable<KeyValuePair<string, string>>, TaskCompletionSource<MetamaskRefreshTokenResponse>>
-                ((_, _, _, tcs) => tcs.SetResult(expectedRefreshResponse));
+                authRequestParamsStub.AsDictionary()
+            )).ReturnsAsync(expectedRefreshResponse);
 
             var restRequestsAdapter = new MetamaskRestRequestsAdapter(httpClientRequestAdapterMock.Object, urlProviderMock.Object);
             var res = await restRequestsAdapter.RefreshAccessTokens(authRequestParamsStub);

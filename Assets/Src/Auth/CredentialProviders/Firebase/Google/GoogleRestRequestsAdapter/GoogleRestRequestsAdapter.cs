@@ -20,12 +20,13 @@ namespace Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter
             _authExceptionCreator = authExceptionCreator;
         }
         
-        public void ExchangeAuthCodeWithIdToken(GoogleIdTokenRequestDtoProxy requestParams, TaskCompletionSource<GoogleIdTokenResponse> tcs)
+        public async void ExchangeAuthCodeWithIdToken(GoogleIdTokenRequestDtoProxy requestParams, TaskCompletionSource<GoogleIdTokenResponse> tcs)
         {
             try
             {
-                _httpClientRequestAdapter.Request(HttpMethod.Post, TokenAccessUri,
-                    requestParams.AsDictionary(), tcs);
+                var res = await _httpClientRequestAdapter.Request<GoogleIdTokenResponse>(HttpMethod.Post, TokenAccessUri,
+                    requestParams.AsDictionary());
+                tcs.SetResult(res);
             }
             catch (Exception e)
             {
@@ -35,18 +36,15 @@ namespace Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter
         
         public async Task<GoogleRefreshTokenResponse> RefreshAccessToken(GoogleRefreshTokenRequestDtoProxy requestParams)
         {
-            var tcs = new TaskCompletionSource<GoogleRefreshTokenResponse>();
             try
             {
-                _httpClientRequestAdapter.Request(HttpMethod.Post, TokenAccessUri,
-                    requestParams.AsDictionary(), tcs);
+                return await _httpClientRequestAdapter.Request<GoogleRefreshTokenResponse>(HttpMethod.Post, TokenAccessUri,
+                    requestParams.AsDictionary());
             }
             catch (Exception e)
             {
                 throw _authExceptionCreator.FormatAuthException(e);
             }
-
-            return await tcs.Task;
         }
     }
 }

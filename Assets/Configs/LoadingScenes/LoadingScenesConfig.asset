@@ -13,14 +13,14 @@ MonoBehaviour:
   m_Name: LoadingScenesConfig
   m_EditorClassIdentifier: 
   transitionSceneAsset: {fileID: 102900000, guid: d0a5d8e5d8cd54b76ac43f3178cc493c, type: 3}
-  scenesAssets:
+  sceneNames:
   - sceneType: 0
-    sceneAsset: {fileID: 102900000, guid: 4e3b1132db2fc3544a2b0f4f163e9477, type: 3}
+    sceneName: Intro
   - sceneType: 1
-    sceneAsset: {fileID: 102900000, guid: 6f46eabc0f67bd5489695655eef865cd, type: 3}
+    sceneName: Auth
   - sceneType: 2
-    sceneAsset: {fileID: 102900000, guid: 0d31c38b6d67a8446a329aff065256fe, type: 3}
+    sceneName: MainMenu
   - sceneType: 3
-    sceneAsset: {fileID: 102900000, guid: f9f35d3494726984090906331e51d888, type: 3}
+    sceneName: Explore
   - sceneType: 4
-    sceneAsset: {fileID: 102900000, guid: 4c0d3ae4b72dae54097961785cc6389c, type: 3}
+    sceneName: DuelGame

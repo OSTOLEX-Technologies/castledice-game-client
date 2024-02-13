@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Refresh" content="0; url='DEEPLINK'">
+    <title>Authentication Redirect</title>
+    <style>
+        body {
+            background-color: #1e2024;
+            display: flex;
+        }
+        #redirect-message-content {
+            border-style: solid;
+            border-color: #e6e6e6;
+            border-width: 3px;
+            border-radius: 8px;
+            
+            display: flex;
+            flex-direction: column;
+            margin: auto;
+            margin-top: 10%;
+            width: 80%;
+            height: 400px;
+        }
+        #redirect-content-title {
+            color: #e6e6e6;
+            text-align: center;
+            font-family: Arial;
+            font-weight: bold;
+            font-size: 60px;
+            
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+        
+        #redirect-content {
+            display: flex;
+            flex-direction: column;
+
+            width: 75%;
+            
+            margin: auto;
+            margin-top: 0;
+        }
+        #redirect-content-tip {
+            color: #878787;
+            text-align: center;
+            font-family: Arial;
+            font-size: 23px;
+            
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+        #redirect-content-link-container {
+            display: flex;
+            flex-direction: column;
+
+            width: 50%;
+
+            margin: auto;
+            margin-top: 0;
+        }
+        #redirect-content-link {
+            color: #a2a2a2;
+            text-align: center;
+            font-family: Arial;
+            font-weight: bold;
+            font-size: 28px;
+            text-underline-offset: auto;
+            text-underline-style: single;
+
+            margin-top: 20px;
+            margin-bottom: 30px;
+        }
+    </style>
+</head>
+<body>
+    <div id="redirect-message-content">
+        <div id="redirect-content-title">
+            LOG IN COMPLETE
+        </div>
+        <div id="redirect-content">
+            <div id="redirect-content-tip">
+                You can now safely close this page. 
+                If this page did not immediately redirect you into the app, click the link below:
+            </div>
+            <div id="redirect-content-link-container">
+                <a id="redirect-content-link" href="DEEPLINK">
+                    Go back to the app
+                </a>
+            </div>
+        </div>
+    </div>
+</body>
+</html>
