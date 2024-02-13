@@ -1,30 +1,31 @@
-﻿using System.Collections.Generic;
-using castledice_game_logic;
+﻿using System;
+using static Tests.Utils.ObjectCreationUtility;
+using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
+using UnityEngine;
+using Random = System.Random;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.PlayersListCreatorsTests
 {
     public class PlayersListCreatorTests
     {
-        public static List<int>[] IdLists =
-        {
-            new () { 1, 2, 3, 4, 5 },
-            new () { 3, 11, 234 }
-        };
-        
         [Test]
-        public void GetPlayersList_ShouldReturnListOfPlayers_WithAppropriateIds([ValueSource(nameof(IdLists))]List<int> ids)
+        public void GetPlayersList_ShouldCreatePlayers_ByPassingPlayerDataToPlayerCreator()
         {
-            var playersListCreator = new PlayersListCreator();
-            
-            var playersList = playersListCreator.GetPlayersList(ids);
-            
-            Assert.That(playersList, Has.Count.EqualTo(ids.Count));
-            foreach (var id in ids)
+            var playersCount = new Random().Next(1, 100);
+            var playersData = GetPlayersDataList(playersCount);
+            var expectedPlayers = GetPlayersList(playersCount);
+            var playerCreatorMock = new Mock<IPlayerCreator>();
+            for (int i = 0; i < playersCount; i++)
             {
-                Assert.That(playersList, Has.Exactly(1).Matches<Player>(p => p.Id == id));
+                playerCreatorMock.Setup(creator => creator.GetPlayer(playersData[i])).Returns(expectedPlayers[i]);
             }
+            var playersListCreator = new PlayersListCreator(playerCreatorMock.Object);
+            
+            var actualPlayers = playersListCreator.GetPlayersList(playersData);
+            
+            Assert.AreEqual(expectedPlayers, actualPlayers);
         }
     }
 }

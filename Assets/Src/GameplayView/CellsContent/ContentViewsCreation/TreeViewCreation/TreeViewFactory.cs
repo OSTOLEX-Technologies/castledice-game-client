@@ -1,26 +1,27 @@
 ﻿using castledice_game_logic.GameObjects;
 using Src.GameplayView.CellsContent.ContentViews;
+using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 
 namespace Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation
 {
     public class TreeViewFactory : ITreeViewFactory
     {
-        private readonly ITreeModelProvider _modelProvider;
+        private readonly ITreeVisualCreator _visualCreator;
         private readonly TreeView _prefab;
         private readonly IInstantiator _instantiator;
 
-        public TreeViewFactory(ITreeModelProvider modelProvider, TreeView prefab, IInstantiator instantiator)
+        public TreeViewFactory(ITreeVisualCreator visualCreator, TreeView prefab, IInstantiator instantiator)
         {
-            _modelProvider = modelProvider;
+            _visualCreator = visualCreator;
             _prefab = prefab;
             _instantiator = instantiator;
         }
 
         public TreeView GetTreeView(Tree tree)
         {
-            var model = _modelProvider.GetTreeModel();
             var view = _instantiator.Instantiate(_prefab);
-            view.Init(tree, model);
+            var visual = _visualCreator.GetTreeVisual(tree);
+            view.Init(tree, visual);
             return view;
         }
     }

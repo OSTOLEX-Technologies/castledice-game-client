@@ -41,7 +41,7 @@ namespace Tests.EditMode.GameplayViewTests.ErrorsTests
             var gameObject = new GameObject();
             var textMesh = gameObject.AddComponent<TextMeshProUGUI>();
             var popup = gameObject.AddComponent<UnityErrorPopup>();
-            AddObjectReferenceValueToSerializedProperty(popup, "messageTextMesh", textMesh);
+            ReflectionUtility.AddObjectReferenceValueToSerializedProperty(popup, "messageTextMesh", textMesh);
             
             popup.SetMessage(message);
             

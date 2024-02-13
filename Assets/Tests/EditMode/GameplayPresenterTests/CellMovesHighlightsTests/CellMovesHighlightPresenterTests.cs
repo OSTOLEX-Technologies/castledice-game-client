@@ -51,14 +51,17 @@ namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
         [Test]
         public void HighlightCellMoves_ShouldBeCalled_IfMoveAppliedEventInvokedInGame()
         {
-            var game = GetTestGameMock().Object;
+            var gameMock = GetGameMock();
+            var move = GetMove();
+            gameMock.Setup(g => g.TryMakeMove(move)).Returns(true).Raises(g => g.MoveApplied += null, this, move);
+            var game = gameMock.Object;
             var viewMock = new Mock<ICellMovesHighlightView>();
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
             var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
             var presenterMock = new Mock<CellMovesHighlightPresenter>(playerDataProviderMock.Object, cellMovesListProviderMock.Object, game, viewMock.Object);
             var testObject = presenterMock.Object;
             
-            game.InvokeMoveApplied(GetMove());
+            game.TryMakeMove(move);
             
             presenterMock.Verify(presenter => presenter.HighlightCellMoves(), Times.Once);
         }
@@ -66,7 +69,9 @@ namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
         [Test]
         public void HighlightCellMoves_ShouldBeCalled_IfTurnSwitchedInGame()
         {
-            var game = GetTestGameMock().Object;
+            var gameMock = GetGameMock();
+            gameMock.Setup(g => g.SwitchTurn()).Raises(g => g.TurnSwitched += null, this, gameMock.Object);
+            var game = gameMock.Object;
             var viewMock = new Mock<ICellMovesHighlightView>();
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
             var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();

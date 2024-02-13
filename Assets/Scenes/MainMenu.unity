@@ -2169,7 +2169,7 @@ MonoBehaviour:
   sceneLoader: {fileID: 629418342}
   gameServerConnectionConfig: {fileID: 11400000, guid: 0601496dfcca4024e86979ae55541ceb, type: 2}
   gameCreationView: {fileID: 227222422}
-  gameCreationProcessScreen: {fileID: 0}
+  gameCreationProcessScreen: {fileID: 1928504331}
   peerUpdater: {fileID: 1180158530}
 --- !u!4 &1386543723
 Transform:

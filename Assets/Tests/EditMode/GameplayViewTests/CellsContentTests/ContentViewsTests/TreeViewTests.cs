@@ -8,15 +8,15 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
     public class TreeViewTests
     {
         [Test]
-        public void Init_ShouldSetGivenModelAsChildObjectWithZeroLocalPosition()
+        public void Init_ShouldSetGivenVisualAsChildObjectWithZeroLocalPosition()
         {
-            var model = new GameObject();
-            model.transform.position = Random.insideUnitSphere;
+            var visual = GetTreeVisual();
+            visual.transform.position = Random.insideUnitSphere;
             var treeView = new GameObject().AddComponent<TreeView>();
-            treeView.Init(GetTree(), model);
+            treeView.Init(GetTree(), visual);
             
-            Assert.AreSame(treeView.transform, model.transform.parent);
-            Assert.AreEqual(Vector3.zero, model.transform.localPosition);
+            Assert.AreSame(treeView.transform, visual.transform.parent);
+            Assert.AreEqual(Vector3.zero, visual.transform.localPosition);
         }
         
         [Test]
@@ -24,7 +24,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         {
             var treeView = new GameObject().AddComponent<TreeView>();
             var tree = GetTree();
-            treeView.Init(tree, new GameObject());
+            treeView.Init(tree, GetTreeVisual());
             
             Assert.AreSame(tree, treeView.Content);
         }

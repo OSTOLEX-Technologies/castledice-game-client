@@ -4,13 +4,11 @@ using castledice_game_data_logic.ConfigsData;
 using castledice_game_data_logic.TurnSwitchConditions;
 using castledice_game_logic;
 using castledice_game_logic.GameConfiguration;
-using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
-using Src.GameplayPresenter.GameCreation.Creators.DecksListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
@@ -20,14 +18,11 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
 {
     public class GameCreatorTests
     {
-        private static Player FirstPlayer = GetPlayer(1);
-        private static Player SecondPlayer = GetPlayer(2);
-        
         [Test]
-        public void CreateGame_ShouldPassPlayersIdsListFromGameStartData_ToGivenPlayersListCreator()
+        public void CreateGame_ShouldPassPlayersDataListFromGameStartData_ToGivenPlayersListCreator()
         {
             var gameStartData = GetGameStartData();
-            var playersListCreatorMock = GetPlayersListCreatorMock();
+            var playersListCreatorMock = new Mock<IPlayersListCreator>();
             var gameCreator = new GameCreatorBuilder
             {
                 PlayersListCreator = playersListCreatorMock.Object
@@ -35,14 +30,14 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             gameCreator.CreateGame(gameStartData);
             
-            playersListCreatorMock.Verify(p => p.GetPlayersList(gameStartData.PlayersIds), Times.Once); 
+            playersListCreatorMock.Verify(p => p.GetPlayersList(gameStartData.PlayersData), Times.Once); 
         }
         
         [Test]
-        public void CreateGame_ShouldPassBoardDataAndPlayersListFromGameStartData_ToGivenBoardConfigCreator()
+        public void CreateGame_ShouldPassBoardDataFromGameStartData_ToGivenBoardConfigCreator()
         {
             var gameStartData = GetGameStartData();
-            var boardConfigCreatorMock = GetBoardConfigCreatorMock();
+            var boardConfigCreatorMock = new Mock<IBoardConfigCreator>();
             var gameCreator = new GameCreatorBuilder
             {
                 BoardConfigCreator = boardConfigCreatorMock.Object
@@ -58,9 +53,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         {
             var gameStartData = GetGameStartData();
             var playersListCreatorMock = new Mock<IPlayersListCreator>();
-            var playersList = new List<Player>{ FirstPlayer, SecondPlayer };
-            playersListCreatorMock.Setup(p => p.GetPlayersList(It.IsAny<List<int>>())).Returns(playersList);
-            var boardConfigCreatorMock = GetBoardConfigCreatorMock();
+            var playersList = new List<Player>();
+            playersListCreatorMock.Setup(p => p.GetPlayersList(It.IsAny<List<PlayerData>>())).Returns(playersList);
+            var boardConfigCreatorMock = new Mock<IBoardConfigCreator>();
             var gameCreator = new GameCreatorBuilder
             {
                 PlayersListCreator = playersListCreatorMock.Object,
@@ -77,7 +72,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         public void CreateGame_ShouldPassPlaceablesConfigDataFromGameStartData_ToGivenPlaceablesConfigCreator()
         {
             var gameStartData = GetGameStartData();
-            var placeablesConfigCreatorMock = GetPlaceablesConfigCreatorMock();
+            var placeablesConfigCreatorMock = new Mock<IPlaceablesConfigCreator>();
             var gameCreator = new GameCreatorBuilder
             {
                 PlaceablesConfigCreator = placeablesConfigCreatorMock.Object
@@ -89,25 +84,10 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         }
         
         [Test]
-        public void CreateGame_ShouldPassListOfPlayerDeckDataFromGameStartData_ToGivenDecksListCreator()
-        {
-            var gameStartData = GetGameStartData();
-            var decksListCreatorMock = GetDecksListCreatorMock();
-            var gameCreator = new GameCreatorBuilder
-            {
-                DecksListCreator = decksListCreatorMock.Object
-            }.Build();    
-            
-            gameCreator.CreateGame(gameStartData);
-            
-            decksListCreatorMock.Verify(p => p.GetDecksList(gameStartData.Decks), Times.Once); 
-        }
-        
-        [Test]
         public void CreateGame_ShouldCreateTurnsSwitchConditionsConfig_WithGivenCreator()
         {
             var gameStartData = GetGameStartData();
-            var turnSwitchConditionsConfigCreatorMock = GetTurnSwitchConditionsConfigCreatorMock();
+            var turnSwitchConditionsConfigCreatorMock = new Mock<ITurnSwitchConditionsConfigCreator>();
             var gameCreator = new GameCreatorBuilder
             {
                 TurnSwitchConditionsConfigCreator = turnSwitchConditionsConfigCreatorMock.Object
@@ -117,71 +97,119 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             turnSwitchConditionsConfigCreatorMock.Verify(p => p.GetTurnSwitchConditionsConfig(gameStartData.TscConfigData), Times.Once); 
         }
+
+        [Test]
+        public void CreateGame_ShouldPassPlayersListFromCreator_ToGivenBuilder()
+        {
+            var playersList = GetPlayersList();
+            var playersListCreatorMock = new Mock<IPlayersListCreator>();
+            playersListCreatorMock.Setup(p => p.GetPlayersList(It.IsAny<List<PlayerData>>())).Returns(playersList);
+            var builderMock = GetGameBuilderMock();
+            var gameCreator = new GameCreatorBuilder
+            {
+                PlayersListCreator = playersListCreatorMock.Object,
+                GameBuilder = builderMock.Object
+            }.Build();
+            
+            gameCreator.CreateGame(GetGameStartData());
+            
+            builderMock.Verify(p => p.BuildPlayersList(playersList), Times.Once);
+        }
         
         [Test]
-        public void CreateGame_ShouldCreateGame_WithTurnSwitchConditionsConfigFromCreator()
+        public void CreateGame_ShouldPassBoardConfigFromCreator_ToGivenBuilder()
         {
-            var gameStartData = GetGameStartData();
+            var boardConfig = GetBoardConfig();
+            var boardConfigCreatorMock = new Mock<IBoardConfigCreator>();
+            boardConfigCreatorMock.Setup(p => p.GetBoardConfig(It.IsAny<BoardData>(), It.IsAny<List<Player>>())).Returns(boardConfig);
+            var builderMock = GetGameBuilderMock();
+            var gameCreator = new GameCreatorBuilder
+            {
+                BoardConfigCreator = boardConfigCreatorMock.Object,
+                GameBuilder = builderMock.Object
+            }.Build();
+            
+            gameCreator.CreateGame(GetGameStartData());
+            
+            builderMock.Verify(p => p.BuildBoardConfig(boardConfig), Times.Once);
+        }
+        
+        [Test]
+        public void CreateGame_ShouldPassPlaceablesConfigFromCreator_ToGivenBuilder()
+        {
+            var placeablesConfig = new PlaceablesConfig(new KnightConfig(1, 2));
+            var placeablesConfigCreatorMock = new Mock<IPlaceablesConfigCreator>();
+            placeablesConfigCreatorMock.Setup(p => p.GetPlaceablesConfig(It.IsAny<PlaceablesConfigData>())).Returns(placeablesConfig);
+            var builderMock = GetGameBuilderMock();
+            var gameCreator = new GameCreatorBuilder
+            {
+                PlaceablesConfigCreator = placeablesConfigCreatorMock.Object,
+                GameBuilder = builderMock.Object
+            }.Build();
+            
+            gameCreator.CreateGame(GetGameStartData());
+            
+            builderMock.Verify(p => p.BuildPlaceablesConfig(placeablesConfig), Times.Once);
+        }
+        
+        [Test]
+        public void CreateGame_ShouldPassTurnSwitchConditionsConfigFromCreator_ToGivenBuilder()
+        {
             var turnSwitchConditionsConfig = GetTurnSwitchConditionsConfig();
             var turnSwitchConditionsConfigCreatorMock = new Mock<ITurnSwitchConditionsConfigCreator>();
             turnSwitchConditionsConfigCreatorMock.Setup(p => p.GetTurnSwitchConditionsConfig(It.IsAny<TscConfigData>())).Returns(turnSwitchConditionsConfig);
+            var builderMock = GetGameBuilderMock();
             var gameCreator = new GameCreatorBuilder
             {
-                TurnSwitchConditionsConfigCreator = turnSwitchConditionsConfigCreatorMock.Object
-            }.Build();    
+                TurnSwitchConditionsConfigCreator = turnSwitchConditionsConfigCreatorMock.Object,
+                GameBuilder = builderMock.Object
+            }.Build();
             
-            var game = gameCreator.CreateGame(gameStartData);
+            gameCreator.CreateGame(GetGameStartData());
             
-            Assert.AreEqual(turnSwitchConditionsConfig, game.TurnSwitchConditionsConfig);
+            builderMock.Verify(p => p.BuildTurnSwitchConditionsConfig(turnSwitchConditionsConfig), Times.Once);
+        }
+        
+        [Test]
+        public void CreateGame_ShouldReturnGame_FromBuilder()
+        {
+            var expectedGame = GetGame();
+            var builderMock = GetGameBuilderMock();
+            builderMock.Setup(p => p.Build()).Returns(expectedGame);
+            var gameCreator = new GameCreatorBuilder
+            {
+                GameBuilder = builderMock.Object
+            }.Build();
+            
+            var actualGame = gameCreator.CreateGame(GetGameStartData());
+            
+            Assert.AreSame(expectedGame, actualGame);
         }
 
         private class GameCreatorBuilder
         {
-            public IPlayersListCreator PlayersListCreator { get; set; } = GetPlayersListCreatorMock().Object;
-            public IBoardConfigCreator BoardConfigCreator { get; set; } = GetBoardConfigCreatorMock().Object;
-            public IPlaceablesConfigCreator PlaceablesConfigCreator { get; set; } = GetPlaceablesConfigCreatorMock().Object;
-            public ITurnSwitchConditionsConfigCreator TurnSwitchConditionsConfigCreator { get; set; } = GetTurnSwitchConditionsConfigCreatorMock().Object;
-            public IDecksListCreator DecksListCreator { get; set; } = GetDecksListCreatorMock().Object;
+            public IPlayersListCreator PlayersListCreator { get; set; } = new Mock<IPlayersListCreator>().Object;
+            public IBoardConfigCreator BoardConfigCreator { get; set; } = new Mock<IBoardConfigCreator>().Object;
+            public IPlaceablesConfigCreator PlaceablesConfigCreator { get; set; } = new Mock<IPlaceablesConfigCreator>().Object;
+            public ITurnSwitchConditionsConfigCreator TurnSwitchConditionsConfigCreator { get; set; } = new Mock<ITurnSwitchConditionsConfigCreator>().Object;
+            public IGameBuilder GameBuilder { get; set; } = GetGameBuilderMock().Object;
+            
             
             public GameCreator Build()
             {
-                return new GameCreator(PlayersListCreator, BoardConfigCreator, PlaceablesConfigCreator, TurnSwitchConditionsConfigCreator, DecksListCreator);
+                return new GameCreator(PlayersListCreator, BoardConfigCreator, PlaceablesConfigCreator, TurnSwitchConditionsConfigCreator, GameBuilder);
             }
         }
-        
-        private static Mock<IPlayersListCreator> GetPlayersListCreatorMock()
+
+        private static Mock<IGameBuilder> GetGameBuilderMock()
         {
-            var mock = new Mock<IPlayersListCreator>();
-            mock.Setup(p => p.GetPlayersList(It.IsAny<List<int>>())).Returns(new List<Player>{FirstPlayer, SecondPlayer});
-            return mock;
-        }
-            
-        private static Mock<IBoardConfigCreator> GetBoardConfigCreatorMock()
-        {
-            var mock = new Mock<IBoardConfigCreator>();
-            mock.Setup(p => p.GetBoardConfig(It.IsAny<BoardData>(), It.IsAny<List<Player>>())).Returns(GetBoardConfig(FirstPlayer, SecondPlayer));
-            return mock;
-        }
-            
-        private static Mock<IPlaceablesConfigCreator> GetPlaceablesConfigCreatorMock()
-        {
-            var mock = new Mock<IPlaceablesConfigCreator>();
-            mock.Setup(p => p.GetPlaceablesConfig(It.IsAny<PlaceablesConfigData>())).Returns(new PlaceablesConfig(new KnightConfig(1, 2)));
-            return mock;
-        }
-            
-        private static Mock<IDecksListCreator> GetDecksListCreatorMock()
-        {
-            var mock = new Mock<IDecksListCreator>();
-            mock.Setup(p => p.GetDecksList(It.IsAny<List<PlayerDeckData>>())).Returns(new Mock<IDecksList>().Object);
-            return mock;
-        }
-        
-        private static Mock<ITurnSwitchConditionsConfigCreator> GetTurnSwitchConditionsConfigCreatorMock()
-        {
-            var mock = new Mock<ITurnSwitchConditionsConfigCreator>();
-            mock.Setup(p => p.GetTurnSwitchConditionsConfig(It.IsAny<TscConfigData>())).Returns(GetTurnSwitchConditionsConfig());
-            return mock;
+            var gameBuilderMock = new Mock<IGameBuilder>();
+            gameBuilderMock.Setup(p => p.Build()).Returns(GetGame());
+            gameBuilderMock.Setup(p => p.BuildPlayersList(It.IsAny<List<Player>>())).Returns(gameBuilderMock.Object);
+            gameBuilderMock.Setup(p => p.BuildBoardConfig(It.IsAny<BoardConfig>())).Returns(gameBuilderMock.Object);
+            gameBuilderMock.Setup(p => p.BuildPlaceablesConfig(It.IsAny<PlaceablesConfig>())).Returns(gameBuilderMock.Object);
+            gameBuilderMock.Setup(p => p.BuildTurnSwitchConditionsConfig(It.IsAny<TurnSwitchConditionsConfig>())).Returns(gameBuilderMock.Object);
+            return gameBuilderMock;
         }
     }
 }

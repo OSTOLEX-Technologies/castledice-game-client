@@ -1,20 +1,22 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
+using castledice_game_data_logic;
 using castledice_game_logic;
-using castledice_game_logic.ActionPointsLogic;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators
 {
     public class PlayersListCreator : IPlayersListCreator
     {
-        public List<Player> GetPlayersList(List<int> ids)
-        {
-            var playersList = new List<Player>();
-            foreach (var id in ids)
-            {
-                playersList.Add(new Player(new PlayerActionPoints(),id));
-            }
+        private readonly IPlayerCreator _playerCreator;
 
-            return playersList;
+        public PlayersListCreator(IPlayerCreator playerCreator)
+        {
+            _playerCreator = playerCreator;
+        }
+
+        public List<Player> GetPlayersList(List<PlayerData> playersData)
+        {
+            return playersData.Select(playerData => _playerCreator.GetPlayer(playerData)).ToList();
         }
     }
 }

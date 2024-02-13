@@ -1,43 +1,39 @@
-﻿using NUnit.Framework;
+using System.Collections;
+using NUnit.Framework;
 using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
 using Tests.Utils.Mocks;
 using UnityEngine;
+using UnityEngine.TestTools;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
 {
     public class KnightViewTests
     {
         [Test, Repeat(10)]
-        public void Init_ShouldSetGivenModelAsChildObjectWithZeroLocalPosition_AndSetGivenRotation()
+        public void Init_ShouldSetGivenVisualAsChildObjectWithZeroLocalPosition()
         {
-            var rotation = new Vector3(Random.value, Random.value, Random.value);
-            var model = new GameObject();
-            model.transform.position = Random.insideUnitSphere;
+            var visual = GetKnightVisual();
+            visual.transform.position = Random.insideUnitSphere;
             var audio = new GameObject().AddComponent<KnightAudioForTests>();
             var knightView = new GameObject().AddComponent<KnightView>();
             var knight = GetKnight();
             
-            knightView.Init(knight, model, rotation, audio);
-            var actualRotation = model.transform.localRotation.eulerAngles;
+            knightView.Init(knight, visual, audio);
             
-            Assert.AreSame(knightView.transform, model.transform.parent);
-            Assert.AreEqual(Vector3.zero, model.transform.localPosition);
-            Assert.AreEqual(rotation.x, actualRotation.x, 0.0001f);
-            Assert.AreEqual(rotation.y, actualRotation.y, 0.0001f);
-            Assert.AreEqual(rotation.z, actualRotation.z, 0.0001f);
+            Assert.AreSame(knightView.transform, visual.transform.parent);
+            Assert.AreEqual(Vector3.zero, visual.transform.localPosition);
         }
         
         [Test]
-        public void Init_ShouldSetKnightSound_AsChildObjectWithZeroLocalPosition()
+        public void Init_ShouldSetKnightAudio_AsChildObjectWithZeroLocalPosition()
         {
-            var model = new GameObject();
             var audio = new GameObject().AddComponent<KnightAudioForTests>();
             audio.transform.position = Random.insideUnitSphere;
             var knightView = new GameObject().AddComponent<KnightView>();
             var knight = GetKnight();
             
-            knightView.Init(knight, model, Vector3.zero, audio);
+            knightView.Init(knight, GetKnightVisual(), audio);
             
             Assert.AreSame(knightView.transform, audio.transform.parent);
             Assert.AreEqual(Vector3.zero, audio.transform.localPosition);
@@ -50,7 +46,7 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         {
             var knightView = new GameObject().AddComponent<KnightView>();
             var audio = new GameObject().AddComponent<KnightAudioForTests>();
-            knightView.Init(GetKnight(), new GameObject(), Vector3.zero, audio);
+            knightView.Init(GetKnight(), GetKnightVisual(), audio);
             
             knightView.StartView();
             
@@ -58,11 +54,11 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         }
         
         [Test]
-        public void DestroyView_ShouldPlayDestroySound_OnAttachedKnightAudio()
+        public void DestroyView_ShouldPlayDestroySound_OnGivenKnightAudio()
         {
             var knightView = new GameObject().AddComponent<KnightView>();
             var audio = new GameObject().AddComponent<KnightAudioForTests>();
-            knightView.Init(GetKnight(), new GameObject(), Vector3.zero, audio);
+            knightView.Init(GetKnight(), GetKnightVisual(), audio);
             
             knightView.DestroyView();
             
@@ -70,16 +66,16 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
         }
 
         [Test]
-        public void DestroyView_ShouldSetModelInactive()
+        public void DestroyView_ShouldSetVisualInactive()
         {
-            var model = new GameObject();
-            model.SetActive(true);
+            var visual = GetKnightVisual();
+            visual.gameObject.SetActive(true);
             var knightView = new GameObject().AddComponent<KnightView>();
-            knightView.Init(GetKnight(), model, Vector3.zero, new GameObject().AddComponent<KnightAudioForTests>());
+            knightView.Init(GetKnight(), visual, new GameObject().AddComponent<KnightAudioForTests>());
             
             knightView.DestroyView();
             
-            Assert.IsFalse(model.activeSelf);
+            Assert.IsFalse(visual.gameObject.activeSelf);
         }
 
         [Test]
@@ -88,11 +84,24 @@ namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsTests
             var expectedKnight = GetKnight();
             var knightView = new GameObject().AddComponent<KnightView>();
             var audio = new GameObject().AddComponent<KnightAudioForTests>();
-            knightView.Init(expectedKnight, new GameObject(), Vector3.zero, audio);
+            knightView.Init(expectedKnight, GetKnightVisual(), audio);
             
             var actualKnight = knightView.Content;
             
             Assert.AreSame(expectedKnight, actualKnight);
+        }
+        
+        [UnityTest]
+        public IEnumerator KnightView_ShouldDestroyItself_AfterDestroySoundIsPlayed()
+        {
+            var knightView = new GameObject().AddComponent<KnightView>();
+            var audio = new GameObject().AddComponent<KnightAudioForTests>();
+            knightView.Init(GetKnight(), GetKnightVisual(), audio);
+            
+            audio.PlayDestroySound();
+            yield return null;
+            
+            Assert.IsTrue(knightView == null);
         }
     }
 }

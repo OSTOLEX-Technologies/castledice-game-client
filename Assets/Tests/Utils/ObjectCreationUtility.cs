@@ -1,4 +1,6 @@
-﻿using System.Collections.Generic;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using System.Reflection;
 using castledice_game_data_logic;
 using castledice_game_data_logic.ConfigsData;
@@ -8,21 +10,25 @@ using castledice_game_logic;
 using castledice_game_logic.ActionPointsLogic;
 using castledice_game_logic.BoardGeneration.CellsGeneration;
 using castledice_game_logic.BoardGeneration.ContentGeneration;
+using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.PlayerColoredContentVisualFieldNames;
 using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.GameObjects.Configs;
 using castledice_game_logic.GameObjects.Factories.Castles;
 using castledice_game_logic.MovesLogic;
+using castledice_game_logic.Time;
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using Moq;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.Audio;
+using Src.GameplayView.ContentVisuals;
+using Src.GameplayView.Grid;
+using static Tests.EditMode.GameplayViewTests.ContentVisualsTests.ContentVisualsFieldNames;
 using Tests.Utils.Mocks;
-using UnityEditor;
 using UnityEngine;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
-using Object = UnityEngine.Object;
+using Random = System.Random;
 using Tree = castledice_game_logic.GameObjects.Tree;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -31,15 +37,13 @@ namespace Tests.Utils
 {
     public static class ObjectCreationUtility
     {
-#if UNITY_EDITOR
-        public static void AddObjectReferenceValueToSerializedProperty<U, T>(U gameObject, string propertyName, T value) where T : Object 
-            where U: Object
+        private static Random _random = new Random();
+        
+        public static TimeSpan GetRandomTimeSpan(int min = 1, int max = 1000)
         {
-            var serializedObject = new SerializedObject(gameObject);
-            serializedObject.FindProperty(propertyName).objectReferenceValue = value;
-            serializedObject.ApplyModifiedProperties();
+            var ticks = _random.Next(min, max);
+            return new TimeSpan(ticks);
         }
-#endif
         
         public static SoundPlayer GetSoundPlayer()
         {
@@ -74,7 +78,7 @@ namespace Tests.Utils
             {
                 {player, (0, 0)},
                 {secondPlayer, (9, 9)}
-            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object, GetTurnSwitchConditionsConfig());
+            }), GetPlaceablesConfig(), GetTurnSwitchConditionsConfig());
             gameMock.Setup(x => x.GetPlayer(It.IsAny<int>())).Returns(player);
             gameMock.Setup(x => x.GetAllPlayers()).Returns(playersList);
             gameMock.Setup(x => x.GetAllPlayersIds()).Returns(new List<int> { 1, 2 });
@@ -91,7 +95,7 @@ namespace Tests.Utils
             {
                 {player, (0, 0)},
                 {secondPlayer, (9, 9)}
-            }), GetPlaceablesConfig(), new Mock<IDecksList>().Object, GetTurnSwitchConditionsConfig());
+            }), GetPlaceablesConfig(), GetTurnSwitchConditionsConfig());
             gameMock.Setup(x => x.GetPlayer(It.IsAny<int>())).Returns(player);
             gameMock.Setup(x => x.GetAllPlayers()).Returns(playersList);
             gameMock.Setup(x => x.GetAllPlayersIds()).Returns(new List<int> { 1, 2 });
@@ -118,17 +122,21 @@ namespace Tests.Utils
         public static GameStartData GetGameStartData()
         {
             var version = "1.0.0";
-            var playerIds = new List<int>() { 1, 2 };
             var boardData = GetBoardData();
             var placeablesConfigs = new PlaceablesConfigData(new KnightConfigData(1, 2));
-            var playerDecks = new List<PlayerDeckData>()
+            var playersData = new List<PlayerData>
             {
-                new(playerIds[0], new List<PlacementType> { PlacementType.Knight }),
-                new (playerIds[1], new List<PlacementType> { PlacementType.Knight })
+                GetPlayerData(id: 1),
+                GetPlayerData(id: 2)
             };
             var tscConfigData = GetTscConfigData();
-            var data = new GameStartData(version, boardData, placeablesConfigs, tscConfigData, playerIds, playerDecks);
+            var data = new GameStartData(version, boardData, placeablesConfigs, tscConfigData, playersData);
             return data;
+        }
+        
+        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), params PlacementType[] placementTypes)
+        {
+            return new PlayerData(id, placementTypes.ToList(), timeSpan);
         }
         
         public static TurnSwitchConditionsConfig GetTurnSwitchConditionsConfig()
@@ -177,8 +185,8 @@ namespace Tests.Utils
 
         public static Game GetGame()
         {
-            var firstPlayer = new Player(new PlayerActionPoints(), 1);
-            var secondPlayer = new Player(new PlayerActionPoints(), 2);
+            var firstPlayer = GetPlayer(id: 1);
+            var secondPlayer = GetPlayer(id: 2);
             var players = new List<Player>()
             {
                 firstPlayer,
@@ -194,14 +202,9 @@ namespace Tests.Utils
 
             var placeablesConfig = new PlaceablesConfig(new KnightConfig(1, 2));
 
-            var placementListProvider = new CommonDecksList(new List<PlacementType>()
-            {
-                PlacementType.Knight
-            });
-
             var turnSwitchConditionsConfig = GetTurnSwitchConditionsConfig();
             
-            var game = new Game(players, boardConfig, placeablesConfig, placementListProvider, turnSwitchConditionsConfig);
+            var game = new Game(players, boardConfig, placeablesConfig, turnSwitchConditionsConfig);
 
             return game;
         }
@@ -225,7 +228,6 @@ namespace Tests.Utils
             return GetBoardConfig(playersToCastlesPositions);
         }
         
-        
         public static BoardConfig GetBoardConfig(Dictionary<Player, Vector2Int> playersToCastlesPositions)
         {
 
@@ -245,6 +247,34 @@ namespace Tests.Utils
             return boardConfig;
         }
         
+        public static List<Player> GetPlayersList(int length = 1)
+        {
+            var players = new List<Player>();
+            for (int i = 0; i < length; i++)
+            {
+                players.Add(GetPlayer(id: i));
+            }
+            return players;
+        }
+        
+        public static List<PlayerData> GetPlayersDataList(int length = 1)
+        {
+            var playersData = new List<PlayerData>();
+            for (int i = 0; i < length; i++)
+            {
+                playersData.Add(GetPlayerData(id: i));
+            }
+            return playersData;
+        }
+        
+        
+        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), List<PlacementType> placementTypes = null)
+        {
+            return new PlayerData(id, placementTypes ?? new List<PlacementType>(), timeSpan);
+        }
+        
+
+        
         public static Board GetFullNByNBoard(int size)
         {
             var board = new Board(CellType.Square);
@@ -263,6 +293,19 @@ namespace Tests.Utils
             return new Mock<ContentData>().Object;
         }
         
+        public static Content GetPlayerOwnedContent()
+        {
+            return GetPlayerOwnedContent(GetPlayer());
+        }
+
+        public static Content GetPlayerOwnedContent(Player owner)
+        {
+            var contentMock = new Mock<Content>();
+            var playerOwnedMock = contentMock.As<IPlayerOwned>();
+            playerOwnedMock.Setup(x => x.GetOwner()).Returns(owner);
+            return contentMock.Object;
+        }
+        
         public static Content GetCellContent()
         {
             return new ObstacleMock();
@@ -270,12 +313,12 @@ namespace Tests.Utils
         
         public static CastleGO GetCastle()
         {
-            return new CastleGO(new Player(new PlayerActionPoints(), 0), 3, 3, 1, 1);
+            return new CastleGO(GetPlayer(id: 1), 3, 3, 1, 1);
         }
         
         public static Knight GetKnight()
         {
-            return new Knight(new Player(new PlayerActionPoints(), 0), 1, 2);
+            return new Knight(GetPlayer(id: 1), 1, 2);
         }
         
         public static Tree GetTree()
@@ -283,11 +326,12 @@ namespace Tests.Utils
             return new Tree(1, false);
         }
         
-        public static Player GetPlayer(int id = 1, int actionPointsCount = 6)
+        public static Player GetPlayer(int id = 1, int actionPointsCount = 6, IPlayerTimer timer = null)
         {
             var actionPoints = new PlayerActionPoints();
             actionPoints.IncreaseActionPoints(actionPointsCount);
-            return new Player(actionPoints, id);
+            timer ??= new Mock<IPlayerTimer>().Object;
+            return new Player(actionPoints, timer, new List<PlacementType> { PlacementType.Knight }, id);
         }
 
         public static IPlayerDataProvider GetPlayerDataProvider(bool authorized = true, string token = "token", int id = 1)
@@ -310,6 +354,156 @@ namespace Tests.Utils
         {
             var mock = new Mock<AbstractMove>(GetPlayer(), new Vector2Int(0, 0));
             return mock.Object;
+        }
+        
+        public static List<Renderer> GetRenderersListWithMaterial(Material material, int count)
+        {
+            var renderers = new List<Renderer>();
+            for (var i = 0; i < count; i++)
+            {
+                renderers.Add(GetRendererWithMaterial(material));
+            }
+            return renderers;
+        }
+        
+        public static Renderer GetRendererWithMaterial(Material material)
+        {
+            var gameObject = new GameObject();
+            var renderer = gameObject.AddComponent<MeshRenderer>();
+            renderer.material = material;
+            return renderer;
+        }
+        
+        public static Renderer GetRendererWithMultipleMaterials(List<Material> materials)
+        {
+            var gameObject = new GameObject();
+            var renderer = gameObject.AddComponent<MeshRenderer>();
+            renderer.materials = materials.ToArray();
+            return renderer;
+        }
+        
+        public static List<Material> GetMaterialsList(int count)
+        {
+            var materials = new List<Material>();
+            for (var i = 0; i < count; i++)
+            {
+                materials.Add(GetMaterialWithColor(UnityEngine.Random.ColorHSV()));
+            }
+            return materials;
+        }
+        
+        public static Material GetMaterialWithColor(Color color)
+        {
+            var material = new Material(Shader.Find("Standard"))
+            {
+                color = color
+            };
+            return material;
+        }
+        
+        public static KnightVisual GetKnightVisual()
+        {
+            var visual = new GameObject().AddComponent<KnightVisual>();
+            var meshRenderer = visual.gameObject.AddComponent<MeshRenderer>();
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                meshRenderer
+            }));
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                meshRenderer
+            }));
+            return visual;
+        }
+        
+        public static List<TreeVisual> GetTreeVisualsList(int count)
+        {
+            var visuals = new List<TreeVisual>();
+            for (var i = 0; i < count; i++)
+            {
+                visuals.Add(GetTreeVisual());
+            }
+            return visuals;
+        }
+        
+        public static TreeVisual GetTreeVisual()
+        {
+            var visual = new GameObject().AddComponent<TreeVisual>();
+            var renderer = new GameObject().AddComponent<MeshRenderer>();
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                renderer
+            }));
+            return visual;
+        }
+
+        public static CastleVisual GetCastleVisual()
+        {
+            var visual = new GameObject().AddComponent<CastleVisual>();
+            var renderer = new GameObject().AddComponent<MeshRenderer>();
+            visual.SetPrivateField(TransparencyAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                renderer
+            }));
+            visual.SetPrivateField(ColoringAffectedRenderersFieldName, GetCompoundRenderer(new List<Renderer>
+            {
+                renderer
+            }));
+            return visual;
+        }
+
+        public static CompoundRenderer GetCompoundRenderer(List<Renderer> renderers)
+        {
+            var compoundRenderer = new CompoundRenderer();
+            compoundRenderer.SetPrivateField("renderers", renderers);
+            return compoundRenderer;
+        }
+        
+        public static List<Renderer> GetRenderersList(int count)
+        {
+            var renderers = new List<Renderer>();
+            for (var i = 0; i < count; i++)
+            {
+                renderers.Add(new GameObject().AddComponent<MeshRenderer>());
+            }
+            return renderers;
+        }
+        
+        public static List<Vector2Int> GetRandomVector2IntList(int minCoordinateValue, int maxCoordinateValue, int count)
+        {
+            var list = new List<Vector2Int>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(GetRandomVector2Int(minCoordinateValue, maxCoordinateValue));
+            }
+            return list;
+        }
+
+        public static Vector2Int GetRandomVector2Int(int minCoordinateValue = 0, int maxCoordinateValue = 10)
+        {
+            var x = _random.Next(minCoordinateValue, maxCoordinateValue);
+            var y = _random.Next(minCoordinateValue, maxCoordinateValue);
+            return new Vector2Int(x, y);
+        }
+
+        public static ContentVisual GetContentVisual()
+        {
+            return GetTreeVisual();
+        }
+        
+        public static List<Content> GetCellContentList(int count)
+        {
+            return Enumerable.Repeat(GetCellContent(), count).ToList();
+        }
+        
+        public static List<Mock<IGridCell>> GetGridCellMocksList(int count)
+        {
+            var list = new List<Mock<IGridCell>>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(new Mock<IGridCell>());
+            }
+            return list;
         }
     }
 }

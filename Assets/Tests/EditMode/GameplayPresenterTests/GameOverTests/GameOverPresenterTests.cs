@@ -12,11 +12,13 @@ namespace Tests.EditMode.GameplayPresenterTests.GameOverTests
         public void Presenter_ShouldInvokeShowWinOnViewWithWinner_IfWinEventIsInvokedOnGame()
         {
             var winner = GetPlayer();
-            var testGame = GetTestGameMock().Object;
+            var gameMock = GetGameMock();
+            gameMock.Setup(game => game.CheckTurns()).Raises(g => g.Win += null, this, (gameMock.Object, winner));
+            var testGame = gameMock.Object;
             var viewMock = new Mock<IGameOverView>();
             var presenter = new GameOverPresenter(testGame, viewMock.Object);
             
-            testGame.ForceWin(winner);
+            testGame.CheckTurns();
             
             viewMock.Verify(view => view.ShowWin(winner), Times.Once);
         }
@@ -24,11 +26,13 @@ namespace Tests.EditMode.GameplayPresenterTests.GameOverTests
         [Test]
         public void Presenter_ShouldInvokeShowDrawOnView_IfDrawEventIsInvokedOnGame()
         {
-            var testGame = GetTestGameMock().Object;
+            var gameMock = GetGameMock();
+            gameMock.Setup(game => game.CheckTurns()).Raises(g => g.Draw += null, this, gameMock.Object);
+            var testGame = gameMock.Object;
             var viewMock = new Mock<IGameOverView>();
             var presenter = new GameOverPresenter(testGame, viewMock.Object);
             
-            testGame.ForceDraw();
+            testGame.CheckTurns();
             
             viewMock.Verify(view => view.ShowDraw(), Times.Once);
         }

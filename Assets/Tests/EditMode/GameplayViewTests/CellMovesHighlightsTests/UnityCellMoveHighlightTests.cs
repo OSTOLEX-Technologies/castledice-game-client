@@ -18,8 +18,8 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
              var orangeHighlight = new GameObject();
              orangeHighlight.SetActive(false);
              var highlight = new GameObject().AddComponent<UnityCellMoveHighlight>();
-             AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
-             AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
              
              highlight.ShowHighlight(moveType);
              
@@ -37,8 +37,8 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
              var orangeHighlight = new GameObject();
              orangeHighlight.SetActive(false);
              var highlight = new GameObject().AddComponent<UnityCellMoveHighlight>();
-             AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
-             AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
              
              highlight.ShowHighlight(moveType);
              
@@ -55,8 +55,8 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
              var orangeHighlight = new GameObject();
              orangeHighlight.SetActive(true);
              var highlight = new GameObject().AddComponent<UnityCellMoveHighlight>();
-             AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
-             AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
              
              highlight.HideHighlight(moveType);
              
@@ -74,8 +74,8 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
              var orangeHighlight = new GameObject();
              orangeHighlight.SetActive(true);
              var highlight = new GameObject().AddComponent<UnityCellMoveHighlight>();
-             AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
-             AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
              
              highlight.HideHighlight(moveType);
              
@@ -90,8 +90,8 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
              var orangeHighlight = new GameObject();
              orangeHighlight.SetActive(true);
              var highlight = new GameObject().AddComponent<UnityCellMoveHighlight>();
-             AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
-             AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "greenHighlight", greenHighlight);
+             ReflectionUtility.AddObjectReferenceValueToSerializedProperty(highlight, "orangeHighlight", orangeHighlight);
              
              highlight.HideAllHighlights();
              
