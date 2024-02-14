@@ -62,6 +62,8 @@ using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
 using Src.PVE;
+using Src.PVE.MoveSearchers.TraitsEvaluators;
+using Src.PVE.TraitsEvaluators;
 using Src.TimeManagement;
 using TMPro;
 using UnityEngine;
@@ -373,7 +375,8 @@ private void SetUpUpdaters()
     {
         var localMoveApplier = new LocalMovesApplier(_game);
         var totalPossibleMovesProvider = new TotalPossibleMovesProvider(_game);
-        var bestMoveSearcher = new DuelAggressiveMoveSearcher(_game.GetBoard(), (0, 0), (9, 9), 2, 3);
+        var moveDestructivenessEvaluator = new DestructivenessEvaluator(_game.GetBoard(), _game.GetPlayer(2), new BoardStateCalculator(_game.GetBoard()));
+        var bestMoveSearcher = new BalancedMoveSearcher(moveDestructivenessEvaluator, moveDestructivenessEvaluator, moveDestructivenessEvaluator);
         _bot = new Bot(localMoveApplier, totalPossibleMovesProvider, bestMoveSearcher, _game, 2);
     }
 
