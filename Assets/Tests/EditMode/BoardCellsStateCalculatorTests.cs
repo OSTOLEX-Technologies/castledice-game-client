@@ -7,7 +7,7 @@ using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode
 {
-    public class BoardStateCalculatorTests
+    public class BoardCellsStateCalculatorTests
     {
         [Test]
         public void GetCurrentStateTest()
@@ -19,13 +19,13 @@ namespace Tests.EditMode
             board[3, 3].AddContent(enemyCastle);
             board[2, 2].AddContent(GetKnight());
             board[1, 1].AddContent(GetKnight());
-            var boardStateCalculator = new BoardStateCalculator(board);
+            var boardStateCalculator = new BoardCellsStateCalculator(board);
             var expected = new CellState[,]
             {
-                {CellState.Friendly, CellState.Free, CellState.Free, CellState.Free},
+                {CellState.FriendlyBase, CellState.Free, CellState.Free, CellState.Free},
                 {CellState.Free, CellState.Enemy, CellState.Free, CellState.Free},
                 {CellState.Free, CellState.Free, CellState.Enemy, CellState.Free},
-                {CellState.Free, CellState.Free, CellState.Free, CellState.Enemy}
+                {CellState.Free, CellState.Free, CellState.Free, CellState.EnemyBase}
             };
             
             var actual = boardStateCalculator.GetCurrentBoardState(playerCastle.GetOwner());
@@ -36,23 +36,27 @@ namespace Tests.EditMode
         [Test]
         public void GetBoardStateAfterPlayerMoveTest()
         {
-            var board = GetFullNByNBoard(4);
+            var board = GetFullNByNBoard(6);
             var playerCastle = GetCastle();
             var enemyCastle = GetCastle();
             board[0, 0].AddContent(playerCastle);
-            board[3, 3].AddContent(enemyCastle);
+            board[5, 5].AddContent(enemyCastle);
+            board[4, 4].AddContent(GetKnight());
+            board[3, 3].AddContent(GetKnight());
             board[2, 2].AddContent(GetKnight());
             board[1, 1].AddContent(GetKnight());
-            var boardStateCalculator = new BoardStateCalculator(board);
-            var expected = new CellState[,]
+            var boardStateCalculator = new BoardCellsStateCalculator(board);
+            var expected = new CellState[,] 
             {
-                {CellState.Friendly, CellState.Free, CellState.Free, CellState.Free},
-                {CellState.Free, CellState.Free, CellState.Free, CellState.Free},
-                {CellState.Free, CellState.Free, CellState.Friendly, CellState.Free},
-                {CellState.Free, CellState.Free, CellState.Free, CellState.Enemy}
+                {CellState.FriendlyBase, CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free},
+                {CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free},
+                {CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free},
+                {CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free},
+                {CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Friendly, CellState.Free},
+                {CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.Free, CellState.EnemyBase}
             };
             
-            var actual = boardStateCalculator.GetBoardStateAfterPlayerMove(new ReplaceMove(playerCastle.GetOwner(), (2, 2), new Knight(playerCastle.GetOwner(), 1, 1)));
+            var actual = boardStateCalculator.GetBoardStateAfterPlayerMove(new ReplaceMove(playerCastle.GetOwner(), (4, 4), new Knight(playerCastle.GetOwner(), 1, 1)));
             
             Assert.AreEqual(expected, actual);
         }

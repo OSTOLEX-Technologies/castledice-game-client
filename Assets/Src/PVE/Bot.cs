@@ -32,7 +32,11 @@ namespace Src.PVE
 
         private async void TryMakeMove()
         {
-            await Task.Delay(3000);
+            if (_game.GetCurrentPlayer() != _game.GetPlayer(_botPlayerId))
+            {
+                return;
+            }
+            await Task.Delay(500);
             var possibleMoves = _totalPossibleMovesProvider.GetTotalPossibleMoves(_botPlayerId);
             if (possibleMoves.Count == 0)
             {

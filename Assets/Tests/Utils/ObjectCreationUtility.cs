@@ -299,12 +299,22 @@ namespace Tests
         
         public static CastleGO GetCastle()
         {
-            return new CastleGO(GetPlayer(id: 1), 3, 3, 1, 1);
-        }
+            return GetCastle(GetPlayer());
+        }        
         
+        public static CastleGO GetCastle(Player player, int durability = 3, int maxDurability = 3, int maxFreeDurability = 1, int captureHitCost = 1)
+        {
+            return new CastleGO(player, durability, maxDurability, maxFreeDurability, captureHitCost);
+        }
+
         public static Knight GetKnight()
         {
-            return new Knight(GetPlayer(id: 1), 1, 2);
+            return GetKnight(GetPlayer());
+        }
+        
+        public static Knight GetKnight(Player player, int placementCost = 1, int health = 2)
+        {
+            return new Knight(player, placementCost, health);
         }
         
         public static Tree GetTree()

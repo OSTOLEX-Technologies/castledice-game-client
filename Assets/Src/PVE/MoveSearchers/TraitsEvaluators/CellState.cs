@@ -4,6 +4,8 @@
     {
         Free,
         Enemy,
-        Friendly
+        Friendly,
+        EnemyBase,
+        FriendlyBase
     }
 }

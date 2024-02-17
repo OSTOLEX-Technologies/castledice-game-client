@@ -373,10 +373,21 @@ private void SetUpUpdaters()
 
     private void SetUpBot()
     {
+        var botPlayer = _game.GetPlayer(2);
+        var board = _game.GetBoard();
         var localMoveApplier = new LocalMovesApplier(_game);
+        var boardStateCalculator = new BoardCellsStateCalculator(board);
+        var distancesCalculator = new BoardStateDistancesCalculator();
         var totalPossibleMovesProvider = new TotalPossibleMovesProvider(_game);
-        var moveDestructivenessEvaluator = new DestructivenessEvaluator(_game.GetBoard(), _game.GetPlayer(2), new BoardStateCalculator(_game.GetBoard()));
-        var bestMoveSearcher = new BalancedMoveSearcher(moveDestructivenessEvaluator, moveDestructivenessEvaluator, moveDestructivenessEvaluator);
+        var moveDestructivenessEvaluator = new EnemyUnitsLossEvaluator(boardStateCalculator);
+        var moveDefensivenessEvaluator = new WeightedEnemyProximityDeltaEvaluator(board, boardStateCalculator, new DijkstraMinPathCostSearcher());
+        var bestMoveSearcher = new BalancedMoveSearcher(
+            moveDestructivenessEvaluator, 
+            moveDestructivenessEvaluator, 
+            moveDefensivenessEvaluator,
+            distancesCalculator, 
+            boardStateCalculator,
+            botPlayer);
         _bot = new Bot(localMoveApplier, totalPossibleMovesProvider, bestMoveSearcher, _game, 2);
     }
 

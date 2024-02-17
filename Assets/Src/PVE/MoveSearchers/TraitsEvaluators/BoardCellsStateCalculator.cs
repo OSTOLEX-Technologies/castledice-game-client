@@ -8,12 +8,12 @@ using CastleGO = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.PVE.MoveSearchers.TraitsEvaluators
 {
-    public class BoardStateCalculator : IBoardStateCalculator
+    public class BoardCellsStateCalculator : IBoardCellsStateCalculator
     {
         private readonly Board _board;
         private readonly bool[,] _connectedCells;
 
-        public BoardStateCalculator(Board board)
+        public BoardCellsStateCalculator(Board board)
         {
             _board = board;
             _connectedCells = new bool[board.GetLength(0), board.GetLength(1)];
@@ -34,10 +34,18 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
                     else if (cell.HasContent(c => c is IPlayerOwned playerOwned && playerOwned.GetOwner() == player))
                     {
                         boardState[i, j] = CellState.Friendly;
+                        if (cell.HasContent(c => c is CastleGO))
+                        {
+                            boardState[i, j] = CellState.FriendlyBase;
+                        }
                     }
                     else
                     {
                         boardState[i, j] = CellState.Enemy;
+                        if (cell.HasContent(c => c is CastleGO))
+                        {
+                            boardState[i, j] = CellState.EnemyBase;
+                        }
                     }
                 }
             }
@@ -61,7 +69,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
                 var castle = (CastleGO) cell.GetContent().Find(c => c is CastleGO);
                 if (castle.GetDurability() <= castle.GetCaptureHitCost())
                 {
-                    boardState[movePosition.X, movePosition.Y] = CellState.Friendly;
+                    boardState[movePosition.X, movePosition.Y] = CellState.FriendlyBase;
                 }
             }
             CutUnconnectedEnemyBranches(boardState, player);
@@ -75,7 +83,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             var futureEnemyBasePositions = new List<Vector2Int>();
             foreach (var basePosition in currentEnemyBasePositions)
             {
-                if (boardState[basePosition.X, basePosition.Y] == CellState.Enemy)
+                if (boardState[basePosition.X, basePosition.Y] == CellState.EnemyBase)
                 {
                     futureEnemyBasePositions.Add(basePosition);
                 }
@@ -116,13 +124,18 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
                     int nextX = x + i;
                     int nextY = y + j;
                     if (!_board.HasCell(nextX, nextY) || _connectedCells[nextX, nextY]) continue;
-                    if (boardState[x, y] == CellState.Enemy && 
-                        boardState[nextX, nextY] == CellState.Enemy)
+                    if (IsEnemyState(boardState[x, y]) && 
+                        IsEnemyState(boardState[nextX, nextY]))
                     {
                         MarkConnectedCells(nextX, nextY, boardState);
                     }
                 }
             }
+        }
+
+        private bool IsEnemyState(CellState state)
+        {
+            return state is CellState.Enemy or CellState.EnemyBase;
         }
 
         private void SetAllEnemyCellsFree(CellState[,] boardState)
