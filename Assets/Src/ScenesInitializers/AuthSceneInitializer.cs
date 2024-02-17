@@ -2,13 +2,7 @@ using System;
 using Src.Auth;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
-using Src.Auth.CredentialProviders.Metamask;
-using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
-using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
-using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
-using Src.Auth.JwtManagement.Converters.Metamask;
-using Src.Auth.REST;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using Src.Components;
@@ -46,14 +40,7 @@ namespace Src.ScenesInitializers
                         new FirebaseCredentialProvider(
                             new FirebaseInternalCredentialProviderCreator(textAssetResourceLoader),
                             new FirebaseCredentialFormatter())), 
-                    new MetamaskTokenProvidersCreator(
-                        new MetamaskBackendCredentialProvider(
-                            _metamaskWalletFacade,
-                            new MetamaskSignerFacade(),
-                            new MetamaskRestRequestsAdapter(
-                                new HttpClientRequestAdapter(),
-                                new MetamaskBackendUrlProvider()),
-                            new MetamaskJwtConverter()))),
+                    new MetamaskTokenProvidersCreator()),
                 _singletonCacher, 
                 authView);
 

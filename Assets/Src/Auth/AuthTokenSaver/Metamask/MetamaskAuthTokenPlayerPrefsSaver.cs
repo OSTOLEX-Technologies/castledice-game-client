@@ -8,7 +8,7 @@ namespace Src.Auth.AuthTokenSaver.Metamask
         protected static string MetamaskStorePrefName =>
             MetamaskStorePrefNamePrefix + IAuthTokenSaver.StorePrefNamePostfix;
 
-        public void TryGetMetamaskAuthTokenStoreAsync(out JwtStore store);
-        public void SaveMetamaskAuthTokensAsync(JwtStore store);
+        public void TryGetMetamaskAuthTokenStore(out JwtStore store);
+        public void SaveMetamaskAuthTokens(JwtStore store);
     }
 }

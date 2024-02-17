@@ -13,7 +13,7 @@ namespace Src.Auth.AuthTokenSaver.Metamask
             _playerPrefsSaver = playerPrefsSaver;
         }
 
-        public void TryGetMetamaskAuthTokenStoreAsync(out JwtStore store)
+        public void TryGetMetamaskAuthTokenStore(out JwtStore store)
         {
             if (_playerPrefsSaver.TryGetStringValue(
                     IMetamaskAuthTokenSaver.MetamaskStorePrefName, 
@@ -26,7 +26,7 @@ namespace Src.Auth.AuthTokenSaver.Metamask
             store = null;
         }
 
-        public void SaveMetamaskAuthTokensAsync(JwtStore store)
+        public void SaveMetamaskAuthTokens(JwtStore store)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
             _playerPrefsSaver.SaveStringValue(

@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Src.Auth.AuthTokenSaver.Metamask;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
@@ -18,18 +19,23 @@ namespace Src.Auth.CredentialProviders.Metamask
         private readonly IMetamaskSignerFacade _signerFacade;
         private readonly IMetamaskRestRequestsAdapter _metamaskRestRequestsAdapter;
         private readonly IMetamaskJwtConverter _jwtConverter;
+        private readonly IMetamaskAuthTokenSaver _authTokenSaver;
+
         private JwtStore _tokenStore;
 
         public MetamaskBackendCredentialProvider(
             IMetamaskWalletFacade walletFacade, 
             IMetamaskSignerFacade signerFacade, 
             IMetamaskRestRequestsAdapter metamaskRestRequestsAdapter,
-            IMetamaskJwtConverter jwtConverter)
+            IMetamaskJwtConverter jwtConverter,
+            IMetamaskAuthTokenSaver authTokenSaver)
         {
             _walletFacade = walletFacade;
             _signerFacade = signerFacade;
             _metamaskRestRequestsAdapter = metamaskRestRequestsAdapter;
             _jwtConverter = jwtConverter;
+            _authTokenSaver = authTokenSaver;
+            _authTokenSaver.TryGetMetamaskAuthTokenStore(out _tokenStore);
         }
 
         public async Task<string> GetCredentialAsync()
@@ -45,6 +51,7 @@ namespace Src.Auth.CredentialProviders.Metamask
                 // var accessResponse = await Auth(signedNonce);
                 //
                 // _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
+                // _authTokenSaver.SaveMetamaskAuthTokens(_tokenStore);
                 // return _tokenStore.AccessToken.Token;
                 
                 return "metamask_access_token_stub";
@@ -54,7 +61,8 @@ namespace Src.Auth.CredentialProviders.Metamask
             {
                 var refreshResponse = await RefreshTokens();
                 _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
-
+                _authTokenSaver.SaveMetamaskAuthTokens(_tokenStore);
+                
                 return _tokenStore.AccessToken.Token;
             }
             

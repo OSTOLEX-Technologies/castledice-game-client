@@ -75,6 +75,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                 _authUrlOpener = new Mock<IUrlOpener>();
                 _localHttpListener = new Mock<ILocalHttpPortListener>();
                 _jwtConverter = new Mock<IGoogleJwtConverter>();
+                _authTokenSaver = new Mock<IFirebaseAuthTokenSaver>();
             }
             
             public void SetRequestAdapterAuth(GoogleIdTokenResponse responseStub)
