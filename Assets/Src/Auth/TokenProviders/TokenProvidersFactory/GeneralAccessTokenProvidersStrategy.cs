@@ -7,8 +7,7 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
     {
         private readonly IFirebaseTokenProvidersCreator _firebaseProviderCreator;
         private readonly IMetamaskTokenProvidersCreator _metamaskProvidersCreator;
-        private readonly 
-        
+
         public GeneralAccessTokenProvidersStrategy(
             IFirebaseTokenProvidersCreator firebaseProviderCreator,
             IMetamaskTokenProvidersCreator metamaskProvidersCreator)

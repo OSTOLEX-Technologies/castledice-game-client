@@ -2,34 +2,18 @@ using Newtonsoft.Json;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.JwtManagement;
 
-namespace Src.Auth.AuthTokenSaver
+namespace Src.Auth.AuthTokenSaver.Firebase
 {
-    public class AuthTokenPlayerPrefsSaver : IAuthTokenSaver
+    public class FirebaseAuthTokenSaver : IFirebaseAuthTokenSaver
     {
-        private const string MetamaskStorePrefNamePrefix = "Metamask";
-        private string MetamaskStorePrefName => MetamaskStorePrefNamePrefix + IAuthTokenSaver.StorePrefNamePostfix;
-
         private readonly IPlayerPrefsStringSaver _playerPrefsSaver;
 
-        public AuthTokenPlayerPrefsSaver(IPlayerPrefsStringSaver playerPrefsSaver)
+        public FirebaseAuthTokenSaver(IPlayerPrefsStringSaver playerPrefsSaver)
         {
             _playerPrefsSaver = playerPrefsSaver;
         }
-
-        public void TryGetMetamaskAuthTokenStoreAsync(out JwtStore store)
-        {
-            if (_playerPrefsSaver.TryGetStringValue(
-                    MetamaskStorePrefName, 
-                    out var storedValue))
-            {
-                store = JsonConvert.DeserializeObject<JwtStore>(storedValue);
-                return;
-            }
-
-            store = null;
-        }
-
-        public void TryGetFirebaseTokenStoreByAuthTypeAsync(out JwtStore store, FirebaseAuthProviderType providerType)
+        
+        public void TryGetTokenStoreByAuthType(out JwtStore store, FirebaseAuthProviderType providerType)
         {
             if (_playerPrefsSaver.TryGetStringValue(
                     FormatFirebaseStorePrefNameByAuthType(providerType), 
@@ -41,14 +25,20 @@ namespace Src.Auth.AuthTokenSaver
 
             store = null;
         }
-
-        public void SaveMetamaskAuthTokensAsync(JwtStore store)
+        public void TryGetGoogleTokenStore(out GoogleJwtStore store)
         {
-            var serializedStore = JsonConvert.SerializeObject(store); 
-            _playerPrefsSaver.SaveStringValue(MetamaskStorePrefName, serializedStore);
+            if (_playerPrefsSaver.TryGetStringValue(
+                    FormatFirebaseStorePrefNameByAuthType(FirebaseAuthProviderType.Google), 
+                    out var storedValue))
+            {
+                store = JsonConvert.DeserializeObject<GoogleJwtStore>(storedValue);
+                return;
+            }
+
+            store = null;
         }
 
-        public void SaveFirebaseAuthTokensAsync(JwtStore store, FirebaseAuthProviderType providerType)
+        public void SaveAuthTokens(JwtStore store, FirebaseAuthProviderType providerType)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
             _playerPrefsSaver.SaveStringValue(FormatFirebaseStorePrefNameByAuthType(providerType), serializedStore);

@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Src.Auth.AuthKeys;
+using Src.Auth.AuthTokenSaver.Firebase;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.JwtManagement;
 using Src.Auth.JwtManagement.Converters.Google;
@@ -19,6 +20,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
         private readonly IUrlOpener _oAuthUrlOpener;
         private readonly ILocalHttpPortListener _localHttpPortListener;
         private readonly IGoogleJwtConverter _jwtConverter;
+        private readonly IFirebaseAuthTokenSaver _authTokenSaver;
 
         private GoogleJwtStore _tokenStore;
 
@@ -26,12 +28,15 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             IGoogleRestRequestsAdapter restRequestsAdapter, 
             IUrlOpener oAuthUrlOpener, 
             ILocalHttpPortListener localHttpPortListener,
-            IGoogleJwtConverter jwtConverter)
+            IGoogleJwtConverter jwtConverter,
+            IFirebaseAuthTokenSaver authTokenSaver)
         {
             _restRequestsAdapter = restRequestsAdapter;
             _oAuthUrlOpener = oAuthUrlOpener;
             _localHttpPortListener = localHttpPortListener;
             _jwtConverter = jwtConverter;
+            _authTokenSaver = authTokenSaver;
+            _authTokenSaver.TryGetGoogleTokenStore(out _tokenStore);
         }
         
         public async Task<GoogleJwtStore> GetCredentialAsync()
@@ -42,6 +47,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
                 var authResponse = await GetAuthData();;
                 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
+                _authTokenSaver.SaveAuthTokens(_tokenStore, FirebaseAuthProviderType.Google);
 
                 return _tokenStore;
             }
@@ -52,6 +58,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
                 var refreshResponse = await RefreshAccessToken();
 
                 _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
+                _authTokenSaver.SaveAuthTokens(_tokenStore, FirebaseAuthProviderType.Google);
 
                 return _tokenStore;
             }
