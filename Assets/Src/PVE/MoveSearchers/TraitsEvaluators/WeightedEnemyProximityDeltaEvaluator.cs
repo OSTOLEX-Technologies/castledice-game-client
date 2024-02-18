@@ -35,7 +35,12 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             var cellsStateAfterMove = _boardCellsStateCalculator.GetBoardStateAfterPlayerMove(move);
             var enemyPositionsAfterMove = GetEnemyPositions(cellsStateAfterMove);
             var distancesToClosestEnemiesAfterMove = GetDistancesToClosestEnemies(enemyPositionsAfterMove, costsAfterMove);
-            
+
+            //If move leads to no enemies, then it is the best move
+            if (distancesToClosestEnemiesAfterMove.Count == 0)
+            {
+                return 1;
+            }
             var distanceChanged = distancesToClosestEnemiesBeforeMove.First() != distancesToClosestEnemiesAfterMove.First();
             if (distanceChanged)
             {

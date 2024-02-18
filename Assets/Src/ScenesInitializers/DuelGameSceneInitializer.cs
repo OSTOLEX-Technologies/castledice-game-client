@@ -375,14 +375,22 @@ private void SetUpUpdaters()
     {
         var botPlayer = _game.GetPlayer(2);
         var botBasePosition = new Vector2Int(9, 9);
+        var playerBasePosition = new Vector2Int(0, 0);
         var board = _game.GetBoard();
         var localMoveApplier = new LocalMovesApplier(_game);
         var dfsValuesCutter = new DfsUnconnectedValuesCutter<CellState>();
         var boardStateCalculator = new BoardCellsStateCalculator(board, dfsValuesCutter);
         var distancesCalculator = new BoardStateDistancesCalculator();
         var totalPossibleMovesProvider = new TotalPossibleMovesProvider(_game);
+        var unitsStructureCalculator = new UnitsStructureCalculator(dfsValuesCutter, depth: 1);
+        var moveEnhancivenessEvaluator = new StructureDeltaEvaluator(boardStateCalculator, unitsStructureCalculator);
         var moveDestructivenessEvaluator = new EnemyUnitsLossEvaluator(boardStateCalculator);
         var boardCostCalculator = new BoardCellsCostCalculator(board, boardStateCalculator);
+        var moveAggressivenessEvaluator = new WeightedEnemyBaseProximityDeltaEvaluator(
+            new DijkstraMinPathCostSearcher(), 
+            boardCostCalculator, 
+            boardStateCalculator, 
+            playerBasePosition);
         var moveDefensivenessEvaluator = new WeightedEnemyProximityDeltaEvaluator(
             new DijkstraMinPathCostSearcher(), 
             boardCostCalculator, 
@@ -390,11 +398,12 @@ private void SetUpUpdaters()
             botBasePosition);
         var bestMoveSearcher = new BalancedMoveSearcher(
             moveDestructivenessEvaluator, 
-            moveDestructivenessEvaluator, 
+            moveAggressivenessEvaluator, 
             moveDefensivenessEvaluator,
             distancesCalculator, 
             boardStateCalculator,
-            botPlayer);
+            botPlayer,
+            moveEnhancivenessEvaluator);
         _bot = new Bot(localMoveApplier, totalPossibleMovesProvider, bestMoveSearcher, _game, 2);
     }
 
