@@ -559,7 +559,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013085728527062925, guid: e6f8c9ce36dae324e8199d481696e85d, type: 3}
       propertyPath: m_AnchoredPosition.x
-      value: 1646.5
+      value: 1537.94
       objectReference: {fileID: 0}
     - target: {fileID: 7013085728527062925, guid: e6f8c9ce36dae324e8199d481696e85d, type: 3}
       propertyPath: m_AnchoredPosition.y
@@ -1391,7 +1391,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8674514082236202673, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
       propertyPath: m_text
-      value: Zashishalovo
+      value: Zashishalovo 2.0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8674514082236202673, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
+      propertyPath: m_fontSize
+      value: 39.55
       objectReference: {fileID: 0}
     - target: {fileID: 8674514083394302991, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
       propertyPath: m_Pivot.x

@@ -11,12 +11,12 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
     public class BoardCellsStateCalculator : IBoardCellsStateCalculator
     {
         private readonly Board _board;
-        private readonly bool[,] _connectedCells;
+        private readonly IUnconnectedValuesCutter<CellState> _unconnectedValuesCutter;
 
-        public BoardCellsStateCalculator(Board board)
+        public BoardCellsStateCalculator(Board board, IUnconnectedValuesCutter<CellState> unconnectedValuesCutter)
         {
             _board = board;
-            _connectedCells = new bool[board.GetLength(0), board.GetLength(1)];
+            _unconnectedValuesCutter = unconnectedValuesCutter;
         }
 
         public CellState[,] GetCurrentBoardState(Player player)
@@ -72,109 +72,9 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
                     boardState[movePosition.X, movePosition.Y] = CellState.FriendlyBase;
                 }
             }
-            CutUnconnectedEnemyBranches(boardState, player);
-            return boardState;
+            var boardStateWithCutUnconnected = _unconnectedValuesCutter.CutUnconnectedUnits(boardState, CellState.Enemy, CellState.EnemyBase, CellState.Free);
+            return boardStateWithCutUnconnected;
         }
         
-        private void CutUnconnectedEnemyBranches(CellState[,] boardState, Player player)
-        {
-            ResetConnectedCells();
-            var currentEnemyBasePositions = GetEnemyBasePositions(player);
-            var futureEnemyBasePositions = new List<Vector2Int>();
-            foreach (var basePosition in currentEnemyBasePositions)
-            {
-                if (boardState[basePosition.X, basePosition.Y] == CellState.EnemyBase)
-                {
-                    futureEnemyBasePositions.Add(basePosition);
-                }
-            }
-            if (futureEnemyBasePositions.Count == 0)
-            {
-                SetAllEnemyCellsFree(boardState);
-                return;
-            }
-            foreach (var enemyBasePosition in futureEnemyBasePositions)
-            {
-                MarkConnectedCells(enemyBasePosition.X, enemyBasePosition.Y, boardState);
-            }
-            SetNotConnectedEnemyCellsFree(boardState);
-        }
-        
-        private void SetNotConnectedEnemyCellsFree(CellState[,] boardState)
-        {
-            for (int i = 0; i < _connectedCells.GetLength(0); i++)
-            {
-                for (int j = 0; j < _connectedCells.GetLength(1); j++)
-                {
-                    if (boardState[i, j] == CellState.Enemy && !_connectedCells[i, j])
-                    {
-                        boardState[i, j] = CellState.Free;
-                    }
-                }
-            }
-        }
-
-        private void MarkConnectedCells(int x, int y, CellState[,] boardState)
-        {
-            _connectedCells[x, y] = true;
-            for (int i = -1; i <= 1; i++)
-            {
-                for (int j = -1; j <= 1; j++)
-                {
-                    int nextX = x + i;
-                    int nextY = y + j;
-                    if (!_board.HasCell(nextX, nextY) || _connectedCells[nextX, nextY]) continue;
-                    if (IsEnemyState(boardState[x, y]) && 
-                        IsEnemyState(boardState[nextX, nextY]))
-                    {
-                        MarkConnectedCells(nextX, nextY, boardState);
-                    }
-                }
-            }
-        }
-
-        private bool IsEnemyState(CellState state)
-        {
-            return state is CellState.Enemy or CellState.EnemyBase;
-        }
-
-        private void SetAllEnemyCellsFree(CellState[,] boardState)
-        {
-            for (int i = 0; i < boardState.GetLength(0); i++)
-            {
-                for (int j = 0; j < boardState.GetLength(1); j++)
-                {
-                    if (boardState[i, j] == CellState.Enemy)
-                    {
-                        boardState[i, j] = CellState.Free;
-                    }
-                }
-            }
-        }
-
-        private List<Vector2Int> GetEnemyBasePositions(Player player)
-        {
-            var enemyBasePositions = new List<Vector2Int>();
-            foreach (var cell in _board)
-            {
-                if (cell.HasContent(c => c is CastleGO castle && castle.GetOwner() != player))
-                {
-                    enemyBasePositions.Add(cell.Position);
-                }
-            }
-            
-            return enemyBasePositions;
-        }
-
-        private void ResetConnectedCells()
-        {
-            for (int i = 0; i < _connectedCells.GetLength(0); i++)
-            {
-                for (int j = 0; j < _connectedCells.GetLength(1); j++)
-                {
-                    _connectedCells[i, j] = false;
-                }
-            }
-        }
     }
 }

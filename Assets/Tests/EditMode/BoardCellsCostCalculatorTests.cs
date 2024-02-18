@@ -3,6 +3,7 @@ using castledice_game_logic.MovesLogic;
 using Moq;
 using NUnit.Framework;
 using Src.PVE.MoveSearchers.TraitsEvaluators;
+using Src.PVE.TraitsEvaluators;
 using static Tests.ObjectCreationUtility;
 
 namespace Tests.EditMode
@@ -156,7 +157,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //Second case with 3 by 3 field, 1 player castle, 1 enemy castle and 1 enemy knight on it.
@@ -188,7 +189,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //Third case with 4 by 4 field, 1 player castle, 1 enemy castle, 2 enemy knights and 2 player knights on it.
@@ -226,7 +227,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //The fourth case is similar to previous one, except there are 3 player knights and the move tries to capture enemy castle.
@@ -268,7 +269,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //The last case is the same as fourth, however here player successfully caputres the enemy castle.
@@ -309,7 +310,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
         }
@@ -347,7 +348,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //Second case with 3 by 3 field, 1 player castle, 1 enemy castle and 1 enemy knight on it.
@@ -379,7 +380,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //Third case with 4 by 4 field, 1 player castle, 1 enemy castle, 2 enemy knights and 2 player knights on it.
@@ -417,7 +418,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //The fourth case is similar to previous one, except there are 3 player knights and the move tries to capture enemy castle.
@@ -459,7 +460,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
             //The last case is the same as fourth, however here player successfully caputres the enemy castle.
@@ -500,7 +501,7 @@ namespace Tests.EditMode
                     EnemyCapturableContentCost = enemyCapturableContentCost,
                     NotRemovableObstaclesCost = notRemovableObstaclesCost,
                     UndefinedCellCost = undefinedCellCost,
-                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board)
+                    BoardCellsStateCalculator = new BoardCellsStateCalculator(board, new DfsUnconnectedValuesCutter<CellState>())
                 };
             }
         }

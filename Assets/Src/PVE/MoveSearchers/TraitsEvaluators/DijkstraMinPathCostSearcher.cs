@@ -71,7 +71,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             }
 
             // Возвращаем значение расстояния до целевой точки
-            return distance[endX, endY];
+            return distance[endX, endY] - graph[endX, endY];
         }
     }
 }

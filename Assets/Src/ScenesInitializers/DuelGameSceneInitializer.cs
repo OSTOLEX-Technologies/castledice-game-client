@@ -7,7 +7,6 @@ using castledice_game_data_logic.MoveConverters;
 using castledice_game_data_logic.Moves;
 using castledice_game_data_logic.TurnSwitchConditions;
 using castledice_game_logic;
-using castledice_game_logic.GameConfiguration;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
@@ -60,6 +59,7 @@ using Src.GameplayView.Updatables;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 using Src.PlayerInput;
 using Src.PVE;
 using Src.PVE.MoveSearchers.TraitsEvaluators;
@@ -374,13 +374,20 @@ private void SetUpUpdaters()
     private void SetUpBot()
     {
         var botPlayer = _game.GetPlayer(2);
+        var botBasePosition = new Vector2Int(9, 9);
         var board = _game.GetBoard();
         var localMoveApplier = new LocalMovesApplier(_game);
-        var boardStateCalculator = new BoardCellsStateCalculator(board);
+        var dfsValuesCutter = new DfsUnconnectedValuesCutter<CellState>();
+        var boardStateCalculator = new BoardCellsStateCalculator(board, dfsValuesCutter);
         var distancesCalculator = new BoardStateDistancesCalculator();
         var totalPossibleMovesProvider = new TotalPossibleMovesProvider(_game);
         var moveDestructivenessEvaluator = new EnemyUnitsLossEvaluator(boardStateCalculator);
-        var moveDefensivenessEvaluator = new WeightedEnemyProximityDeltaEvaluator(board, boardStateCalculator, new DijkstraMinPathCostSearcher());
+        var boardCostCalculator = new BoardCellsCostCalculator(board, boardStateCalculator);
+        var moveDefensivenessEvaluator = new WeightedEnemyProximityDeltaEvaluator(
+            new DijkstraMinPathCostSearcher(), 
+            boardCostCalculator, 
+            boardStateCalculator, 
+            botBasePosition);
         var bestMoveSearcher = new BalancedMoveSearcher(
             moveDestructivenessEvaluator, 
             moveDestructivenessEvaluator, 

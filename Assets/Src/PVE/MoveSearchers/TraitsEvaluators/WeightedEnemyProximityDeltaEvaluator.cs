@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
+using System.Linq;
 using castledice_game_logic;
-using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Src.PVE.TraitsEvaluators;
@@ -10,167 +10,85 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
 {
     public class WeightedEnemyProximityDeltaEvaluator : IMoveTraitEvaluator
     {
-        private readonly Board _board;
+        private readonly IBoardCellsCostCalculator _boardCellsCostCalculator;
         private readonly IBoardCellsStateCalculator _boardCellsStateCalculator;
         private readonly IGraphPathMinCostSearcher _graphPathMinCostSearcher;
+        private readonly Vector2Int _basePosition;
 
-        public WeightedEnemyProximityDeltaEvaluator(Board board, IBoardCellsStateCalculator boardCellsStateCalculator, IGraphPathMinCostSearcher graphPathMinCostSearcher)
+        public WeightedEnemyProximityDeltaEvaluator(IGraphPathMinCostSearcher graphPathMinCostSearcher, IBoardCellsCostCalculator boardCellsCostCalculator, IBoardCellsStateCalculator boardCellsStateCalculator, Vector2Int basePosition)
         {
-            _board = board;
-            _boardCellsStateCalculator = boardCellsStateCalculator;
             _graphPathMinCostSearcher = graphPathMinCostSearcher;
+            _boardCellsCostCalculator = boardCellsCostCalculator;
+            _boardCellsStateCalculator = boardCellsStateCalculator;
+            _basePosition = basePosition;
         }
 
         public float EvaluateTrait(AbstractMove move)
         {
-            var costsGraphBeforeMove = GetCostsGraph(move.Player);
-            var friendlyBasesBeforeMove = GetFriendlyBasesPositions(move.Player);
-            var enemiesPositionsBeforeMove = GetEnemiesPositions(move.Player);
-            var minimalEnemyProximityBeforeMove = GetMinimalEnemyProximity(friendlyBasesBeforeMove, enemiesPositionsBeforeMove, costsGraphBeforeMove);
+            var player = move.Player;
+            var costsBeforeMove = _boardCellsCostCalculator.GetInverseCellsCosts(player);
+            var cellsStateBeforeMove = _boardCellsStateCalculator.GetCurrentBoardState(player);
+            var enemyPositionsBeforeMove = GetEnemyPositions(cellsStateBeforeMove);
+            var distancesToClosestEnemiesBeforeMove = GetDistancesToClosestEnemies(enemyPositionsBeforeMove, costsBeforeMove);
             
-            var costsGraphAfterMove = GetCostsGraphAfterMove(move);
-            var boardStateAfterMove = _boardCellsStateCalculator.GetBoardStateAfterPlayerMove(move);
-            var friendlyBasesAfterMove = new List<Vector2Int>();
-            foreach (var basePos in friendlyBasesBeforeMove)
-            {
-                if (boardStateAfterMove[basePos.X, basePos.Y] == CellState.FriendlyBase)
-                {
-                    friendlyBasesAfterMove.Add(basePos);
-                }
-            }
-            var enemiesPositionsAfterMove = new List<Vector2Int>();
-            foreach (var enemyPos in enemiesPositionsBeforeMove)
-            {
-                if (boardStateAfterMove[enemyPos.X, enemyPos.Y] == CellState.Enemy || boardStateAfterMove[enemyPos.X, enemyPos.Y] == CellState.EnemyBase)
-                {
-                    enemiesPositionsAfterMove.Add(enemyPos);
-                }
-            }
-            var minimalEnemyProximityAfterMove = GetMinimalEnemyProximity(friendlyBasesAfterMove, enemiesPositionsAfterMove, costsGraphAfterMove);
+            var costsAfterMove = _boardCellsCostCalculator.GetInverseCellsCostsAfterMove(move);
+            var cellsStateAfterMove = _boardCellsStateCalculator.GetBoardStateAfterPlayerMove(move);
+            var enemyPositionsAfterMove = GetEnemyPositions(cellsStateAfterMove);
+            var distancesToClosestEnemiesAfterMove = GetDistancesToClosestEnemies(enemyPositionsAfterMove, costsAfterMove);
             
-            return (minimalEnemyProximityAfterMove - minimalEnemyProximityBeforeMove) / (float)minimalEnemyProximityBeforeMove;
+            var distanceChanged = distancesToClosestEnemiesBeforeMove.First() != distancesToClosestEnemiesAfterMove.First();
+            if (distanceChanged)
+            {
+                //If distance changed, then it should get BIGGER
+                var oldDistance = distancesToClosestEnemiesBeforeMove.First();
+                var newDistance = distancesToClosestEnemiesAfterMove.First();
+                return (newDistance - oldDistance)/(float)oldDistance;
+            }
+            else
+            {
+                //If distance did not change, then count of closest enemies should get SMALLER
+                var oldCount = distancesToClosestEnemiesBeforeMove.Count;
+                var newCount = distancesToClosestEnemiesAfterMove.Count;
+                return (oldCount - newCount)/(float)oldCount;
+            }
         }
 
-        private int GetMinimalEnemyProximity(List<Vector2Int> friendlyBasesBeforeMove, List<Vector2Int> enemiesPositionsBeforeMove, int[,] costsGraphBeforeMove)
+        private List<int> GetDistancesToClosestEnemies(List<Vector2Int> enemyPositions, int[,] costsBeforeMove)
         {
-            var minimalEnemyProximity = int.MaxValue;
-            foreach (var friendlyBase in friendlyBasesBeforeMove)
-            {
-                foreach (var enemyPosition in enemiesPositionsBeforeMove)
-                {
-                    var costsGraphCopy = (int[,])costsGraphBeforeMove.Clone();
-                    costsGraphCopy[enemyPosition.X, enemyPosition.Y] = 0;
-                    costsGraphCopy[friendlyBase.X, friendlyBase.Y] = 0;
-                    var distance = _graphPathMinCostSearcher.FindMinCost(costsGraphCopy,friendlyBase, enemyPosition);
-                    if (distance < minimalEnemyProximity)
-                    {
-                        minimalEnemyProximity = distance;
-                    }
-                }
-            }
-
-            return minimalEnemyProximity;
+            var distancesToEnemies = GetDistancesToEnemies(enemyPositions, costsBeforeMove);
+            var minDistance = distancesToEnemies.Count > 0 ? distancesToEnemies.Min() : 0;
+            return distancesToEnemies.Where(c => c == minDistance).ToList();
         }
 
-        private List<Vector2Int> GetEnemiesPositions(Player movePlayer)
+        private List<int> GetDistancesToEnemies(List<Vector2Int> enemyPositions, int[,] costsBeforeMove)
         {
-            var enemyUnitsPositions = new List<Vector2Int>();
-            foreach (var cell in _board)
+            var distancesToEnemies = new List<int>();
+            foreach (var enemyPosition in enemyPositions)
             {
-                if (cell.HasContent(c => c is IPlayerOwned playerOwned && playerOwned.GetOwner() != movePlayer))
-                {
-                    enemyUnitsPositions.Add(cell.Position);
-                }
+                var distance = _graphPathMinCostSearcher.FindMinCost(costsBeforeMove, enemyPosition, _basePosition);
+                distancesToEnemies.Add(distance);
             }
             
-            return enemyUnitsPositions;
+            return distancesToEnemies;
         }
 
-        private List<Vector2Int> GetFriendlyBasesPositions(Player movePlayer)
+
+        private List<Vector2Int> GetEnemyPositions(CellState[,] cellStates)
         {
-            var friendlyBasesPositions = new List<Vector2Int>();
-            foreach (var cell in _board)
+            var enemyPositions = new List<Vector2Int>();
+            for (int i = 0; i < cellStates.GetLength(0); i++)
             {
-                if (cell.HasContent(c => c is IPlayerOwned playerOwned && playerOwned.GetOwner() == movePlayer))
+                for (int j = 0; j < cellStates.GetLength(1); j++)
                 {
-                    if (cell.HasContent(c => c is CastleGO))
+                    var cellState = cellStates[i, j];
+                    if (cellState == CellState.Enemy)
                     {
-                        friendlyBasesPositions.Add(cell.Position);
-                    }
-                }
-            }
-            
-            return friendlyBasesPositions;
-        }
-
-        private int[,] GetCostsGraphAfterMove(AbstractMove move)
-        {
-            var costsGraph = GetCostsGraph(move.Player);
-            var boardStateAfterMove = _boardCellsStateCalculator.GetBoardStateAfterPlayerMove(move);
-            for (int i = 0; i < costsGraph.GetLength(0); i++)
-            {
-                for (int j = 0; j < costsGraph.GetLength(1); j++)
-                {
-                    if (boardStateAfterMove[i, j] == CellState.Friendly)
-                    {
-                        costsGraph[i, j] = 3;
-                    }
-
-                    if (boardStateAfterMove[i, j] == CellState.Free)
-                    {
-                        costsGraph[i, j] = 1;
-                    }
-
-                    if (boardStateAfterMove[i, j] == CellState.EnemyBase || boardStateAfterMove[i, j] == CellState.FriendlyBase)
-                    {
-                        costsGraph[i, j] = 1000;
+                        enemyPositions.Add(new Vector2Int(i, j));
                     }
                 }
             }
 
-            return costsGraph;
-        }
-
-        private int[,] GetCostsGraph(Player movePlayer)
-        {
-            var costsGraph = new int[_board.GetLength(0), _board.GetLength(1)];
-            for (int i = 0; i < _board.GetLength(0); i++)
-            {
-                for (int j = 0; j < _board.GetLength(1); j++)
-                {
-                    var cell = _board[i, j];
-                    costsGraph[i, j] = GetCellCost(cell, movePlayer);
-                }
-            }
-
-            return costsGraph;
-        }
-        
-        private int GetCellCost(Cell cell, Player movePlayer)
-        {
-            if (!cell.HasContent())
-            {
-                return 1;
-            }
-            if (cell.HasContent(c => c is IReplaceable))
-            {
-                var replaceable = cell.GetContent().Find(c => c is IReplaceable) as IReplaceable;
-                if (replaceable is IPlayerOwned playerOwned && playerOwned.GetOwner() == movePlayer)
-                {
-                    return replaceable.GetReplaceCost();
-                }
-                return 1000;
-            }
-            if (cell.HasContent(c => c is ICapturable))
-            {
-                return 1000;
-            }
-            if (cell.HasContent(c => c is IRemovable))
-            {
-                var removable = cell.GetContent().Find(c => c is IRemovable) as IRemovable;
-                return removable.CanBeRemoved() ? removable.GetRemoveCost() : int.MaxValue;
-            }
-            return 1000;
+            return enemyPositions;
         }
     }
 }
