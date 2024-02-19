@@ -41,7 +41,17 @@ namespace Src.Auth.AuthTokenSaver.Firebase
         public void SaveAuthTokens(JwtStore store, FirebaseAuthProviderType providerType)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
-            _playerPrefsSaver.SaveStringValue(FormatFirebaseStorePrefNameByAuthType(providerType), serializedStore);
+            _playerPrefsSaver.SaveStringValue(
+                FormatFirebaseStorePrefNameByAuthType(providerType), 
+                serializedStore);
+        }
+        
+        public void SaveGoogleAuthTokens(GoogleJwtStore store)
+        {
+            var serializedStore = JsonConvert.SerializeObject(store); 
+            _playerPrefsSaver.SaveStringValue(
+                FormatFirebaseStorePrefNameByAuthType(FirebaseAuthProviderType.Google), 
+                serializedStore);
         }
 
         private string FormatFirebaseStorePrefNameByAuthType(FirebaseAuthProviderType providerType)

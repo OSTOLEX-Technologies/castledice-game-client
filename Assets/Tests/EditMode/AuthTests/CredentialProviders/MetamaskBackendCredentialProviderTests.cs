@@ -25,7 +25,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
             Assert.AreSame(
-                MetamaskCredentialProviderDirector.NoSavedTokensCredentials.AccessToken.Token, 
+                MetamaskCredentialProviderDirector.NoSavedTokensCredentials.accessToken.Token, 
                 result);
         }
         
@@ -37,7 +37,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
             Assert.AreSame(
-                MetamaskCredentialProviderDirector.ExpiredTokenCredentials.AccessToken.Token, 
+                MetamaskCredentialProviderDirector.ExpiredTokenCredentials.accessToken.Token, 
                 result);
         }
         
@@ -49,7 +49,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
             Assert.AreSame(
-                MetamaskCredentialProviderDirector.ValidTokenCredentials.AccessToken.Token, 
+                MetamaskCredentialProviderDirector.ValidTokenCredentials.accessToken.Token, 
                 result);
         }
         

@@ -10,11 +10,11 @@ namespace Src.Auth.JwtManagement
     {
         [JsonProperty]
         [JsonPropertyName("id_token")]
-        public IJwtToken IdToken;
+        public JwtToken idToken;
 
-        public GoogleJwtStore(IJwtToken idToken, IJwtToken accessToken, IJwtToken refreshToken) : base(accessToken, refreshToken)
+        public GoogleJwtStore(JwtToken idToken, JwtToken accessToken, JwtToken refreshToken) : base(accessToken, refreshToken)
         {
-            IdToken = idToken;
+            this.idToken = idToken;
         }
     }
 }

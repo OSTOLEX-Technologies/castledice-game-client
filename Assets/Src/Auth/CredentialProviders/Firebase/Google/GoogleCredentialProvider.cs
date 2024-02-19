@@ -47,18 +47,18 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
                 var authResponse = await GetAuthData();;
                 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
-                _authTokenSaver.SaveAuthTokens(_tokenStore, FirebaseAuthProviderType.Google);
+                _authTokenSaver.SaveGoogleAuthTokens(_tokenStore);
 
                 return _tokenStore;
             }
 
-            if (!_tokenStore.AccessToken.Valid)
+            if (!_tokenStore.accessToken.Valid)
             {
                 Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
                 var refreshResponse = await RefreshAccessToken();
 
                 _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
-                _authTokenSaver.SaveAuthTokens(_tokenStore, FirebaseAuthProviderType.Google);
+                _authTokenSaver.SaveGoogleAuthTokens(_tokenStore);
 
                 return _tokenStore;
             }
@@ -101,7 +101,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             var requestParamsDto = new GoogleRefreshTokenRequestDtoProxy(
                 GoogleAuthConfig.ClientId,
                 GoogleAuthConfig.ClientSecret,
-                _tokenStore.RefreshToken.Token);
+                _tokenStore.refreshToken.Token);
             
             var response = await _restRequestsAdapter.RefreshAccessToken(requestParamsDto);
 

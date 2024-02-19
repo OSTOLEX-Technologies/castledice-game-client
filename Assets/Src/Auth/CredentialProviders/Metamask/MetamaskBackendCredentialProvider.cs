@@ -57,16 +57,16 @@ namespace Src.Auth.CredentialProviders.Metamask
                 return "metamask_access_token_stub";
             }
             
-            if (!_tokenStore.AccessToken.Valid)
+            if (!_tokenStore.accessToken.Valid)
             {
                 var refreshResponse = await RefreshTokens();
                 _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
                 _authTokenSaver.SaveMetamaskAuthTokens(_tokenStore);
                 
-                return _tokenStore.AccessToken.Token;
+                return _tokenStore.accessToken.Token;
             }
             
-            return _tokenStore.AccessToken.Token;
+            return _tokenStore.accessToken.Token;
         }
 
         private async Task WaitForWalletConnect()
@@ -100,7 +100,7 @@ namespace Src.Auth.CredentialProviders.Metamask
         private async Task<MetamaskRefreshTokenResponse> RefreshTokens()
         {
             var refreshResponse = await _metamaskRestRequestsAdapter.RefreshAccessTokens(
-                new MetamaskRefreshRequestDtoProxy(_tokenStore.RefreshToken.Token));
+                new MetamaskRefreshRequestDtoProxy(_tokenStore.refreshToken.Token));
 
             return refreshResponse;
         }

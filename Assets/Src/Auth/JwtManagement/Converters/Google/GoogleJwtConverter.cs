@@ -32,9 +32,9 @@ namespace Src.Auth.JwtManagement.Converters.Google
                 DateTime.Now);
 
             return new GoogleJwtStore(
-                oldStore.IdToken,
+                oldStore.idToken,
                 accessToken,
-                oldStore.RefreshToken);
+                oldStore.refreshToken);
         }
     }
 }

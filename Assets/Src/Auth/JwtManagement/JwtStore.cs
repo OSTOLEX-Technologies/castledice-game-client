@@ -10,16 +10,16 @@ namespace Src.Auth.JwtManagement
     {
         [JsonProperty]
         [JsonPropertyName("access_token")]
-        public IJwtToken AccessToken;
+        public JwtToken accessToken;
         
         [JsonProperty]
         [JsonPropertyName("refresh_token")]
-        public IJwtToken RefreshToken;
+        public JwtToken refreshToken;
 
-        public JwtStore(IJwtToken accessToken, IJwtToken refreshToken)
+        public JwtStore(JwtToken accessToken, JwtToken refreshToken)
         {
-            AccessToken = accessToken;
-            RefreshToken = refreshToken;
+            this.accessToken = accessToken;
+            this.refreshToken = refreshToken;
         }
     }
 }
