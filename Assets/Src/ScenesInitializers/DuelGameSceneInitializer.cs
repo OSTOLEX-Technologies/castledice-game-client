@@ -396,6 +396,7 @@ private void SetUpUpdaters()
             boardCostCalculator, 
             boardStateCalculator, 
             botBasePosition);
+        var moveHarmfulnessEvaluator = new EnemyStructureDeltaEvaluator(boardStateCalculator, unitsStructureCalculator);
         var bestMoveSearcher = new BalancedMoveSearcher(
             moveDestructivenessEvaluator, 
             moveAggressivenessEvaluator, 
@@ -403,7 +404,8 @@ private void SetUpUpdaters()
             distancesCalculator, 
             boardStateCalculator,
             botPlayer,
-            moveEnhancivenessEvaluator);
+            moveEnhancivenessEvaluator,
+            moveHarmfulnessEvaluator);
         _bot = new Bot(localMoveApplier, totalPossibleMovesProvider, bestMoveSearcher, _game, 2);
     }
 

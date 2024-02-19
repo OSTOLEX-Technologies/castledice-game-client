@@ -23,6 +23,10 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
 
         public float EvaluateTrait(AbstractMove move)
         {
+            if (move.Position == _enemyBasePosition)
+            {
+                return 1;
+            }
             var player = move.Player;
             var costsBeforeMove = _boardCellsCostCalculator.GetCellsCosts(player);
             var cellsStateBeforeMove = _boardCellsStateCalculator.GetCurrentBoardState(player);
@@ -36,9 +40,9 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             
             var oldDistance = distancesToBaseBeforeMove.First();
             var newDistance = distancesToBaseAfterMove.First();
-            if (newDistance == 0)
+            if (newDistance == oldDistance)
             {
-                return 1;
+                return 0;
             }
             return (oldDistance - newDistance)/(float)oldDistance;
         }

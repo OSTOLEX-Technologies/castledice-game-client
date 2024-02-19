@@ -1391,7 +1391,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8674514082236202673, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
       propertyPath: m_text
-      value: FastThinker
+      value: Abiba
       objectReference: {fileID: 0}
     - target: {fileID: 8674514082236202673, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
       propertyPath: m_fontSize

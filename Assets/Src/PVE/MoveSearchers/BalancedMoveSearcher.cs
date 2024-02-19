@@ -14,20 +14,22 @@ namespace Src.PVE
             public float Destructiveness;
             public float Aggressiveness;
             public float Defensiveness;
-            public float Enahnciveness;
+            public float Enhanciveness;
+            public float Harmfulness;
         }
         
-        private Player _player;
+        private readonly Player _player;
         
-        private IMoveTraitEvaluator _destructivenessEvaluator;
-        private IMoveTraitEvaluator _aggressivenessEvaluator;
-        private IMoveTraitEvaluator _defensivenessEvaluator;
-        private IMoveTraitEvaluator _enhancivenessEvaluator;
+        private readonly IMoveTraitEvaluator _destructivenessEvaluator;
+        private readonly IMoveTraitEvaluator _aggressivenessEvaluator;
+        private readonly IMoveTraitEvaluator _defensivenessEvaluator;
+        private readonly IMoveTraitEvaluator _enhancivenessEvaluator;
+        private readonly IMoveTraitEvaluator _harmfulnessEvaluator;
 
-        private IBoardStateDistancesCalculator _distancesCalculator;
-        private IBoardCellsStateCalculator _boardCellsStateCalculator;
+        private readonly IBoardStateDistancesCalculator _distancesCalculator;
+        private readonly IBoardCellsStateCalculator _boardCellsStateCalculator;
 
-        public BalancedMoveSearcher(IMoveTraitEvaluator destructivenessEvaluator, IMoveTraitEvaluator aggressivenessEvaluator, IMoveTraitEvaluator defensivenessEvaluator, IBoardStateDistancesCalculator distancesCalculator, IBoardCellsStateCalculator boardCellsStateCalculator, Player player, IMoveTraitEvaluator enhancivenessEvaluator)
+        public BalancedMoveSearcher(IMoveTraitEvaluator destructivenessEvaluator, IMoveTraitEvaluator aggressivenessEvaluator, IMoveTraitEvaluator defensivenessEvaluator, IBoardStateDistancesCalculator distancesCalculator, IBoardCellsStateCalculator boardCellsStateCalculator, Player player, IMoveTraitEvaluator enhancivenessEvaluator, IMoveTraitEvaluator harmfulnessEvaluator)
         {
             _destructivenessEvaluator = destructivenessEvaluator;
             _aggressivenessEvaluator = aggressivenessEvaluator;
@@ -36,18 +38,23 @@ namespace Src.PVE
             _boardCellsStateCalculator = boardCellsStateCalculator;
             _player = player;
             _enhancivenessEvaluator = enhancivenessEvaluator;
+            _harmfulnessEvaluator = harmfulnessEvaluator;
         }
 
         public AbstractMove GetBestMove(List<AbstractMove> moves)
         {
             var movesToTraits = GetMovesToTraits(moves);
             var normalizedMovesToTraits = NormalizeMovesToTraits(movesToTraits);
-            if (GetEnemyProximity() < 5)
+            if (GetEnemyBaseProximity() < 1.3) //Checking if bot units are close to the player base
             {
-                return GetBestMove(normalizedMovesToTraits, 0.1f, 0f, 0.5f, 0.4f);
+                return GetBestMove(normalizedMovesToTraits, 0, 1, 0, 0, 0);
             }
-
-            return GetBestMove(normalizedMovesToTraits, 0.3f, 0.4f, 0f, 0.3f);
+            if (GetEnemyProximity() < 5) //Checking if player units are close to the bot base
+            {
+                return GetBestMove(normalizedMovesToTraits, 0.1f, 0f, 0.4f, 0.3f, 0.2f);
+            }
+            //Just moving forward
+            return GetBestMove(normalizedMovesToTraits, 0.2f, 0.4f, 0f, 0.2f, 0.2f);
         }
         
         private Dictionary<AbstractMove, MoveTraits> GetMovesToTraits(List<AbstractMove> moves)
@@ -59,12 +66,14 @@ namespace Src.PVE
                 var aggressiveness = _aggressivenessEvaluator.EvaluateTrait(move);
                 var defensiveness = _defensivenessEvaluator.EvaluateTrait(move);
                 var enhanciveness = _enhancivenessEvaluator.EvaluateTrait(move);
+                var harmfulness = _harmfulnessEvaluator.EvaluateTrait(move);
                 movesToTraits.Add(move, new MoveTraits
                 {
                     Destructiveness = destructiveness,
                     Aggressiveness = aggressiveness,
                     Defensiveness = defensiveness,
-                    Enahnciveness = enhanciveness
+                    Enhanciveness = enhanciveness,
+                    Harmfulness = harmfulness
                 });
             }
             return movesToTraits;
@@ -75,7 +84,8 @@ namespace Src.PVE
             var normalized = NormalizeTrait(movesToTraits, traits => traits.Destructiveness, (traits, value) => traits.Destructiveness = value);
             normalized = NormalizeTrait(normalized, traits => traits.Aggressiveness, (traits, value) => traits.Aggressiveness = value);
             normalized = NormalizeTrait(normalized, traits => traits.Defensiveness, (traits, value) => traits.Defensiveness = value);
-            normalized = NormalizeTrait(normalized, traits => traits.Enahnciveness, (traits, value) => traits.Enahnciveness = value);
+            normalized = NormalizeTrait(normalized, traits => traits.Enhanciveness, (traits, value) => traits.Enhanciveness = value);
+            normalized = NormalizeTrait(normalized, traits => traits.Harmfulness, (traits, value) => traits.Harmfulness = value);
             return normalized;
         }
         
@@ -108,7 +118,7 @@ namespace Src.PVE
             return normalizedMovesToTraits;
         }
 
-        private AbstractMove GetBestMove(Dictionary<AbstractMove, MoveTraits> movesToTraits, float destructivenessWeight, float aggressivenessWeight, float defensivenessWeight, float enhancivenessWeight)
+        private AbstractMove GetBestMove(Dictionary<AbstractMove, MoveTraits> movesToTraits, float destructivenessWeight, float aggressivenessWeight, float defensivenessWeight, float enhancivenessWeight, float harmfulnessWeight)
         {
             AbstractMove bestMove = null;
             var bestMoveValue = float.MinValue;
@@ -118,7 +128,8 @@ namespace Src.PVE
                 var moveValue = traits.Destructiveness * destructivenessWeight + 
                                 traits.Aggressiveness * aggressivenessWeight + 
                                 traits.Defensiveness * defensivenessWeight + 
-                                traits.Enahnciveness * enhancivenessWeight;
+                                traits.Enhanciveness * enhancivenessWeight +
+                                traits.Harmfulness * harmfulnessWeight;
                 if (moveValue > bestMoveValue)
                 {
                     bestMoveValue = moveValue;
@@ -135,6 +146,11 @@ namespace Src.PVE
             return proximity;
         }
 
-
+        private float GetEnemyBaseProximity()
+        {
+            var currentBoardState = _boardCellsStateCalculator.GetCurrentBoardState(_player);
+            var proximity = _distancesCalculator.GetMinimalDistanceBetweenCellStates(currentBoardState, CellState.Friendly, CellState.EnemyBase);
+            return proximity;
+        }
     }
 }
