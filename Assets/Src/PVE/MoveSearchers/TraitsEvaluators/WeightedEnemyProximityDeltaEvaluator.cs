@@ -35,26 +35,21 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             var cellsStateAfterMove = _boardCellsStateCalculator.GetBoardStateAfterPlayerMove(move);
             var enemyPositionsAfterMove = GetEnemyPositions(cellsStateAfterMove);
             var distancesToClosestEnemiesAfterMove = GetDistancesToClosestEnemies(enemyPositionsAfterMove, costsAfterMove);
-
-            //If move leads to no enemies, then it is the best move
-            if (distancesToClosestEnemiesAfterMove.Count == 0)
-            {
-                return 1;
-            }
+            
             var distanceChanged = distancesToClosestEnemiesBeforeMove.First() != distancesToClosestEnemiesAfterMove.First();
             if (distanceChanged)
             {
                 //If distance changed, then it should get BIGGER
                 var oldDistance = distancesToClosestEnemiesBeforeMove.First();
                 var newDistance = distancesToClosestEnemiesAfterMove.First();
-                return (newDistance - oldDistance)/(float)oldDistance;
+                return newDistance - oldDistance;
             }
             else
             {
                 //If distance did not change, then count of closest enemies should get SMALLER
                 var oldCount = distancesToClosestEnemiesBeforeMove.Count;
                 var newCount = distancesToClosestEnemiesAfterMove.Count;
-                return (oldCount - newCount)/(float)oldCount;
+                return oldCount - newCount;
             }
         }
 
@@ -86,7 +81,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
                 for (int j = 0; j < cellStates.GetLength(1); j++)
                 {
                     var cellState = cellStates[i, j];
-                    if (cellState == CellState.Enemy)
+                    if (cellState == CellState.Enemy || cellState == CellState.EnemyBase)
                     {
                         enemyPositions.Add(new Vector2Int(i, j));
                     }

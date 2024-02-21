@@ -54,7 +54,7 @@ namespace Src.PVE
                 return GetBestMove(normalizedMovesToTraits, 0.1f, 0f, 0.4f, 0.3f, 0.2f);
             }
             //Just moving forward
-            return GetBestMove(normalizedMovesToTraits, 0.2f, 0.4f, 0f, 0.2f, 0.2f);
+            return GetBestMove(normalizedMovesToTraits, 0.2f, 0.3f, 0f, 0.3f, 0.2f);
         }
         
         private Dictionary<AbstractMove, MoveTraits> GetMovesToTraits(List<AbstractMove> moves)
@@ -120,7 +120,13 @@ namespace Src.PVE
 
         private AbstractMove GetBestMove(Dictionary<AbstractMove, MoveTraits> movesToTraits, float destructivenessWeight, float aggressivenessWeight, float defensivenessWeight, float enhancivenessWeight, float harmfulnessWeight)
         {
-            AbstractMove bestMove = null;
+            var bestMoves = GetBestMoves(movesToTraits, destructivenessWeight, aggressivenessWeight, defensivenessWeight, enhancivenessWeight, harmfulnessWeight);
+            return bestMoves[UnityEngine.Random.Range(0, bestMoves.Count)];
+        }
+        
+        private List<AbstractMove> GetBestMoves(Dictionary<AbstractMove, MoveTraits> movesToTraits, float destructivenessWeight, float aggressivenessWeight, float defensivenessWeight, float enhancivenessWeight, float harmfulnessWeight)
+        {
+            var bestMoves = new List<AbstractMove>();
             var bestMoveValue = float.MinValue;
             foreach (var move in movesToTraits.Keys)
             {
@@ -133,10 +139,22 @@ namespace Src.PVE
                 if (moveValue > bestMoveValue)
                 {
                     bestMoveValue = moveValue;
-                    bestMove = move;
                 }
             }
-            return bestMove;
+            foreach (var move in movesToTraits.Keys)
+            {
+                var traits = movesToTraits[move];
+                var moveValue = traits.Destructiveness * destructivenessWeight + 
+                                traits.Aggressiveness * aggressivenessWeight + 
+                                traits.Defensiveness * defensivenessWeight + 
+                                traits.Enhanciveness * enhancivenessWeight +
+                                traits.Harmfulness * harmfulnessWeight;
+                if (Math.Abs(moveValue - bestMoveValue) < 0.01) //0.01 is a move picking precision
+                {
+                    bestMoves.Add(move);
+                }
+            }
+            return bestMoves;
         }
         
         private float GetEnemyProximity()

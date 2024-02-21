@@ -19,11 +19,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             var structureBeforeMove = _unitsStructureCalculator.CalculateFriendlyStructure(boardStateBeforeMove);
             var boardStateAfterMove = _boardCellsStateCalculator.GetBoardStateAfterPlayerMove(move);
             var structureAfterMove = _unitsStructureCalculator.CalculateFriendlyStructure(boardStateAfterMove);
-            if (structureBeforeMove == 0)
-            {
-                return 1;
-            }
-            return (structureAfterMove - structureBeforeMove)/structureBeforeMove;
+            return structureAfterMove - structureBeforeMove;
         }
     }
 }

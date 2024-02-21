@@ -40,7 +40,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
                 var loss = GetStructureForUnitOnPosition(position, inputMatrix, unitState, baseState, freeState, depth);
                 unitsStructures.Add(loss);
             }
-            return unitsStructures.Sum() / friendlyPositions.Count;
+            return unitsStructures.Min();
         }
 
         private float GetStructureForUnitOnPosition(Vector2Int position, CellState[,] inputMatrix, CellState unitState, CellState baseState, CellState freeState, int depth = 1)
