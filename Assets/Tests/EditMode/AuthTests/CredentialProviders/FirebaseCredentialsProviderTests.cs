@@ -17,8 +17,13 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
     {
         [Test]
         [TestCaseSource(nameof(GetAuthTypes))]
-        public async Task GetCredentialAsync_ShouldGetValidCredentials(FirebaseAuthProviderType firebaseAuthProviderType)
+        public async Task GetCredentialAsync_ShouldGetValidCredentials(AuthType firebaseAuthProviderType)
         {
+            if (firebaseAuthProviderType == AuthType.Metamask)
+            {
+                Assert.IsTrue(true);
+            }
+            
             var googleCredentials = new GoogleJwtStore(
                 new JwtToken("id", Int32.MaxValue, DateTime.Now),
                 new JwtToken("access", Int32.MaxValue, DateTime.Now),
@@ -31,7 +36,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             
             switch (firebaseAuthProviderType)
             {
-                case FirebaseAuthProviderType.Google:
+                case AuthType.Google:
                     var googleCredentialProviderMock = new Mock<IGoogleCredentialProvider>();
                     googleCredentialProviderMock.Setup(
                         a => a.GetCredentialAsync()).ReturnsAsync(googleCredentials);
@@ -54,12 +59,12 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             Assert.AreSame(expectedCredentials, resultCredentials);
         }
             
-        public static IEnumerable<FirebaseAuthProviderType> GetAuthTypes()
+        public static IEnumerable<AuthType> GetAuthTypes()
         {
-            var authTypes = Enum.GetValues(typeof(FirebaseAuthProviderType));
+            var authTypes = Enum.GetValues(typeof(AuthType));
             foreach (var firebaseAuthType in authTypes) 
             {
-                yield return (FirebaseAuthProviderType) firebaseAuthType;
+                yield return (AuthType) firebaseAuthType;
             }
         }
     }

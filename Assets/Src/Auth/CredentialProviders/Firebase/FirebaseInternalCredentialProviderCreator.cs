@@ -1,6 +1,5 @@
 ﻿using Src.Auth.AuthKeys;
-using Src.Auth.AuthTokenSaver.Firebase;
-using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.DeepLinking.DeepLinkTextInjector;
@@ -19,14 +18,14 @@ namespace Src.Auth.CredentialProviders.Firebase
     public class FirebaseInternalCredentialProviderCreator : IFirebaseInternalCredentialProviderCreator
     {
         private readonly TextAssetResourceLoader _textAssetResourceLoader;
-        private readonly IFirebaseAuthTokenSaver _authTokenSaver;
+        private readonly IAuthTokenSaver _authTokenSaver;
 
         public FirebaseInternalCredentialProviderCreator(
-            TextAssetResourceLoader textAssetResourceLoader)
+            TextAssetResourceLoader textAssetResourceLoader,
+            IAuthTokenSaver authTokenSaver)
         {
             _textAssetResourceLoader = textAssetResourceLoader;
-            _authTokenSaver = new FirebaseAuthTokenSaver(
-                new PlayerPrefsStringSaver());
+            _authTokenSaver = authTokenSaver;
         }
 
         public IGoogleCredentialProvider CreateGoogleCredentialProvider()

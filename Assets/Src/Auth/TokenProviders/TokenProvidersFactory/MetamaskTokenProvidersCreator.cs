@@ -1,6 +1,5 @@
 ﻿using System.Threading.Tasks;
-using Src.Auth.AuthTokenSaver.Metamask;
-using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Metamask;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
@@ -15,11 +14,8 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
     {
         private readonly IMetamaskBackendCredentialProvider _backendCredentialProvider;
 
-        public MetamaskTokenProvidersCreator()
+        public MetamaskTokenProvidersCreator(IAuthTokenSaver authTokenSaver)
         {
-            var authTokenSaver = new MetamaskAuthTokenPlayerPrefsSaver(
-                new PlayerPrefsStringSaver());
-            
             _backendCredentialProvider = new MetamaskBackendCredentialProvider(
                 new MetamaskWalletFacade(),
                 new MetamaskSignerFacade(),

@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Src.Auth.AuthKeys;
-using Src.Auth.AuthTokenSaver.Firebase;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.JwtManagement;
 using Src.Auth.JwtManagement.Converters.Google;
@@ -20,7 +20,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
         private readonly IUrlOpener _oAuthUrlOpener;
         private readonly ILocalHttpPortListener _localHttpPortListener;
         private readonly IGoogleJwtConverter _jwtConverter;
-        private readonly IFirebaseAuthTokenSaver _authTokenSaver;
+        private readonly IAuthTokenSaver _authTokenSaver;
 
         private GoogleJwtStore _tokenStore;
 
@@ -29,7 +29,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             IUrlOpener oAuthUrlOpener, 
             ILocalHttpPortListener localHttpPortListener,
             IGoogleJwtConverter jwtConverter,
-            IFirebaseAuthTokenSaver authTokenSaver)
+            IAuthTokenSaver authTokenSaver)
         {
             _restRequestsAdapter = restRequestsAdapter;
             _oAuthUrlOpener = oAuthUrlOpener;

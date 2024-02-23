@@ -1,19 +1,22 @@
+using System;
 using Newtonsoft.Json;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.JwtManagement;
 
-namespace Src.Auth.AuthTokenSaver.Firebase
+namespace Src.Auth.AuthTokenSaver
 {
-    public class FirebaseAuthTokenSaver : IFirebaseAuthTokenSaver
+    public class AuthTokenSaver : IAuthTokenSaver
     {
         private readonly IPlayerPrefsStringSaver _playerPrefsSaver;
 
-        public FirebaseAuthTokenSaver(IPlayerPrefsStringSaver playerPrefsSaver)
+        public AuthTokenSaver(IPlayerPrefsStringSaver playerPrefsSaver)
         {
             _playerPrefsSaver = playerPrefsSaver;
         }
         
-        public void TryGetTokenStoreByAuthType(out JwtStore store, FirebaseAuthProviderType providerType)
+        #region Getting Store
+        
+        public void TryGetTokenStoreByAuthType(out JwtStore store, AuthType providerType)
         {
             if (_playerPrefsSaver.TryGetStringValue(
                     FormatFirebaseStorePrefNameByAuthType(providerType), 
@@ -25,10 +28,11 @@ namespace Src.Auth.AuthTokenSaver.Firebase
 
             store = null;
         }
+
         public void TryGetGoogleTokenStore(out GoogleJwtStore store)
         {
             if (_playerPrefsSaver.TryGetStringValue(
-                    FormatFirebaseStorePrefNameByAuthType(FirebaseAuthProviderType.Google), 
+                    FormatFirebaseStorePrefNameByAuthType(AuthType.Google), 
                     out var storedValue))
             {
                 store = JsonConvert.DeserializeObject<GoogleJwtStore>(storedValue);
@@ -37,24 +41,58 @@ namespace Src.Auth.AuthTokenSaver.Firebase
 
             store = null;
         }
+        
+        #endregion
 
-        public void SaveAuthTokens(JwtStore store, FirebaseAuthProviderType providerType)
+
+        #region Saving Store
+
+        public void SaveAuthTokens(JwtStore store, AuthType providerType)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
             _playerPrefsSaver.SaveStringValue(
                 FormatFirebaseStorePrefNameByAuthType(providerType), 
                 serializedStore);
+            UpdateLastLoginInfo(providerType);
         }
-        
+
         public void SaveGoogleAuthTokens(GoogleJwtStore store)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
             _playerPrefsSaver.SaveStringValue(
-                FormatFirebaseStorePrefNameByAuthType(FirebaseAuthProviderType.Google), 
+                FormatFirebaseStorePrefNameByAuthType(AuthType.Google), 
                 serializedStore);
+            UpdateLastLoginInfo(AuthType.Google);
         }
 
-        private string FormatFirebaseStorePrefNameByAuthType(FirebaseAuthProviderType providerType)
+        #endregion
+
+
+        #region Last Login Info
+
+        public bool TryGetLastLoginInfo(out AuthType authType)
+        {
+            authType = AuthType.Google;
+            if (!_playerPrefsSaver.TryGetStringValue(
+                    IAuthTokenSaver.LastLoginStoreInfoPrefName,
+                    out var storedValue)) return false;
+            
+            Enum.TryParse(storedValue, out authType);
+            return true;
+
+        }
+
+        public void UpdateLastLoginInfo(AuthType authType)
+        {
+            _playerPrefsSaver.SaveStringValue(
+                IAuthTokenSaver.LastLoginStoreInfoPrefName, 
+                authType.ToString());
+        }
+
+        #endregion
+        
+        
+        private string FormatFirebaseStorePrefNameByAuthType(AuthType providerType)
         {
             return providerType + IAuthTokenSaver.StorePrefNamePostfix;
         }

@@ -4,6 +4,7 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
 {
     public interface IAccessTokenProvidersStrategy
     {
-        Task<IAccessTokenProvider> GetAccessTokenProviderAsync(AuthType authType);
+        public Task<IAccessTokenProvider> GetAccessTokenProviderAsync(
+            AuthType firebaseAuthProviderType);
     }
 }

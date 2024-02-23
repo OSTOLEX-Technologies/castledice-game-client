@@ -1,6 +1,6 @@
 using System;
 using System.Threading.Tasks;
-using Src.Auth.AuthTokenSaver.Metamask;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
@@ -19,7 +19,7 @@ namespace Src.Auth.CredentialProviders.Metamask
         private readonly IMetamaskSignerFacade _signerFacade;
         private readonly IMetamaskRestRequestsAdapter _metamaskRestRequestsAdapter;
         private readonly IMetamaskJwtConverter _jwtConverter;
-        private readonly IMetamaskAuthTokenSaver _authTokenSaver;
+        private readonly IAuthTokenSaver _authTokenSaver;
 
         private JwtStore _tokenStore;
 
@@ -28,14 +28,14 @@ namespace Src.Auth.CredentialProviders.Metamask
             IMetamaskSignerFacade signerFacade, 
             IMetamaskRestRequestsAdapter metamaskRestRequestsAdapter,
             IMetamaskJwtConverter jwtConverter,
-            IMetamaskAuthTokenSaver authTokenSaver)
+            IAuthTokenSaver authTokenSaver)
         {
             _walletFacade = walletFacade;
             _signerFacade = signerFacade;
             _metamaskRestRequestsAdapter = metamaskRestRequestsAdapter;
             _jwtConverter = jwtConverter;
             _authTokenSaver = authTokenSaver;
-            _authTokenSaver.TryGetMetamaskAuthTokenStore(out _tokenStore);
+            _authTokenSaver.TryGetTokenStoreByAuthType(out _tokenStore, AuthType.Metamask);
         }
 
         public async Task<string> GetCredentialAsync()
@@ -61,7 +61,7 @@ namespace Src.Auth.CredentialProviders.Metamask
             {
                 var refreshResponse = await RefreshTokens();
                 _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
-                _authTokenSaver.SaveMetamaskAuthTokens(_tokenStore);
+                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
                 
                 return _tokenStore.accessToken.Token;
             }

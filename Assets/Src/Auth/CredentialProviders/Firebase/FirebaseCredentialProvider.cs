@@ -18,16 +18,17 @@ namespace Src.Auth.CredentialProviders.Firebase
             _firebaseCredentialFormatter = firebaseCredentialFormatter;
         }
         
-        public async Task<Credential> GetCredentialAsync(FirebaseAuthProviderType authProviderType)
+        public async Task<Credential> GetCredentialAsync(AuthType authProviderType)
         {
             switch (authProviderType)
             {
-                case FirebaseAuthProviderType.Google:
+                case AuthType.Google:
                     var googleCredentialProvider = _internalCredentialProviderCreator.CreateGoogleCredentialProvider();
                     var googleCredentials = await googleCredentialProvider.GetCredentialAsync();
                     var credential = _firebaseCredentialFormatter.FormatCredentials(googleCredentials);
                     
                     return credential;
+                
                 default: 
                     throw new FirebaseCredentialProviderNotFoundException(authProviderType);
             }

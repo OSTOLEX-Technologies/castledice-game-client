@@ -5,6 +5,6 @@ namespace Src.Auth.CredentialProviders.Firebase
 {
     public interface IFirebaseCredentialProvider
     {
-        Task<Credential> GetCredentialAsync(FirebaseAuthProviderType authProviderType);
+        Task<Credential> GetCredentialAsync(AuthType authProviderType);
     }
 }

@@ -2,7 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Src.Auth.AuthTokenSaver.Firebase;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.JwtManagement;
@@ -62,7 +62,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             private Mock<IUrlOpener> _authUrlOpener;
             private Mock<ILocalHttpPortListener> _localHttpListener;
             private Mock<IGoogleJwtConverter> _jwtConverter;
-            private Mock<IFirebaseAuthTokenSaver> _authTokenSaver;
+            private Mock<IAuthTokenSaver> _authTokenSaver;
 
             internal GoogleCredentialProviderBuilder()
             {
@@ -75,7 +75,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                 _authUrlOpener = new Mock<IUrlOpener>();
                 _localHttpListener = new Mock<ILocalHttpPortListener>();
                 _jwtConverter = new Mock<IGoogleJwtConverter>();
-                _authTokenSaver = new Mock<IFirebaseAuthTokenSaver>();
+                _authTokenSaver = new Mock<IAuthTokenSaver>();
             }
             
             public void SetRequestAdapterAuth(GoogleIdTokenResponse responseStub)

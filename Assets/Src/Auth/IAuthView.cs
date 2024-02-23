@@ -8,7 +8,7 @@ namespace Src.Auth
 
         public void ShowSignInMessage(string signInMessage);
 
-        public event EventHandler<AuthType> AuthTypeChosen;
-        public event EventHandler AuthCompleted;
+        public event Action<AuthType> AuthTypeChosen;
+        public event Action AuthCompleted;
     }
 }

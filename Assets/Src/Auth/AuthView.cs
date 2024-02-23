@@ -42,10 +42,10 @@ namespace Src.Auth
             metamaskAuthCancellationCanvas.gameObject.SetActive(true);
             Login(AuthType.Metamask);
         }
-        
+
         public void Login(AuthType authType)
         {
-            AuthTypeChosen?.Invoke(this, authType);
+            AuthTypeChosen?.Invoke(authType);
         }
 
         public void CancelMetamaskAuth()
@@ -85,7 +85,7 @@ namespace Src.Auth
 
             await WaitUntilMetamaskDisconnects();
             
-            AuthCompleted?.Invoke(this, EventArgs.Empty);
+            AuthCompleted?.Invoke();
         }
         #endregion
         
@@ -108,8 +108,8 @@ namespace Src.Auth
         #endregion
         
 
-        public event EventHandler<AuthType> AuthTypeChosen;
+        public event Action<AuthType> AuthTypeChosen;
         
-        public event EventHandler AuthCompleted;
+        public event Action AuthCompleted;
     }
 }
