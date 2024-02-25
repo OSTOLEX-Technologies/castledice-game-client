@@ -1,5 +1,3 @@
-using System;
-
 namespace Src.SceneTransitionCommands
 {
     public interface ISceneTransitionHandler

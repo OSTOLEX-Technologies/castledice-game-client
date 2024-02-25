@@ -1,4 +1,3 @@
-using System;
 using Src.Components;
 using Src.LoadingScenes;
 
