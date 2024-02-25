@@ -1,4 +1,4 @@
-﻿namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages
+﻿namespace MetaMask.SocketIOClient.Messages
 {
     public enum MessageType
     {

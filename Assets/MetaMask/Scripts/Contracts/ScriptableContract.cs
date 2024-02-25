@@ -1,11 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
-using MetaMask.Runtime;
 using UnityEngine;
+using evm.net;
+using evm.net.Models;
 
-namespace MetaMask.Scripts.Contracts
+namespace MetaMask.Unity.Contracts
 {
     public abstract class ScriptableContract<T> : ScriptableObject where T : class, IContract
     {

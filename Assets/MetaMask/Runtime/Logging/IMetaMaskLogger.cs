@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace MetaMask.Runtime.Logging
+namespace MetaMask.Logging
 {
 
     /// <summary>

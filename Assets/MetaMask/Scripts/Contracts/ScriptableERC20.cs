@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
-using MetaMask.Runtime.Contracts;
+using MetaMask.Contracts;
 using UnityEngine;
+using evm.net.Models;
 
-namespace MetaMask.Scripts.Contracts
+namespace MetaMask.Unity.Contracts
 {
     [CreateAssetMenu(menuName = "MetaMask/Contract Templates/ERC20")]
     public class ScriptableERC20 : ScriptableContract<ERC20>, ERC20

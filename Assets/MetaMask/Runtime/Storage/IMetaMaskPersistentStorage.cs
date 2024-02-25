@@ -1,4 +1,4 @@
-﻿namespace MetaMask.Runtime.Storage
+﻿namespace MetaMask.IO
 {
 
     /// <summary>

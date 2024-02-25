@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer
+namespace MetaMask.SocketIOClient.JsonSerializer
 {
     public interface IJsonSerializer
     {

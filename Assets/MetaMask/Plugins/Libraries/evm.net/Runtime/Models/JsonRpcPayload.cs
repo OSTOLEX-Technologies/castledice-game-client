@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models
+namespace evm.net.Models
 {
     public class JsonRpcPayload : JsonRpcBase
     {

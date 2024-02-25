@@ -1,6 +1,7 @@
 ﻿using System;
+using evm.net.Models;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
+namespace evm.net
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class EvmMethodInfoAttribute : Attribute

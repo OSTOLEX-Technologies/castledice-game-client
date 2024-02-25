@@ -1,8 +1,8 @@
 using System;
 using System.Collections.Generic;
-using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Interfaces;
+using EventEmitter.NET.Interfaces;
 
-namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime
+namespace EventEmitter.NET
 {
     /// <summary>
     /// A class that simply holds the IEventProvider for a given event data type T. This is needed to keep the

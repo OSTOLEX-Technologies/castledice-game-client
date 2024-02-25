@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MetaMask.Scripts.Transports.Unity.UGUI;
+using MetaMask.Transports.Unity.UI;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.Caching;

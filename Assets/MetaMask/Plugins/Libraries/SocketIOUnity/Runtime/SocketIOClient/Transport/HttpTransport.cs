@@ -2,10 +2,11 @@
 using System.Collections;
 using System.Threading;
 using System.Threading.Tasks;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
+using MetaMask.SocketIOClient.JsonSerializer;
+using MetaMask.SocketIOClient.Messages;
+
+namespace MetaMask.SocketIOClient.Transport
 {
     public class HttpTransport : BaseTransport
     {

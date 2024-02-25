@@ -1,7 +1,10 @@
-﻿using System.Text.Json.Serialization;
+﻿using System.Text.Json;
+using System.Text.Json.Serialization;
+using System.Threading.Tasks;
+
 using Newtonsoft.Json;
 
-namespace MetaMask.Runtime.Models
+namespace MetaMask.Models
 {
     public class MetaMaskSubmittedRequest
     {

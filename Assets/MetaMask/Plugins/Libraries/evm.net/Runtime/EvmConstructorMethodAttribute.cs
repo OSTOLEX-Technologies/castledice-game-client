@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
+namespace evm.net
 {
     [AttributeUsage(AttributeTargets.Method)]
     public class EvmConstructorMethodAttribute : Attribute

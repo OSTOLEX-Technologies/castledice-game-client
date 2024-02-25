@@ -1,7 +1,10 @@
 using System.Collections.Generic;
+
+using MetaMask.NativeWebSocket;
+
 using UnityEngine;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime
+namespace MetaMask.SocketIOClient
 {
 
     public class WebSocketDispatcher : MonoBehaviour
@@ -17,7 +20,7 @@ namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime
             }
         }
 
-        private List<WebSocket.WebSocket> webSockets = new List<WebSocket.WebSocket>();
+        private List<WebSocket> webSockets = new List<WebSocket>();
 
         private void Awake()
         {
@@ -47,12 +50,12 @@ namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime
         }
 #endif
 
-        public void AddWebSocket(WebSocket.WebSocket webSocket)
+        public void AddWebSocket(WebSocket webSocket)
         {
             this.webSockets.Add(webSocket);
         }
 
-        public void RemoveWebSocket(WebSocket.WebSocket webSocket)
+        public void RemoveWebSocket(WebSocket webSocket)
         {
             this.webSockets.Remove(webSocket);
         }

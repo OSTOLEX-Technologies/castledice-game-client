@@ -1,8 +1,10 @@
 ﻿using System.Numerics;
+using System.Text.Json;
 using System.Text.Json.Serialization;
+
 using Newtonsoft.Json;
 
-namespace MetaMask.Runtime.Models
+namespace MetaMask.Models
 {
     public class MetaMaskTransaction : ISerializerCallback
     {

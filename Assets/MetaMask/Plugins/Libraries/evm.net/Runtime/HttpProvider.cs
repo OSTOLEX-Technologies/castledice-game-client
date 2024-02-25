@@ -1,12 +1,14 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Threading.Tasks;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Network;
+using evm.net.Models;
+using evm.net.Network;
 using Newtonsoft.Json;
 using UnityEngine;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
+namespace evm.net
 {
     public class HttpProvider : IProvider
     {
