@@ -11,6 +11,9 @@ namespace Src.Auth
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
+        [SerializeField, InspectorName("Main Auth Canvas")]
+        private Canvas mainAuthCanvas;
+        
         [SerializeField, InspectorName("Metamask Auth Cancellation Canvas")]
         private Canvas metamaskAuthCancellationCanvas;
         
@@ -28,6 +31,17 @@ namespace Src.Auth
         private Action _metamaskProviderDisconnected;
 
         #region PublicMethods
+        public void HideAuthUI()
+        {
+            mainAuthCanvas.gameObject.SetActive(false);
+            metamaskAuthCancellationCanvas.gameObject.SetActive(false);
+            signInMessageCanvas.gameObject.SetActive(false);
+            if (_qrCodeHandlerCanvas is not null)
+            {
+                _qrCodeHandlerCanvas.gameObject.SetActive(false);
+            }
+        }
+        
         public void LoginWithGoogle()
         {
             Login(AuthType.Google);
@@ -84,6 +98,8 @@ namespace Src.Auth
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
 
             await WaitUntilMetamaskDisconnects();
+            
+            HideAuthUI();
             
             AuthCompleted?.Invoke();
         }

@@ -4,6 +4,7 @@ using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
+using Src.Auth.Scripts;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using Src.Components;
@@ -15,6 +16,9 @@ namespace Src.ScenesInitializers
 {
     public class AuthSceneInitializer : MonoBehaviour
     {
+        [SerializeField, InspectorName("Scene Flow Script")]
+        private AuthSceneFlow authSceneFlow;
+        
         [SerializeField, InspectorName("Auth View")]
         private AuthView authView;
 
@@ -30,7 +34,7 @@ namespace Src.ScenesInitializers
         
         private AuthController _authController;
         private AuthSceneTransitionHandler _transitionHandler;
-        
+
         private void Awake()
         {
             _singletonCacher = new SingletonCacher();
@@ -51,15 +55,13 @@ namespace Src.ScenesInitializers
                 authView);
 
             _transitionHandler = new AuthSceneTransitionHandler(sceneLoader, SceneType.MainMenu);
-            authView.AuthCompleted += UnsubscribeFromAuthCompleted;
-            authView.AuthCompleted += _transitionHandler.HandleTransitionCommand;
-            
-            authView.Init(_metamaskWalletFacade, _authController);
-        }
 
-        private void UnsubscribeFromAuthCompleted()
-        {
-            authView.AuthCompleted -= _transitionHandler.HandleTransitionCommand;
+            authView.Init(_metamaskWalletFacade, _authController);
+            
+            authSceneFlow.StartSceneFlow(
+                authView,
+                _authTokenSaver,
+                _transitionHandler);
         }
     }
 }
