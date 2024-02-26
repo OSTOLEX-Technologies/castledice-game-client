@@ -14,6 +14,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
         private readonly IBoardCellsStateCalculator _boardCellsStateCalculator;
         private readonly IGraphPathMinCostSearcher _graphPathMinCostSearcher;
         private readonly Vector2Int _basePosition;
+        private readonly int _noEnemiesDistance = 1000; //This is a value that should be returned in case if there are no enemies on the board
 
         public WeightedEnemyProximityDeltaEvaluator(IGraphPathMinCostSearcher graphPathMinCostSearcher, IBoardCellsCostCalculator boardCellsCostCalculator, IBoardCellsStateCalculator boardCellsStateCalculator, Vector2Int basePosition)
         {
@@ -36,21 +37,13 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             var enemyPositionsAfterMove = GetEnemyPositions(cellsStateAfterMove);
             var distancesToClosestEnemiesAfterMove = GetDistancesToClosestEnemies(enemyPositionsAfterMove, costsAfterMove);
             
-            var distanceChanged = distancesToClosestEnemiesBeforeMove.First() != distancesToClosestEnemiesAfterMove.First();
-            if (distanceChanged)
+            if (distancesToClosestEnemiesAfterMove.Count == 0)
             {
-                //If distance changed, then it should get BIGGER
-                var oldDistance = distancesToClosestEnemiesBeforeMove.First();
-                var newDistance = distancesToClosestEnemiesAfterMove.First();
-                return newDistance - oldDistance;
+                return _noEnemiesDistance;
             }
-            else
-            {
-                //If distance did not change, then count of closest enemies should get SMALLER
-                var oldCount = distancesToClosestEnemiesBeforeMove.Count;
-                var newCount = distancesToClosestEnemiesAfterMove.Count;
-                return oldCount - newCount;
-            }
+            var oldDistance = distancesToClosestEnemiesBeforeMove.First();
+            var newDistance = distancesToClosestEnemiesAfterMove.First();
+            return newDistance - oldDistance;
         }
 
         private List<int> GetDistancesToClosestEnemies(List<Vector2Int> enemyPositions, int[,] costsBeforeMove)
@@ -81,7 +74,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
                 for (int j = 0; j < cellStates.GetLength(1); j++)
                 {
                     var cellState = cellStates[i, j];
-                    if (cellState == CellState.Enemy || cellState == CellState.EnemyBase)
+                    if (cellState is CellState.Enemy or CellState.EnemyBase)
                     {
                         enemyPositions.Add(new Vector2Int(i, j));
                     }

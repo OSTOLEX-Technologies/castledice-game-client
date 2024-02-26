@@ -225,3 +225,11 @@ HAssets/Src/PVE/MoveSearchers/TraitsEvaluators/StructureDeltaEvaluator.cs,a\4\a
 YAssets/Src/PVE/MoveSearchers/TraitsEvaluators/WeightedEnemyBaseProximityDeltaEvaluator.cs,e\f\ef69adabaf8b41a1c51861311ff48feb197d4ecd
 y
 IAssets/Src/PVE/MoveSearchers/TraitsEvaluators/UnitsStructureCalculator.cs,0\0\00f6ccb04cee9d285d123a6c700f81fcd07c5982
+w
+GAssets/Src/GameplayPresenter/GameWrappers/TotalPossibleMovesProvider.cs,1\3\13f59e25cba1dcedd90a8c60919c2398e12e92ef
+c
+3Assets/Src/PVE/MoveSearchers/IMoveTraitEvaluator.cs,0\c\0cb8b45411539f5f51445ede88f2367637b6e0e2
+†
+VAssets/Src/PVE/MoveSearchers/TraitsEvaluators/IBoardStateWeightedDistanceCalculator.cs,4\4\443301b854eed9cbfadbbfd90fe6d2423ec3f8a0
+…
+UAssets/Src/PVE/MoveSearchers/TraitsEvaluators/BoardStateWeightedDistanceCalculator.cs,c\a\caa7cf32b46e03762f7a8695c881372399598b0d

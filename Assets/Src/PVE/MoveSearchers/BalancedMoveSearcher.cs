@@ -81,15 +81,35 @@ namespace Src.PVE
 
         private Dictionary<AbstractMove, MoveTraits> NormalizeMovesToTraits(Dictionary<AbstractMove, MoveTraits> movesToTraits)
         {
-            var normalized = NormalizeTrait(movesToTraits, traits => traits.Destructiveness, (traits, value) => traits.Destructiveness = value);
-            normalized = NormalizeTrait(normalized, traits => traits.Aggressiveness, (traits, value) => traits.Aggressiveness = value);
-            normalized = NormalizeTrait(normalized, traits => traits.Defensiveness, (traits, value) => traits.Defensiveness = value);
-            normalized = NormalizeTrait(normalized, traits => traits.Enhanciveness, (traits, value) => traits.Enhanciveness = value);
-            normalized = NormalizeTrait(normalized, traits => traits.Harmfulness, (traits, value) => traits.Harmfulness = value);
+            var normalized = NormalizeTrait(movesToTraits, traits => traits.Destructiveness, (traits, value) =>
+            {
+                traits.Destructiveness = value;
+                return traits;
+            });
+            normalized = NormalizeTrait(normalized, traits => traits.Aggressiveness, (traits, value) =>
+            {
+                traits.Aggressiveness = value;
+                return traits;
+            });
+            normalized = NormalizeTrait(normalized, traits => traits.Defensiveness, (traits, value) =>
+            {
+                traits.Defensiveness = value;
+                return traits;
+            });
+            normalized = NormalizeTrait(normalized, traits => traits.Enhanciveness, (traits, value) =>
+            {
+                traits.Enhanciveness = value;
+                return traits;
+            });
+            normalized = NormalizeTrait(normalized, traits => traits.Harmfulness, (traits, value) =>
+            {
+                traits.Harmfulness = value;
+                return traits;
+            });
             return normalized;
         }
         
-        private Dictionary<AbstractMove, MoveTraits> NormalizeTrait(Dictionary<AbstractMove, MoveTraits> movesToTraits, Func<MoveTraits, float> traitGetter, Action<MoveTraits, float> traitSetter)
+        private Dictionary<AbstractMove, MoveTraits> NormalizeTrait(Dictionary<AbstractMove, MoveTraits> movesToTraits, Func<MoveTraits, float> traitGetter, Func<MoveTraits, float, MoveTraits> traitSetter)
         {
             var maxTrait = float.MinValue;
             foreach (var move in movesToTraits.Keys)
@@ -109,13 +129,20 @@ namespace Src.PVE
             }
             
             var normalizedMovesToTraits = new Dictionary<AbstractMove, MoveTraits>();
+            var minIsEqualToMax = Math.Abs(minTrait - maxTrait) < 0.00001;
             foreach (var move in movesToTraits.Keys)
             {
                 var traits = movesToTraits[move];
-                traitSetter(traits, (traitGetter(traits) - minTrait) / (maxTrait - minTrait));
+                //var normalizedValue = minIsEqualToMax ? 0 : NormalizeValue(traitGetter(traits), minTrait, maxTrait);
+                //var newTraits = traitSetter(traits, normalizedValue);
                 normalizedMovesToTraits.Add(move, traits);
             }
             return normalizedMovesToTraits;
+        }
+        
+        private float NormalizeValue(float value, float minValue, float maxValue)
+        {
+            return (value - minValue) / (maxValue - minValue);
         }
 
         private AbstractMove GetBestMove(Dictionary<AbstractMove, MoveTraits> movesToTraits, float destructivenessWeight, float aggressivenessWeight, float defensivenessWeight, float enhancivenessWeight, float harmfulnessWeight)
