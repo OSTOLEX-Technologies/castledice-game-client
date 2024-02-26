@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
 
-namespace evm.net.Network
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Network
 {
     /// <summary>
     /// An interface for making simple HTTP/HTTPS requests.

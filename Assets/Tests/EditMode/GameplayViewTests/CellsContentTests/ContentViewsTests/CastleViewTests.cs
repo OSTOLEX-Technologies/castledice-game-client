@@ -5,7 +5,7 @@ using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using Src.GameplayView.CellsContent.ContentViews;
 using Tests.Utils.Mocks;
 using UnityEditor;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using UnityEngine;
 using UnityEngine.TestTools;
 

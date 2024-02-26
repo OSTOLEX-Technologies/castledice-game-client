@@ -1,12 +1,10 @@
-using System.IO;
-using UnityEngine;
 using UnityEditor;
 using UnityEditor.Callbacks;
 #if UNITY_IOS
 using UnityEditor.iOS.Xcode;
 #endif
 
-namespace MetaMask
+namespace MetaMask.Editor
 {
 
     public class BuildPostProcessor

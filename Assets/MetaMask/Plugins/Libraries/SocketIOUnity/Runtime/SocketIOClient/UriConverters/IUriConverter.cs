@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 
-namespace MetaMask.SocketIOClient.UriConverters
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.UriConverters
 {
     public interface IUriConverter
     {

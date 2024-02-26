@@ -3,7 +3,7 @@ using Src.GameplayView.ClickDetection;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
-namespace Tests.PlayMode
+namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
 {
     public class UnityCellClickDetectorTests
     {

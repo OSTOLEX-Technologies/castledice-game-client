@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayView.PlacedUnitsHighlights;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.EditMode.GameplayPresenterTests.PlacedUnitsHighlightsTests

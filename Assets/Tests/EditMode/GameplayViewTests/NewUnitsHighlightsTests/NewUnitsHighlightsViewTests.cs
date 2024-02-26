@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Highlights;
 using Src.GameplayView.NewUnitsHighlights;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.PlayerObjectsColor;
 using Tests.Utils.Mocks;
 using UnityEngine;

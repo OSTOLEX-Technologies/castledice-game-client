@@ -4,7 +4,7 @@ using castledice_game_logic;
 using castledice_game_logic.GameObjects;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 using CastleGO = castledice_game_logic.GameObjects.Castle;
 

@@ -6,7 +6,7 @@ using Src.GameplayView.CellsContent.ContentViewsCreation.CastleViewCreation;
 using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
 using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentViewsCreationTests
 {

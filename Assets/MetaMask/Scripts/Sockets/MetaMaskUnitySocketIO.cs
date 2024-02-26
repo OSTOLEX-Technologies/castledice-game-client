@@ -1,20 +1,20 @@
 using System;
 using System.Collections.Generic;
 using System.Text;
+using System.Threading.Tasks;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient;
+using MetaMask.Runtime.Sockets;
+using UnityEngine;
+using UnityEngine.Networking;
 #if UNITY_WEBGL && !UNITY_EDITOR
 using System.Runtime.InteropServices;
 using UnityEngine;
 using System.Collections.Generic;
 using Newtonsoft.Json;
 #endif
-using System.Threading.Tasks;
 
-using MetaMask.SocketIOClient;
-using UnityEngine;
-
-using UnityEngine.Networking;
-
-namespace MetaMask.Sockets
+namespace MetaMask.Scripts.Sockets
 {
 
     public class MetaMaskUnitySocketIO : IMetaMaskSocketWrapper

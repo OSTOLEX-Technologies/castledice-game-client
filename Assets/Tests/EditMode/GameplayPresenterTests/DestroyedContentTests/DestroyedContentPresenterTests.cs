@@ -7,7 +7,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.DestroyedContent;
 using Src.GameplayView.DestroyedContent;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.DestroyedContentTests
 {

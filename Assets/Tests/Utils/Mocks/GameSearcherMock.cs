@@ -1,6 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Src.GameplayPresenter.GameCreation;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.Utils.Mocks
 {

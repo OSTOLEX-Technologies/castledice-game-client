@@ -4,7 +4,7 @@ using castledice_game_logic.Time;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.Timers;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.Timers;
 
 namespace Tests.EditMode.GameplayPresenterTests.TimersTests

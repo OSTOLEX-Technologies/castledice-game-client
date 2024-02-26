@@ -1,4 +1,6 @@
-namespace MetaMask.Cryptography
+using MetaMask.Runtime.Cryptography;
+
+namespace MetaMask.Scripts.Cryptography
 {
 
     public class BouncyEciesProvider : IEciesProvider

@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ActionPointsGiving;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.ActionPointsGivingTests
 {

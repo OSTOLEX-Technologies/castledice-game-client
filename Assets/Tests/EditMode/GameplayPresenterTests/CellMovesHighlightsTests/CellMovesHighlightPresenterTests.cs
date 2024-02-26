@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayView.CellMovesHighlights;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
 {

@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ContentVisuals;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.Grid;

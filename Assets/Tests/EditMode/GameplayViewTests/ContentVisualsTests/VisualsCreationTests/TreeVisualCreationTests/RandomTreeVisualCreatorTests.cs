@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests.VisualsCreationTests.TreeVisualCreationTests
 {

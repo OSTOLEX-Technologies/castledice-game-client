@@ -1,9 +1,8 @@
 using System;
-using System.Text.Json;
-using evm.net.Models;
-using MetaMask.Models;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
+using MetaMask.Runtime.Models;
 
-namespace MetaMask
+namespace MetaMask.Runtime
 {
     public interface IMetaMaskEventsHandler : IMetaMaskEvents
     {

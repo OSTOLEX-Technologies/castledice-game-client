@@ -2,7 +2,7 @@
 using castledice_game_data_logic.Moves;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameWrappers;

@@ -1,4 +1,4 @@
-﻿namespace evm.net.Models
+﻿namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models
 {
     public class EvmAddress : IConvertableType
     {

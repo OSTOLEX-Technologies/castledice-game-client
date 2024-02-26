@@ -1,6 +1,9 @@
 using UnityEngine;
 
-public class ExampleScript_Marketplace : MonoBehaviour
+namespace Src.Marketplace
 {
+    public class ExampleScript_Marketplace : MonoBehaviour
+    {
 
+    }
 }

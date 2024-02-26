@@ -1,7 +1,6 @@
 ﻿using System;
-using evm.net.Models;
 
-namespace evm.net
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
 {
     public class EvmParameterInfoAttribute : Attribute
     {

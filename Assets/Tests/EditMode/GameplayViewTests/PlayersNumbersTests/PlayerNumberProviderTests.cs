@@ -2,7 +2,7 @@
 using castledice_game_logic;
 using NUnit.Framework;
 using Src.GameplayView.PlayersNumbers;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.PlayersNumbersTests
 {

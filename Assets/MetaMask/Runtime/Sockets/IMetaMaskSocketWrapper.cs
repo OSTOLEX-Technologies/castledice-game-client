@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.Threading.Tasks;
 
-namespace MetaMask.Sockets
+namespace MetaMask.Runtime.Sockets
 {
 
     /// <summary>

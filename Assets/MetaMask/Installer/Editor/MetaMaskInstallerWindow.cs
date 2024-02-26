@@ -1,14 +1,10 @@
 using System.Collections.Generic;
-
-using MetaMask.Unity;
-
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
-
 using UnityEngine;
 
-namespace MetaMask
+namespace MetaMask.Installer.Editor
 {
 
     public class MetaMaskInstallerWindow : EditorWindow

@@ -5,9 +5,9 @@ using castledice_game_logic.MovesLogic;
 using NUnit.Framework;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayViewTests.ClientMovesTests
 {
     public class ClientMovesViewTests
     {

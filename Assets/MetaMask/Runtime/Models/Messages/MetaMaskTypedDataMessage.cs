@@ -1,8 +1,7 @@
 using System.Text.Json.Serialization;
-using evm.net.Models;
 using Newtonsoft.Json;
 
-namespace MetaMask.Models
+namespace MetaMask.Runtime.Models.Messages
 {
     public class MetaMaskTypedDataMessage<T>
     {

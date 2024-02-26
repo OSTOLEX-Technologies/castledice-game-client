@@ -1,7 +1,7 @@
 ﻿using NUnit.Framework;
 using Src.GameplayView.Audio;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.AudioTests
 {

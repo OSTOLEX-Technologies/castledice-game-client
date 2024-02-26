@@ -1,7 +1,7 @@
-using evm.net.Models;
+using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
 using ImpromptuInterface;
 
-namespace evm.net.Factory
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Factory
 {
     public class ImpromptuContractFactory : IContractFactory
     {

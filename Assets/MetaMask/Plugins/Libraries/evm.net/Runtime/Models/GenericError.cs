@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace evm.net.Models
+namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models
 {
     public class GenericError
     {

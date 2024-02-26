@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayView;
 using Src.GameplayView.CellsContent.ContentAudio.KnightAudio;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CellsContentTests.ContentAudioTests.KnightAudioTests
 {

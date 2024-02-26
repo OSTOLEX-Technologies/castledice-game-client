@@ -1,6 +1,6 @@
 using System;
 using NUnit.Framework;
-using Src.AuthController.JwtManagement.Tokens;
+using Src.Auth.JwtManagement.Tokens;
 
 namespace Tests.EditMode.AuthTests.JwtStorage
 {

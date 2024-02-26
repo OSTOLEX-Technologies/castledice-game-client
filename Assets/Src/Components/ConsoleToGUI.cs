@@ -1,6 +1,6 @@
 using UnityEngine;
-    
-namespace DebugStuff
+
+namespace Src.Components
 {
     public class ConsoleToGUI : MonoBehaviour
     {

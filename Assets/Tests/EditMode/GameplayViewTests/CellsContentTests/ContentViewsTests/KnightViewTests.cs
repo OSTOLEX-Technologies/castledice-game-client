@@ -1,6 +1,6 @@
-﻿using System.Collections;
+using System.Collections;
 using NUnit.Framework;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Src.GameplayView.CellsContent.ContentViews;
 using Tests.Utils.Mocks;
 using UnityEngine;

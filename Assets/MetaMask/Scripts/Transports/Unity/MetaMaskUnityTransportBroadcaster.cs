@@ -1,11 +1,10 @@
 using System;
 using System.Collections.Generic;
-
-using MetaMask.Models;
-using MetaMask.SocketIOClient;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime;
+using MetaMask.Runtime.Models;
 using UnityEngine;
 
-namespace MetaMask.Transports.Unity
+namespace MetaMask.Scripts.Transports.Unity
 {
 
     public class MetaMaskUnityTransportBroadcaster : MonoBehaviour

@@ -2,15 +2,15 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
-using Src.AuthController.CredentialProviders.Firebase.Google;
-using Src.AuthController.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
-using Src.AuthController.JwtManagement;
-using Src.AuthController.JwtManagement.Converters.Google;
-using Src.AuthController.JwtManagement.Tokens;
-using Src.AuthController.REST.PortListener;
-using Src.AuthController.REST.REST_Request_Proxies.Firebase.Google;
-using Src.AuthController.REST.REST_Response_DTOs.Firebase.Google;
-using Src.AuthController.UrlOpening;
+using Src.Auth.CredentialProviders.Firebase.Google;
+using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
+using Src.Auth.JwtManagement;
+using Src.Auth.JwtManagement.Converters.Google;
+using Src.Auth.JwtManagement.Tokens;
+using Src.Auth.REST.PortListener;
+using Src.Auth.REST.REST_Request_Proxies.Firebase.Google;
+using Src.Auth.REST.REST_Response_DTOs.Firebase.Google;
+using Src.Auth.UrlOpening;
 
 namespace Tests.EditMode.AuthTests.CredentialProviders
 {

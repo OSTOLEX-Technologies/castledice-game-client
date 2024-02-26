@@ -15,6 +15,14 @@
       },
       "oauth_client": [
         {
+          "client_id": "150757942999-irjl48er9c4aqtcpipkpt9g1k5po78pb.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.ostolex.castledice_client",
+            "certificate_hash": "0931dd7fe85adb38193841e6ff82e604cf2dd4ad"
+          }
+        },
+        {
           "client_id": "150757942999-vitpotb0bc1cu4f8vknfmhbfpq30q2gr.apps.googleusercontent.com",
           "client_type": 3
         }

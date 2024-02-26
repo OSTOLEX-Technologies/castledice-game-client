@@ -5,9 +5,9 @@ using NUnit.Framework;
 using Riptide;
 using Src.GameplayPresenter.GameCreation;
 using Src.NetworkingModule;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
-namespace Tests.PlayMode
+namespace Tests.EditMode.NetworkingModuleTests
 {
     public class GameSearcherTests
     {

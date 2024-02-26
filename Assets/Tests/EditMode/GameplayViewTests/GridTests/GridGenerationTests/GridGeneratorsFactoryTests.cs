@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 
-namespace Tests.EditMode
+namespace Tests.EditMode.GameplayViewTests.GridTests.GridGenerationTests
 {
     public class GridGeneratorsFactoryTests
     {

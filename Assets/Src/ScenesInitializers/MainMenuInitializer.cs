@@ -3,6 +3,7 @@ using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
 using Src.Caching;
+using Src.Components;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
@@ -14,6 +15,7 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
+using Src.LoadingScenes;
 using Src.NetworkingModule;
 using Src.NetworkingModule.ConnectionConfiguration;
 using Src.NetworkingModule.Errors;
@@ -94,6 +96,6 @@ public class MainMenuInitializer : MonoBehaviour
 
     private void OnGameCreated(object sender, EventArgs e)
     {
-        sceneLoader.LoadScene(duelModeSceneName);
+        sceneLoader.LoadScene(SceneType.DuelGame);
     }
 }

@@ -4,15 +4,15 @@ using System.Collections.Generic;
 using System.Diagnostics;
 using System.Threading;
 using System.Threading.Tasks;
-
-using MetaMask.NativeWebSocket;
-using MetaMask.SocketIOClient.JsonSerializer;
-using MetaMask.SocketIOClient.Messages;
-using MetaMask.SocketIOClient.Transport;
-using MetaMask.SocketIOClient.UriConverters;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Exceptions;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.UriConverters;
+using MetaMask.Plugins.Libraries.WebSocket;
 using UnityEngine.Networking;
 
-namespace MetaMask.SocketIOClient
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient
 {
     /// <summary>
     /// socket.io client class

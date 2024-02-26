@@ -1,8 +1,7 @@
 ﻿using System;
+using MetaMask.Runtime.Models;
 
-using MetaMask.Models;
-
-namespace MetaMask.Transports
+namespace MetaMask.Runtime.Transports
 {
 
     /// <summary>

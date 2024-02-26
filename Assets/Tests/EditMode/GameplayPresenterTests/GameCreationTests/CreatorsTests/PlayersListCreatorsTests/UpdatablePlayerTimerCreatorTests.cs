@@ -1,4 +1,4 @@
-﻿using static Tests.ObjectCreationUtility;
+﻿using static Tests.Utils.ObjectCreationUtility;
 using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;

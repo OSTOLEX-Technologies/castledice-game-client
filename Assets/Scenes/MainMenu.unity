@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 303853028}
-  m_IndirectSpecularColor: {r: 0.18254378, g: 0.22825451, b: 0.30721018, a: 1}
+  m_IndirectSpecularColor: {r: 0.18252397, g: 0.22820571, b: 0.30719048, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -1209,6 +1209,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ff0927c617b8b5f49a36e7ffbe791f83, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  loadingScenesConfig: {fileID: 11400000, guid: edf14d89b07e34cc8abfc45aa7bf724a, type: 2}
 --- !u!4 &629418343
 Transform:
   m_ObjectHideFlags: 0
@@ -2226,7 +2227,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   errorPopup: {fileID: 1065858762}
-  duelModeSceneName: DuelGame
   sceneLoader: {fileID: 629418342}
   gameServerConnectionConfig: {fileID: 11400000, guid: 0601496dfcca4024e86979ae55541ceb, type: 2}
   gameCreationView: {fileID: 227222422}

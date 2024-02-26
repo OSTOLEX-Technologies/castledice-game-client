@@ -1,4 +1,4 @@
-﻿using static Tests.ObjectCreationUtility;
+﻿using static Tests.Utils.ObjectCreationUtility;
 using System;
 using castledice_events_logic.ServerToClient;
 using Moq;

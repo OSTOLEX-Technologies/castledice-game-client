@@ -4,7 +4,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ContentVisuals;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 using Random = UnityEngine.Random;
 
 namespace Tests.EditMode.GameplayViewTests.ContentVisualsTests

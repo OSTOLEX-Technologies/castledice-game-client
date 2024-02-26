@@ -5,12 +5,11 @@ using System.Diagnostics;
 using System.Reactive.Subjects;
 using System.Threading;
 using System.Threading.Tasks;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages;
+using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.UriConverters;
 
-using MetaMask.SocketIOClient.JsonSerializer;
-using MetaMask.SocketIOClient.Messages;
-using MetaMask.SocketIOClient.UriConverters;
-
-namespace MetaMask.SocketIOClient.Transport
+namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
 {
     public abstract class BaseTransport : IObserver<string>, IObserver<byte[]>, IObservable<IMessage>, IDisposable
     {

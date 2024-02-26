@@ -1,6 +1,7 @@
+using MetaMask.Runtime;
 using UnityEngine;
 
-namespace MetaMask.Unity
+namespace MetaMask.Scripts
 {
 
     [CreateAssetMenu(menuName = "MetaMask/Config")]

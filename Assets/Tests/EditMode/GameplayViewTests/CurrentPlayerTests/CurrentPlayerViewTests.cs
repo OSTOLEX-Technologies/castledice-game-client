@@ -3,7 +3,7 @@ using NUnit.Framework;
 using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.CurrentPlayerTests
 {

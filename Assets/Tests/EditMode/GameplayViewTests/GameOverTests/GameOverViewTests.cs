@@ -4,7 +4,7 @@ using NUnit.Framework;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.PlayersColors;
 using UnityEngine;
-using static Tests.ObjectCreationUtility;
+using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.GameplayViewTests.GameOverTests
 {
