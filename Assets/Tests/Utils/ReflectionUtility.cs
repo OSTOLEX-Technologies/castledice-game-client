@@ -1,4 +1,5 @@
-﻿using UnityEditor;
+﻿using System.Threading.Tasks;
+using UnityEditor;
 using UnityEngine;
 
 namespace Tests
@@ -32,6 +33,19 @@ namespace Tests
         {
             var field = obj.GetType().GetField(fieldName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             field.SetValue(obj, null);
+        }
+        
+        public static void CallProtectedMethod(this object obj, string methodName, params object[] parameters)
+        {
+            var method = obj.GetType().GetMethod(methodName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            method.Invoke(obj, parameters);
+        }
+        
+        public static async Task CallAsyncProtectedMethod(this object obj, string methodName, params object[] parameters)
+        {
+            var method = obj.GetType().GetMethod(methodName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
+            var task = (Task) method.Invoke(obj, parameters);
+            await task;
         }
     }
 }
