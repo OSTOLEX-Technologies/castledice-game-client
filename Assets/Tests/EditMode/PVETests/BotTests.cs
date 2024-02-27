@@ -117,22 +117,24 @@ namespace Tests.EditMode.PVETests
            await bot.CallAsyncProtectedMethod(MakeMoveMethodName);
         }
         
-        private class BotBuilder
+
+    }
+    
+    public class BotBuilder
+    {
+        public ILocalMoveApplier LocalMoveApplier = new Mock<ILocalMoveApplier>().Object;
+        public IBestMoveSearcher BestMoveSearcher = new Mock<IBestMoveSearcher>().Object;
+        public Game Game = GetGameMock().Object;
+        public Player BotPlayer = GetPlayer();
+            
+        public Bot Build()
         {
-            public ILocalMoveApplier LocalMoveApplier = new Mock<ILocalMoveApplier>().Object;
-            public IBestMoveSearcher BestMoveSearcher = new Mock<IBestMoveSearcher>().Object;
-            public Game Game = GetGameMock().Object;
-            public Player BotPlayer = GetPlayer();
+            return new Mock<Bot>(LocalMoveApplier, BestMoveSearcher, Game, BotPlayer).Object;
+        }
             
-            public Bot Build()
-            {
-                return new Mock<Bot>(LocalMoveApplier, BestMoveSearcher, Game, BotPlayer).Object;
-            }
-            
-            public Mock<Bot> BuildMock()
-            {
-                return new Mock<Bot>(LocalMoveApplier, BestMoveSearcher, Game, BotPlayer);
-            }
+        public Mock<Bot> BuildMock()
+        {
+            return new Mock<Bot>(LocalMoveApplier, BestMoveSearcher, Game, BotPlayer);
         }
     }
 }
