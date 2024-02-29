@@ -1,6 +1,6 @@
 ﻿namespace Src.PVE.MoveSearchers.TraitBasedSearchers
 {
-    public class MoveTraitsValues
+    public struct MoveTraitsValues
     {
         public float Destructiveness;
         public float Aggressiveness;

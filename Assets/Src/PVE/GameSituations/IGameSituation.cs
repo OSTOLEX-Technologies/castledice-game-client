@@ -2,6 +2,6 @@
 {
     public interface IGameSituation
     {
-        
+        bool IsSituation();
     }
 }
