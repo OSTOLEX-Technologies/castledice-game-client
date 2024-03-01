@@ -27,7 +27,7 @@ namespace Tests.EditMode.PVETests.MoveSearchersTests.TraitBasedSearchersTests
 
         [Test]
         //This test uses different test cases that are provided from GetTestCase method. See this method and its comments for more details.
-        public void GetBestMove_ShouldReturnCorrectBestMove([Values(1, 2, 3, 4, 5, 6)]int testCaseNumber)
+        public void GetBestMove_ShouldReturnCorrectBestMove([Range(1, 6)]int testCaseNumber)
         {
             var testCaseData = GetTestCase(testCaseNumber);
             var inputMoves = testCaseData.InputMoves;
