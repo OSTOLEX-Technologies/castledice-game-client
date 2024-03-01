@@ -5,6 +5,6 @@ namespace Src.PVE.MoveSearchers.TraitBasedSearchers
 {
     public interface IMovesTraitsNormalizer
     {
-        Dictionary<AbstractMove, MoveTraitsValues> NormalizeTraits(Dictionary<AbstractMove, MoveTraitsValues> traits);
+        Dictionary<AbstractMove, MoveTraitsValues> NormalizeTraits(Dictionary<AbstractMove, MoveTraitsValues> movesToTraits);
     }
 }

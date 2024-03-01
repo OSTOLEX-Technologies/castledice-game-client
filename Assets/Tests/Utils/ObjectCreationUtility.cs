@@ -352,8 +352,7 @@ namespace Tests.Utils
 
         public static AbstractMove GetMove()
         {
-            var mock = new Mock<AbstractMove>(GetPlayer(), new Vector2Int(0, 0));
-            return mock.Object;
+            return new PlaceMove(GetPlayer(), new Vector2Int(0, 0), GetKnight());
         }
         
         public static List<Renderer> GetRenderersListWithMaterial(Material material, int count)
