@@ -31,6 +31,7 @@ namespace Src.ScenesInitializers
         private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
         private IAuthTokenSaver _authTokenSaver;
+        private IFirebaseCredentialProvider _firebaseCredentialProvider;
         
         private AuthController _authController;
         private AuthSceneTransitionHandler _transitionHandler;
@@ -41,22 +42,23 @@ namespace Src.ScenesInitializers
             _metamaskWalletFacade = new MetamaskWalletFacade();
             _authTokenSaver = new AuthTokenSaver(
                 new PlayerPrefsStringSaver());
+
+            _firebaseCredentialProvider = new FirebaseCredentialProvider(
+                new FirebaseInternalCredentialProviderCreator(
+                    textAssetResourceLoader,
+                    _authTokenSaver),
+                new FirebaseCredentialFormatter());
             
             _authController = new AuthController(
                 new GeneralAccessTokenProvidersStrategy(
-                    new FirebaseTokenProvidersCreator(
-                        new FirebaseCredentialProvider(
-                            new FirebaseInternalCredentialProviderCreator(
-                                textAssetResourceLoader,
-                                _authTokenSaver),
-                            new FirebaseCredentialFormatter())), 
+                    new FirebaseTokenProvidersCreator(_firebaseCredentialProvider), 
                     new MetamaskTokenProvidersCreator(_authTokenSaver)),
                 _singletonCacher, 
                 authView);
 
             _transitionHandler = new AuthSceneTransitionHandler(sceneLoader, SceneType.MainMenu);
 
-            authView.Init(_metamaskWalletFacade, _authController);
+            authView.Init(_metamaskWalletFacade, _authController, _firebaseCredentialProvider);
             
             authSceneFlow.StartSceneFlow(
                 authView,

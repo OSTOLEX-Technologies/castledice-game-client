@@ -1,5 +1,6 @@
 ﻿using System.Threading.Tasks;
 using Firebase.Auth;
+using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.Auth.Exceptions;
 
@@ -9,6 +10,8 @@ namespace Src.Auth.CredentialProviders.Firebase
     {
         private readonly IFirebaseInternalCredentialProviderCreator _internalCredentialProviderCreator;
         private readonly IFirebaseCredentialFormatter _firebaseCredentialFormatter;
+
+        private IGoogleCredentialProvider _googleCredentialProvider;
 
         public FirebaseCredentialProvider(
             IFirebaseInternalCredentialProviderCreator internalCredentialProviderCreator,
@@ -23,8 +26,8 @@ namespace Src.Auth.CredentialProviders.Firebase
             switch (authProviderType)
             {
                 case AuthType.Google:
-                    var googleCredentialProvider = _internalCredentialProviderCreator.CreateGoogleCredentialProvider();
-                    var googleCredentials = await googleCredentialProvider.GetCredentialAsync();
+                    _googleCredentialProvider = _internalCredentialProviderCreator.CreateGoogleCredentialProvider();
+                    var googleCredentials = await _googleCredentialProvider.GetCredentialAsync();
                     var credential = _firebaseCredentialFormatter.FormatCredentials(googleCredentials);
                     
                     return credential;
@@ -32,6 +35,11 @@ namespace Src.Auth.CredentialProviders.Firebase
                 default: 
                     throw new FirebaseCredentialProviderNotFoundException(authProviderType);
             }
+        }
+
+        public void InterruptGoogleProviderInit()
+        {
+            _googleCredentialProvider?.InterruptProviderInit();
         }
     }
 }

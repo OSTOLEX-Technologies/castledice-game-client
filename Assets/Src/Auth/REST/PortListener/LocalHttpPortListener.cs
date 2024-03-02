@@ -22,6 +22,11 @@ namespace Src.Auth.REST.PortListener
             _listenerHandler.Start();
         }
 
+        public void Interrupt()
+        {
+            StopListening();
+        }
+        
         private void StopListening()
         {
             _callback = null;

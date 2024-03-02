@@ -5,6 +5,8 @@ namespace Src.Auth.CredentialProviders.Firebase
 {
     public interface IFirebaseCredentialProvider
     {
-        Task<Credential> GetCredentialAsync(AuthType authProviderType);
+        public Task<Credential> GetCredentialAsync(AuthType authProviderType);
+        
+        public void InterruptGoogleProviderInit();
     }
 }

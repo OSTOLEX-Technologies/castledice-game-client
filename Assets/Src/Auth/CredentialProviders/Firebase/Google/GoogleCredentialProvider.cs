@@ -49,9 +49,12 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
                 _authTokenSaver.SaveGoogleAuthTokens(_tokenStore);
 
+                PrintTokens();
                 return _tokenStore;
             }
 
+            PrintTokens();
+            
             if (!_tokenStore.accessToken.Valid)
             {
                 Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
@@ -59,12 +62,18 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
 
                 _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
                 _authTokenSaver.SaveGoogleAuthTokens(_tokenStore);
-
+                
+                PrintTokens();
                 return _tokenStore;
             }
 
             Debug.Log("GOOGLE TOKEN IS VALID");
             return _tokenStore;
+        }
+
+        public void InterruptProviderInit()
+        {
+            _localHttpPortListener.Interrupt();
         }
 
         private async Task<GoogleIdTokenResponse> GetAuthData()
@@ -106,6 +115,14 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             var response = await _restRequestsAdapter.RefreshAccessToken(requestParamsDto);
 
             return response;
+        }
+
+        private void PrintTokens()
+        {
+            Debug.Log($"TOKENS:\n " +
+                      $"ID: {_tokenStore.idToken.Token}\n " +
+                      $"Access: {_tokenStore.accessToken.Token}\n " +
+                      $"Refresh: {_tokenStore.refreshToken.Token}");
         }
     }
 }

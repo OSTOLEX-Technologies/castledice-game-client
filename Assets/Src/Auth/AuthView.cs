@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Threading.Tasks;
 using MetaMask.Transports.Unity.UI;
+using Src.Auth.CredentialProviders.Firebase;
+using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.Caching;
@@ -25,6 +27,7 @@ namespace Src.Auth
 
         private AuthController _authController;
         private IMetamaskWalletFacade _metamaskWalletFacade;
+        private IFirebaseCredentialProvider _firebaseCredentialProvider;
 
         private MetaMaskUnityUIHandler _qrCodeHandlerCanvas;
         
@@ -46,6 +49,7 @@ namespace Src.Auth
         {
             Login(AuthType.Google);
         }
+
         public void LoginWithMetamask()
         {
             if (_qrCodeHandlerCanvas is not null)
@@ -75,10 +79,12 @@ namespace Src.Auth
         #region Init
         public void Init(
             IMetamaskWalletFacade metamaskWalletFacade, 
-            AuthController controller)
+            AuthController controller,
+            IFirebaseCredentialProvider firebaseCredentialProvider)
         {
             _metamaskWalletFacade = metamaskWalletFacade;
             _authController = controller;
+            _firebaseCredentialProvider = firebaseCredentialProvider;
 
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
         }
@@ -120,6 +126,14 @@ namespace Src.Auth
             _metamaskWalletFacade.Disconnect();
 
             await disconnectTsc.Task;
+        }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus)
+            {
+                _firebaseCredentialProvider.InterruptGoogleProviderInit();
+            }
         }
         #endregion
         
