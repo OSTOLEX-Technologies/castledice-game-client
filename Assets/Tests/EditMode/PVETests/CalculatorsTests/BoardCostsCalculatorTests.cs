@@ -8,6 +8,7 @@ using Moq;
 using NUnit.Framework;
 using Src.PVE.Calculators;
 using static Tests.Utils.ObjectCreationUtility;
+using static Tests.Utils.ContentMocksCreationUtility;
 
 namespace Tests.EditMode.PVETests.CalculatorsTests
 {
@@ -482,92 +483,6 @@ namespace Tests.EditMode.PVETests.CalculatorsTests
             }
         }
         
-        private static Content GetPlayerOwnedContent(Player player)
-        {
-            var mockContent = new Mock<Content>();
-            var mockPlayerOwned = mockContent.As<IPlayerOwned>();
-            mockPlayerOwned.Setup(x => x.GetOwner()).Returns(player);
-            return mockContent.Object;
-        }
 
-        private static Content GetNotRemovableContent()
-        {
-            var mockContent = new Mock<Content>();
-            var mockRemovable = mockContent.As<IRemovable>();
-            mockRemovable.Setup(x => x.CanBeRemoved()).Returns(false);
-            return mockContent.Object;
-        }
-        
-        private static Content GetRemovableContent(int removeCost)
-        {
-            var mockContent = new Mock<Content>();
-            var mockRemovable = mockContent.As<IRemovable>();
-            mockRemovable.Setup(x => x.CanBeRemoved()).Returns(true);
-            mockRemovable.Setup(x => x.GetRemoveCost()).Returns(removeCost);
-            return mockContent.Object;
-        }
-
-        private static Content GetUndefinedContent()
-        {
-            var contentMock = new Mock<Content>();
-            return contentMock.Object;
-        }
-
-        private static Content GetReplaceableContent(int replaceCost)
-        {
-            var contentMock = new Mock<Content>();
-            var replaceableMock = contentMock.As<IReplaceable>();
-            replaceableMock.Setup(x => x.GetReplaceCost()).Returns(replaceCost);
-            return contentMock.Object;
-        }
-
-        private static Content GetCapturableContent(int captureHitCost, Player forPlayer)
-        {
-            var contentMock = new Mock<Content>();
-            var capturableMock = contentMock.As<ICapturable>();
-            capturableMock.Setup(x => x.GetCaptureHitCost(forPlayer)).Returns(captureHitCost);
-            return contentMock.Object;
-        }
-
-        private static IPlaceable GetPlaceablePlayerOwned(Player owner)
-        {
-            var placeableMock = new Mock<IPlaceable>();
-            var playerOwnedMock = placeableMock.As<IPlayerOwned>();
-            playerOwnedMock.Setup(x => x.GetOwner()).Returns(owner);
-            return placeableMock.Object;
-        }
-
-        private static IPlaceable GetPlaceableReplaceable(int replaceCost)
-        {
-            var placeableMock = new Mock<IPlaceable>();
-            var replaceableMock = placeableMock.As<IReplaceable>();
-            replaceableMock.Setup(x => x.GetReplaceCost()).Returns(replaceCost);
-            return placeableMock.Object;
-        }
-        
-        private static IPlaceable GetPlaceableRemovable(int removeCost)
-        {
-            var placeableMock = new Mock<IPlaceable>();
-            var removableMock = placeableMock.As<IRemovable>();
-            removableMock.Setup(x => x.CanBeRemoved()).Returns(true);
-            removableMock.Setup(x => x.GetRemoveCost()).Returns(removeCost);
-            return placeableMock.Object;
-        }
-        
-        private static IPlaceable GetPlaceableCapturable(int captureHitCost, Player forPlayer)
-        {
-            var placeableMock = new Mock<IPlaceable>();
-            var capturableMock = placeableMock.As<ICapturable>();
-            capturableMock.Setup(x => x.GetCaptureHitCost(forPlayer)).Returns(captureHitCost);
-            return placeableMock.Object;
-        }
-
-        private static IPlaceable GetPlaceableNotRemovable()
-        {
-            var placeableMock = new Mock<IPlaceable>();
-            var removableMock = placeableMock.As<IRemovable>();
-            removableMock.Setup(x => x.CanBeRemoved()).Returns(false);
-            return placeableMock.Object;
-        }
     }
 }
