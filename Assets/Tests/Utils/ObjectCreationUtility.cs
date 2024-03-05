@@ -134,11 +134,7 @@ namespace Tests.Utils
             return data;
         }
         
-        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), params PlacementType[] placementTypes)
-        {
-            return new PlayerData(id, placementTypes.ToList(), timeSpan);
-        }
-        
+
         public static TurnSwitchConditionsConfig GetTurnSwitchConditionsConfig()
         {
             return new TurnSwitchConditionsConfig(new List<TscType> { TscType.SwitchByActionPoints });
@@ -273,7 +269,10 @@ namespace Tests.Utils
             return new PlayerData(id, placementTypes ?? new List<PlacementType>(), timeSpan);
         }
         
-
+        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), params PlacementType[] placementTypes)
+        {
+            return new PlayerData(id, placementTypes.ToList(), timeSpan);
+        }
         
         public static Board GetFullNByNBoard(int size)
         {
@@ -310,10 +309,21 @@ namespace Tests.Utils
         {
             return new ObstacleMock();
         }
+
+        public static CastleGO GetCastle(Player player, int durability = 3, int maxDurability = 3,
+            int maxFreeDurability = 1, int captureHitCost = 1)
+        {
+            return new CastleGO(player, durability, maxDurability, maxFreeDurability, captureHitCost);
+        }
         
         public static CastleGO GetCastle()
         {
             return new CastleGO(GetPlayer(id: 1), 3, 3, 1, 1);
+        }
+
+        public static Knight GetKnight(Player player, int placementCost = 1, int health = 2)
+        {
+            return new Knight(player, placementCost, health);
         }
         
         public static Knight GetKnight()
