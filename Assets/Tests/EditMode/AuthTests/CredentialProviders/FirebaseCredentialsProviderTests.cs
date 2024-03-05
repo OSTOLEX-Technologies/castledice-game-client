@@ -16,14 +16,9 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
     public class FirebaseCredentialsProviderTests
     {
         [Test]
-        [TestCaseSource(nameof(GetAuthTypes))]
-        public async Task GetCredentialAsync_ShouldGetValidCredentials(AuthType firebaseAuthProviderType)
+        [TestCaseSource(nameof(GetAuthTypesExceptMetamask))]
+        public async Task GetCredentialAsync_ShouldGetValidCredentials(AuthType authType)
         {
-            if (firebaseAuthProviderType == AuthType.Metamask)
-            {
-                Assert.IsTrue(true);
-            }
-            
             var googleCredentials = new GoogleJwtStore(
                 new JwtToken("id", Int32.MaxValue, DateTime.Now),
                 new JwtToken("access", Int32.MaxValue, DateTime.Now),
@@ -34,7 +29,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             //Test object
             FirebaseCredentialProvider firebaseCredentialProvider = null;
             
-            switch (firebaseAuthProviderType)
+            switch (authType)
             {
                 case AuthType.Google:
                     var googleCredentialProviderMock = new Mock<IGoogleCredentialProvider>();
@@ -55,16 +50,18 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                     break;
             }
 
-            var resultCredentials = await firebaseCredentialProvider.GetCredentialAsync(firebaseAuthProviderType);
+            var resultCredentials = await firebaseCredentialProvider.GetCredentialAsync(authType);
             Assert.AreSame(expectedCredentials, resultCredentials);
         }
             
-        public static IEnumerable<AuthType> GetAuthTypes()
+        public static IEnumerable<AuthType> GetAuthTypesExceptMetamask()
         {
             var authTypes = Enum.GetValues(typeof(AuthType));
-            foreach (var firebaseAuthType in authTypes) 
+            foreach (var authType in authTypes)
             {
-                yield return (AuthType) firebaseAuthType;
+                var type = (AuthType)authType;
+                if (type == AuthType.Metamask) continue;
+                yield return type;
             }
         }
     }
