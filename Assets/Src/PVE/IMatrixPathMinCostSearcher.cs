@@ -14,11 +14,12 @@ namespace Src.PVE
         /// 1 3 3 3 1
         /// 1 1 1 1 3
         /// 1 1 1 1 0
-        /// The minimum cost path from (0, 0) to (4, 4) is 6.
+        /// The minimum cost path from (0, 0) to (4, 4) is 5.
         /// The cost does not include the cost of the cell "from", but includes the cost of the cell "to".
         /// That is, if in the given matrix the cell "from" would have the cost 5 and the cell "to" would have the cost 7,
-        /// the minimum cost path from "from" to "to" would be 13.
+        /// the minimum cost path from "from" to "to" would be 12.
         /// If the sum of costs of the path is greater than int.MaxValue, the method should return int.MaxValue.
+        /// If positions "from" and "to" are the same, the method should return 0.
         /// </summary>
         /// <param name="matrix"></param>
         /// <param name="from"></param>

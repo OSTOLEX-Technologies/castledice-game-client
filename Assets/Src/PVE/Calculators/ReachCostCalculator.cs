@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
