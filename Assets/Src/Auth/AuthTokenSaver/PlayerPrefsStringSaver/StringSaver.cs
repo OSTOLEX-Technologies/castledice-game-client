@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver
 {
-    public class PlayerPrefsStringSaver : IPlayerPrefsStringSaver
+    public class StringSaver : IStringSaver
     {
         public bool TryGetStringValue(string name, out string value)
         {

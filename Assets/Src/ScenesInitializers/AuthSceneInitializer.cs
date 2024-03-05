@@ -41,7 +41,7 @@ namespace Src.ScenesInitializers
             _singletonCacher = new SingletonCacher();
             _metamaskWalletFacade = new MetamaskWalletFacade();
             _authTokenSaver = new AuthTokenSaver(
-                new PlayerPrefsStringSaver());
+                new StringSaver());
 
             _firebaseCredentialProvider = new FirebaseCredentialProvider(
                 new FirebaseInternalCredentialProviderCreator(

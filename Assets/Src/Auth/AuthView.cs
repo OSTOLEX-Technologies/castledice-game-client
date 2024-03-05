@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using MetaMask.Transports.Unity.UI;
 using Src.Auth.CredentialProviders.Firebase;
-using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.Caching;

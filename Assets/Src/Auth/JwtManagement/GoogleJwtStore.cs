@@ -16,5 +16,18 @@ namespace Src.Auth.JwtManagement
         {
             this.idToken = idToken;
         }
+        
+        public override bool Equals(object obj)
+        {
+            if (obj is not GoogleJwtStore other) return false;
+            return 
+                base.Equals(obj) &&
+                idToken.Equals(other.idToken);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(accessToken, refreshToken, idToken);
+        }
     }
 }

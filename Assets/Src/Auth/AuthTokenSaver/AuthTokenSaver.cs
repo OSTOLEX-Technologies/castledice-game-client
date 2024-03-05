@@ -7,19 +7,22 @@ namespace Src.Auth.AuthTokenSaver
 {
     public class AuthTokenSaver : IAuthTokenSaver
     {
-        private readonly IPlayerPrefsStringSaver _playerPrefsSaver;
+        private const string StorePrefNamePostfix = "AuthTokensStore";
+        private const string LastLoginStoreInfoPrefName = "LastLoginAuthTokensStoreInfo";
+        
+        private readonly IStringSaver _saver;
 
-        public AuthTokenSaver(IPlayerPrefsStringSaver playerPrefsSaver)
+        public AuthTokenSaver(IStringSaver saver)
         {
-            _playerPrefsSaver = playerPrefsSaver;
+            _saver = saver;
         }
         
         #region Getting Store
         
         public void TryGetTokenStoreByAuthType(out JwtStore store, AuthType providerType)
         {
-            if (_playerPrefsSaver.TryGetStringValue(
-                    FormatFirebaseStorePrefNameByAuthType(providerType), 
+            if (_saver.TryGetStringValue(
+                    GetStorePrefNameByAuthType(providerType), 
                     out var storedValue))
             {
                 store = JsonConvert.DeserializeObject<JwtStore>(storedValue);
@@ -31,8 +34,8 @@ namespace Src.Auth.AuthTokenSaver
 
         public void TryGetGoogleTokenStore(out GoogleJwtStore store)
         {
-            if (_playerPrefsSaver.TryGetStringValue(
-                    FormatFirebaseStorePrefNameByAuthType(AuthType.Google), 
+            if (_saver.TryGetStringValue(
+                    GetStorePrefNameByAuthType(AuthType.Google), 
                     out var storedValue))
             {
                 store = JsonConvert.DeserializeObject<GoogleJwtStore>(storedValue);
@@ -50,8 +53,8 @@ namespace Src.Auth.AuthTokenSaver
         public void SaveAuthTokens(JwtStore store, AuthType providerType)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
-            _playerPrefsSaver.SaveStringValue(
-                FormatFirebaseStorePrefNameByAuthType(providerType), 
+            _saver.SaveStringValue(
+                GetStorePrefNameByAuthType(providerType), 
                 serializedStore);
             UpdateLastLoginInfo(providerType);
         }
@@ -59,8 +62,8 @@ namespace Src.Auth.AuthTokenSaver
         public void SaveGoogleAuthTokens(GoogleJwtStore store)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
-            _playerPrefsSaver.SaveStringValue(
-                FormatFirebaseStorePrefNameByAuthType(AuthType.Google), 
+            _saver.SaveStringValue(
+                GetStorePrefNameByAuthType(AuthType.Google), 
                 serializedStore);
             UpdateLastLoginInfo(AuthType.Google);
         }
@@ -73,8 +76,8 @@ namespace Src.Auth.AuthTokenSaver
         public bool TryGetLastLoginInfo(out AuthType authType)
         {
             authType = AuthType.Google;
-            if (!_playerPrefsSaver.TryGetStringValue(
-                    IAuthTokenSaver.LastLoginStoreInfoPrefName,
+            if (!_saver.TryGetStringValue(
+                    LastLoginStoreInfoPrefName,
                     out var storedValue)) return false;
             
             Enum.TryParse(storedValue, out authType);
@@ -84,17 +87,17 @@ namespace Src.Auth.AuthTokenSaver
 
         public void UpdateLastLoginInfo(AuthType authType)
         {
-            _playerPrefsSaver.SaveStringValue(
-                IAuthTokenSaver.LastLoginStoreInfoPrefName, 
+            _saver.SaveStringValue(
+                LastLoginStoreInfoPrefName, 
                 authType.ToString());
         }
 
         #endregion
         
         
-        private string FormatFirebaseStorePrefNameByAuthType(AuthType providerType)
+        public static string GetStorePrefNameByAuthType(AuthType providerType)
         {
-            return providerType + IAuthTokenSaver.StorePrefNamePostfix;
+            return providerType + StorePrefNamePostfix;
         }
     }
 }

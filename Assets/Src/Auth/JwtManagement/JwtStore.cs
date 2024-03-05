@@ -21,5 +21,18 @@ namespace Src.Auth.JwtManagement
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
         }
+
+        public override bool Equals(object obj)
+        {
+            if (obj is not JwtStore other) return false;
+            return 
+                accessToken.Equals(other.accessToken) &&
+                refreshToken.Equals(other.refreshToken);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(accessToken, refreshToken);
+        }
     }
 }
