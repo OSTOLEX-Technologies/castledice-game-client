@@ -26,7 +26,7 @@ namespace Src.Auth.AuthTokenSaver
                     GetStorePrefNameByAuthType(providerType), 
                     out var storedValue))
             {
-                var converter = new JwtStoreDataConverter();
+                var converter = new JwtStoreJsonConverter();
                 store = JsonConvert.DeserializeObject<AbstractJwtStore>(
                     storedValue, converter);
                 return;

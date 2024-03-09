@@ -5,7 +5,7 @@ using Newtonsoft.Json.Linq;
 
 namespace Src.Auth.JwtManagement.JsonConverters
 {
-    public class JwtStoreDataConverter : JsonConverter<AbstractJwtStore>
+    public class JwtStoreJsonConverter : JsonConverter<AbstractJwtStore>
     {
         public override void WriteJson(JsonWriter writer, AbstractJwtStore value, JsonSerializer serializer)
         {
