@@ -7,6 +7,7 @@ using Moq;
 using NUnit.Framework;
 using Src.PVE.Calculators;
 using Src.PVE.Checkers;
+using Src.PVE.MoveConditions;
 using static Tests.Utils.ContentMocksCreationUtility;
 using static Tests.Utils.ObjectCreationUtility;
 
@@ -94,13 +95,13 @@ namespace Tests.EditMode.PVETests.CalculatorsTests
             var playerBaseCheckerMock = new Mock<IPlayerBaseChecker>();
             //This base does not belong to player before move
             playerBaseCheckerMock.Setup(x => x.IsPlayerBase(baseToCapture, player)).Returns(false); 
-            var baseCaptureCheckerMock = new Mock<IBaseCaptureChecker>();
+            var baseCaptureCheckerMock = new Mock<IMoveCondition>();
             //This move will capture base
-            baseCaptureCheckerMock.Setup(x => x.WillCaptureBase(capturingMove)).Returns(true);
+            baseCaptureCheckerMock.Setup(x => x.IsSatisfiedBy(capturingMove)).Returns(true);
             var basePositionsCalculator = new BasePositionsCalculatorBuilder
             {
                 BaseChecker = playerBaseCheckerMock.Object,
-                BaseCaptureChecker = baseCaptureCheckerMock.Object,
+                BaseCaptureCondition = baseCaptureCheckerMock.Object,
                 Board = board
             }.Build();
             
@@ -124,11 +125,11 @@ namespace Tests.EditMode.PVETests.CalculatorsTests
             var baseCheckerMock = new Mock<IPlayerBaseChecker>();
             baseCheckerMock.Setup(x => x.IsPlayerBase(firstPlayerBase, player)).Returns(true);
             baseCheckerMock.Setup(x => x.IsPlayerBase(secondPlayerBase, player)).Returns(true);
-            var baseCaptureCheckerMock = new Mock<IBaseCaptureChecker>();
-            baseCaptureCheckerMock.Setup(x => x.WillCaptureBase(capturingMove)).Returns(true);
+            var baseCaptureCheckerMock = new Mock<IMoveCondition>();
+            baseCaptureCheckerMock.Setup(x => x.IsSatisfiedBy(capturingMove)).Returns(true);
             var basePositionsCalculator = new BasePositionsCalculatorBuilder
             {
-                BaseCaptureChecker = baseCaptureCheckerMock.Object,
+                BaseCaptureCondition = baseCaptureCheckerMock.Object,
                 Board = board,
                 BaseChecker = baseCheckerMock.Object
             }.Build();
@@ -142,18 +143,18 @@ namespace Tests.EditMode.PVETests.CalculatorsTests
         {
             public Board Board { get; set; }
             public IPlayerBaseChecker BaseChecker { get; set; }
-            public IBaseCaptureChecker BaseCaptureChecker { get; set; }
+            public IMoveCondition BaseCaptureCondition { get; set; }
             
             public BasePositionsCalculatorBuilder()
             {
                 Board = GetFullNByNBoard(10);
                 BaseChecker = new Mock<IPlayerBaseChecker>().Object;
-                BaseCaptureChecker = new Mock<IBaseCaptureChecker>().Object;
+                BaseCaptureCondition = new Mock<IMoveCondition>().Object;
             }
             
             public BasePositionsCalculator Build()
             {
-                return new BasePositionsCalculator(Board, BaseChecker, BaseCaptureChecker);
+                return new BasePositionsCalculator(Board, BaseChecker, BaseCaptureCondition);
             }
         }
     }

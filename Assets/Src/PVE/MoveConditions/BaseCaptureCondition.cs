@@ -2,18 +2,18 @@
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.MovesLogic;
 
-namespace Src.PVE.Checkers
+namespace Src.PVE.MoveConditions
 {
-    public class BaseCaptureChecker : IBaseCaptureChecker
+    public class BaseCaptureCondition : IMoveCondition
     {
         private readonly Board _board;
 
-        public BaseCaptureChecker(Board board)
+        public BaseCaptureCondition(Board board)
         {
             _board = board;
         }
 
-        public bool WillCaptureBase(AbstractMove move)
+        public bool IsSatisfiedBy(AbstractMove move)
         {
             if (move is not CaptureMove) return false;
             var cell = _board[move.Position];
@@ -22,6 +22,7 @@ namespace Src.PVE.Checkers
                 var capturable = cell.GetContent().Find(c => c is ICapturable) as ICapturable;
                 var player = move.Player;
                 if (!capturable.CanBeCaptured(player)) return false;
+                return capturable.CaptureHitsLeft(player) <= 1;
             }
 
             return false;

@@ -3,6 +3,7 @@ using castledice_game_logic;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Src.PVE.Checkers;
+using Src.PVE.MoveConditions;
 
 namespace Src.PVE.Calculators
 {
@@ -10,9 +11,9 @@ namespace Src.PVE.Calculators
     {
         private readonly Board _board;
         private readonly IPlayerBaseChecker _baseChecker;
-        private readonly IBaseCaptureChecker _baseCaptureChecker;
+        private readonly IMoveCondition _baseCaptureChecker;
 
-        public BasePositionsCalculator(Board board, IPlayerBaseChecker baseChecker, IBaseCaptureChecker baseCaptureChecker)
+        public BasePositionsCalculator(Board board, IPlayerBaseChecker baseChecker, IMoveCondition baseCaptureChecker)
         {
             _board = board;
             _baseChecker = baseChecker;
@@ -35,7 +36,7 @@ namespace Src.PVE.Calculators
         public List<Vector2Int> GetBasePositionsAfterMove(Player forPlayer, AbstractMove afterMove)
         {
             var result = GetBasePositions(forPlayer);
-            if (_baseCaptureChecker.WillCaptureBase(afterMove))
+            if (_baseCaptureChecker.IsSatisfiedBy(afterMove))
             {
                 if (afterMove.Player == forPlayer)
                 {
