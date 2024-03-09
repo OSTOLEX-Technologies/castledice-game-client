@@ -7,20 +7,31 @@ namespace Src.PVE.Calculators
 {
     public class LostPositionsCalculator : ILostPositionsCalculator
     {
-        private readonly IUnitsPositionsSearcher _unitsPositionsSearcher;
-        private readonly IUnconnectedValuesCutter<SimpleCellState> _unconnectedValuesCutter;
-        private readonly IBasePositionsCalculator _basePositionsCalculator;
+        private readonly ISimpleArmyStateCalculator _armyStateCalculator;
 
-        public LostPositionsCalculator(IUnitsPositionsSearcher unitsPositionsSearcher, IUnconnectedValuesCutter<SimpleCellState> unconnectedValuesCutter, IBasePositionsCalculator basePositionsCalculator)
+        public LostPositionsCalculator(ISimpleArmyStateCalculator armyStateCalculator)
         {
-            _unitsPositionsSearcher = unitsPositionsSearcher;
-            _unconnectedValuesCutter = unconnectedValuesCutter;
-            _basePositionsCalculator = basePositionsCalculator;
+            _armyStateCalculator = armyStateCalculator;
         }
 
         public List<Vector2Int> GetLostPositions(Player forPlayer, AbstractMove afterMove)
         {
-            throw new System.NotImplementedException();
+            var armyStateBeforeMove = _armyStateCalculator.GetArmyState(forPlayer);
+            var armyStateAfterMove = _armyStateCalculator.GetArmyStateAfterMove(forPlayer, afterMove);
+            var lostPositions = new List<Vector2Int>();
+            for (int i = 0; i < armyStateAfterMove.GetLength(0); i++)
+            {
+                for (int j = 0; j < armyStateAfterMove.GetLength(1); j++)
+                {
+                    var stateBefore = armyStateBeforeMove[i, j];
+                    var stateAfter = armyStateAfterMove[i, j];
+                    if (stateBefore != stateAfter && stateAfter == SimpleCellState.Neither)
+                    {
+                        lostPositions.Add(new Vector2Int(i, j));
+                    }
+                }                
+            }
+            return lostPositions;
         }
     }
 }
