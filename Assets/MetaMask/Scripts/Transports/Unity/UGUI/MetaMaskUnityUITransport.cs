@@ -1,10 +1,11 @@
 using System;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime;
-using MetaMask.Runtime;
-using MetaMask.Runtime.Models;
+using MetaMask.Models;
+using MetaMask.SocketIOClient;
+using MetaMask.Unity;
 using UnityEngine;
+using UnityEngine.Serialization;
 
-namespace MetaMask.Scripts.Transports.Unity.UGUI
+namespace MetaMask.Transports.Unity.UI
 {
 
     [CreateAssetMenu(menuName = "MetaMask/Transports/Unity UI")]

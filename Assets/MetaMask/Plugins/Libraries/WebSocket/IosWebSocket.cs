@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 using System.Collections.Generic;
 #endif
 
-namespace MetaMask.Plugins.Libraries.WebSocket
+namespace MetaMask.NativeWebSocket
 {
 
 #if UNITY_IOS

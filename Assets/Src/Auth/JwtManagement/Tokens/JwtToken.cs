@@ -27,5 +27,19 @@ namespace Src.Auth.JwtManagement.Tokens
         {
             _token = token;
         }
+        
+        public override bool Equals(object obj)
+        {
+            if (obj is not JwtToken other) return false;
+            return 
+                _token == other._token && 
+                _expiresInSeconds == other._expiresInSeconds && 
+                _issuedAt.Equals(other._issuedAt);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(_token, _expiresInSeconds, _issuedAt);
+        }
     }
 }

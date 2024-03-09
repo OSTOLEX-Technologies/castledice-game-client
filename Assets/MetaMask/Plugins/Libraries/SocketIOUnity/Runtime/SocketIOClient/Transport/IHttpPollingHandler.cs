@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
+namespace MetaMask.SocketIOClient.Transport
 {
     public interface IHttpPollingHandler : IDisposable
     {

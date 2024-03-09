@@ -1,4 +1,4 @@
-namespace MetaMask.Runtime
+namespace MetaMask
 {
     public interface IMetaMaskEvents
     {

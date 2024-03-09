@@ -1,14 +1,10 @@
-using System;
 using Src.Auth;
+using Src.Auth.AuthTokenSaver;
+using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
-using Src.Auth.CredentialProviders.Metamask;
-using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
-using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
-using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
-using Src.Auth.JwtManagement.Converters.Metamask;
-using Src.Auth.REST;
+using Src.Auth.Scripts;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 using Src.Components;
@@ -20,6 +16,9 @@ namespace Src.ScenesInitializers
 {
     public class AuthSceneInitializer : MonoBehaviour
     {
+        [SerializeField, InspectorName("Scene Flow Script")]
+        private AuthSceneFlow authSceneFlow;
+        
         [SerializeField, InspectorName("Auth View")]
         private AuthView authView;
 
@@ -31,42 +30,40 @@ namespace Src.ScenesInitializers
         
         private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
+        private IAuthTokenSaver _authTokenSaver;
+        private IFirebaseCredentialProvider _firebaseCredentialProvider;
         
         private AuthController _authController;
         private AuthSceneTransitionHandler _transitionHandler;
-        
+
         private void Awake()
         {
             _singletonCacher = new SingletonCacher();
             _metamaskWalletFacade = new MetamaskWalletFacade();
+            _authTokenSaver = new AuthTokenSaver(
+                new StringSaver());
+
+            _firebaseCredentialProvider = new FirebaseCredentialProvider(
+                new FirebaseInternalCredentialProviderCreator(
+                    textAssetResourceLoader,
+                    _authTokenSaver),
+                new FirebaseCredentialFormatter());
             
             _authController = new AuthController(
                 new GeneralAccessTokenProvidersStrategy(
-                    new FirebaseTokenProvidersCreator(
-                        new FirebaseCredentialProvider(
-                            new FirebaseInternalCredentialProviderCreator(textAssetResourceLoader),
-                            new FirebaseCredentialFormatter())), 
-                    new MetamaskTokenProvidersCreator(
-                        new MetamaskBackendCredentialProvider(
-                            _metamaskWalletFacade,
-                            new MetamaskSignerFacade(),
-                            new MetamaskRestRequestsAdapter(
-                                new HttpClientRequestAdapter(),
-                                new MetamaskBackendUrlProvider()),
-                            new MetamaskJwtConverter()))),
+                    new FirebaseTokenProvidersCreator(_firebaseCredentialProvider), 
+                    new MetamaskTokenProvidersCreator(_authTokenSaver)),
                 _singletonCacher, 
                 authView);
 
             _transitionHandler = new AuthSceneTransitionHandler(sceneLoader, SceneType.MainMenu);
-            authView.AuthCompleted += UnsubscribeFromAuthCompleted;
-            authView.AuthCompleted += _transitionHandler.HandleTransitionCommand;
-            
-            authView.Init(_metamaskWalletFacade, _authController);
-        }
 
-        private void UnsubscribeFromAuthCompleted(object sender, EventArgs args)
-        {
-            authView.AuthCompleted -= _transitionHandler.HandleTransitionCommand;
+            authView.Init(_metamaskWalletFacade, _authController, _firebaseCredentialProvider);
+            
+            authSceneFlow.StartSceneFlow(
+                authView,
+                _authTokenSaver,
+                _transitionHandler);
         }
     }
 }

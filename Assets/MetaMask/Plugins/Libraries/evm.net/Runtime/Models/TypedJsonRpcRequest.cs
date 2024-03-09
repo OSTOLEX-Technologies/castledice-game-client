@@ -1,7 +1,7 @@
 using System;
 using Newtonsoft.Json;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models
+namespace evm.net.Models
 {
     public class JsonRpcRequest<T> : JsonRpcPayload
     {

@@ -1,6 +1,6 @@
 using System.Threading.Tasks;
-using MetaMask.Runtime.Models;
-using MetaMask.Scripts;
+using MetaMask.Models;
+using MetaMask.Unity;
 
 namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer
 {

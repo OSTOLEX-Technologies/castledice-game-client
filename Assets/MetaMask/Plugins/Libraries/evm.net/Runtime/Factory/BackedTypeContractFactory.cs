@@ -1,9 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
+using evm.net.Models;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Factory
+namespace evm.net.Factory
 {
     public class BackedTypeContractFactory : IContractFactory
     {

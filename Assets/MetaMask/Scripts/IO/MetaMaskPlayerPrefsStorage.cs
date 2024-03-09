@@ -1,8 +1,8 @@
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime;
-using MetaMask.Runtime.Storage;
+using MetaMask.SocketIOClient;
+using MetaMask.Unity;
 using UnityEngine;
 
-namespace MetaMask.Scripts.IO
+namespace MetaMask.IO
 {
     public class MetaMaskPlayerPrefsStorage : IMetaMaskPersistentStorage
     {

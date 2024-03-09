@@ -1,25 +1,23 @@
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using evm.net;
 using System.Threading;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime;
-using MetaMask.Runtime;
-using MetaMask.Runtime.Logging;
-using MetaMask.Runtime.Models;
-using MetaMask.Runtime.Sockets;
-using MetaMask.Runtime.Transports;
-using MetaMask.Scripts.Cryptography;
-using MetaMask.Scripts.IO;
-using MetaMask.Scripts.Sockets;
-using MetaMask.Scripts.Transports.Unity;
-using MetaMask.Scripts.Transports.Unity.UGUI;
-using MetaMask.Scripts.Utilities;
+using MetaMask.Cryptography;
+using MetaMask.IO;
+using MetaMask.Logging;
+using MetaMask.Models;
+using MetaMask.SocketIOClient;
+using MetaMask.Sockets;
+using MetaMask.Transports;
+using MetaMask.Transports.Unity;
+using MetaMask.Transports.Unity.UI;
+using MetaMask.Unity.Utils;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 using UnityEngine.Serialization;
 
-namespace MetaMask.Scripts
+namespace MetaMask.Unity
 {
     [RequireComponent(typeof(MetaMaskUnityEventHandler))]
     [RequireComponent(typeof(MetaMaskHttpService))]

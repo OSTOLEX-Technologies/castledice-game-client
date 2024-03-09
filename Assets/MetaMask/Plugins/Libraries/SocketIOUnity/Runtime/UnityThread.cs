@@ -7,9 +7,10 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime
+namespace MetaMask.SocketIOClient
 {
     public class UnityThread : MonoBehaviour
     {

@@ -4,6 +4,6 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
 {
     public interface IFirebaseTokenProvidersCreator
     {
-        public Task<FirebaseTokenProvider> GetTokenProviderAsync(FirebaseAuthProviderType authProviderType);
+        public Task<FirebaseTokenProvider> GetTokenProviderAsync(AuthType authProviderType);
     }
 }

@@ -1,6 +1,6 @@
-﻿using MetaMask.Runtime.Storage;
+﻿using UnityEngine;
 
-namespace MetaMask.Scripts.IO
+namespace MetaMask.IO
 {
     public static class MetaMaskUnityStorage
     {

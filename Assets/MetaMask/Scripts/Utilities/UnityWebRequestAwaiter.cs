@@ -3,7 +3,7 @@ using System.Runtime.CompilerServices;
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace MetaMask.Scripts.Utilities
+namespace MetaMask.Unity
 {
     /// <summary>
     ///     A unity web request awaiter to hook them into async/await practice.

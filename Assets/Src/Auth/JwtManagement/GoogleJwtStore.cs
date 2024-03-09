@@ -10,11 +10,27 @@ namespace Src.Auth.JwtManagement
     {
         [JsonProperty]
         [JsonPropertyName("id_token")]
-        public IJwtToken IdToken;
+        public JwtToken idToken;
 
-        public GoogleJwtStore(IJwtToken idToken, IJwtToken accessToken, IJwtToken refreshToken) : base(accessToken, refreshToken)
+        public GoogleJwtStore(JwtToken idToken, JwtToken accessToken, JwtToken refreshToken) 
+            : base(accessToken, refreshToken)
         {
-            IdToken = idToken;
+            Type = JwtStoreType.Google;
+            
+            this.idToken = idToken;
+        }
+        
+        public override bool Equals(object obj)
+        {
+            if (obj is not GoogleJwtStore other) return false;
+            return 
+                base.Equals(obj) &&
+                idToken.Equals(other.idToken);
+        }
+
+        public override int GetHashCode()
+        {
+            return HashCode.Combine(accessToken, refreshToken, idToken);
         }
     }
 }

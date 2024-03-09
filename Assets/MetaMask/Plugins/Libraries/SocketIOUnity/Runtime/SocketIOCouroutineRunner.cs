@@ -1,7 +1,8 @@
 using System.Collections;
+
 using UnityEngine;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime
+namespace MetaMask.SocketIOClient
 {
     public class SocketIOCouroutineRunner : MonoBehaviour
     {

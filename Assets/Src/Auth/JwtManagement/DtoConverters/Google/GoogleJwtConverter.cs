@@ -5,7 +5,8 @@ using UnityEngine;
 
 namespace Src.Auth.JwtManagement.Converters.Google
 {
-    public sealed class GoogleJwtConverter : IGoogleJwtConverter
+    public sealed class 
+        GoogleJwtConverter : IGoogleJwtConverter
     {
         public GoogleJwtStore FromGoogleAuthResponse(GoogleIdTokenResponse response)
         {
@@ -32,9 +33,9 @@ namespace Src.Auth.JwtManagement.Converters.Google
                 DateTime.Now);
 
             return new GoogleJwtStore(
-                oldStore.IdToken,
+                oldStore.idToken,
                 accessToken,
-                oldStore.RefreshToken);
+                oldStore.refreshToken);
         }
     }
 }

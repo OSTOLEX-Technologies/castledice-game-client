@@ -6,10 +6,10 @@ using System.Reactive.Subjects;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Exceptions;
+
 using UnityEngine.Networking;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
+namespace MetaMask.SocketIOClient.Transport
 {
     public abstract class HttpPollingHandler : IHttpPollingHandler
     {

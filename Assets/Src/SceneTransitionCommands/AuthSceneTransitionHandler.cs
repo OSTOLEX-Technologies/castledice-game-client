@@ -1,4 +1,3 @@
-using System;
 using Src.Components;
 using Src.LoadingScenes;
 
@@ -15,7 +14,7 @@ namespace Src.SceneTransitionCommands
             _sceneType = sceneType;
         }
 
-        public void HandleTransitionCommand(object signalSender, EventArgs args)
+        public void HandleTransitionCommand()
         {
             _sceneLoader.LoadSceneWithTransition(_sceneType);
         }

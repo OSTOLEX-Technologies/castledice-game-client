@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Text.Json;
 using System.Text.Json.Serialization;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer
+namespace MetaMask.SocketIOClient.JsonSerializer
 {
     internal class ByteArrayConverter : JsonConverter<byte[]>
     {

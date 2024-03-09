@@ -1,10 +1,10 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
+using System.Collections.Generic;
 using System.Text;
 using System.Text.RegularExpressions;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Generator
+namespace evm.net.Generator
 {
     public abstract class CodeGenerator
     {

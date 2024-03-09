@@ -1,6 +1,6 @@
 using System;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models
+namespace evm.net.Models
 {
     [AttributeUsage(AttributeTargets.Interface)]
     public class BackedTypeAttribute : Attribute

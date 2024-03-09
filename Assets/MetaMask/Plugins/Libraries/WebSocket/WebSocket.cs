@@ -7,13 +7,15 @@ using System.Runtime.CompilerServices;
 using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
+
 using UnityEngine;
+
 #if UNITY_WEBGL && !UNITY_EDITOR
 using AOT;
 using System.Runtime.InteropServices;
 #endif
 
-namespace MetaMask.Plugins.Libraries.WebSocket
+namespace MetaMask.NativeWebSocket
 {
 
     public class MainThreadUtil : MonoBehaviour

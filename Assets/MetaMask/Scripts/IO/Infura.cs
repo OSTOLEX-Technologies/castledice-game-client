@@ -1,7 +1,7 @@
 using System;
 using System.Collections.Generic;
 
-namespace MetaMask.Scripts.IO
+namespace MetaMask.IO
 {
     public static class Infura
     {
