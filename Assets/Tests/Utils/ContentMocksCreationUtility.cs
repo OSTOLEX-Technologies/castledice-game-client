@@ -7,9 +7,12 @@ namespace Tests.Utils
 {
     public static class ContentMocksCreationUtility
     {
-        public static Content GetPlayerOwnedContent()
+
+        
+        public static Content GetContent()
         {
-            return GetPlayerOwnedContent(GetPlayer());
+            var contentMock = new Mock<Content>();
+            return contentMock.Object;
         }
         
         public static Content GetPlayerOwnedContent(Player player)
@@ -19,7 +22,12 @@ namespace Tests.Utils
             mockPlayerOwned.Setup(x => x.GetOwner()).Returns(player);
             return mockContent.Object;
         }
-
+        
+        public static Content GetPlayerOwnedContent()
+        {
+            return GetPlayerOwnedContent(GetPlayer());
+        }
+        
         public static Content GetNotRemovableContent()
         {
             var mockContent = new Mock<Content>();
@@ -35,12 +43,6 @@ namespace Tests.Utils
             mockRemovable.Setup(x => x.CanBeRemoved()).Returns(true);
             mockRemovable.Setup(x => x.GetRemoveCost()).Returns(removeCost);
             return mockContent.Object;
-        }
-
-        public static Content GetUndefinedContent()
-        {
-            var contentMock = new Mock<Content>();
-            return contentMock.Object;
         }
 
         public static Content GetReplaceableContent(int replaceCost)

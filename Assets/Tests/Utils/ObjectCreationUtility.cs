@@ -354,8 +354,12 @@ namespace Tests.Utils
 
         public static AbstractMove GetMove(Player player)
         {
-            return new PlaceMove(player, new Vector2Int(0, 0), GetKnight());
-
+            return GetMove(player, new Vector2Int(0, 0));
+        }
+        
+        public static AbstractMove GetMove(Player player, Vector2Int position)
+        {
+            return new PlaceMove(player, position, GetKnight());
         }
         
         public static List<Renderer> GetRenderersListWithMaterial(Material material, int count)
