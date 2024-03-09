@@ -1,6 +1,5 @@
 ﻿using System.Collections.Generic;
 using castledice_game_logic;
-using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 
@@ -8,42 +7,40 @@ namespace Src.PVE.Calculators
 {
     public class OccupiedPositionsCalculator : IOccupiedPositionsCalculator
     {
-        private readonly Board _board;
-        private readonly ILostPositionsCalculator _lostPositionsCalculator;
+        private readonly ISimpleArmyStateCalculator _armyStateCalculator;
 
-        public OccupiedPositionsCalculator(Board board, ILostPositionsCalculator lostPositionsCalculator)
+        public OccupiedPositionsCalculator(ISimpleArmyStateCalculator armyStateCalculator)
         {
-            _board = board;
-            _lostPositionsCalculator = lostPositionsCalculator;
+            _armyStateCalculator = armyStateCalculator;
         }
         
         public List<Vector2Int> GetOccupiedPositionsAfterMove(Player forPlayer, AbstractMove afterMove)
         {
-            var occupiedPositions = GetOccupiedPositions(forPlayer);
-            var lostPositions = _lostPositionsCalculator.GetLostPositions(forPlayer, afterMove);
-            foreach (var lostPosition in lostPositions)
-            {
-                occupiedPositions.Remove(lostPosition);
-            }
-            return occupiedPositions;
+            var armyState = _armyStateCalculator.GetArmyStateAfterMove(forPlayer, afterMove);
+            return GetOccupiedPositions(armyState);
         }
 
         public List<Vector2Int> GetOccupiedPositions(Player forPlayer)
         {
+            var armyState = _armyStateCalculator.GetArmyState(forPlayer);
+            return GetOccupiedPositions(armyState);
+        }
+        
+        private List<Vector2Int> GetOccupiedPositions(SimpleCellState[,] armyState)
+        {
             var occupiedPositions = new List<Vector2Int>();
-            foreach (var cell in _board)
+            for (var i = 0; i < armyState.GetLength(0); i++)
             {
-                if (CellHasPlayerOwnedContent(cell, forPlayer))
+                for (var j = 0; j < armyState.GetLength(1); j++)
                 {
-                    occupiedPositions.Add(cell.Position);
+                    if (armyState[i, j] != SimpleCellState.Neither)
+                    {
+                        occupiedPositions.Add(new Vector2Int(i, j));
+                    }
                 }
             }
-            return occupiedPositions;
-        }
 
-        private static bool CellHasPlayerOwnedContent(Cell cell, Player player)
-        {
-            return cell.HasContent(c => c is IPlayerOwned owned && owned.GetOwner() == player);
+            return occupiedPositions;
         }
     }
 }
