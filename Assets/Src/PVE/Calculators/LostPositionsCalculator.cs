@@ -7,14 +7,12 @@ namespace Src.PVE.Calculators
 {
     public class LostPositionsCalculator : ILostPositionsCalculator
     {
-        private readonly Board _board;
         private readonly IUnitsPositionsSearcher _unitsPositionsSearcher;
         private readonly IUnconnectedValuesCutter<SimpleCellState> _unconnectedValuesCutter;
         private readonly IBasePositionsCalculator _basePositionsCalculator;
 
-        public LostPositionsCalculator(Board board, IUnitsPositionsSearcher unitsPositionsSearcher, IUnconnectedValuesCutter<SimpleCellState> unconnectedValuesCutter, IBasePositionsCalculator basePositionsCalculator)
+        public LostPositionsCalculator(IUnitsPositionsSearcher unitsPositionsSearcher, IUnconnectedValuesCutter<SimpleCellState> unconnectedValuesCutter, IBasePositionsCalculator basePositionsCalculator)
         {
-            _board = board;
             _unitsPositionsSearcher = unitsPositionsSearcher;
             _unconnectedValuesCutter = unconnectedValuesCutter;
             _basePositionsCalculator = basePositionsCalculator;

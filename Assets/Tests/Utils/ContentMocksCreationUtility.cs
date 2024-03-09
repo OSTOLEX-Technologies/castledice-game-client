@@ -99,5 +99,25 @@ namespace Tests.Utils
             removableMock.Setup(x => x.CanBeRemoved()).Returns(false);
             return placeableMock.Object;
         }
+
+        public static Content GetCapturablePlayerOwnedContent(Player owner, int captureHitCost)
+        {
+            var contentMock = new Mock<Content>();
+            var playerOwnedMock = contentMock.As<IPlayerOwned>();
+            playerOwnedMock.Setup(x => x.GetOwner()).Returns(owner);
+            var capturableMock = contentMock.As<ICapturable>();
+            capturableMock.Setup(x => x.GetCaptureHitCost(owner)).Returns(captureHitCost);
+            return contentMock.Object;
+        }
+        
+        public static Content GetReplaceablePlayerOwnedContent(Player owner, int replaceCost)
+        {
+            var contentMock = new Mock<Content>();
+            var playerOwnedMock = contentMock.As<IPlayerOwned>();
+            playerOwnedMock.Setup(x => x.GetOwner()).Returns(owner);
+            var replaceableMock = contentMock.As<IReplaceable>();
+            replaceableMock.Setup(x => x.GetReplaceCost()).Returns(replaceCost);
+            return contentMock.Object;
+        }
     }
 }

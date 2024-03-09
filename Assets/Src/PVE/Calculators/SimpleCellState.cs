@@ -2,8 +2,8 @@
 {
     public enum SimpleCellState
     {
+        Neither,
         Unit,
-        Base,
-        Neither
+        Base
     }
 }
