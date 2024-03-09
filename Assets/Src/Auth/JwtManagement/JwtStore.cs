@@ -6,7 +6,7 @@ using Src.Auth.JwtManagement.Tokens;
 namespace Src.Auth.JwtManagement
 {
     [Serializable]
-    public class JwtStore
+    public class JwtStore : AbstractJwtStore
     {
         [JsonProperty]
         [JsonPropertyName("access_token")]
@@ -18,6 +18,8 @@ namespace Src.Auth.JwtManagement
 
         public JwtStore(JwtToken accessToken, JwtToken refreshToken)
         {
+            Type = JwtStoreType.Standard;
+            
             this.accessToken = accessToken;
             this.refreshToken = refreshToken;
         }

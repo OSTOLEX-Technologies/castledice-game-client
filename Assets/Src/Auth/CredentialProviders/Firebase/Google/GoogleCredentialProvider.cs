@@ -36,7 +36,8 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             _localHttpPortListener = localHttpPortListener;
             _jwtConverter = jwtConverter;
             _authTokenSaver = authTokenSaver;
-            _authTokenSaver.TryGetGoogleTokenStore(out _tokenStore);
+            _authTokenSaver.TryGetTokenStoreByAuthType(out var tempTokenStore, AuthType.Google);
+            _tokenStore = tempTokenStore as GoogleJwtStore;
         }
         
         public async Task<GoogleJwtStore> GetCredentialAsync()
@@ -47,7 +48,8 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
                 var authResponse = await GetAuthData();;
                 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
-                _authTokenSaver.SaveGoogleAuthTokens(_tokenStore);
+                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
+                
 
                 PrintTokens();
                 return _tokenStore;
@@ -61,7 +63,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
                 var refreshResponse = await RefreshAccessToken();
 
                 _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
-                _authTokenSaver.SaveGoogleAuthTokens(_tokenStore);
+                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
                 
                 PrintTokens();
                 return _tokenStore;

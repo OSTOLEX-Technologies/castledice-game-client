@@ -35,7 +35,8 @@ namespace Src.Auth.CredentialProviders.Metamask
             _metamaskRestRequestsAdapter = metamaskRestRequestsAdapter;
             _jwtConverter = jwtConverter;
             _authTokenSaver = authTokenSaver;
-            _authTokenSaver.TryGetTokenStoreByAuthType(out _tokenStore, AuthType.Metamask);
+            _authTokenSaver.TryGetTokenStoreByAuthType(out var tempTokenStore, AuthType.Metamask);
+            _tokenStore = tempTokenStore as JwtStore;
         }
 
         public async Task<string> GetCredentialAsync()
@@ -51,7 +52,7 @@ namespace Src.Auth.CredentialProviders.Metamask
                 // var accessResponse = await Auth(signedNonce);
                 //
                 // _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
-                // _authTokenSaver.SaveMetamaskAuthTokens(_tokenStore);
+                // _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
                 // return _tokenStore.AccessToken.Token;
                 
                 return "metamask_access_token_stub";

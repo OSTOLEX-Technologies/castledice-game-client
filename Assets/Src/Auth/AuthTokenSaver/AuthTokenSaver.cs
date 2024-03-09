@@ -2,6 +2,7 @@ using System;
 using Newtonsoft.Json;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.JwtManagement;
+using Src.Auth.JwtManagement.JsonConverters;
 
 namespace Src.Auth.AuthTokenSaver
 {
@@ -19,38 +20,27 @@ namespace Src.Auth.AuthTokenSaver
         
         #region Getting Store
         
-        public void TryGetTokenStoreByAuthType(out JwtStore store, AuthType providerType)
+        public void TryGetTokenStoreByAuthType(out AbstractJwtStore store, AuthType providerType)
         {
             if (_saver.TryGetStringValue(
                     GetStorePrefNameByAuthType(providerType), 
                     out var storedValue))
             {
-                store = JsonConvert.DeserializeObject<JwtStore>(storedValue);
+                var converter = new JwtStoreDataConverter();
+                store = JsonConvert.DeserializeObject<AbstractJwtStore>(
+                    storedValue, converter);
                 return;
             }
 
             store = null;
         }
 
-        public void TryGetGoogleTokenStore(out GoogleJwtStore store)
-        {
-            if (_saver.TryGetStringValue(
-                    GetStorePrefNameByAuthType(AuthType.Google), 
-                    out var storedValue))
-            {
-                store = JsonConvert.DeserializeObject<GoogleJwtStore>(storedValue);
-                return;
-            }
-
-            store = null;
-        }
-        
         #endregion
 
 
         #region Saving Store
 
-        public void SaveAuthTokens(JwtStore store, AuthType providerType)
+        public void SaveAuthTokens(AbstractJwtStore store, AuthType providerType)
         {
             var serializedStore = JsonConvert.SerializeObject(store); 
             _saver.SaveStringValue(
@@ -59,14 +49,6 @@ namespace Src.Auth.AuthTokenSaver
             UpdateLastLoginInfo(providerType);
         }
 
-        public void SaveGoogleAuthTokens(GoogleJwtStore store)
-        {
-            var serializedStore = JsonConvert.SerializeObject(store); 
-            _saver.SaveStringValue(
-                GetStorePrefNameByAuthType(AuthType.Google), 
-                serializedStore);
-            UpdateLastLoginInfo(AuthType.Google);
-        }
 
         #endregion
 

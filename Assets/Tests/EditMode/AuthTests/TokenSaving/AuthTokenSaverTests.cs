@@ -19,8 +19,7 @@ namespace Tests.EditMode.AuthTests.TokenSaving
 
         private AuthTokenSaver _tokenSaver;
         private StringSaverMock _saverMock;
-        private JwtStore _sampleStore;
-        private GoogleJwtStore _sampleGoogleStore;
+        private AbstractJwtStore _sampleStore;
 
         [SetUp]
         public void Init()
@@ -30,12 +29,11 @@ namespace Tests.EditMode.AuthTests.TokenSaving
             
             var sampleToken = new JwtToken(SampleToken, int.MaxValue, DateTime.Now);
             _sampleStore = new JwtStore(sampleToken, sampleToken);
-            _sampleGoogleStore = new GoogleJwtStore(sampleToken, sampleToken, sampleToken);
         }
 
 
         [Test]
-        [TestCaseSource(nameof(GetAuthTypesExceptGoogle))]
+        [TestCaseSource(nameof(GetAuthTypes))]
         public void SaveAuthTokens_ShouldSaveTokens_WithSpecifiedName(AuthType type)
         {
             _tokenSaver.SaveAuthTokens(_sampleStore, type);
@@ -45,37 +43,20 @@ namespace Tests.EditMode.AuthTests.TokenSaving
             
             Assert.IsTrue(stored == serialized);
         }
-        [Test]
-        public void SaveGoogleAuthTokens_ShouldSaveTokens_WithSpecifiedName()
-        {
-            _tokenSaver.SaveGoogleAuthTokens(_sampleGoogleStore);
-            
-            var stored = _saverMock.Values[AuthTokenSaver.GetStorePrefNameByAuthType(AuthType.Google)];
-            var serialized = JsonConvert.SerializeObject(_sampleGoogleStore);
-            
-            Assert.IsTrue(stored == serialized);
-        }
 
-        
+
         [Test]
-        [TestCaseSource(nameof(GetAuthTypesExceptGoogle))]
+        [TestCaseSource(nameof(GetAuthTypes))]
         public void TryGetTokenValueByAuthType_ShouldReturnStoredToken_IfThereIsSavedOne(AuthType type)
         {
             _tokenSaver.SaveAuthTokens(_sampleStore, type);
             _tokenSaver.TryGetTokenStoreByAuthType(out var store, type);
             Assert.IsTrue(_sampleStore.Equals(store));
         }
-        [Test]
-        public void TryGetGoogleTokenStore_ShouldReturnStoredToken_IfThereIsSavedOne()
-        {
-            _tokenSaver.SaveGoogleAuthTokens(_sampleGoogleStore);
-            _tokenSaver.TryGetGoogleTokenStore(out var store);
-            Assert.IsTrue(_sampleGoogleStore.Equals(store));
-        }
 
-        
+
         [Test]
-        [TestCaseSource(nameof(GetAuthTypesExceptGoogle))]
+        [TestCaseSource(nameof(GetAuthTypes))]
         public void UpdateLastLoginInfo_ShouldSaveGivenInfo(AuthType type)
         {
             _tokenSaver.UpdateLastLoginInfo(type);
@@ -86,7 +67,7 @@ namespace Tests.EditMode.AuthTests.TokenSaving
             Assert.IsTrue(storedValue == type.ToString());
         }
         [Test]
-        [TestCaseSource(nameof(GetAuthTypesExceptGoogle))]
+        [TestCaseSource(nameof(GetAuthTypes))]
         public void TryGetLastLoginInfo_ShouldReturnInfo_SavedPreviously(AuthType type)
         {
             _tokenSaver.UpdateLastLoginInfo(type);
@@ -103,14 +84,12 @@ namespace Tests.EditMode.AuthTests.TokenSaving
             Assert.IsTrue(!success);
         }
         
-        public static IEnumerable<AuthType> GetAuthTypesExceptGoogle()
+        public static IEnumerable<AuthType> GetAuthTypes()
         {
             var authTypes = Enum.GetValues(typeof(AuthType));
             foreach (var authType in authTypes)
             {
-                var type = (AuthType)authType;
-                if (type == AuthType.Google) continue;
-                yield return type;
+                yield return (AuthType)authType;
             }
         }
     }

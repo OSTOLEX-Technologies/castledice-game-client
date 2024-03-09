@@ -4,10 +4,8 @@ namespace Src.Auth.AuthTokenSaver
 {
     public interface IAuthTokenSaver
     {
-        public void TryGetTokenStoreByAuthType(out JwtStore store, AuthType providerType);
-        public void TryGetGoogleTokenStore(out GoogleJwtStore store);
-        public void SaveAuthTokens(JwtStore store, AuthType providerType);
-        public void SaveGoogleAuthTokens(GoogleJwtStore store);
+        public void TryGetTokenStoreByAuthType(out AbstractJwtStore store, AuthType providerType);
+        public void SaveAuthTokens(AbstractJwtStore store, AuthType providerType);
 
         public bool TryGetLastLoginInfo(out AuthType authType);
         public void UpdateLastLoginInfo(AuthType authType);
