@@ -88,7 +88,7 @@ namespace Tests.EditMode.PVETests.CalculatorsTests
         public void GetCosts_ShouldGiveDefaultCost_ToCellsWithUndefinedContent()
         {
             var board = GetFullNByNBoard(2);
-            var undefinedContent = GetUndefinedContent();
+            var undefinedContent = GetContent();
             board[0, 0].AddContent(undefinedContent);
             var minimalPlaceCost = 1;
             var defaultCost = new Random().Next(15, 100);
