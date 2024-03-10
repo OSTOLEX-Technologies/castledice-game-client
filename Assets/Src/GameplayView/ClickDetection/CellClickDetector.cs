@@ -5,7 +5,7 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayView.ClickDetection
 {
-    public class UnityCellClickDetector : MonoBehaviour, ICellClickDetector, IClickable
+    public class CellClickDetector : MonoBehaviour, ICellClickDetector, IClickable
     {
         [CanBeNull] public event EventHandler<Vector2Int> Clicked;
 

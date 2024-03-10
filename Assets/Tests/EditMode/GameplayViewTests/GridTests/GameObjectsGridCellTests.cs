@@ -8,7 +8,7 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.EditMode.GameplayViewTests.GridTests
 {
-    public class UnityGridCellTests
+    public class GameObjectsGridCellTests
     {
         public static Vector2Int[] Positions = { (0, 0), (1, 0), (2, 0), (0, 1), (1, 1) };
         
@@ -16,7 +16,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void PositionProperty_ShouldReturnPosition_GivenInInit([ValueSource(nameof(Positions))]Vector2Int position)
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             
             cell.Init(position);
             
@@ -27,7 +27,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void Contains_ShouldReturnTrueForGameObject_IfAddChildWasCalled()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
 
             cell.AddChild(child);
@@ -39,7 +39,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void AddChild_ShouldSetCellGameObject_AsParentOfChildGameObject()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
 
             cell.AddChild(child);
@@ -53,7 +53,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
             var cellPosition = new Vector3(1, 2, 3);
             var gameObject = new GameObject();
             gameObject.transform.position = cellPosition;
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
 
             cell.AddChild(child);
@@ -66,7 +66,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void RemoveChild_ShouldReturnTrue_IfChildWasAddedBefore()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
             cell.AddChild(child);
 
@@ -79,7 +79,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void RemoveChild_ShouldReturnFalse_IfChildWasNotAddedBefore()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
 
             var result = cell.RemoveChild(child);
@@ -91,7 +91,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void Contains_ShouldReturnFalse_IfChildWasRemoved()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
             cell.AddChild(child);
 
@@ -104,7 +104,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public IEnumerator RemoveChild_ShouldDestroyChildGameObject()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
             cell.AddChild(child);
             
@@ -118,7 +118,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public IEnumerator RemoveChild_ShouldNotDestroyChildGameObject_IfItWasNotAddedBefore()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child = new GameObject();
             
             cell.RemoveChild(child);
@@ -131,7 +131,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void GetEnumerator_ShouldReturnAllChildren()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
             var child1 = new GameObject();
             var child2 = new GameObject();
             cell.AddChild(child1);
@@ -148,7 +148,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         public void GetEnumerator_ShouldReturnEmptyList_IfNoChildren()
         {
             var gameObject = new GameObject();
-            var cell = gameObject.AddComponent<UnityGridCell>();
+            var cell = gameObject.AddComponent<GameObjectsGridCell>();
 
             var result = cell.ToList();
 

@@ -3,16 +3,16 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayView.ClickDetection
 {
-    public class UnityCellClickDetectorsFactory : MonoBehaviour, IUnityCellClickDetectorsFactory
+    public class CellClickDetectorsFactory : MonoBehaviour, ICellClickDetectorsFactory
     {
-        private IUnityCellClickDetectorsConfig _config;
+        private ICellClickDetectorsConfig _config;
         
-        public void Init(IUnityCellClickDetectorsConfig config)
+        public void Init(ICellClickDetectorsConfig config)
         {
             _config = config;
         }
         
-        public UnityCellClickDetector GetDetector(Vector2Int position)
+        public CellClickDetector GetDetector(Vector2Int position)
         {
             var detector = Instantiate(_config.DetectorPrefab);
             detector.Init(position);

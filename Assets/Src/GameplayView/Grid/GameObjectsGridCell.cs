@@ -5,7 +5,7 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayView.Grid
 {
-    public class UnityGridCell : MonoBehaviour, IGridCell
+    public class GameObjectsGridCell : MonoBehaviour, IGridCell
     {
         public Vector2Int Position { get; private set; }
 

@@ -6,9 +6,9 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayView.Grid
 {
-    public class UnityGrid : MonoBehaviour, IGrid
+    public class GameObjectsGrid : MonoBehaviour, IGrid
     {
-        private Dictionary<Vector2Int, UnityGridCell> _cells = new();
+        private readonly Dictionary<Vector2Int, GameObjectsGridCell> _cells = new();
         
         public IEnumerator<IGridCell> GetEnumerator()
         {
@@ -26,7 +26,7 @@ namespace Src.GameplayView.Grid
             {
                 throw new InvalidOperationException("Cell already exists on given game position " + gamePosition);
             }
-            var cell = new GameObject().AddComponent<UnityGridCell>();
+            var cell = new GameObject().AddComponent<GameObjectsGridCell>();
             cell.Init(gamePosition);
             cell.transform.position = scenePosition;
             _cells.Add(gamePosition, cell);

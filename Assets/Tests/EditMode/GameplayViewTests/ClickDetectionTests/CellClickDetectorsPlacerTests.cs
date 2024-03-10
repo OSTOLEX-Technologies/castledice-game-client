@@ -20,9 +20,9 @@ namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
         [Test]
         public void PlaceDetectors_ShouldCallGetDetectorOnGivenFactory_ForEveryPositionOnGrid([ValueSource(nameof(PositionsArrays))]Vector2Int[] positions)
         {
-            var factoryMock = new Mock<IUnityCellClickDetectorsFactory>();
+            var factoryMock = new Mock<ICellClickDetectorsFactory>();
             var gameObject = new GameObject();
-            var detector = gameObject.AddComponent<UnityCellClickDetector>();
+            var detector = gameObject.AddComponent<CellClickDetector>();
             factoryMock.Setup(f => f.GetDetector(It.IsAny<Vector2Int>())).Returns(detector);
             var grid = new GridForTests();
             foreach (var position in positions)
@@ -42,9 +42,9 @@ namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
         [Test]
         public void PlaceDetectors_ShouldPlaceDetectorsFromFactory_OnEveryCellOfGrid([ValueSource(nameof(CellsCounts))]int cellsCount)
         {
-            var factoryMock = new Mock<IUnityCellClickDetectorsFactory>();
+            var factoryMock = new Mock<ICellClickDetectorsFactory>();
             var gameObject = new GameObject();
-            var detector = gameObject.AddComponent<UnityCellClickDetector>();
+            var detector = gameObject.AddComponent<CellClickDetector>();
             factoryMock.Setup(f => f.GetDetector(It.IsAny<Vector2Int>())).Returns(detector);
             var grid = new GridForTests();
             for (int i = 0; i < cellsCount; i++)
@@ -65,9 +65,9 @@ namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
         [Test]
         public void PlaceDetectors_ShouldReturnListOfPlacedDetectors([ValueSource(nameof(CellsCounts))] int cellsCount)
         {
-            var factoryMock = new Mock<IUnityCellClickDetectorsFactory>();
+            var factoryMock = new Mock<ICellClickDetectorsFactory>();
             var gameObject = new GameObject();
-            var detector = gameObject.AddComponent<UnityCellClickDetector>();
+            var detector = gameObject.AddComponent<CellClickDetector>();
             factoryMock.Setup(f => f.GetDetector(It.IsAny<Vector2Int>())).Returns(detector);
             var grid = new GridForTests();
             for (int i = 0; i < cellsCount; i++)

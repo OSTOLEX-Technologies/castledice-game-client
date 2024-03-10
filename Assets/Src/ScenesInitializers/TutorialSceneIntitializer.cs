@@ -70,7 +70,7 @@ using UnityEngine;
 
 namespace Src.ScenesInitializers
 {
-    public class DuelGameSceneInitializer : MonoBehaviour
+    public class TutorialSceneInitializer : MonoBehaviour
     {
         [Header("Camera")]
         [SerializeField] private Camera camera;
@@ -232,7 +232,6 @@ namespace Src.ScenesInitializers
 
         private void SetUpGame()
         {
-            _gameStartData = Singleton<GameStartData>.Instance;
             var playersListCreator = new PlayersListCreator(new PlayerCreator(new UpdatablePlayerTimerCreator(new FixedTimeDeltaProvider(), _fixedUpdater)));
             var coordinateSpawnerCreator = new CoordinateContentSpawnerCreator(new ContentToCoordinateCreator());
             var matrixCellsGeneratorCreator = new MatrixCellsGeneratorCreator();
@@ -241,7 +240,8 @@ namespace Src.ScenesInitializers
             var turnSwitchConditionsConfigCreator = new TurnSwitchConditionsConfigCreator();
             var gameBuilder = new GameBuilder(new GameConstructorWrapper());
             var gameCreator = new GameCreator(playersListCreator, boardConfigCreator, placeablesConfigCreator, turnSwitchConditionsConfigCreator, gameBuilder);
-            _game = gameCreator.CreateGame(_gameStartData);
+            
+            //var gameStartData = _tutorialGameStartDataConfig.GetGameStartData();
         }
 
         private void SetUpGameOver()

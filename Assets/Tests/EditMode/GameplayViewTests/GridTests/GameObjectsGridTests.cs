@@ -9,15 +9,15 @@ using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.EditMode.GameplayViewTests.GridTests
 {
-    public class UnityGridTests
+    public class GameObjectsGridTests
     {
         public static Vector3[] ScenePositions = { new (1, 2, 3), new (4, 5, 6), new (0.2f, 3, 2.5f)};
         public static Vector2Int[] GamePositions = { (0, 0), (1, 0), (2, 0), (0, 1), (1, 1) };
         
         [Test]
-        public void AddCell_ShouldCreateUnityGridCell_WithGivenGamePosition([ValueSource(nameof(GamePositions))]Vector2Int gamePosition)
+        public void AddCell_ShouldCreateGameObjectsGridCell_WithGivenGamePosition([ValueSource(nameof(GamePositions))]Vector2Int gamePosition)
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             
             grid.AddCell(gamePosition, new Vector3());
             var cell = grid.GetCell(gamePosition);
@@ -26,14 +26,14 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         }
         
         [UnityTest]
-        public IEnumerator AddCell_ShouldCreateUnityGridCell_OnGivenScenePosition([ValueSource(nameof(ScenePositions))]Vector3 scenePosition)
+        public IEnumerator AddCell_ShouldCreateGameObjectsGridCell_OnGivenScenePosition([ValueSource(nameof(ScenePositions))]Vector3 scenePosition)
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
             grid.AddCell(gamePosition, scenePosition);
             yield return null;
-            var gameObject = (grid.First() as UnityGridCell).gameObject;
+            var gameObject = (grid.First() as GameObjectsGridCell).gameObject;
             
             Assert.AreEqual(scenePosition, gameObject.transform.position);
         }
@@ -41,7 +41,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         [Test]
         public void AddCell_ShouldThrowInvalidOperationException_IfCellAlreadyExistsOnGivenGamePosition()
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
             grid.AddCell(gamePosition, new Vector3());
@@ -52,7 +52,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         [Test]
         public void GetCell_ShouldReturnIGridCell_IfItWasPreviouslyAdded()
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
             grid.AddCell(gamePosition, new Vector3());
@@ -63,7 +63,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         [Test]
         public void GetCell_ShouldThrowInvalidOperationException_IfCellWasNotAddedOnGivenGamePosition()
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
             Assert.Throws<InvalidOperationException>(() => grid.GetCell(gamePosition));
@@ -72,7 +72,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         [Test]
         public void RemoveCell_ShouldReturnTrue_IfCellWasPreviouslyAdded()
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
             grid.AddCell(gamePosition, new Vector3());
@@ -83,7 +83,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         [Test]
         public void RemoveCell_ShouldReturnFalse_IfCellWasNotPreviouslyAdded()
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
             Assert.False(grid.RemoveCell(gamePosition));
@@ -92,7 +92,7 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         [Test]
         public void Any_ShouldReturnFalse_IfAllCellsWereRemoved()
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             
             grid.AddCell(gamePosition, new Vector3());
@@ -104,12 +104,12 @@ namespace Tests.EditMode.GameplayViewTests.GridTests
         [UnityTest]
         public IEnumerator RemoveCell_ShouldDestroyCellGameObject()
         {
-            var grid = new GameObject().AddComponent<UnityGrid>();
+            var grid = new GameObject().AddComponent<GameObjectsGrid>();
             var gamePosition = new Vector2Int(1, 1);
             var scenePosition = Vector3.zero;
             
             grid.AddCell(gamePosition, scenePosition);
-            var cellGameObject = (grid.GetCell(gamePosition) as UnityGridCell).gameObject;
+            var cellGameObject = (grid.GetCell(gamePosition) as GameObjectsGridCell).gameObject;
             grid.RemoveCell(gamePosition);
             yield return null;
 
