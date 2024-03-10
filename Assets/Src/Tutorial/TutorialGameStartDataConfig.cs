@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using castledice_game_data_logic;
 using castledice_game_data_logic.ConfigsData;
+using castledice_game_data_logic.Content;
+using castledice_game_data_logic.TurnSwitchConditions;
 using castledice_game_logic;
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
@@ -43,7 +45,49 @@ namespace Src.Tutorial
         
         public GameStartData GetGameStartData(int playerId, int enemyId)
         {
-            throw new NotImplementedException();
+            var cellsPresence = new bool[boardLength,boardWidth];
+            for (int i = 0; i < boardLength; i++)
+            {
+                for (int j = 0; j < boardWidth; j++)
+                {
+                    cellsPresence[i, j] = true;
+                }
+            }
+            var playerCastleData = new CastleData(
+                playerBasePosition, 
+                playerCastleConfig.CaptureHitCost, 
+                playerCastleConfig.MaxFreeDurability, 
+                playerCastleConfig.MaxDurability, 
+                playerCastleConfig.Durability, 
+                playerId);
+            var enemyCastleData = new CastleData(
+                enemyBasePosition, 
+                enemyCastleConfig.CaptureHitCost, 
+                enemyCastleConfig.MaxFreeDurability, 
+                enemyCastleConfig.MaxDurability, 
+                enemyCastleConfig.Durability, 
+                enemyId);
+            var contentData = new List<ContentData>
+            {
+                playerCastleData,
+                enemyCastleData
+            };
+            var boardData = new BoardData(boardLength, boardWidth, cellType, cellsPresence, contentData);
+            var placeablesConfigData = new PlaceablesConfigData(
+                new KnightConfigData(knightPlacementCost, knightHealth));
+            var tscConfigData = new TscConfigData(defaultTscTypes);
+            var playerData = new PlayerData(playerId, defaultPlacementTypes, defaultTimeSpan);
+            var enemyData = new PlayerData(enemyId, defaultPlacementTypes, defaultTimeSpan);
+            var gameStartData = new GameStartData(
+                defaultVersion, 
+                boardData, 
+                placeablesConfigData, 
+                tscConfigData, 
+                new List<PlayerData>
+                {
+                    playerData, enemyData
+                });
+            return gameStartData;
         }
 
         [Serializable]

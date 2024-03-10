@@ -26,6 +26,7 @@ namespace Tests.EditMode.TutorialTests
         private const string EnemyCastleConfigFieldName = "enemyCastleConfig";
         private const string DefaultTscTypesFieldName = "defaultTscTypes";
         private const string DefaultAvailablePlacementTypesFieldName = "defaultPlacementTypes";
+        private const string DefaultTimeSpanFieldName = "defaultTimeSpan";
         
         private const string KnightPlacementCostFieldName = "knightPlacementCost";
         private const string KnightHealthFieldName = "knightHealth";
@@ -236,12 +237,17 @@ namespace Tests.EditMode.TutorialTests
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlySetPlayerData()
         {
             var rnd = new Random();
-            var expectedTimeSpan = new TimeSpan(rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next());
+            var expectedTimeSpan = new TimeSpan(
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60));
             var expectedPlayerId = rnd.Next();
             var expectedAvailablePlacementTypes = new List<PlacementType> {PlacementType.Knight};
             var expectedPlayerData = new PlayerData(expectedPlayerId, expectedAvailablePlacementTypes, expectedTimeSpan);
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
-            config.SetPrivateField(DefaultTscTypesFieldName, expectedTimeSpan);
+            config.SetPrivateField(DefaultTimeSpanFieldName, expectedTimeSpan);
             config.SetPrivateField(DefaultAvailablePlacementTypesFieldName, expectedAvailablePlacementTypes);
             
             var gameStartData = config.GetGameStartData(expectedPlayerId, 1);
@@ -254,12 +260,17 @@ namespace Tests.EditMode.TutorialTests
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlySetEnemyData()
         {
             var rnd = new Random();
-            var expectedTimeSpan = new TimeSpan(rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next(), rnd.Next());
+            var expectedTimeSpan = new TimeSpan(
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60), 
+                rnd.Next(1, 60));
             var expectedEnemyId = rnd.Next();
             var expectedAvailablePlacementTypes = new List<PlacementType> {PlacementType.Knight};
             var expectedEnemyData = new PlayerData(expectedEnemyId, expectedAvailablePlacementTypes, expectedTimeSpan);
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
-            config.SetPrivateField(DefaultTscTypesFieldName, expectedTimeSpan);
+            config.SetPrivateField(DefaultTimeSpanFieldName, expectedTimeSpan);
             config.SetPrivateField(DefaultAvailablePlacementTypesFieldName, expectedAvailablePlacementTypes);
             
             var gameStartData = config.GetGameStartData(0, expectedEnemyId);
