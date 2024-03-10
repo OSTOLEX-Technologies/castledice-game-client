@@ -92,7 +92,7 @@ namespace Src.ScenesInitializers
     
         [Header("Grid")]
         [SerializeField] private GameObjectsGrid grid;
-        [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
+        [SerializeField] private SquareGridGenerationConfig gridGenerationConfig;
         private SquareGridGenerator _gridGenerator;
     
         [Header("Cells")]
