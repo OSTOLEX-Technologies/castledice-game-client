@@ -11,9 +11,9 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
     public class BoardCellsStateCalculator : IBoardCellsStateCalculator
     {
         private readonly Board _board;
-        private readonly IUnconnectedValuesCutter<CellState> _unconnectedValuesCutter;
+        private readonly DfsUnconnectedValuesCutter _unconnectedValuesCutter;
 
-        public BoardCellsStateCalculator(Board board, IUnconnectedValuesCutter<CellState> unconnectedValuesCutter)
+        public BoardCellsStateCalculator(Board board, DfsUnconnectedValuesCutter unconnectedValuesCutter)
         {
             _board = board;
             _unconnectedValuesCutter = unconnectedValuesCutter;

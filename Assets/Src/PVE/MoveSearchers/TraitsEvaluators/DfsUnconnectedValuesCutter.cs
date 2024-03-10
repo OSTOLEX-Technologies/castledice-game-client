@@ -1,16 +1,17 @@
 ﻿using System.Collections.Generic;
 using castledice_game_logic.Math;
+using Src.PVE.TraitsEvaluators;
 
 namespace Src.PVE.MoveSearchers.TraitsEvaluators
 {
-    public class DfsUnconnectedValuesCutter<T> : IUnconnectedValuesCutter<T>
+    public class DfsUnconnectedValuesCutter
     {
         private bool[,] _connectedCells;
         
-        public T[,] CutUnconnectedUnits(T[,] inputMatrix, T unitState, T baseState, T freeState)
+        public CellState[,] CutUnconnectedUnits(CellState[,] inputMatrix, CellState unitState, CellState baseState, CellState freeState)
         {
             _connectedCells = new bool[inputMatrix.GetLength(0), inputMatrix.GetLength(1)];
-            var matrixCopy = (T[,])inputMatrix.Clone();
+            var matrixCopy = (CellState[,])inputMatrix.Clone();
             var basePositions = GetBasePositions(matrixCopy, baseState);
             if (basePositions.Count == 0)
             {
@@ -26,7 +27,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             return matrixCopy;
         }
 
-        private void MarkUnknownCellsAsConnected(T[,] matrixCopy, T unitState, T baseState, T freeState)
+        private void MarkUnknownCellsAsConnected(CellState[,] matrixCopy, CellState unitState, CellState baseState, CellState freeState)
         {
             for (int i = 0; i < matrixCopy.GetLength(0); i++)
             {
@@ -40,7 +41,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             }
         }
 
-        private void SetNotConnectedCellsFree(T[,] matrixCopy, T freeState)
+        private void SetNotConnectedCellsFree(CellState[,] matrixCopy, CellState freeState)
         {
             for (int i = 0; i < matrixCopy.GetLength(0); i++)
             {
@@ -54,7 +55,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             }
         }
 
-        private void MarkConnectedCells(int basePositionX, int basePositionY, T[,] inputMatrix, T baseState, T unitState)
+        private void MarkConnectedCells(int basePositionX, int basePositionY, CellState[,] inputMatrix, CellState baseState, CellState unitState)
         {
             _connectedCells[basePositionX, basePositionY] = true;
             for (int i = -1; i <= 1; i++)
@@ -78,7 +79,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             }
         }
         
-        private void SetAllUnitCellsFree(T[,] inputMatrix, T freeState, T unitState)
+        private void SetAllUnitCellsFree(CellState[,] inputMatrix, CellState freeState, CellState unitState)
         {
             for (int i = 0; i < inputMatrix.GetLength(0); i++)
             {
@@ -92,7 +93,7 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
             }
         }
 
-        private List<Vector2Int> GetBasePositions(T[,] inputMatrix, T baseState)
+        private List<Vector2Int> GetBasePositions(CellState[,] inputMatrix, CellState baseState)
         {
             var basePositions = new List<Vector2Int>();
             for (int i = 0; i < inputMatrix.GetLength(0); i++)

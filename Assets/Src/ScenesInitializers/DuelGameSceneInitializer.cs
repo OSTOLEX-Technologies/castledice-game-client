@@ -378,7 +378,7 @@ private void SetUpUpdaters()
         var playerBasePosition = new Vector2Int(0, 0);
         var board = _game.GetBoard();
         var localMoveApplier = new LocalMovesApplier(_game);
-        var dfsValuesCutter = new DfsUnconnectedValuesCutter<CellState>();
+        var dfsValuesCutter = new DfsUnconnectedValuesCutter();
         var boardStateCalculator = new BoardCellsStateCalculator(board, dfsValuesCutter);
         var distancesCalculator = new BoardStateDistancesCalculator();
         var totalPossibleMovesProvider = new TotalPossibleMovesProvider(_game);

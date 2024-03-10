@@ -7,10 +7,10 @@ namespace Src.PVE.MoveSearchers.TraitsEvaluators
 {
     public class UnitsStructureCalculator : IUnitsStructureCalculator
     {
-        private readonly IUnconnectedValuesCutter<CellState> _unconnectedValuesCutter;
+        private readonly DfsUnconnectedValuesCutter _unconnectedValuesCutter;
         private readonly int _depth;
 
-        public UnitsStructureCalculator(IUnconnectedValuesCutter<CellState> unconnectedValuesCutter, int depth = 1)
+        public UnitsStructureCalculator(DfsUnconnectedValuesCutter unconnectedValuesCutter, int depth = 1)
         {
             _depth = depth;
             _unconnectedValuesCutter = unconnectedValuesCutter;
