@@ -83,6 +83,18 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5147410827318275732, guid: aead06da19ea6d44db7d57f674507beb, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4c0ecf00cdca4ae4a8900d4de441bc69, type: 2}
+    - target: {fileID: 5147410827318275732, guid: aead06da19ea6d44db7d57f674507beb, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0ac5582979b4cba45a7977928d7d7cca, type: 2}
+    - target: {fileID: 5147410827318275732, guid: aead06da19ea6d44db7d57f674507beb, type: 3}
+      propertyPath: m_Materials.Array.data[2]
+      value: 
+      objectReference: {fileID: 2100000, guid: ea25e58fffd14c046a1a2309ba81e226, type: 2}
     - target: {fileID: 6607323624185498178, guid: aead06da19ea6d44db7d57f674507beb, type: 3}
       propertyPath: m_Name
       value: PlateAngle1.3

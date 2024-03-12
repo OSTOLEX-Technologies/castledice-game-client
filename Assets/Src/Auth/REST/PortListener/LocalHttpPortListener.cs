@@ -4,7 +4,7 @@ namespace Src.Auth.REST.PortListener
 {
     public class LocalHttpPortListener : ILocalHttpPortListener
     {
-        private IHttpPortListenerHandler _listenerHandler;
+        private readonly IHttpPortListenerHandler _listenerHandler;
         private Action<string> _callback;
 
         public LocalHttpPortListener(IHttpPortListenerHandler listenerHandler)

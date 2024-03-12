@@ -96,6 +96,6 @@ public class MainMenuInitializer : MonoBehaviour
 
     private void OnGameCreated(object sender, EventArgs e)
     {
-        sceneLoader.LoadScene(ESceneType.DuelGame);
+        sceneLoader.LoadScene(SceneType.DuelGame);
     }
 }

@@ -41,7 +41,6 @@ namespace Src.Auth.DeepLinking
                 switch (resolvedLink.LinkName)
                 {
                     case DeepLinkConfig.GoogleAuthRedirectUri:
-                        //TODO: disable google auth panel|canvas
                         break;
                 }
             }

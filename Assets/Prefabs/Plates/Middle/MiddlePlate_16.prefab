@@ -39,6 +39,14 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 4069149800863576720}
     m_Modifications:
+    - target: {fileID: -5006675562568016996, guid: a6334a0306f17f147ae37b0644d53f50, type: 3}
+      propertyPath: m_Materials.Array.data[0]
+      value: 
+      objectReference: {fileID: 2100000, guid: 4c0ecf00cdca4ae4a8900d4de441bc69, type: 2}
+    - target: {fileID: -5006675562568016996, guid: a6334a0306f17f147ae37b0644d53f50, type: 3}
+      propertyPath: m_Materials.Array.data[1]
+      value: 
+      objectReference: {fileID: 2100000, guid: 0ac5582979b4cba45a7977928d7d7cca, type: 2}
     - target: {fileID: 1615336207559400349, guid: a6334a0306f17f147ae37b0644d53f50, type: 3}
       propertyPath: m_Name
       value: Plate.016

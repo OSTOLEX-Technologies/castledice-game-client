@@ -4,8 +4,6 @@ using MetaMask.Scripts.Transports.Unity.UGUI;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.Caching;
-using Src.Components;
-using Src.LoadingScenes;
 using TMPro;
 using UnityEngine;
 
@@ -13,14 +11,12 @@ namespace Src.Auth
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
-        [SerializeField, InspectorName("SceneLoader component")]
-        private SceneLoader sceneLoader;
-        
         [SerializeField, InspectorName("Metamask Auth Cancellation Canvas")]
         private Canvas metamaskAuthCancellationCanvas;
         
         [SerializeField, InspectorName("Sign in Message Canvas")]
         private Canvas signInMessageCanvas;
+
         [SerializeField, InspectorName("Sign in Message Text Field")]
         private TextMeshProUGUI signInMessageText;
 
@@ -88,7 +84,8 @@ namespace Src.Auth
             var token = await Singleton<IAccessTokenProvider>.Instance.GetAccessTokenAsync();
 
             await WaitUntilMetamaskDisconnects();
-            sceneLoader.LoadSceneWithTransition(ESceneType.MainMenu);
+            
+            AuthCompleted?.Invoke(this, EventArgs.Empty);
         }
         #endregion
         
@@ -112,5 +109,7 @@ namespace Src.Auth
         
 
         public event EventHandler<AuthType> AuthTypeChosen;
+        
+        public event EventHandler AuthCompleted;
     }
 }
