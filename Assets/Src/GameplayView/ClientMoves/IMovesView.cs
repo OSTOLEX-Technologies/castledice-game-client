@@ -5,7 +5,7 @@ using castledice_game_logic.MovesLogic;
 
 namespace Src.GameplayView.ClientMoves
 {
-    public interface IClientMovesView
+    public interface IMovesView
     {
         void ShowMovesList(List<AbstractMove> moves);
         event EventHandler<Vector2Int> PositionClicked;

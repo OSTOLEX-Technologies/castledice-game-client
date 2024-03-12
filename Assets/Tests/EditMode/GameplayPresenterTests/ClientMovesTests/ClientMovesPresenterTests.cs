@@ -59,7 +59,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
             var movesList = new List<AbstractMove>();
             var possibleMovesListProviderMock = new Mock<IPossibleMovesListProvider>();
             possibleMovesListProviderMock.Setup(p => p.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(movesList);
-            var viewMock = new Mock<IClientMovesView>();
+            var viewMock = new Mock<IMovesView>();
             var presenter = new ClientMovesPresenterBuilder
             {
                 PossibleMovesListProvider = possibleMovesListProviderMock.Object,
@@ -149,7 +149,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
         [Test]
         public void ShowMovesForPosition_ShouldBeCalled_IfPositionClickedEventIsInvoked()
         {
-            var viewStub = new ClientMovesViewStub();
+            var viewStub = new MovesViewStub();
             var position = new Vector2Int(0, 0);
             var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), 
                 new Mock<IServerMoveApplier>().Object, 
@@ -166,7 +166,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
         [Test]
         public void MakeMove_ShouldBeCalled_IfMovePickedEventIsInvoked()
         {
-            var viewStub = new ClientMovesViewStub();
+            var viewStub = new MovesViewStub();
             var move = GetMove();
             var presenterMock = new Mock<ClientMovesPresenter>(GetPlayerDataProvider(), 
                 new Mock<IServerMoveApplier>().Object, 
@@ -188,7 +188,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
             public IPossibleMovesListProvider PossibleMovesListProvider { get; set; } = GetPossibleMovesListProvider();
             public ILocalMoveApplier LocalMoveApplier { get; set; } = new Mock<ILocalMoveApplier>().Object;
             public IMoveToDataConverter MoveToDataConverter { get; set; } = new Mock<IMoveToDataConverter>().Object;
-            public IClientMovesView View { get; set; } = new Mock<IClientMovesView>().Object;
+            public IMovesView View { get; set; } = new Mock<IMovesView>().Object;
             
             public ClientMovesPresenter Build()
             {
@@ -196,7 +196,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
             }
         }
 
-        public class ClientMovesViewStub : IClientMovesView
+        public class MovesViewStub : IMovesView
         {
             public void ShowMovesList(List<AbstractMove> moves)
             {

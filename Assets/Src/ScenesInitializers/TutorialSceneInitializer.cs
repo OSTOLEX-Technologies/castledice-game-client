@@ -121,7 +121,7 @@ namespace Src.ScenesInitializers
         private CellsContentView _contentView;
     
         //Moves
-        private ClientMovesView _clientMovesView;
+        private MovesView _movesView;
         private ClientMovesPresenter _clientMovesPresenter;
         private ServerMovesPresenter _serverMovesPresenter;
     
@@ -332,14 +332,14 @@ namespace Src.ScenesInitializers
 
         private void SetUpClientMoves()
         {
-            _clientMovesView = new ClientMovesView(_cellClickDetectors);
+            _movesView = new MovesView(_cellClickDetectors);
             var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
             var serverMovesApplier = new ServerMoveApplier(ClientsHolder.GetClient(ClientType.GameServerClient));
             ApproveMoveMessageHandler.SetDTOAccepter(serverMovesApplier);
             var localMovesApplier = new LocalMovesApplier(_game);
             var possibleMovesProvider = new PossibleMovesListProvider(_game);
             _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider,
-                localMovesApplier, new MoveToDataConverter(), _clientMovesView);
+                localMovesApplier, new MoveToDataConverter(), _movesView);
         }
 
         private void SetUpServerMoves()

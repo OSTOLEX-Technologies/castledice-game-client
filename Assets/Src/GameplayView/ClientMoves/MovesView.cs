@@ -6,14 +6,14 @@ using Src.GameplayView.ClickDetection;
 
 namespace Src.GameplayView.ClientMoves
 {
-    public class ClientMovesView : IClientMovesView
+    public class MovesView : IMovesView
     {
         public event EventHandler<Vector2Int> PositionClicked;
         public event EventHandler<AbstractMove> MovePicked;
         
         private List<ICellClickDetector> _detectors;
 
-        public ClientMovesView(List<ICellClickDetector> detectors)
+        public MovesView(List<ICellClickDetector> detectors)
         {
             _detectors = detectors;
             foreach (var detector in _detectors)

@@ -28,7 +28,7 @@ namespace Tests.EditMode.GameplayViewTests.ClientMovesTests
         public void PositionClickedEvent_ShouldBeCalled_IfClickedEventOnDetectorInvoked()
         {
             var detector = new DetectorForTests();
-            var view = new ClientMovesView(new List<ICellClickDetector> {detector});
+            var view = new MovesView(new List<ICellClickDetector> {detector});
             var eventInvoked = false;
             view.PositionClicked += (sender, position) => eventInvoked = true;
             
@@ -42,7 +42,7 @@ namespace Tests.EditMode.GameplayViewTests.ClientMovesTests
         {
             var detector = new DetectorForTests();
             detector.Position = position;
-            var view = new ClientMovesView(new List<ICellClickDetector> {detector});
+            var view = new MovesView(new List<ICellClickDetector> {detector});
             Vector2Int actualPosition = default;
             
             view.PositionClicked += (sender, pos) => actualPosition = pos;
@@ -54,7 +54,7 @@ namespace Tests.EditMode.GameplayViewTests.ClientMovesTests
         [Test]
         public void ShowMovesList_ShouldInvokeMovePickedEvent_WithFirstMoveFromGivenList()
         {
-            var view = new ClientMovesView(new List<ICellClickDetector>());
+            var view = new MovesView(new List<ICellClickDetector>());
             var move = GetMove();
             var moves = new List<AbstractMove> {move};
             AbstractMove actualMove = null;
@@ -68,7 +68,7 @@ namespace Tests.EditMode.GameplayViewTests.ClientMovesTests
         [Test]
         public void ShowMovesList_ShouldNotInvokeMovePickedEvent_IfGivenEmptyList()
         {
-            var view = new ClientMovesView(new List<ICellClickDetector>());
+            var view = new MovesView(new List<ICellClickDetector>());
             var moves = new List<AbstractMove>();
             AbstractMove actualMove = null;
             
