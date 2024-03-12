@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using Src.PVE.MoveConditions;
 
 namespace Src.Tutorial
@@ -15,12 +16,24 @@ namespace Src.Tutorial
         
         public IMoveCondition GetCurrentCondition()
         {
-            throw new System.NotImplementedException();
+            if (_conditions.Count == 0)
+            {
+                throw new InvalidOperationException("Conditions list is empty");
+            }
+            return _conditions[_currentConditionIndex];
         }
 
         public void MoveToNextCondition()
         {
-            throw new System.NotImplementedException();
+            if (_conditions.Count == 0)
+            {
+                throw new InvalidOperationException("Conditions list is empty");
+            }
+            if (_currentConditionIndex == _conditions.Count - 1)
+            {
+                throw new InvalidOperationException("No more conditions in the list");
+            }
+            _currentConditionIndex++;
         }
     }
 }

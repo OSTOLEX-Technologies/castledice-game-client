@@ -56,7 +56,7 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void MoveToNextCondition_ShouldThrowInvalidOperationException_IfNoMoreConditionsInTheList()
         {
-            var conditions = new List<IMoveCondition> { new Mock<IMoveCondition>().Object };
+            var conditions = new List<IMoveCondition> { new Mock<IMoveCondition>().Object, new Mock<IMoveCondition>().Object };
             var sequence = new ListMoveConditionsSequence(conditions);
 
             sequence.MoveToNextCondition();
