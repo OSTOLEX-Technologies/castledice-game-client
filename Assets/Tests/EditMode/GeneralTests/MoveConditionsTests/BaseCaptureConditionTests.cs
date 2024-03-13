@@ -4,11 +4,11 @@ using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Moq;
 using NUnit.Framework;
-using Src.PVE.MoveConditions;
+using Src.General.MoveConditions;
 using static Tests.Utils.ContentMocksCreationUtility;
 using static Tests.Utils.ObjectCreationUtility;
 
-namespace Tests.EditMode.PVETests.MoveConditionsTests
+namespace Tests.EditMode.GeneralTests.MoveConditionsTests
 {
     public class BaseCaptureConditionTests
     {

@@ -2,7 +2,7 @@
 using castledice_game_logic.GameObjects;
 using castledice_game_logic.MovesLogic;
 
-namespace Src.PVE.MoveConditions
+namespace Src.General.MoveConditions
 {
     public class BaseCaptureCondition : IMoveCondition
     {

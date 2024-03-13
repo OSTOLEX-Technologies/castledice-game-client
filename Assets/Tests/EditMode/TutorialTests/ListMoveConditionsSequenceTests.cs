@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using Moq;
 using NUnit.Framework;
-using Src.PVE.MoveConditions;
+using Src.General.MoveConditions;
 using Src.Tutorial;
 
 namespace Tests.EditMode.TutorialTests

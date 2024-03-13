@@ -6,7 +6,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
-using Src.PVE.MoveConditions;
+using Src.General.MoveConditions;
 using Src.Tutorial;
 using static Tests.Utils.ObjectCreationUtility;
 

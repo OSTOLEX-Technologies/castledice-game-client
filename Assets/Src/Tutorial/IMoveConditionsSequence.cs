@@ -1,4 +1,4 @@
-﻿using Src.PVE.MoveConditions;
+﻿using Src.General.MoveConditions;
 
 namespace Src.Tutorial
 {

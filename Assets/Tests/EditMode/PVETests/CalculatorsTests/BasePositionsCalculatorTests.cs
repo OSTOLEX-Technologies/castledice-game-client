@@ -5,9 +5,9 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using Moq;
 using NUnit.Framework;
+using Src.General.MoveConditions;
 using Src.PVE.Calculators;
 using Src.PVE.Checkers;
-using Src.PVE.MoveConditions;
 using static Tests.Utils.ContentMocksCreationUtility;
 using static Tests.Utils.ObjectCreationUtility;
 

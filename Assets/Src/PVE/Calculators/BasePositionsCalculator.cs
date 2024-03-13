@@ -2,8 +2,8 @@
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using Src.General.MoveConditions;
 using Src.PVE.Checkers;
-using Src.PVE.MoveConditions;
 
 namespace Src.PVE.Calculators
 {

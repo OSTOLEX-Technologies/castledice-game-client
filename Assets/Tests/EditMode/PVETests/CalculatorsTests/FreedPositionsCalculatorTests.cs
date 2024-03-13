@@ -6,8 +6,8 @@ using castledice_game_logic.MovesLogic;
 using Moq;
 using static Tests.Utils.ObjectCreationUtility;
 using NUnit.Framework;
+using Src.General.MoveConditions;
 using Src.PVE.Calculators;
-using Src.PVE.MoveConditions;
 
 namespace Tests.EditMode.PVETests.CalculatorsTests
 {

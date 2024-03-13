@@ -1,6 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
-using Src.PVE.MoveConditions;
+using Src.General.MoveConditions;
 
 namespace Src.Tutorial
 {

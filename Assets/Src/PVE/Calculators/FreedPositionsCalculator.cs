@@ -2,7 +2,7 @@
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
-using Src.PVE.MoveConditions;
+using Src.General.MoveConditions;
 
 namespace Src.PVE.Calculators
 {
