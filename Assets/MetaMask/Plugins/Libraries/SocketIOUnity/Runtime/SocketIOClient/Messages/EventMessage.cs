@@ -1,9 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.Text;
 using System.Text.Json;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages
+using MetaMask.SocketIOClient.Transport;
+
+namespace MetaMask.SocketIOClient.Messages
 {
     public class EventMessage : IMessage
     {

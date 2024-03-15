@@ -1,9 +1,10 @@
 using System;
 using System.Runtime.CompilerServices;
+
 using UnityEngine;
 using UnityEngine.Networking;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime
+namespace MetaMask.SocketIOClient
 {
 
     /// <summary>

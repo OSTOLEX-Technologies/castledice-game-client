@@ -2,10 +2,10 @@
 using System.Runtime.InteropServices;
 #else
 using System;
+using UnityEngine;
 #endif
-using MetaMask.Runtime.Storage;
 
-namespace MetaMask.Scripts.IO
+namespace MetaMask.IO
 {
     public class MetaMaskWebLocalStorage : IMetaMaskPersistentStorage
     {

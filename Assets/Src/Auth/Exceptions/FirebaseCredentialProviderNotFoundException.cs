@@ -5,11 +5,11 @@ namespace Src.Auth.Exceptions
     [Serializable]
     public class FirebaseCredentialProviderNotFoundException : Exception
     {
-        public FirebaseAuthProviderType UsedAuthType { get; }
+        public AuthType UsedAuthType { get; }
         
         public FirebaseCredentialProviderNotFoundException() {}
         
-        public FirebaseCredentialProviderNotFoundException(FirebaseAuthProviderType usedAuthType)
+        public FirebaseCredentialProviderNotFoundException(AuthType usedAuthType)
         {
             UsedAuthType = usedAuthType;
         }
@@ -20,7 +20,7 @@ namespace Src.Auth.Exceptions
         public FirebaseCredentialProviderNotFoundException(string message, Exception inner) : base(message, inner)
         {}
 
-        public FirebaseCredentialProviderNotFoundException(string message, FirebaseAuthProviderType usedAuthType) : base(message)
+        public FirebaseCredentialProviderNotFoundException(string message, AuthType usedAuthType) : base(message)
         {
             UsedAuthType = usedAuthType;
         }

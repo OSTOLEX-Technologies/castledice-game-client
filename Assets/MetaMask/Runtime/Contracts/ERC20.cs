@@ -13,10 +13,10 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
+using evm.net;
+using evm.net.Models;
 
-namespace MetaMask.Runtime.Contracts
+namespace MetaMask.Contracts
 {
 	#if UNITY_EDITOR || !ENABLE_MONO
 	[BackedType(typeof(ERC20Backing))]

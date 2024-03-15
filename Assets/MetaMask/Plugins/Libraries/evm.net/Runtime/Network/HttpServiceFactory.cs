@@ -1,6 +1,6 @@
 using System;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Network
+namespace evm.net.Network
 {
     /// <summary>
     /// A factory that creates a new instance of the <see cref="IHttpService"/> interface. A creator function

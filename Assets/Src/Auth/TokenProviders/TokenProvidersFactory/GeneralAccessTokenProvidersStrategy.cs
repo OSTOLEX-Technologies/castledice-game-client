@@ -7,7 +7,7 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
     {
         private readonly IFirebaseTokenProvidersCreator _firebaseProviderCreator;
         private readonly IMetamaskTokenProvidersCreator _metamaskProvidersCreator;
-        
+
         public GeneralAccessTokenProvidersStrategy(
             IFirebaseTokenProvidersCreator firebaseProviderCreator,
             IMetamaskTokenProvidersCreator metamaskProvidersCreator)
@@ -18,12 +18,12 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
 
         public async Task<IAccessTokenProvider> GetAccessTokenProviderAsync(AuthType authType)
         {
-            switch (authType)
+            return authType switch
             {
-                case AuthType.Google: return await _firebaseProviderCreator.GetTokenProviderAsync(FirebaseAuthProviderType.Google);
-                case AuthType.Metamask: return await _metamaskProvidersCreator.GetTokenProviderAsync();
-                default: throw new AccessTokenProviderNotFoundException(authType);
-            }
+                AuthType.Google => await _firebaseProviderCreator.GetTokenProviderAsync(authType),
+                AuthType.Metamask => await _metamaskProvidersCreator.GetTokenProviderAsync(),
+                _ => throw new AccessTokenProviderNotFoundException(authType)
+            };
         }
     }
 }

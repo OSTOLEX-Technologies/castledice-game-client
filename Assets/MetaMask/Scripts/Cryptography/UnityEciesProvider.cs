@@ -1,8 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
-using MetaMask.Runtime.Cryptography;
 
-namespace MetaMask.Scripts.Cryptography
+namespace MetaMask.Cryptography
 {
     public class UnityEciesProvider : IEciesProvider
     {

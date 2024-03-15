@@ -1,7 +1,7 @@
 using System.Numerics;
 using Nethereum.Util;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
+namespace evm.net
 {
     public class Units
     {

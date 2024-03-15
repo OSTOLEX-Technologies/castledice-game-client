@@ -1,12 +1,15 @@
 using System;
 using System.Collections.Generic;
 using System.Reflection;
-using MetaMask.Scripts;
-using MetaMask.Scripts.Transports.Unity.UGUI;
+using MetaMask.IO;
 using UnityEditor;
+
 using UnityEngine;
 
-namespace MetaMask.Editor.EditorGUI
+using MetaMask.Transports.Unity.UI;
+using UnityEngine.Experimental.Rendering;
+
+namespace MetaMask.Unity
 {
     public class MetaMaskWindow : EditorWindow
     {

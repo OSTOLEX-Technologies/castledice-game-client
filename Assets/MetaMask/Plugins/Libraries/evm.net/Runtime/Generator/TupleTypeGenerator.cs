@@ -1,7 +1,7 @@
 using System;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models.ABI;
+using evm.net.Models.ABI;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Generator
+namespace evm.net.Generator
 {
     public class TupleTypeGenerator : CodeGenerator
     {

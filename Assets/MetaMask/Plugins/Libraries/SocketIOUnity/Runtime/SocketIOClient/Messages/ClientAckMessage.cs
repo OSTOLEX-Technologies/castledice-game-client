@@ -2,9 +2,10 @@
 using System.Linq;
 using System.Text;
 using System.Text.Json;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages
+using MetaMask.SocketIOClient.Transport;
+
+namespace MetaMask.SocketIOClient.Messages
 {
     /// <summary>
     /// The server calls the client's callback

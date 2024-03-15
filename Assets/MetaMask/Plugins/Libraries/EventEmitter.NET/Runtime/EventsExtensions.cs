@@ -1,8 +1,8 @@
 ﻿using System;
-using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Interfaces;
-using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Model;
+using EventEmitter.NET.Interfaces;
+using EventEmitter.NET.Model;
 
-namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime
+namespace EventEmitter.NET
 {
     /// <summary>
     /// Extension methods for any class that implements IEvents.

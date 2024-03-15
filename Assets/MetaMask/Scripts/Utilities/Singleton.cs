@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MetaMask.Scripts.Utilities
+namespace MetaMask.Unity
 {
     /// <summary>
     /// Inherit from this base class to create a singleton.

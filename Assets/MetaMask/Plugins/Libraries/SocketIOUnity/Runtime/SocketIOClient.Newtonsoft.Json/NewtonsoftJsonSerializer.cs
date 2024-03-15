@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.JsonSerializer;
+
+using MetaMask.SocketIOClient.JsonSerializer;
+
 using Newtonsoft.Json;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Newtonsoft.Json
+namespace MetaMask.SocketIOClient.Newtonsoft.Json
 {
     public class NewtonsoftJsonSerializer : IJsonSerializer
     {
