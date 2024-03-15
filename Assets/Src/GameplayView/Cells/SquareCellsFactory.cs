@@ -2,11 +2,11 @@
 
 namespace Src.GameplayView.Cells
 {
-    public class UnitySquareCellsFactory : MonoBehaviour, ISquareCellsFactory
+    public class SquareCellsFactory : MonoBehaviour, ISquareCellsFactory
     {
-        private UnitySquareCellAssetsConfig _config;
+        private SquareCellAssetsConfig _config;
 
-        public void Init(UnitySquareCellAssetsConfig config)
+        public void Init(SquareCellAssetsConfig config)
         {
             _config = config;
         }

@@ -96,8 +96,8 @@ namespace Src.ScenesInitializers
         private SquareGridGenerator _gridGenerator;
     
         [Header("Cells")]
-        [SerializeField] private UnitySquareCellsFactory cellsFactory;
-        [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
+        [SerializeField] private SquareCellsFactory cellsFactory;
+        [SerializeField] private SquareCellAssetsConfig assetsConfig;
         private SquareCellsViewGenerator3D _cellsViewGenerator;
     
         [Header("Content configs")]
