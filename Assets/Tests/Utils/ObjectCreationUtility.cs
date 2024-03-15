@@ -511,5 +511,25 @@ namespace Tests.Utils
             }
             return list;
         }
+        
+        public static List<int> GetRandomIntList(int count)
+        {
+            var list = new List<int>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(_random.Next());
+            }
+            return list;
+        }
+        
+        public static List<int> GetRandomIntList(int min, int max, int count)
+        {
+            var list = new List<int>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(_random.Next(min, max));
+            }
+            return list;
+        }
     }
 }
