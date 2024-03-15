@@ -32,7 +32,7 @@ namespace Src.ScenesInitializers
         private IObjectCacher _singletonCacher;
         private IMetamaskWalletFacade _metamaskWalletFacade;
         
-        private AuthController _authController;
+        private Auth.AuthController _authController;
         private AuthSceneTransitionHandler _transitionHandler;
         
         private void Awake()
@@ -40,7 +40,7 @@ namespace Src.ScenesInitializers
             _singletonCacher = new SingletonCacher();
             _metamaskWalletFacade = new MetamaskWalletFacade();
             
-            _authController = new AuthController(
+            _authController = new Auth.AuthController(
                 new GeneralAccessTokenProvidersStrategy(
                     new FirebaseTokenProvidersCreator(
                         new FirebaseCredentialProvider(

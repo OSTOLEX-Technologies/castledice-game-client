@@ -1,4 +1,6 @@
 using Src.Auth.AuthKeys;
+using Src.AuthController.AuthKeys;
+using MetamaskAuthConfig = Src.Auth.AuthKeys.MetamaskAuthConfig;
 
 namespace Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider
 {

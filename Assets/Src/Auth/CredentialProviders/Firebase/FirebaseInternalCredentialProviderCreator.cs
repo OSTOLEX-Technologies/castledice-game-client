@@ -10,7 +10,9 @@ using Src.Auth.REST.PortListener;
 using Src.Auth.REST.PortListener.ListenerContextInterpretation;
 using Src.Auth.REST.PortListener.ListenerContextResponse;
 using Src.Auth.UrlOpening;
+using Src.AuthController.AuthKeys;
 using Src.Components;
+using GoogleAuthConfig = Src.Auth.AuthKeys.GoogleAuthConfig;
 
 namespace Src.Auth.CredentialProviders.Firebase
 {

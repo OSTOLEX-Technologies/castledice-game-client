@@ -16,6 +16,9 @@ using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
 using Src.LoadingScenes;
+using Src.MainMenu.Controllers;
+using Src.MainMenu.Scripts;
+using Src.MainMenu.Views;
 using Src.NetworkingModule;
 using Src.NetworkingModule.ConnectionConfiguration;
 using Src.NetworkingModule.Errors;
@@ -33,6 +36,7 @@ public class MainMenuInitializer : MonoBehaviour
     [SerializeField] private UnityGameCreationView gameCreationView;
     [SerializeField] private GameObject gameCreationProcessScreen;
     [SerializeField] private UnityPeerUpdater peerUpdater;
+    [SerializeField] private SettingsPopup settingsPopup;
 
     private GameCreationPresenter _gameCreationPresenter;
     private GameNotSavedErrorPresenter _gameNotSavedErrorPresenter;
@@ -92,6 +96,14 @@ public class MainMenuInitializer : MonoBehaviour
         ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
         
         _gameCreationPresenter.GameCreated += OnGameCreated;
+        
+        // Setting up settings popup
+        SettingsPopupView settingsPopupView = new SettingsPopupView();
+        SettingsPopupController settingsPopupController = new SettingsPopupController(settingsPopupView);
+        settingsPopup.SettingsPopupView = settingsPopupView;
+        settingsPopup.SettingsPopupController = settingsPopupController;
+        settingsPopup.Init();
+        
     }
 
     private void OnGameCreated(object sender, EventArgs e)
