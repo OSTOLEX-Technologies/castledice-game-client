@@ -3,6 +3,7 @@ using NUnit.Framework;
 using Src.General.MoveConditions;
 using Src.Tutorial;
 using UnityEngine;
+using Random = System.Random;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Tests.EditMode.TutorialTests
@@ -12,11 +13,12 @@ namespace Tests.EditMode.TutorialTests
         private const string AllowedPositionsFieldName = "allowedPositions";
         private const string ConditionAllowedPositionsFieldName = "_allowedPositions";
         
+        private readonly Random _rnd = new Random();
+        
         [Test]
         public void GetMoveConditions_ShouldReturnList_WithSameCountAsAllowedPositionsList()
         {
-            var rnd = new System.Random();
-            var allowedPositions = GetNestedPositionsList(rnd.Next(1, 10));
+            var allowedPositions = GetNestedPositionsList(_rnd.Next(1, 10));
             var config = ScriptableObject.CreateInstance<PositionMoveConditionsListConfig>();
             config.SetPrivateField(AllowedPositionsFieldName, allowedPositions);
             
@@ -28,8 +30,7 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetMoveConditions_ShouldReturnList_WithPositionsMoveConditionsOnly()
         {
-            var rnd = new System.Random();
-            var allowedPositions = GetNestedPositionsList(rnd.Next(1, 10));
+            var allowedPositions = GetNestedPositionsList(_rnd.Next(1, 10));
             var config = ScriptableObject.CreateInstance<PositionMoveConditionsListConfig>();
             config.SetPrivateField(AllowedPositionsFieldName, allowedPositions);
             
@@ -45,8 +46,7 @@ namespace Tests.EditMode.TutorialTests
         //Proper positions in this context means that each conditions should have list of allowed positions corresponding to the sublist in config.
         public void GetMoveConditions_ShouldReturnPositionsMoveConditions_WhereEachConditionHasProperPositions()
         {
-            var rnd = new System.Random();
-            var allowedPositions = GetNestedPositionsList(rnd.Next(1, 10));
+            var allowedPositions = GetNestedPositionsList(_rnd.Next(1, 10));
             var config = ScriptableObject.CreateInstance<PositionMoveConditionsListConfig>();
             config.SetPrivateField(AllowedPositionsFieldName, allowedPositions);
             
@@ -61,14 +61,13 @@ namespace Tests.EditMode.TutorialTests
             }
         }
         
-        private static List<List<Vector2Int>> GetNestedPositionsList(int count)
+        private List<List<Vector2Int>> GetNestedPositionsList(int count)
         {
-            var rnd = new System.Random();
             var allowedPositions = new List<List<Vector2Int>>();
             for (var i = 0; i < count; i++)
             {
                 var nestedList = new List<Vector2Int>();
-                for (var j = 0; j < rnd.Next(1, 10); j++) nestedList.Add(new Vector2Int(rnd.Next(1, 10), rnd.Next(1, 10)));
+                for (var j = 0; j < _rnd.Next(1, 10); j++) nestedList.Add(new Vector2Int(_rnd.Next(1, 10), _rnd.Next(1, 10)));
                 allowedPositions.Add(nestedList);
             }
             return allowedPositions;

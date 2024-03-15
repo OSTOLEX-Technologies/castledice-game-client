@@ -10,11 +10,12 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
 {
     public class TutorialActionPointsGivingPresenterTests
     {
+        private readonly Random _rnd = new Random();
+        
         [Test]
         public void Presenter_ShouldGiveActionPointsToCurrentPlayer_AfterTurnSwitched()
         {
-            var rnd = new Random();
-            var currentPlayerId = rnd.Next();
+            var currentPlayerId = _rnd.Next();
             var currentPlayer = GetPlayer(currentPlayerId);
             var gameMock = GetGameMock();
             gameMock.Setup(g => g.GetCurrentPlayer()).Returns(currentPlayer);
@@ -45,8 +46,7 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
         [Test]
         public void Presenter_ShouldGiveGeneratedAmountOfActionPoints_AfterTurnSwitched()
         {
-            var rnd = new Random();
-            var expectedAmount = rnd.Next();
+            var expectedAmount = _rnd.Next();
             var actionPointsGeneratorMock = new Mock<IActionPointsGenerator>();
             actionPointsGeneratorMock.Setup(a => a.GetActionPoints(It.IsAny<Player>())).Returns(expectedAmount);
             var gameMock = GetGameMock();
@@ -132,8 +132,7 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
         [Test]
         public void Presenter_ShouldShowGeneratedAmountOfActionPoints_AfterTurnSwitched()
         {
-            var rnd = new Random();
-            var expectedAmount = rnd.Next();
+            var expectedAmount = _rnd.Next();
             var viewMock = new Mock<IActionPointsGivingView>();
             var actionPointsGeneratorMock = new Mock<IActionPointsGenerator>();
             actionPointsGeneratorMock.Setup(a => a.GetActionPoints(It.IsAny<Player>())).Returns(expectedAmount);

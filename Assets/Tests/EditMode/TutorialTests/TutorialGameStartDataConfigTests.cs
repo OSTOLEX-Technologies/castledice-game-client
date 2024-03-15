@@ -35,6 +35,8 @@ namespace Tests.EditMode.TutorialTests
         private const string MaxDurabilityFieldName = "MaxDurability";
         private const string DurabilityFieldName = "Durability";
         private const string CaptureHitCostFieldName = "CaptureHitCost";
+        
+        private readonly Random _rnd = new Random();
 
         //Test for version
         [Test]
@@ -51,9 +53,8 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetGameStartData_ShouldReturnGameStartData_WhereBoardDataHasGivenBoardWidthAndLength()
         {
-            var rnd = new Random();
-            var boardWidth = rnd.Next(1, 100);
-            var boardLength = rnd.Next(1, 100);
+            var boardWidth = _rnd.Next(1, 100);
+            var boardLength = _rnd.Next(1, 100);
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
             config.SetPrivateField(BoardWidthFieldName, boardWidth);
             config.SetPrivateField(BoardLengthFieldName, boardLength);
@@ -96,13 +97,12 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlyConfiguredPlayerCastle()
         {
-            var rnd = new Random();
-            var expectedPosition = new Vector2Int(rnd.Next(), rnd.Next());
-            var expectedMaxFreeDurability = rnd.Next();
-            var expectedMaxDurability = rnd.Next();
-            var expectedDurability = rnd.Next();
-            var expectedCaptureHitCost = rnd.Next();
-            var expectedOwnerId = rnd.Next();
+            var expectedPosition = new Vector2Int(_rnd.Next(), _rnd.Next());
+            var expectedMaxFreeDurability = _rnd.Next();
+            var expectedMaxDurability = _rnd.Next();
+            var expectedDurability = _rnd.Next();
+            var expectedCaptureHitCost = _rnd.Next();
+            var expectedOwnerId = _rnd.Next();
             var expectedCastleData = new CastleData(expectedPosition, 
                 expectedCaptureHitCost, 
                 expectedMaxFreeDurability,
@@ -127,13 +127,12 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlyConfiguredEnemyCastle()
         {
-            var rnd = new Random();
-            var expectedPosition = new Vector2Int(rnd.Next(), rnd.Next());
-            var expectedMaxFreeDurability = rnd.Next();
-            var expectedMaxDurability = rnd.Next();
-            var expectedDurability = rnd.Next();
-            var expectedCaptureHitCost = rnd.Next();
-            var expectedOwnerId = rnd.Next();
+            var expectedPosition = new Vector2Int(_rnd.Next(), _rnd.Next());
+            var expectedMaxFreeDurability = _rnd.Next();
+            var expectedMaxDurability = _rnd.Next();
+            var expectedDurability = _rnd.Next();
+            var expectedCaptureHitCost = _rnd.Next();
+            var expectedOwnerId = _rnd.Next();
             var expectedCastleData = new CastleData(expectedPosition, 
                 expectedCaptureHitCost, 
                 expectedMaxFreeDurability,
@@ -158,9 +157,8 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetGameStartData_ShouldReturnGameStartData_WhereCellsPresenceHasCorrectSize()
         {
-            var rnd = new Random();
-            var boardLength = rnd.Next(1, 100);
-            var boardWidth = rnd.Next(1, 100);
+            var boardLength = _rnd.Next(1, 100);
+            var boardWidth = _rnd.Next(1, 100);
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
             config.SetPrivateField(BoardWidthFieldName, boardWidth);
             config.SetPrivateField(BoardLengthFieldName, boardLength);
@@ -195,9 +193,8 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetGameStartData_ShouldReturnGameStartData_WithCorrectPlaceablesConfigData()
         {
-            var rnd = new Random();
-            var expectedKnightPlacementCost = rnd.Next();
-            var expectedKnightHealth = rnd.Next();
+            var expectedKnightPlacementCost = _rnd.Next();
+            var expectedKnightHealth = _rnd.Next();
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
             config.SetPrivateField(KnightPlacementCostFieldName, expectedKnightPlacementCost);
             config.SetPrivateField(KnightHealthFieldName, expectedKnightHealth);
@@ -236,14 +233,13 @@ namespace Tests.EditMode.TutorialTests
         //Player data in this test means the PlayerData related to the player, that is not to the enemy.
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlySetPlayerData()
         {
-            var rnd = new Random();
             var expectedTimeSpan = new TimeSpan(
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60));
-            var expectedPlayerId = rnd.Next();
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60));
+            var expectedPlayerId = _rnd.Next();
             var expectedAvailablePlacementTypes = new List<PlacementType> {PlacementType.Knight};
             var expectedPlayerData = new PlayerData(expectedPlayerId, expectedAvailablePlacementTypes, expectedTimeSpan);
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
@@ -259,14 +255,13 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlySetEnemyData()
         {
-            var rnd = new Random();
             var expectedTimeSpan = new TimeSpan(
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60), 
-                rnd.Next(1, 60));
-            var expectedEnemyId = rnd.Next();
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60), 
+                _rnd.Next(1, 60));
+            var expectedEnemyId = _rnd.Next();
             var expectedAvailablePlacementTypes = new List<PlacementType> {PlacementType.Knight};
             var expectedEnemyData = new PlayerData(expectedEnemyId, expectedAvailablePlacementTypes, expectedTimeSpan);
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();

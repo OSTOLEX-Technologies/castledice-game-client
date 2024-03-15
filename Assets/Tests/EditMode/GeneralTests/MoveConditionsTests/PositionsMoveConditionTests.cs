@@ -1,4 +1,5 @@
-﻿using castledice_game_logic.Math;
+﻿using System;
+using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Moq;
 using NUnit.Framework;
@@ -9,16 +10,17 @@ namespace Tests.EditMode.GeneralTests.MoveConditionsTests
 {
     public class PositionsMoveConditionTests
     {
+        private readonly Random _rnd = new Random();
+        
         [Test]
         public void IsSatisfiedBy_ShouldReturnFalse_IfPositionsOfMoveIsNotInGivenList()
         {
-            var rnd = new System.Random();
-            var movePosition = new Vector2Int(rnd.Next(1, 10), rnd.Next(1, 10));
+            var movePosition = new Vector2Int(_rnd.Next(1, 10), _rnd.Next(1, 10));
             var allowedPositions = new System.Collections.Generic.List<Vector2Int>
             {
-                new Vector2Int(rnd.Next(10, 20), rnd.Next(10, 20)),
-                new Vector2Int(rnd.Next(20, 30), rnd.Next(20, 30)),
-                new Vector2Int(rnd.Next(30, 40), rnd.Next(30, 40))
+                new Vector2Int(_rnd.Next(10, 20), _rnd.Next(10, 20)),
+                new Vector2Int(_rnd.Next(20, 30), _rnd.Next(20, 30)),
+                new Vector2Int(_rnd.Next(30, 40), _rnd.Next(30, 40))
             };
             var move = new Mock<AbstractMove>(GetPlayer(), movePosition);
             var positionsMoveCondition = new PositionsMoveCondition(allowedPositions);
@@ -31,13 +33,12 @@ namespace Tests.EditMode.GeneralTests.MoveConditionsTests
         [Test]
         public void IsSatisfiedBy_ShouldReturnTrue_IfPositionsOfMoveIsInGivenList()
         {
-            var rnd = new System.Random();
-            var movePosition = new Vector2Int(rnd.Next(1, 10), rnd.Next(1, 10));
+            var movePosition = new Vector2Int(_rnd.Next(1, 10), _rnd.Next(1, 10));
             var allowedPositions = new System.Collections.Generic.List<Vector2Int>
             {
-                new Vector2Int(rnd.Next(1, 10), rnd.Next(1, 10)),
+                new Vector2Int(_rnd.Next(1, 10), _rnd.Next(1, 10)),
                 movePosition,
-                new Vector2Int(rnd.Next(20, 30), rnd.Next(20, 30))
+                new Vector2Int(_rnd.Next(20, 30), _rnd.Next(20, 30))
             };
             var move = new Mock<AbstractMove>(GetPlayer(), movePosition);
             var positionsMoveCondition = new PositionsMoveCondition(allowedPositions);
