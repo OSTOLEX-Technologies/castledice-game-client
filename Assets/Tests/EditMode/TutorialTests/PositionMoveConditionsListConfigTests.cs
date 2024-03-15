@@ -18,7 +18,7 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetMoveConditions_ShouldReturnList_WithSameCountAsAllowedPositionsList()
         {
-            var allowedPositions = GetNestedPositionsList(_rnd.Next(1, 10));
+            var allowedPositions = GetAllowedPositionsList(_rnd.Next(1, 10));
             var config = ScriptableObject.CreateInstance<PositionMoveConditionsListConfig>();
             config.SetPrivateField(AllowedPositionsFieldName, allowedPositions);
             
@@ -30,7 +30,7 @@ namespace Tests.EditMode.TutorialTests
         [Test]
         public void GetMoveConditions_ShouldReturnList_WithPositionsMoveConditionsOnly()
         {
-            var allowedPositions = GetNestedPositionsList(_rnd.Next(1, 10));
+            var allowedPositions = GetAllowedPositionsList(_rnd.Next(1, 10));
             var config = ScriptableObject.CreateInstance<PositionMoveConditionsListConfig>();
             config.SetPrivateField(AllowedPositionsFieldName, allowedPositions);
             
@@ -46,7 +46,7 @@ namespace Tests.EditMode.TutorialTests
         //Proper positions in this context means that each conditions should have list of allowed positions corresponding to the sublist in config.
         public void GetMoveConditions_ShouldReturnPositionsMoveConditions_WhereEachConditionHasProperPositions()
         {
-            var allowedPositions = GetNestedPositionsList(_rnd.Next(1, 10));
+            var allowedPositions = GetAllowedPositionsList(_rnd.Next(1, 10));
             var config = ScriptableObject.CreateInstance<PositionMoveConditionsListConfig>();
             config.SetPrivateField(AllowedPositionsFieldName, allowedPositions);
             
@@ -55,20 +55,21 @@ namespace Tests.EditMode.TutorialTests
             for (var i = 0; i < moveConditions.Count; i++)
             {
                 var condition = moveConditions[i] as PositionsMoveCondition;
-                var expectedPositions = allowedPositions[i];
+                var expectedPositions = allowedPositions[i].Positions;
                 var actualPositions = condition.GetPrivateField<List<Vector2Int>>(ConditionAllowedPositionsFieldName);
                 Assert.AreEqual(expectedPositions, actualPositions);
             }
         }
         
-        private List<List<Vector2Int>> GetNestedPositionsList(int count)
+        private List<AllowedPositions> GetAllowedPositionsList(int count)
         {
-            var allowedPositions = new List<List<Vector2Int>>();
+            var allowedPositions = new List<AllowedPositions>();
             for (var i = 0; i < count; i++)
             {
-                var nestedList = new List<Vector2Int>();
-                for (var j = 0; j < _rnd.Next(1, 10); j++) nestedList.Add(new Vector2Int(_rnd.Next(1, 10), _rnd.Next(1, 10)));
-                allowedPositions.Add(nestedList);
+                var positions = new AllowedPositions();
+                var list = positions.Positions;
+                for (var j = 0; j < _rnd.Next(1, 10); j++) list.Add(new Vector2Int(_rnd.Next(1, 10), _rnd.Next(1, 10)));
+                allowedPositions.Add(positions);
             }
             return allowedPositions;
         }
