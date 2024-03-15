@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 303853028}
-  m_IndirectSpecularColor: {r: 0.18252397, g: 0.22820571, b: 0.30719048, a: 1}
+  m_IndirectSpecularColor: {r: 0.18254378, g: 0.22825451, b: 0.30721018, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -2227,6 +2227,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   errorPopup: {fileID: 1065858762}
+  duelModeSceneName: 
   sceneLoader: {fileID: 629418342}
   gameServerConnectionConfig: {fileID: 11400000, guid: 0601496dfcca4024e86979ae55541ceb, type: 2}
   gameCreationView: {fileID: 227222422}
@@ -3810,6 +3811,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 2027161555}
     m_Modifications:
+    - target: {fileID: 2643230733658101672, guid: 4f291ce0c4e36434b8b38ebfea553fbc, type: 3}
+      propertyPath: m_text
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8738199032319808132, guid: 4f291ce0c4e36434b8b38ebfea553fbc, type: 3}
       propertyPath: m_Name
       value: MainMenuStatusBar
@@ -3900,6 +3905,10 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8738199032319808133, guid: 4f291ce0c4e36434b8b38ebfea553fbc, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8738199033279469964, guid: 4f291ce0c4e36434b8b38ebfea553fbc, type: 3}
+      propertyPath: m_text
       value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []

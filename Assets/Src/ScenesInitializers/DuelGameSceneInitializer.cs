@@ -185,10 +185,13 @@ namespace Src.ScenesInitializers
         private Game _game;
         private GameStartData _gameStartData;
 
+        private DuelPlayerColorProvider _playerColorProvider;
+
         private void Start()
         {
             SetUpUpdaters();
             SetUpGame();
+            SetUpColorProvider();
             SetUpInput();
             SetUpGrid();
             SetUpContent();
@@ -217,11 +220,10 @@ namespace Src.ScenesInitializers
 
         private void SetUpTimers()
         {
-            var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
             var highlighterForPlayerProvider = new PlayerColorHighlighterProvider(redPlayerHighlighter, bluePlayerHighlighter,
-                playerColorProvider);
+                _playerColorProvider);
             var timeViewForPlayerProvider =
-                new PlayerColorTimeViewProvider(redPlayerTimeView, bluePlayerTimeView, playerColorProvider);
+                new PlayerColorTimeViewProvider(redPlayerTimeView, bluePlayerTimeView, _playerColorProvider);
             var playerTimerViewCreator = new PlayerTimerViewCreator(highlighterForPlayerProvider, timeViewForPlayerProvider);
             var playerTimerViewsProvider = new CachingPlayerTimerViewProvider(playerTimerViewCreator);
             _timersView = new TimersView(playerTimerViewsProvider, _updater);
@@ -244,9 +246,16 @@ namespace Src.ScenesInitializers
             _game = gameCreator.CreateGame(_gameStartData);
         }
 
+        private void SetUpColorProvider()
+        {
+            var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+            var localPlayer = _game.GetPlayer(playerDataProvider.GetId());
+            _playerColorProvider = new DuelPlayerColorProvider(localPlayer);
+        }
+
         private void SetUpGameOver()
         {
-            _gameOverView = new GameOverView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+            _gameOverView = new GameOverView(_playerColorProvider,
                 blueWinnerScreen, redWinnerScreen, drawScreen);
             _gameOverPresenter = new GameOverPresenter(_game, _gameOverView);
         }
@@ -303,7 +312,6 @@ namespace Src.ScenesInitializers
             var instantiator = new Instantiator();
             var playersList = _game.GetAllPlayers();
             var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-            var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider);
             var playerNumberProvider = new PlayerNumberProvider(playersList);
             var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
         
@@ -311,11 +319,11 @@ namespace Src.ScenesInitializers
             var cachingTreeVisualCreator = new CachingTreeVisualCreator(randomTreeVisualCreator);
             var treeViewFactory = new TreeViewFactory(cachingTreeVisualCreator, treeViewPrefab, instantiator);
 
-            var knightColorProvider = new PlayerObjectsColorProvider(knightColorConfig, playerColorProvider);
+            var knightColorProvider = new PlayerObjectsColorProvider(knightColorConfig, _playerColorProvider);
             var knightVisualCreator = new KnightVisualCreator(knightVisualPrefabConfig, knightColorProvider, instantiator, playerRotationProvider);
             var knightAudioFactory = new SoundPlayerKnightAudioFactory(knightSoundsConfig, knightAudioPrefab, instantiator);
             var knightViewFactory = new KnightViewFactory(knightVisualCreator, knightAudioFactory, knightViewPrefab, instantiator);
-            var castleColorProvider = new PlayerObjectsColorProvider(castleColorConfig, playerColorProvider);
+            var castleColorProvider = new PlayerObjectsColorProvider(castleColorConfig, _playerColorProvider);
             var castleVisualCreator = new CastleVisualCreator(castleVisualPrefabConfig, castleColorProvider, instantiator);
             var castleAudioFactory = new SoundPlayerCastleAudioFactory(castleSoundsConfig, castleAudioPrefab, instantiator);
             var castleViewFactory = new CastleViewFactory(castleVisualCreator, castleAudioFactory, castleViewPrefab, instantiator);
@@ -353,8 +361,7 @@ namespace Src.ScenesInitializers
         private void SetUpPlacedUnitsHighlights()
         {
             var instantiator = new Instantiator();
-            var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
-            var objectsColorProvider = new PlayerObjectsColorProvider(placedUnitsHighlightsColorConfig, playerColorProvider);
+            var objectsColorProvider = new PlayerObjectsColorProvider(placedUnitsHighlightsColorConfig, _playerColorProvider);
             var underlineCreator = new ColoredHighlightCreator(coloredHighlightPrefabConfig, instantiator);
             _placedUnitsHighlightsView = new PlacedUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
             _placedUnitsHighlightsPresenter = new PlacedUnitsHighlightsPresenter(_game.GetBoard(), _placedUnitsHighlightsView);
@@ -363,8 +370,7 @@ namespace Src.ScenesInitializers
         private void SetUpNewUnitsHighlights()
         {
             var instantiator = new Instantiator();
-            var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
-            var objectsColorProvider = new PlayerObjectsColorProvider(newUnitsHighlightsColorConfig, playerColorProvider);
+            var objectsColorProvider = new PlayerObjectsColorProvider(newUnitsHighlightsColorConfig, _playerColorProvider);
             var underlineCreator = new ColoredHighlightCreator(newUnitsHighlightsPrefabConfig, instantiator);
             _newUnitsHighlightsView = new NewUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
             _newUnitsHighlightsPresenter = new NewUnitsHighlightsPresenter(_game, _newUnitsHighlightsView);
@@ -375,7 +381,7 @@ namespace Src.ScenesInitializers
             var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
             var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
             _actionPointsGivingView =
-                new ActionPointsGivingView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+                new ActionPointsGivingView(_playerColorProvider,
                     popupDemonstrator);
             _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
                 new ActionPointsGiver(_game), _actionPointsGivingView);
@@ -405,7 +411,7 @@ namespace Src.ScenesInitializers
     
         private void SetUpCurrentPlayerLabel()
         {
-            _currentPlayerView = new CurrentPlayerView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+            _currentPlayerView = new CurrentPlayerView(_playerColorProvider,
                 bluePlayerLabel, redPlayerLabel);
             _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
             _currentPlayerPresenter.ShowCurrentPlayer();

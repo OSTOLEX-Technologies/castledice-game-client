@@ -11,6 +11,7 @@ using Src.Tutorial;
 using UnityEngine;
 using Random = System.Random;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
+using Vector2IntUnity = UnityEngine.Vector2Int;
 
 namespace Tests.EditMode.TutorialTests
 {
@@ -98,6 +99,7 @@ namespace Tests.EditMode.TutorialTests
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlyConfiguredPlayerCastle()
         {
             var expectedPosition = new Vector2Int(_rnd.Next(), _rnd.Next());
+            var expectedPositionUnity = new Vector2IntUnity(expectedPosition.X, expectedPosition.Y);
             var expectedMaxFreeDurability = _rnd.Next();
             var expectedMaxDurability = _rnd.Next();
             var expectedDurability = _rnd.Next();
@@ -116,7 +118,7 @@ namespace Tests.EditMode.TutorialTests
             playerCastleConfig.SetPublicField(MaxDurabilityFieldName, expectedMaxDurability);
             playerCastleConfig.SetPublicField(DurabilityFieldName, expectedDurability);
             playerCastleConfig.SetPublicField(CaptureHitCostFieldName, expectedCaptureHitCost);
-            config.SetPrivateField(PlayerBasePositionFieldName, expectedPosition);
+            config.SetPrivateField(PlayerBasePositionFieldName, expectedPositionUnity);
             
             var gameStartData = config.GetGameStartData(expectedOwnerId, 1);
             var contentList = gameStartData.BoardData.GeneratedContent;
@@ -128,6 +130,7 @@ namespace Tests.EditMode.TutorialTests
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlyConfiguredEnemyCastle()
         {
             var expectedPosition = new Vector2Int(_rnd.Next(), _rnd.Next());
+            var expectedPositionUnity = new Vector2IntUnity(expectedPosition.X, expectedPosition.Y);
             var expectedMaxFreeDurability = _rnd.Next();
             var expectedMaxDurability = _rnd.Next();
             var expectedDurability = _rnd.Next();
@@ -146,7 +149,7 @@ namespace Tests.EditMode.TutorialTests
             enemyCastleConfig.SetPublicField(MaxDurabilityFieldName, expectedMaxDurability);
             enemyCastleConfig.SetPublicField(DurabilityFieldName, expectedDurability);
             enemyCastleConfig.SetPublicField(CaptureHitCostFieldName, expectedCaptureHitCost);
-            config.SetPrivateField(EnemyBasePositionFieldName, expectedPosition);
+            config.SetPrivateField(EnemyBasePositionFieldName, expectedPositionUnity);
             
             var gameStartData = config.GetGameStartData(0, expectedOwnerId);
             var contentList = gameStartData.BoardData.GeneratedContent;

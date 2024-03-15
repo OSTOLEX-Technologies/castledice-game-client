@@ -2,9 +2,11 @@
 using NUnit.Framework;
 using Src.General.MoveConditions;
 using Src.Tutorial;
+using Tests.EditMode.GeneralTests;
 using UnityEngine;
 using Random = System.Random;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
+using Vector2IntUnity = UnityEngine.Vector2Int;
 
 namespace Tests.EditMode.TutorialTests
 {
@@ -55,7 +57,7 @@ namespace Tests.EditMode.TutorialTests
             for (var i = 0; i < moveConditions.Count; i++)
             {
                 var condition = moveConditions[i] as PositionsMoveCondition;
-                var expectedPositions = allowedPositions[i].Positions;
+                var expectedPositions = allowedPositions[i].Positions.ConvertToGameLogicVector2IntList();
                 var actualPositions = condition.GetPrivateField<List<Vector2Int>>(ConditionAllowedPositionsFieldName);
                 Assert.AreEqual(expectedPositions, actualPositions);
             }
@@ -68,7 +70,7 @@ namespace Tests.EditMode.TutorialTests
             {
                 var positions = new AllowedPositions();
                 var list = positions.Positions;
-                for (var j = 0; j < _rnd.Next(1, 10); j++) list.Add(new Vector2Int(_rnd.Next(1, 10), _rnd.Next(1, 10)));
+                for (var j = 0; j < _rnd.Next(1, 10); j++) list.Add(new Vector2IntUnity(_rnd.Next(1, 10), _rnd.Next(1, 10)));
                 allowedPositions.Add(positions);
             }
             return allowedPositions;

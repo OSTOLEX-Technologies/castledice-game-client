@@ -1038,7 +1038,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419227382}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af2bae7747207bc499252173cba0476a, type: 3}
   m_Name: 
@@ -1099,6 +1099,31 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9c770dfce63deee448fb02bfce62342d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  playerId: 0
+  enemyId: 1
+  gameStartDataConfig: {fileID: 11400000, guid: 199cbc725162b86408c8657d3a843a49, type: 2}
+  playerCamera: {fileID: 30934008}
+  cellClickDetectorsConfig: {fileID: 11400000, guid: 3bd459adf056ce4408910b4e66c6bbd6, type: 2}
+  cellClickDetectorsFactory: {fileID: 1096959018}
+  grid: {fileID: 764948085}
+  gridGenerationConfig: {fileID: 11400000, guid: fd08ed526d45082449186b12a879de7e, type: 2}
+  cellsFactory: {fileID: 1815871629}
+  cellAssetsConfig: {fileID: 11400000, guid: 98a63a0dc7d70744e9fa2aa3d8ada4dd, type: 2}
+  playerOrderRotations: {fileID: 0}
+  knightSoundsConfig: {fileID: 0}
+  knightAudioPrefab: {fileID: 0}
+  knightViewPrefab: {fileID: 0}
+  knightVisualPrefabConfig: {fileID: 0}
+  knightColorConfig: {fileID: 0}
+  treeViewPrefab: {fileID: 0}
+  treeVisualPrefabConfig: {fileID: 0}
+  castleSoundsConfig: {fileID: 0}
+  castleViewPrefab: {fileID: 0}
+  castleAudioPrefab: {fileID: 0}
+  castleVisualPrefabConfig: {fileID: 0}
+  castleColorConfig: {fileID: 0}
+  destroyedContentTransparencyConfig: {fileID: 0}
+  positionMoveConditionsListConfig: {fileID: 0}
 --- !u!1 &1765735282
 GameObject:
   m_ObjectHideFlags: 0

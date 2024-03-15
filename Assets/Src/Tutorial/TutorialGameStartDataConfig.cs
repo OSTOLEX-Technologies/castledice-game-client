@@ -9,9 +9,11 @@ using castledice_game_logic.GameObjects;
 using castledice_game_logic.TurnsLogic.TurnSwitchConditions;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
+using Vector2IntUnity = UnityEngine.Vector2Int;
 
 namespace Src.Tutorial
 {
+    [CreateAssetMenu(fileName = "TutorialGameStartDataConfig", menuName = "Configs/Tutorial/TutorialGameStartDataConfig")]
     public class TutorialGameStartDataConfig : ScriptableObject, ITutorialGameStartDataProvider
     {
         
@@ -19,8 +21,8 @@ namespace Src.Tutorial
         [SerializeField] private int boardWidth = 10;
         [SerializeField] private int boardLength = 10;
         [SerializeField] private CellType cellType = CellType.Square;
-        [SerializeField] private Vector2Int enemyBasePosition = (9, 9);
-        [SerializeField] private Vector2Int playerBasePosition = (0, 0);
+        [SerializeField] private Vector2IntUnity enemyBasePosition = new Vector2IntUnity(9, 9);
+        [SerializeField] private Vector2IntUnity playerBasePosition = new Vector2IntUnity(0, 0);
         [SerializeField] private TutorialCastleConfig playerCastleConfig = new TutorialCastleConfig
         {
             MaxDurability = 3,
@@ -45,6 +47,8 @@ namespace Src.Tutorial
         
         public GameStartData GetGameStartData(int playerId, int enemyId)
         {
+            var playerBasePositionGl = new Vector2Int(playerBasePosition.x, playerBasePosition.y);
+            var enemyBasePositionGl = new Vector2Int(enemyBasePosition.x, enemyBasePosition.y);
             var cellsPresence = new bool[boardLength,boardWidth];
             for (int i = 0; i < boardLength; i++)
             {
@@ -54,14 +58,14 @@ namespace Src.Tutorial
                 }
             }
             var playerCastleData = new CastleData(
-                playerBasePosition, 
+                playerBasePositionGl, 
                 playerCastleConfig.CaptureHitCost, 
                 playerCastleConfig.MaxFreeDurability, 
                 playerCastleConfig.MaxDurability, 
                 playerCastleConfig.Durability, 
                 playerId);
             var enemyCastleData = new CastleData(
-                enemyBasePosition, 
+                enemyBasePositionGl, 
                 enemyCastleConfig.CaptureHitCost, 
                 enemyCastleConfig.MaxFreeDurability, 
                 enemyCastleConfig.MaxDurability, 
