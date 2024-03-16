@@ -24,7 +24,7 @@ namespace Src.GameplayPresenter.CellMovesHighlights
         {
             if (move.Player == _player)
             {
-                if (_player.ActionPoints.Amount == 0)
+                if (_player.ActionPoints.Amount <= 0)
                 {
                     TimeToHide?.Invoke();
                 }
