@@ -16,6 +16,7 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpa
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
+using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayPresenter.NewUnitsHighlights;
 using Src.GameplayPresenter.PlacedUnitsHighlights;
@@ -38,6 +39,7 @@ using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using Src.GameplayView.DestroyedContent;
+using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
 using Src.GameplayView.Highlights;
@@ -158,6 +160,13 @@ namespace Src.ScenesInitializers
         private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
         private CellMovesHighlightView _cellMovesHighlightView;
         
+        [Header("Game over")]
+        [SerializeField] private GameObject blueWinnerScreen;
+        [SerializeField] private GameObject redWinnerScreen;
+        [SerializeField] private GameObject drawScreen;
+        private GameOverPresenter _gameOverPresenter;
+        private GameOverView _gameOverView;
+        
         private DuelPlayerColorProvider _playerColorProvider;
 
         [Header("Bot configuration")]
@@ -179,6 +188,8 @@ namespace Src.ScenesInitializers
             SetUpBot();
             SetUpPlacedUnitsHighlights();
             SetUpNewUnitsHighlights();
+            SetUpCellMovesHighlights();
+            SetUpGameOver();
             
             GiveActionPointsToCurrentPlayer();
         }
@@ -382,14 +393,21 @@ namespace Src.ScenesInitializers
             _newUnitsHighlightsPresenter = new NewUnitsHighlightsPresenter(_game, _newUnitsHighlightsView);
         }
         
-        // private void SetUpCellMovesHighlights()
-        // {
-        //     cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
-        //     var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
-        //     _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
-        //     var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
-        //     _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataCreator,
-        //         new CellMovesListProvider(_game), _game, _cellMovesHighlightView);
-        // }
+        private void SetUpCellMovesHighlights()
+         {
+             cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
+             var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
+             _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
+             var cellMovesListProvider = new CellMovesListProvider(_game);
+             var observer = new CellMovesHighlightObserver(_game, _player);
+             _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_player, cellMovesListProvider, observer, _cellMovesHighlightView);
+         }
+        
+        private void SetUpGameOver()
+        {
+            _gameOverView = new GameOverView(_playerColorProvider,
+                blueWinnerScreen, redWinnerScreen, drawScreen);
+            _gameOverPresenter = new GameOverPresenter(_game, _gameOverView);
+        }
     }
 }

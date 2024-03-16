@@ -42,7 +42,10 @@ namespace Src.Tutorial
             if (currentCondition.IsSatisfiedBy(move))
             {
                 _localMoveApplier.ApplyMove(move);
-                _moveConditionsSequence.MoveToNextCondition();
+                if (_moveConditionsSequence.HasNext())
+                {
+                    _moveConditionsSequence.MoveToNextCondition();
+                }
                 RightMovePicked?.Invoke(this, move);
             }
             else

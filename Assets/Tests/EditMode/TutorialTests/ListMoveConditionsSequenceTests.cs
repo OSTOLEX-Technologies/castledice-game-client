@@ -86,5 +86,28 @@ namespace Tests.EditMode.TutorialTests
             
             Assert.AreSame(expectedCondition, actualCondition);
         }
+        
+        [Test]
+        public void HasNext_ShouldReturnFalse_IfConditionsListIsEmpty()
+        {
+            var conditions = new List<IMoveCondition>();
+            var sequence = new ListMoveConditionsSequence(conditions);
+
+            var actualResult = sequence.HasNext();
+
+            Assert.IsFalse(actualResult);
+        }
+        
+        [Test]
+        public void HasNext_ShouldReturnFalse_IfNoMoreConditionsInTheList()
+        {
+            var conditions = new List<IMoveCondition> { new Mock<IMoveCondition>().Object, new Mock<IMoveCondition>().Object };
+            var sequence = new ListMoveConditionsSequence(conditions);
+            sequence.MoveToNextCondition();
+
+            var actualResult = sequence.HasNext();
+
+            Assert.IsFalse(actualResult);
+        }
     }
 }

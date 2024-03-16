@@ -35,5 +35,10 @@ namespace Src.Tutorial
             }
             _currentConditionIndex++;
         }
+
+        public bool HasNext()
+        {
+            return _currentConditionIndex < _conditions.Count - 1;
+        }
     }
 }

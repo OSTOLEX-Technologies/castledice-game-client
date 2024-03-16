@@ -177,6 +177,7 @@ namespace Tests.EditMode.TutorialTests
             moveConditionMock.Setup(condition => condition.IsSatisfiedBy(move)).Returns(true);
             var moveConditionsSequenceMock = new Mock<IMoveConditionsSequence>();
             moveConditionsSequenceMock.Setup(sequence => sequence.GetCurrentCondition()).Returns(moveConditionMock.Object);
+            moveConditionsSequenceMock.Setup(sequence => sequence.HasNext()).Returns(true);
             var viewMock = new Mock<IMovesView>();
             var presenter = new TutorialMovesPresenterBuilder
             {
@@ -197,6 +198,27 @@ namespace Tests.EditMode.TutorialTests
             moveConditionMock.Setup(condition => condition.IsSatisfiedBy(move)).Returns(false);
             var moveConditionsSequenceMock = new Mock<IMoveConditionsSequence>();
             moveConditionsSequenceMock.Setup(sequence => sequence.GetCurrentCondition()).Returns(moveConditionMock.Object);
+            var viewMock = new Mock<IMovesView>();
+            var presenter = new TutorialMovesPresenterBuilder
+            {
+                MoveConditionsSequence = moveConditionsSequenceMock.Object,
+                View = viewMock.Object
+            }.Build();
+            
+            viewMock.Raise(view => view.MovePicked += null, viewMock.Object, move);
+            
+            moveConditionsSequenceMock.Verify(sequence => sequence.MoveToNextCondition(), Times.Never);
+        }
+        
+        [Test]
+        public void Presenter_ShouldNotMoveToNextCondition_IfNoMoreConditionsInSequence()
+        {
+            var move = GetMove();
+            var moveConditionMock = new Mock<IMoveCondition>();
+            moveConditionMock.Setup(condition => condition.IsSatisfiedBy(move)).Returns(true);
+            var moveConditionsSequenceMock = new Mock<IMoveConditionsSequence>();
+            moveConditionsSequenceMock.Setup(sequence => sequence.GetCurrentCondition()).Returns(moveConditionMock.Object);
+            moveConditionsSequenceMock.Setup(sequence => sequence.HasNext()).Returns(false);
             var viewMock = new Mock<IMovesView>();
             var presenter = new TutorialMovesPresenterBuilder
             {

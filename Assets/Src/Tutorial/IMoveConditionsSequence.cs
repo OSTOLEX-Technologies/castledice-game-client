@@ -6,5 +6,6 @@ namespace Src.Tutorial
     {
         IMoveCondition GetCurrentCondition();
         void MoveToNextCondition();
+        bool HasNext();
     }
 }

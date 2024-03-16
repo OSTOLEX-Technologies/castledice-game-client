@@ -1070,14 +1070,17 @@ MonoBehaviour:
   popupDisappearTimeMilliseconds: 1500
   redActionPointsPopup: {fileID: 1306602971}
   blueActionPointsPopup: {fileID: 1856468401}
-  playerActionPointsSequenceConfig: {fileID: 0}
-  enemyActionPointsSequenceConfig: {fileID: 0}
-  coloredHighlightPrefabConfig: {fileID: 0}
-  placedUnitsHighlightsColorConfig: {fileID: 0}
-  newUnitsHighlightsPrefabConfig: {fileID: 0}
-  newUnitsHighlightsColorConfig: {fileID: 0}
-  cellMoveHighlightsConfig: {fileID: 0}
-  cellMoveHighlightsFactory: {fileID: 0}
+  playerActionPointsSequenceConfig: {fileID: 11400000, guid: 5aa83bc0e336baa4890dbc5f6b5e0b2d, type: 2}
+  enemyActionPointsSequenceConfig: {fileID: 11400000, guid: 836702b06dcb8f341a90bd4a37ce7fe2, type: 2}
+  coloredHighlightPrefabConfig: {fileID: 11400000, guid: b3f5d408d9be7094daf39ea825a93ad7, type: 2}
+  placedUnitsHighlightsColorConfig: {fileID: 11400000, guid: be9e8af516dc9474ebbf6b5f4fb5ec56, type: 2}
+  newUnitsHighlightsPrefabConfig: {fileID: 11400000, guid: 18dd04590ed2db3429b5de54ef2339f7, type: 2}
+  newUnitsHighlightsColorConfig: {fileID: 11400000, guid: 8ababd8e40c3ac04f87b4ccaedd9c1b2, type: 2}
+  cellMoveHighlightsConfig: {fileID: 11400000, guid: 299796ff4d01cc74384058d8e2af43d5, type: 2}
+  cellMoveHighlightsFactory: {fileID: 2095275312}
+  blueWinnerScreen: {fileID: 8317343790580066247}
+  redWinnerScreen: {fileID: 8317343790085242007}
+  drawScreen: {fileID: 8317343789972965597}
   botMoveDelayMilliseconds: 500
   allowedPositionsScenariosConfig: {fileID: 11400000, guid: 76b8a50489aae0b4a9440753acd45856, type: 2}
 --- !u!1 &1500419343
@@ -1536,6 +1539,10 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 0}
     m_Modifications:
+    - target: {fileID: 7598893628138004947, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8054231189717775424, guid: 0289b512eab4d2446b60acab73c7d746, type: 3}
       propertyPath: m_text
       value: 0
