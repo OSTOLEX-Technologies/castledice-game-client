@@ -4,8 +4,6 @@ using castledice_game_data_logic;
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
-using Src.Caching;
-using Src.GameplayPresenter;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.DestroyedContent;
@@ -41,9 +39,12 @@ using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
+using Src.General.MoveConditions;
 using Src.General.NumericSequences;
 using Src.PlayerInput;
 using Src.PVE;
+using Src.PVE.Calculators;
+using Src.PVE.Checkers;
 using Src.PVE.GameSituations;
 using Src.PVE.MoveSearchers.TraitBasedSearchers;
 using Src.PVE.MoveSearchers.TraitBasedSearchers.TraitsEvaluators;
@@ -52,6 +53,7 @@ using Src.TimeManagement;
 using Src.Tutorial;
 using Src.Tutorial.ActionPointsGiving;
 using Src.Tutorial.BotConfiguration;
+using Tests.EditMode.GeneralTests;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -148,6 +150,7 @@ namespace Src.ScenesInitializers
             SetUpClickDetectors();
             SetUpPlayerMoves();
             SetUpActionPointsGiving();
+            SetUpBot();
 
             GiveActionPointsToCurrentPlayer();
         }
@@ -284,9 +287,23 @@ namespace Src.ScenesInitializers
             var moveDelay = TimeSpan.FromMilliseconds(botMoveDelayMilliseconds);
             var localMoveApplier = new LocalMovesApplier(_game);
             var situationsToPositions = new Dictionary<IGameSituation, List<Vector2Int>>();
+            var unconnectedValuesCutter = new DfsUnconnectedValuesCutter<SimpleCellState>();
+            var board = _game.GetBoard();
+            var unitChecker = new PlayerUnitChecker();
+            var unitsPositionsSearcher = new UnitsPositionsSearcher(board, unitChecker);
+            var baseCaptureChecker = new BaseCaptureCondition(board);
+            var playerBaseChecker = new PlayerBaseChecker();
+            var basePositionsCalculator = new BasePositionsCalculator(board, playerBaseChecker, baseCaptureChecker);
+            var boardSize = new Vector2Int(board.GetLength(0), board.GetLength(1));
+            var armyStateCalculator = new SimpleArmyStateCalculator(unconnectedValuesCutter, unitsPositionsSearcher, basePositionsCalculator, boardSize);
+            var occupiedPositionsCalculator = new OccupiedPositionsCalculator(armyStateCalculator);
             foreach (var scenario in allowedPositionsScenariosConfig.Scenarios)
             {
-            
+                var playerOccupiedPositions = scenario.EnemyPositions.ConvertToGameLogicVector2IntList();
+                var botAllowedPositions = scenario.AllowedPositions.ConvertToGameLogicVector2IntList();
+                var situation =
+                    new OccupiedPositionsSituation(playerOccupiedPositions, occupiedPositionsCalculator, _player);
+                situationsToPositions.Add(situation, botAllowedPositions);
             }
             var allowedPositionsProvider = new SituationalPositionsProvider(situationsToPositions);
             var positionValidityEvaluator = new PositionValidityEvaluator(allowedPositionsProvider);
