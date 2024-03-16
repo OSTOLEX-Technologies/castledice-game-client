@@ -19,8 +19,8 @@ namespace Src.Components.UI.ItemsGridFill
         private void Start()
         {
             if (items.Length == 0) return;
-            
-            OnElementClicked(0);
+
+            if (bEnablePreview) OnElementClicked(0);
             
             for (var i  = 0; i < items.Length; i++)
             {
