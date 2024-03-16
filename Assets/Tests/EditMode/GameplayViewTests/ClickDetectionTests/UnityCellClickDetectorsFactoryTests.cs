@@ -15,9 +15,9 @@ namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
         public void GetDetector_ShouldReturnUnityCellClickDetector_WithGivenPosition([ValueSource(nameof(Positions))]Vector2Int position)
         {
             var gameObject = new GameObject();
-            var factory = gameObject.AddComponent<UnityCellClickDetectorsFactory>();
-            var configMock = new Mock<IUnityCellClickDetectorsConfig>();
-            var detectorPrefab = new GameObject().AddComponent<UnityCellClickDetector>();
+            var factory = gameObject.AddComponent<CellClickDetectorsFactory>();
+            var configMock = new Mock<ICellClickDetectorsConfig>();
+            var detectorPrefab = new GameObject().AddComponent<CellClickDetector>();
             configMock.Setup(c => c.DetectorPrefab).Returns(detectorPrefab);
             factory.Init(configMock.Object);
             Vector2Int actualPosition = default;

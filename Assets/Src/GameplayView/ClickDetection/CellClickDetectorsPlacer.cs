@@ -6,9 +6,9 @@ namespace Src.GameplayView.ClickDetection
     public class CellClickDetectorsPlacer
     {
         private readonly IGrid _grid;
-        private readonly IUnityCellClickDetectorsFactory _detectorsFactory;
+        private readonly ICellClickDetectorsFactory _detectorsFactory;
         
-        public CellClickDetectorsPlacer(IGrid grid, IUnityCellClickDetectorsFactory detectorsFactory)
+        public CellClickDetectorsPlacer(IGrid grid, ICellClickDetectorsFactory detectorsFactory)
         {
             _grid = grid;
             _detectorsFactory = detectorsFactory;

@@ -8,6 +8,7 @@ using Src.GameplayView.NewUnitsHighlights;
 using UnityEngine;
 using static Tests.Utils.ObjectCreationUtility;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
+using static Tests.Utils.ContentMocksCreationUtility;
 
 namespace Tests.EditMode.GameplayPresenterTests.NewUnitsHighlightsTests
 {

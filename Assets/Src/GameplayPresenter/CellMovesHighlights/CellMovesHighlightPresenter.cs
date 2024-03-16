@@ -6,62 +6,31 @@ namespace Src.GameplayPresenter.CellMovesHighlights
 {
     public class CellMovesHighlightPresenter
     {
-        private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly Player _localPlayer;
         private readonly ICellMovesListProvider _cellMovesListProvider;
-        private readonly Game _game;
+        private readonly ICellMovesHighlightObserver _observer;
         private readonly ICellMovesHighlightView _view;
 
-        public CellMovesHighlightPresenter(IPlayerDataProvider playerDataProvider, ICellMovesListProvider cellMovesListProvider, Game game, ICellMovesHighlightView view)
+        public CellMovesHighlightPresenter(Player localPlayer, ICellMovesListProvider cellMovesListProvider, ICellMovesHighlightObserver observer, ICellMovesHighlightView view)
         {
-            _playerDataProvider = playerDataProvider;
+            _localPlayer = localPlayer;
             _cellMovesListProvider = cellMovesListProvider;
-            _game = game;
+            _observer = observer;
             _view = view;
-            SubscribeToGameEvents();
-            SubscribeToPlayerEvents();
+            _observer.TimeToHighlight += HighlightCellMoves;
+            _observer.TimeToHide += HideHighlights;
         }
 
-        private void SubscribeToGameEvents()
-        {
-            _game.MoveApplied += OnMoveApplied;
-            _game.TurnSwitched += OnTurnSwitched;
-        }
-        
-        private void SubscribeToPlayerEvents()
-        {
-            var playerId = _playerDataProvider.GetId();
-            var player = _game.GetPlayer(playerId);
-            player.ActionPoints.ActionPointsIncreased += OnActionPointsGiven;
-        }
-
-        public virtual void HighlightCellMoves()
+        private void HighlightCellMoves()
         {
             _view.HideHighlights();
-            var playerId = _playerDataProvider.GetId();
-            if (!IsCurrentPlayer(playerId)) return;
-            var cellMovesList = _cellMovesListProvider.GetCellMovesList(playerId);
+            var cellMovesList = _cellMovesListProvider.GetCellMovesList(_localPlayer.Id);
             _view.HighlightCellMoves(cellMovesList);
         }
 
-        private bool IsCurrentPlayer(int playerId)
+        private void HideHighlights()
         {
-            var currentPlayer = _game.GetCurrentPlayer();
-            return currentPlayer.Id == playerId;
-        }
-
-        private void OnMoveApplied(object sender, AbstractMove move)
-        {
-            HighlightCellMoves();
-        }
-
-        private void OnTurnSwitched(object sender, Game game)
-        {
-            HighlightCellMoves();
-        }
-
-        private void OnActionPointsGiven(object sender, int amount)
-        {
-            HighlightCellMoves();
+            _view.HideHighlights();
         }
     }
 }
