@@ -5,6 +5,7 @@ using castledice_game_data_logic;
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.DestroyedContent;
@@ -16,8 +17,11 @@ using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameWrappers;
+using Src.GameplayPresenter.NewUnitsHighlights;
+using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayView;
 using Src.GameplayView.ActionPointsGiving;
+using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
 using Src.GameplayView.CellsContent;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
@@ -36,6 +40,9 @@ using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.Grid;
 using Src.GameplayView.Grid.GridGeneration;
+using Src.GameplayView.Highlights;
+using Src.GameplayView.NewUnitsHighlights;
+using Src.GameplayView.PlacedUnitsHighlights;
 using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersNumbers;
@@ -133,6 +140,24 @@ namespace Src.ScenesInitializers
         private TutorialActionPointsGivingPresenter _actionPointsGivingPresenter;
         private ActionPointsGivingView _actionPointsGivingView;
 
+        [Header("Placed units highlights")]
+        [SerializeField] private ColoredHighlightPrefabConfig coloredHighlightPrefabConfig;
+        [SerializeField] private PlayerObjectsColorConfig placedUnitsHighlightsColorConfig;
+        private PlacedUnitsHighlightsView _placedUnitsHighlightsView;
+        private PlacedUnitsHighlightsPresenter _placedUnitsHighlightsPresenter;
+        
+        [Header("New units highlights")]
+        [SerializeField] private ColoredHighlightPrefabConfig newUnitsHighlightsPrefabConfig;
+        [SerializeField] private PlayerObjectsColorConfig newUnitsHighlightsColorConfig;
+        private NewUnitsHighlightsView _newUnitsHighlightsView;
+        private NewUnitsHighlightsPresenter _newUnitsHighlightsPresenter;
+        
+        [Header("Move highlights")]
+        [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
+        [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
+        private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
+        private CellMovesHighlightView _cellMovesHighlightView;
+        
         private DuelPlayerColorProvider _playerColorProvider;
 
         [Header("Bot configuration")]
@@ -152,7 +177,9 @@ namespace Src.ScenesInitializers
             SetUpPlayerMoves();
             SetUpActionPointsGiving();
             SetUpBot();
-
+            SetUpPlacedUnitsHighlights();
+            SetUpNewUnitsHighlights();
+            
             GiveActionPointsToCurrentPlayer();
         }
 
@@ -336,5 +363,33 @@ namespace Src.ScenesInitializers
             var delayer = new AsyncDelayer();
             _bot = new SteadyBot(localMoveApplier, bestMoveSearcher, _game, _enemy, moveDelay, delayer);
         }
+        
+        private void SetUpPlacedUnitsHighlights()
+        {
+            var instantiator = new Instantiator();
+            var objectsColorProvider = new PlayerObjectsColorProvider(placedUnitsHighlightsColorConfig, _playerColorProvider);
+            var underlineCreator = new ColoredHighlightCreator(coloredHighlightPrefabConfig, instantiator);
+            _placedUnitsHighlightsView = new PlacedUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
+            _placedUnitsHighlightsPresenter = new PlacedUnitsHighlightsPresenter(_game.GetBoard(), _placedUnitsHighlightsView);
+        }
+        
+        private void SetUpNewUnitsHighlights()
+        {
+            var instantiator = new Instantiator();
+            var objectsColorProvider = new PlayerObjectsColorProvider(newUnitsHighlightsColorConfig, _playerColorProvider);
+            var underlineCreator = new ColoredHighlightCreator(newUnitsHighlightsPrefabConfig, instantiator);
+            _newUnitsHighlightsView = new NewUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
+            _newUnitsHighlightsPresenter = new NewUnitsHighlightsPresenter(_game, _newUnitsHighlightsView);
+        }
+        
+        // private void SetUpCellMovesHighlights()
+        // {
+        //     cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
+        //     var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
+        //     _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
+        //     var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
+        //     _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataCreator,
+        //         new CellMovesListProvider(_game), _game, _cellMovesHighlightView);
+        // }
     }
 }

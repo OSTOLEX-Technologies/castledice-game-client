@@ -285,9 +285,10 @@ namespace Src.ScenesInitializers
             cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
             var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
             _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
-            var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
-            _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataCreator,
-                new CellMovesListProvider(_game), _game, _cellMovesHighlightView);
+            var player = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetId());
+            var observer = new CellMovesHighlightObserver(_game, player);
+            _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(player,
+                new CellMovesListProvider(_game), observer, _cellMovesHighlightView);
         }
 
         private void SetUpClickDetectors()
