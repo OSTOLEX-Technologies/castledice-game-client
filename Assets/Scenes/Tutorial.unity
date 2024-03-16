@@ -382,7 +382,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!114 &396189202
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1007,7 +1007,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1419227384}
-  - component: {fileID: 1419227385}
   - component: {fileID: 1419227386}
   m_Layer: 0
   m_Name: SceneInitializer
@@ -1031,13 +1030,72 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1419227385
+--- !u!114 &1419227386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1419227382}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9c770dfce63deee448fb02bfce62342d, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  playerId: 0
+  enemyId: 1
+  gameStartDataConfig: {fileID: 11400000, guid: 199cbc725162b86408c8657d3a843a49, type: 2}
+  playerCamera: {fileID: 30934008}
+  cellClickDetectorsConfig: {fileID: 11400000, guid: 3bd459adf056ce4408910b4e66c6bbd6, type: 2}
+  cellClickDetectorsFactory: {fileID: 1096959018}
+  grid: {fileID: 764948085}
+  gridGenerationConfig: {fileID: 11400000, guid: fd08ed526d45082449186b12a879de7e, type: 2}
+  cellsFactory: {fileID: 1815871629}
+  cellAssetsConfig: {fileID: 11400000, guid: 98a63a0dc7d70744e9fa2aa3d8ada4dd, type: 2}
+  playerOrderRotations: {fileID: 11400000, guid: 46274906cb25fe443bf11edbaee9faec, type: 2}
+  knightSoundsConfig: {fileID: 11400000, guid: 485eb9cf476b15846a9daa2cc5f3fd51, type: 2}
+  knightAudioPrefab: {fileID: 9031346945946173860, guid: abb0e1d6dcd916b4cbcd0a662fdec3a6, type: 3}
+  knightViewPrefab: {fileID: 8287254654038348272, guid: fec35469feb64db409bb0570e44ff1ae, type: 3}
+  knightVisualPrefabConfig: {fileID: 11400000, guid: c44ea10e9a3e6c94b824c5c0d09251ca, type: 2}
+  knightColorConfig: {fileID: 11400000, guid: 711e8d7fa4e69164f83437761d9069e1, type: 2}
+  treeViewPrefab: {fileID: 6641248664255995534, guid: 89c5eb029b6403f41a5c1af3cd1c0e23, type: 3}
+  treeVisualPrefabConfig: {fileID: 11400000, guid: 3334c42dee8183e4eaa3d218ef93101f, type: 2}
+  castleSoundsConfig: {fileID: 11400000, guid: da329f08e63390a4bbcfcb6c496a1916, type: 2}
+  castleViewPrefab: {fileID: 7926198696129808440, guid: 8fd36fd32163a4e489e348d9dca9a4ca, type: 3}
+  castleAudioPrefab: {fileID: 312714061503171999, guid: 8efee6a2294d5fc4dba083eb75ad1003, type: 3}
+  castleVisualPrefabConfig: {fileID: 11400000, guid: 890a5dc2d4b52694d94c48061122b580, type: 2}
+  castleColorConfig: {fileID: 11400000, guid: 076d5a78144da404c8d07244e340ec63, type: 2}
+  destroyedContentTransparencyConfig: {fileID: 11400000, guid: 2fd7fa23a869bc444af0e322e630c70f, type: 2}
+  positionMoveConditionsListConfig: {fileID: 11400000, guid: d13855a2fa22c3d4d80ae5a08cbd5521, type: 2}
+  popupDisappearTimeMilliseconds: 1500
+  redActionPointsPopup: {fileID: 1306602971}
+  blueActionPointsPopup: {fileID: 1856468401}
+  playerActionPointsSequence: {fileID: 11400000, guid: 5aa83bc0e336baa4890dbc5f6b5e0b2d, type: 2}
+  enemyActionPointsSequence: {fileID: 11400000, guid: 836702b06dcb8f341a90bd4a37ce7fe2, type: 2}
+--- !u!1 &1500419343
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1500419345}
+  - component: {fileID: 1500419344}
+  m_Layer: 0
+  m_Name: OldInitializer
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!114 &1500419344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1500419343}
   m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: af2bae7747207bc499252173cba0476a, type: 3}
@@ -1087,43 +1145,21 @@ MonoBehaviour:
   newUnitsHighlightsColorConfig: {fileID: 11400000, guid: 8ababd8e40c3ac04f87b4ccaedd9c1b2, type: 2}
   fixedUpdaterBehaviour: {fileID: 396189204}
   updaterBehaviour: {fileID: 396189202}
---- !u!114 &1419227386
-MonoBehaviour:
+--- !u!4 &1500419345
+Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1419227382}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9c770dfce63deee448fb02bfce62342d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  playerId: 0
-  enemyId: 1
-  gameStartDataConfig: {fileID: 11400000, guid: 199cbc725162b86408c8657d3a843a49, type: 2}
-  playerCamera: {fileID: 30934008}
-  cellClickDetectorsConfig: {fileID: 11400000, guid: 3bd459adf056ce4408910b4e66c6bbd6, type: 2}
-  cellClickDetectorsFactory: {fileID: 1096959018}
-  grid: {fileID: 764948085}
-  gridGenerationConfig: {fileID: 11400000, guid: fd08ed526d45082449186b12a879de7e, type: 2}
-  cellsFactory: {fileID: 1815871629}
-  cellAssetsConfig: {fileID: 11400000, guid: 98a63a0dc7d70744e9fa2aa3d8ada4dd, type: 2}
-  playerOrderRotations: {fileID: 0}
-  knightSoundsConfig: {fileID: 0}
-  knightAudioPrefab: {fileID: 0}
-  knightViewPrefab: {fileID: 0}
-  knightVisualPrefabConfig: {fileID: 0}
-  knightColorConfig: {fileID: 0}
-  treeViewPrefab: {fileID: 0}
-  treeVisualPrefabConfig: {fileID: 0}
-  castleSoundsConfig: {fileID: 0}
-  castleViewPrefab: {fileID: 0}
-  castleAudioPrefab: {fileID: 0}
-  castleVisualPrefabConfig: {fileID: 0}
-  castleColorConfig: {fileID: 0}
-  destroyedContentTransparencyConfig: {fileID: 0}
-  positionMoveConditionsListConfig: {fileID: 0}
+  m_GameObject: {fileID: 1500419343}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1327.0565, y: 345.65598, z: -0.118439406}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 14
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1765735282
 GameObject:
   m_ObjectHideFlags: 0

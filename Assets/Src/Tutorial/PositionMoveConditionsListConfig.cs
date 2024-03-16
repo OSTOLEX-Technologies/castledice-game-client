@@ -17,7 +17,6 @@ namespace Src.Tutorial
     [CreateAssetMenu(fileName = "PositionMoveConditionsListConfig", menuName = "Configs/PositionMoveConditionsListConfig")]
     public class PositionMoveConditionsListConfig : ScriptableObject, IMoveConditionsListConfig
     {
-        [Tooltip("Each sublist will be converted into a separate PositionsMoveCondition, which determines the allowed positions for a move.")]
         [SerializeField] private List<AllowedPositions> allowedPositions;   
         
         public List<IMoveCondition> GetMoveConditions()

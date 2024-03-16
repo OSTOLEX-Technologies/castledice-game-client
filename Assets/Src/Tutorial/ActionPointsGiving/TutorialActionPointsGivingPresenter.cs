@@ -7,7 +7,7 @@ namespace Src.Tutorial.ActionPointsGiving
     {
         private readonly IActionPointsGivingView _view;
         private readonly IActionPointsGenerator _actionPointsGenerator;
-        private Game _game;
+        private readonly Game _game;
 
         public TutorialActionPointsGivingPresenter(IActionPointsGivingView view, IActionPointsGenerator actionPointsGenerator, Game game)
         {
@@ -19,9 +19,14 @@ namespace Src.Tutorial.ActionPointsGiving
 
         private void OnTurnSwitched(object sender, Game game)
         {
-            var currentPlayer = game.GetCurrentPlayer();
+            GiveActionPointsToCurrentPlayer();
+        }
+
+        public void GiveActionPointsToCurrentPlayer()
+        {
+            var currentPlayer = _game.GetCurrentPlayer();
             var actionPointsAmount = _actionPointsGenerator.GetActionPoints(currentPlayer);
-            game.GiveActionPointsToPlayer(currentPlayer.Id, actionPointsAmount);
+            _game.GiveActionPointsToPlayer(currentPlayer.Id, actionPointsAmount);
             _view.ShowActionPointsForPlayer(currentPlayer, actionPointsAmount);
         }
     }

@@ -89,7 +89,7 @@ namespace Src.Tutorial
                 tscConfigData, 
                 new List<PlayerData>
                 {
-                    playerData, enemyData
+                    enemyData, playerData
                 });
             return gameStartData;
         }

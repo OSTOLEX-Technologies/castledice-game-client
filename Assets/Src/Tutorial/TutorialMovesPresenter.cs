@@ -34,7 +34,6 @@ namespace Src.Tutorial
         {
             var moves = _possibleMovesListProvider.GetPossibleMoves(position, _playerId);
             _view.ShowMovesList(moves);
-            _view.MovePicked += OnMovePicked;
         }
 
         private void OnMovePicked(object sender, AbstractMove move)

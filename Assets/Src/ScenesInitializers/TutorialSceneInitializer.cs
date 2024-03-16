@@ -1,7 +1,9 @@
+using System;
 using System.Collections.Generic;
 using castledice_game_data_logic;
 using castledice_game_logic;
 using castledice_game_logic.Math;
+using castledice_game_logic.MovesLogic;
 using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
@@ -16,6 +18,7 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView;
+using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.Cells;
 using Src.GameplayView.CellsContent;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
@@ -38,10 +41,19 @@ using Src.GameplayView.PlayerObjectsColor;
 using Src.GameplayView.PlayersColors;
 using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
+using Src.General.NumericSequences;
 using Src.PlayerInput;
+using Src.PVE;
+using Src.PVE.GameSituations;
+using Src.PVE.MoveSearchers.TraitBasedSearchers;
+using Src.PVE.MoveSearchers.TraitBasedSearchers.TraitsEvaluators;
+using Src.PVE.Providers;
 using Src.TimeManagement;
 using Src.Tutorial;
+using Src.Tutorial.ActionPointsGiving;
+using Src.Tutorial.BotConfiguration;
 using UnityEngine;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.ScenesInitializers
 {
@@ -109,15 +121,35 @@ namespace Src.ScenesInitializers
         private MovesView _movesView;
         private TutorialMovesPresenter _movesPresenter;
         
+        [Header("Action points giving")]
+        [SerializeField] private int popupDisappearTimeMilliseconds;
+        [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
+        [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
+        [SerializeField] private IntSequenceConfig playerActionPointsSequence;
+        [SerializeField] private IntSequenceConfig enemyActionPointsSequence;
+        private TutorialActionPointsGivingPresenter _actionPointsGivingPresenter;
+        private ActionPointsGivingView _actionPointsGivingView;
+
+        private DuelPlayerColorProvider _playerColorProvider;
+
+        [Header("Bot configuration")]
+        [SerializeField] private int botMoveDelayMilliseconds;
+        [SerializeField] private AllowedPositionsScenariosConfig allowedPositionsScenariosConfig;
+        private Bot _bot;
+        
         private void Start()
         {
             SetUpGameAndPlayers();
+            SetUpPlayerColorProvider();
             SetUpInputHandling();
             SetUpGrid();
             SetUpCells();
+            SetUpContent();
             SetUpClickDetectors();
             SetUpPlayerMoves();
-            SetUpContent();
+            SetUpActionPointsGiving();
+
+            GiveActionPointsToCurrentPlayer();
         }
 
         private void SetUpGameAndPlayers()
@@ -127,6 +159,11 @@ namespace Src.ScenesInitializers
             _game = gameCreator.CreateGame();
             _player = _game.GetPlayer(playerId);
             _enemy = _game.GetPlayer(enemyId);
+        }
+
+        private void SetUpPlayerColorProvider()
+        {
+            _playerColorProvider = new DuelPlayerColorProvider(_player);
         }
 
         private TutorialGameCreator GetGameCreator()
@@ -217,6 +254,67 @@ namespace Src.ScenesInitializers
             var moveConditionsSequence =
                 new ListMoveConditionsSequence(positionMoveConditionsListConfig.GetMoveConditions());
             _movesPresenter = new TutorialMovesPresenter(_movesView, possibleMovesListProvider, localMoveApplier, moveConditionsSequence, playerId);
+            _movesPresenter.WrongMovePicked += (object sender, AbstractMove move) => Debug.Log("Wrong move picked");
+            _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => Debug.Log("Right move picked");
+        }
+
+        private void SetUpActionPointsGiving()
+        {
+            var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
+            var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
+            _actionPointsGivingView =
+                new ActionPointsGivingView(_playerColorProvider,
+                    popupDemonstrator);
+            var sequenceProvider = new DictPlayerIntSequenceProvider(new Dictionary<Player, IIntSequence>
+            {
+                {_player, playerActionPointsSequence},
+                {_enemy, enemyActionPointsSequence}
+            });
+            var actionPointsGenerator = new SequenceActionPointsGenerator(sequenceProvider);
+            _actionPointsGivingPresenter = new TutorialActionPointsGivingPresenter(_actionPointsGivingView, actionPointsGenerator, _game);
+        }
+        
+        private void GiveActionPointsToCurrentPlayer()
+        {
+            _actionPointsGivingPresenter.GiveActionPointsToCurrentPlayer();
+        }
+
+        private void SetUpBot()
+        {
+            var moveDelay = TimeSpan.FromMilliseconds(botMoveDelayMilliseconds);
+            var localMoveApplier = new LocalMovesApplier(_game);
+            var situationsToPositions = new Dictionary<IGameSituation, List<Vector2Int>>();
+            foreach (var scenario in allowedPositionsScenariosConfig.Scenarios)
+            {
+            
+            }
+            var allowedPositionsProvider = new SituationalPositionsProvider(situationsToPositions);
+            var positionValidityEvaluator = new PositionValidityEvaluator(allowedPositionsProvider);
+            var traitsEvaluator = new MovesListTraitsEvaluator(
+                positionValidityEvaluator, 
+                positionValidityEvaluator, 
+                positionValidityEvaluator, 
+                positionValidityEvaluator,
+                positionValidityEvaluator);
+            var movesTraitsNormalizer = new MovesTraitsNormalizer();
+            var totalPossibleMovesProvider = new TotalPossibleMovesProvider(_game);
+            var randomNumberGenerator = new RangeRandomNumberGenerator();
+            var bestMoveSearcher = new TraitsWeightedSumMoveSearcher(
+                traitsEvaluator, 
+                movesTraitsNormalizer, 
+                totalPossibleMovesProvider, 
+                randomNumberGenerator, 
+                new Dictionary<IGameSituation, MoveTraitsValues>(),
+                new MoveTraitsValues
+                {
+                    Aggressiveness = 1,
+                    Defensiveness = 1,
+                    Destructiveness = 1,
+                    Enhanciveness = 1,
+                    Harmfulness = 1
+                });
+            var delayer = new AsyncDelayer();
+            _bot = new SteadyBot(localMoveApplier, bestMoveSearcher, _game, _enemy, moveDelay, delayer);
         }
     }
 }

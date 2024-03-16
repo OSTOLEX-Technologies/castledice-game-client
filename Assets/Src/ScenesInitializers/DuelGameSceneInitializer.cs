@@ -206,7 +206,6 @@ namespace Src.ScenesInitializers
             SetUpCellMovesHighlights();
             SetUpActionPointsCount();
             SetUpCurrentPlayerLabel();
-            SetUpCurrentPlayerLabel();
             SetUpGameOver();
             SetUpTimers();
             NotifyPlayerIsReady();

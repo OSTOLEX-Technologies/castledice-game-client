@@ -276,5 +276,18 @@ namespace Tests.EditMode.TutorialTests
          
             Assert.Contains(expectedEnemyData, playersData);
         }
+
+        [Test]
+        public void GetGameStartData_ShouldReturnGameStartData_WhereEnemyDataGoesFirst_InPlayersData()
+        {
+            var enemyId = _rnd.Next(1, 1000);
+            var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
+            
+            var gameStartData = config.GetGameStartData(0, enemyId);
+            var playersData = gameStartData.PlayersData;
+            var firstPlayerData = playersData[0];
+            
+            Assert.AreEqual(enemyId, firstPlayerData.PlayerId);
+        }
     }
 }
