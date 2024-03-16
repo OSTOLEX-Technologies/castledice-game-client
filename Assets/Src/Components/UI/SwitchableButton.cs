@@ -17,42 +17,60 @@ namespace Src.Components.UI
 
         [SerializeField, InspectorName("Disable On Selection")] private bool bDisableOnSelection;
 
+        public UnityAction<SwitchableButton, bool> ButtonClicked;
+        
         private UnityAction _clickAction;
         
         private Button _button;
-        private bool _bActive;
+        public bool Pressed { get; private set; }
 
+        public void InvertPressState()
+        {
+            _clickAction?.Invoke();
+        }
+        
+        public void SetupButton(bool initialPressedState)
+        {
+            Pressed = initialPressedState;
+            UpdateSprite();
+            UpdateTextColor();
+            UpdateInteractivity();
+        }
+        
         private void Awake()
         {
             _button = gameObject.GetComponent<Button>();
-            UpdateActiveState();
 
+            SetupButton(false);
+            
             _clickAction += UpdateActiveState;
             _clickAction += UpdateSprite;
             _clickAction += UpdateTextColor;
             _clickAction += UpdateInteractivity;
+            _clickAction += () => ButtonClicked?.Invoke(this, Pressed);
+            
             _button.onClick.AddListener(_clickAction);
         }
 
         private void UpdateActiveState()
         {
-            _bActive = _button.interactable;
+            Pressed = !Pressed;
         }
         private void UpdateSprite()
         {
-            var selectedSprite = _bActive ? activeSprite : inactiveSprite;
+            var selectedSprite = Pressed ? activeSprite : inactiveSprite;
             _button.image.sprite = selectedSprite;
         }
         
         private void UpdateTextColor()
         {
-            var selectedTextColor = _bActive ? activeTextColor : inactiveTextColor;
+            var selectedTextColor = Pressed ? activeTextColor : inactiveTextColor;
             text.color = selectedTextColor;
         }
 
         private void UpdateInteractivity()
         {
-            _button.interactable = _bActive;
+            _button.interactable = !Pressed;
         }
     }
 }

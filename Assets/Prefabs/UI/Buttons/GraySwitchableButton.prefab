@@ -11,6 +11,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: GraySwitchableButton
       objectReference: {fileID: 0}
+    - target: {fileID: 1584853535525969320, guid: c7d6636792e8ed24397df000067f4859, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.a
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584853535525969320, guid: c7d6636792e8ed24397df000067f4859, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.b
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584853535525969320, guid: c7d6636792e8ed24397df000067f4859, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.g
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1584853535525969320, guid: c7d6636792e8ed24397df000067f4859, type: 3}
+      propertyPath: m_Colors.m_DisabledColor.r
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 1584853535525969321, guid: c7d6636792e8ed24397df000067f4859, type: 3}
       propertyPath: m_Pivot.x
       value: 0.5
@@ -97,7 +113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1584853536468847278, guid: c7d6636792e8ed24397df000067f4859, type: 3}
       propertyPath: m_fontSize
-      value: 34.65
+      value: 16.65
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: c7d6636792e8ed24397df000067f4859, type: 3}
