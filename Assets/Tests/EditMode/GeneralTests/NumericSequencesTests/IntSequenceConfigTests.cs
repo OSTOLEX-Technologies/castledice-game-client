@@ -1,5 +1,4 @@
-﻿using System.Collections.Generic;
-using NUnit.Framework;
+﻿using NUnit.Framework;
 using Src.General.NumericSequences;
 using UnityEngine;
 using static Tests.Utils.ObjectCreationUtility;
@@ -13,64 +12,29 @@ namespace Tests.EditMode.GeneralTests.NumericSequencesTests
         private const string DefaultNumberFieldName = "defaultNumber";
         
         private readonly Random _rnd = new Random();
-        
-        [Test]
-        public void Next_ShouldReturnDrnDefaultValue_IfSequenceListIsEmpty()
-        {
-            var expectedDefaultNumber =_rnd.Next();
-            var sequenceConfig = ScriptableObject.CreateInstance<IntSequenceConfig>();
-            sequenceConfig.SetPrivateField(SequenceListFieldName, new List<int>());
-            sequenceConfig.SetPrivateField(DefaultNumberFieldName, expectedDefaultNumber);
-            
-            var actualNumber = sequenceConfig.Next();
-            
-            Assert.AreEqual(expectedDefaultNumber, actualNumber);
-        }
 
         [Test]
-        public void Next_ShouldReturnFirstNumberFromSequenceList_IfCalledFirstTime()
+        public void SequenceProperty_ShouldReturnSequence_FromPrivateField()
         {
-            var expectedNumber =_rnd.Next();
-            var sequenceConfig = ScriptableObject.CreateInstance<IntSequenceConfig>();
-            sequenceConfig.SetPrivateField(SequenceListFieldName, new List<int> {expectedNumber});
-            sequenceConfig.SetPrivateField(DefaultNumberFieldName,_rnd.Next());
+            var expectedSequence = GetRandomIntList(_rnd.Next(1, 10));
+            var config = ScriptableObject.CreateInstance<IntSequenceConfig>();
+            config.SetPrivateField(SequenceListFieldName, expectedSequence);
             
-            var actualNumber = sequenceConfig.Next();
+            var actualSequence = config.Sequence;
             
-            Assert.AreEqual(expectedNumber, actualNumber);
-        }
-
-        [Test]
-        public void Next_ShouldReturnNextItemInSequenceList_ForEachCall()
-        {
-            var callsNumber =_rnd.Next(1, 10);
-            var sequenceList = GetRandomIntList(callsNumber);
-            var expectedNumber = sequenceList[callsNumber-1];
-            var sequenceConfig = ScriptableObject.CreateInstance<IntSequenceConfig>();
-            sequenceConfig.SetPrivateField(SequenceListFieldName, sequenceList);
-            
-            for (var i = 1; i < callsNumber; i++)
-            {
-                sequenceConfig.Next();
-            }
-            var actualNumber = sequenceConfig.Next();
-            
-            Assert.AreEqual(expectedNumber, actualNumber);
+            Assert.AreEqual(expectedSequence, actualSequence);
         }
         
         [Test]
-        public void Next_ShouldReturnDrnDefaultNumber_IfSequenceListEnded()
+        public void DefaultNumberProperty_ShouldReturnDefaultNumber_FromPrivateField()
         {
-            var sequenceList = GetRandomIntList(1);
-            var defaultNumber =_rnd.Next();
-            var sequenceConfig = ScriptableObject.CreateInstance<IntSequenceConfig>();
-            sequenceConfig.SetPrivateField(SequenceListFieldName, sequenceList);
-            sequenceConfig.SetPrivateField(DefaultNumberFieldName, defaultNumber);
+            var expectedDefaultNumber = _rnd.Next();
+            var config = ScriptableObject.CreateInstance<IntSequenceConfig>();
+            config.SetPrivateField(DefaultNumberFieldName, expectedDefaultNumber);
             
-            sequenceConfig.Next();
-            var actualNumber = sequenceConfig.Next();
+            var actualDefaultNumber = config.DefaultNumber;
             
-            Assert.AreEqual(defaultNumber, actualNumber);
+            Assert.AreEqual(expectedDefaultNumber, actualDefaultNumber);
         }
     }
 }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using castledice_game_data_logic;
 using castledice_game_logic;
 using castledice_game_logic.Math;
@@ -127,8 +128,8 @@ namespace Src.ScenesInitializers
         [SerializeField] private int popupDisappearTimeMilliseconds;
         [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
         [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
-        [SerializeField] private IntSequenceConfig playerActionPointsSequence;
-        [SerializeField] private IntSequenceConfig enemyActionPointsSequence;
+        [SerializeField] private IntSequenceConfig playerActionPointsSequenceConfig;
+        [SerializeField] private IntSequenceConfig enemyActionPointsSequenceConfig;
         private TutorialActionPointsGivingPresenter _actionPointsGivingPresenter;
         private ActionPointsGivingView _actionPointsGivingView;
 
@@ -268,6 +269,8 @@ namespace Src.ScenesInitializers
             _actionPointsGivingView =
                 new ActionPointsGivingView(_playerColorProvider,
                     popupDemonstrator);
+            var playerActionPointsSequence = new IntSequence(playerActionPointsSequenceConfig.Sequence.ToList(), playerActionPointsSequenceConfig.DefaultNumber);
+            var enemyActionPointsSequence = new IntSequence(enemyActionPointsSequenceConfig.Sequence.ToList(), enemyActionPointsSequenceConfig.DefaultNumber);
             var sequenceProvider = new DictPlayerIntSequenceProvider(new Dictionary<Player, IIntSequence>
             {
                 {_player, playerActionPointsSequence},

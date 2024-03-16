@@ -30,4 +30,18 @@ MonoBehaviour:
   - Positions:
     - {x: 5, y: 4}
   - Positions:
-    - {x: 5, y: 5}
+    - {x: 6, y: 5}
+  - Positions:
+    - {x: 6, y: 6}
+  - Positions:
+    - {x: 6, y: 7}
+  - Positions:
+    - {x: 7, y: 8}
+  - Positions:
+    - {x: 8, y: 9}
+  - Positions:
+    - {x: 9, y: 9}
+  - Positions:
+    - {x: 9, y: 9}
+  - Positions:
+    - {x: 9, y: 9}

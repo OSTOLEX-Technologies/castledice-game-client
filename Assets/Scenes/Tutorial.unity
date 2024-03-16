@@ -1072,6 +1072,8 @@ MonoBehaviour:
   blueActionPointsPopup: {fileID: 1856468401}
   playerActionPointsSequence: {fileID: 11400000, guid: 5aa83bc0e336baa4890dbc5f6b5e0b2d, type: 2}
   enemyActionPointsSequence: {fileID: 11400000, guid: 836702b06dcb8f341a90bd4a37ce7fe2, type: 2}
+  botMoveDelayMilliseconds: 500
+  allowedPositionsScenariosConfig: {fileID: 11400000, guid: 76b8a50489aae0b4a9440753acd45856, type: 2}
 --- !u!1 &1500419343
 GameObject:
   m_ObjectHideFlags: 0

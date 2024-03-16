@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6005d63abece4cbdac9b4110684d8de8, type: 3}
   m_Name: PlayerActionPointsSequence
   m_EditorClassIdentifier: 
-  sequence: 03000000030000000300000005000000
+  sequence: 0300000003000000030000000600000006000000
   defaultNumber: 3

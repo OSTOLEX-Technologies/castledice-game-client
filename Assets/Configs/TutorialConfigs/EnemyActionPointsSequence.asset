@@ -12,5 +12,5 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6005d63abece4cbdac9b4110684d8de8, type: 3}
   m_Name: EnemyActionPointsSequence
   m_EditorClassIdentifier: 
-  sequence: 06000000020000000200000002000000
+  sequence: 0600000001000000020000000300000002000000
   defaultNumber: 3
