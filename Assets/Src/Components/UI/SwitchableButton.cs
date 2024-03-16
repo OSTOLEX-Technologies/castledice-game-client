@@ -23,10 +23,19 @@ namespace Src.Components.UI
         
         private Button _button;
         public bool Pressed { get; private set; }
+        private bool _bEnabled = true;
 
         public void InvertPressState()
         {
             _clickAction?.Invoke();
+        }
+
+        public void DisableButton()
+        {
+            _button.interactable = false;
+            _button.image.sprite = inactiveSprite;
+            _button.colors = ColorBlock.defaultColorBlock;
+            _bEnabled = false;
         }
         
         public void SetupButton(bool initialPressedState)
@@ -35,13 +44,17 @@ namespace Src.Components.UI
             UpdateSprite();
             UpdateTextColor();
             UpdateInteractivity();
+            if (Pressed)
+            {
+                ButtonClicked?.Invoke(this, Pressed);
+            }
         }
         
         private void Awake()
         {
             _button = gameObject.GetComponent<Button>();
 
-            SetupButton(false);
+            if (_bEnabled) SetupButton(false);
             
             _clickAction += UpdateActiveState;
             _clickAction += UpdateSprite;
