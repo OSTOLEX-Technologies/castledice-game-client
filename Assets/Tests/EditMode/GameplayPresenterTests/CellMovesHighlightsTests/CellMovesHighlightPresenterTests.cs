@@ -54,5 +54,48 @@ namespace Tests.EditMode.GameplayPresenterTests.CellMovesHighlightsTests
             viewMock.Verify(x => x.HideHighlights(), Times.Once);
             viewMock.Verify(x => x.HighlightCellMoves(It.IsAny<List<CellMove>>()), Times.Once);
         }
+
+        [Test]
+        public void HighlightCellMoves_ShouldBeCalledWithMovesListFromProvider_WhenTimeToHighlightEventRaised()
+        {
+            var expectedMovesList = new List<CellMove> {  };
+            var observerMock = new Mock<ICellMovesHighlightObserver>();
+            var viewMock = new Mock<ICellMovesHighlightView>();
+            var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
+            cellMovesListProviderMock.Setup(x => x.GetCellMovesList(It.IsAny<int>())).Returns(expectedMovesList);
+            var presenter = new CellMovesHighlightPresenter(GetPlayer(), cellMovesListProviderMock.Object, observerMock.Object, viewMock.Object);
+            
+            observerMock.Raise(x => x.TimeToHighlight += () => { });
+            
+            viewMock.Verify(x => x.HighlightCellMoves(expectedMovesList));
+        }
+        
+        [Test]
+        public void GetCellMoves_ShouldBeCalledOnce_WhenTimeToHighlightEventRaised()
+        {
+            var observerMock = new Mock<ICellMovesHighlightObserver>();
+            var viewMock = new Mock<ICellMovesHighlightView>();
+            var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
+            var presenter = new CellMovesHighlightPresenter(GetPlayer(), cellMovesListProviderMock.Object, observerMock.Object, viewMock.Object);
+            
+            observerMock.Raise(x => x.TimeToHighlight += () => { });
+            
+            cellMovesListProviderMock.Verify(x => x.GetCellMovesList(It.IsAny<int>()), Times.Once);
+        }
+        
+        [Test]
+        public void GetCellMoves_ShouldBeCalledWithLocalPlayerId_WhenTimeToHighlightEventRaised()
+        {
+            var rnd = new System.Random();
+            var expectedPlayerId = rnd.Next();
+            var observerMock = new Mock<ICellMovesHighlightObserver>();
+            var viewMock = new Mock<ICellMovesHighlightView>();
+            var cellMovesListProviderMock = new Mock<ICellMovesListProvider>();
+            var presenter = new CellMovesHighlightPresenter(GetPlayer(expectedPlayerId), cellMovesListProviderMock.Object, observerMock.Object, viewMock.Object);
+            
+            observerMock.Raise(x => x.TimeToHighlight += () => { });
+            
+            cellMovesListProviderMock.Verify(x => x.GetCellMovesList(expectedPlayerId));
+        }
     }
 }
