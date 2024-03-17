@@ -5,13 +5,11 @@ using castledice_game_logic;
 using castledice_game_logic.Math;
 using Src.Caching;
 using Src.GameplayPresenter;
-using Src.GameplayPresenter.ActionPointsCount;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
-using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.DestroyedContent;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
@@ -27,7 +25,6 @@ using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayPresenter.Timers;
 using Src.GameplayView;
-using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
@@ -45,7 +42,6 @@ using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
-using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
@@ -64,6 +60,7 @@ using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
+using Src.Prototypes.NewActionPoints;
 using Src.TimeManagement;
 using TMPro;
 using UnityEngine;
@@ -126,29 +123,14 @@ namespace Src.ScenesInitializers
         private ServerMovesPresenter _serverMovesPresenter;
     
         [Header("Action points giving")]
-        [SerializeField] private int popupDisappearTimeMilliseconds;
-        [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
-        [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
         private ActionPointsGivingPresenter _actionPointsGivingPresenter;
-        private ActionPointsGivingView _actionPointsGivingView;
-    
-        [Header("Action points count")]
-        [SerializeField] private TextMeshProUGUI actionPointsLabel;
-        [SerializeField] private TextMeshProUGUI actionPointsText;
-        private ActionPointsCountPresenter _actionPointsCountPresenter;
-        private ActionPointsCountView _actionPointsCountView;
+        private IActionPointsGivingView _actionPointsGivingView;
     
         [Header("Move highlights")]
         [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
         [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
         private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
         private CellMovesHighlightView _cellMovesHighlightView;
-
-        [Header("Current player label")] 
-        [SerializeField] private GameObject bluePlayerLabel;
-        [SerializeField] private GameObject redPlayerLabel;
-        private CurrentPlayerPresenter _currentPlayerPresenter;
-        private CurrentPlayerView _currentPlayerView;
     
         [Header("Destroyed content")]
         [SerializeField] private TransparencyConfig destroyedContentTransparencyConfig;
@@ -180,6 +162,14 @@ namespace Src.ScenesInitializers
         [SerializeField] private UpdaterBehaviour updaterBehaviour;
         private readonly Updater _updater = new();
         private readonly Updater _fixedUpdater = new();
+        
+        [Header("Action points UI")]
+        [SerializeField] private TextMeshProUGUI blueActionPointsText;
+        [SerializeField] private GameObject blueActionPointsBanner;
+        [SerializeField] private TextMeshProUGUI redActionPointsText;
+        [SerializeField] private GameObject redActionPointsBanner;
+        private ActionPointsUI _blueActionPointsUI;
+        private ActionPointsUI _redActionPointsUI;
     
     
         private Game _game;
@@ -204,10 +194,9 @@ namespace Src.ScenesInitializers
             SetUpActionPointsGiving();
             SetUpCamera();
             SetUpCellMovesHighlights();
-            SetUpActionPointsCount();
-            SetUpCurrentPlayerLabel();
             SetUpGameOver();
             SetUpTimers();
+            SetUpActionPointsUI();
             NotifyPlayerIsReady();
         }
     
@@ -378,23 +367,11 @@ namespace Src.ScenesInitializers
     
         private void SetUpActionPointsGiving()
         {
-            var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
-            var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
-            _actionPointsGivingView =
-                new ActionPointsGivingView(_playerColorProvider,
-                    popupDemonstrator);
+            _actionPointsGivingView = new StubActionPointsView();
             _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
                 new ActionPointsGiver(_game), _actionPointsGivingView);
             var actionPointsGivingAccepter = new GiveActionPointsAccepter(_actionPointsGivingPresenter);
             GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
-        }
-
-        private void SetUpActionPointsCount()
-        {
-            var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-            _actionPointsCountView = new ActionPointsCountView(actionPointsText, actionPointsLabel);
-            _actionPointsCountPresenter = new ActionPointsCountPresenter(playerDataProvider, _game,
-                _actionPointsCountView);
         }
 
         private void SetUpCamera()
@@ -408,14 +385,6 @@ namespace Src.ScenesInitializers
                 camera.transform.localEulerAngles = Vector3.zero;
             }
         }
-    
-        private void SetUpCurrentPlayerLabel()
-        {
-            _currentPlayerView = new CurrentPlayerView(_playerColorProvider,
-                bluePlayerLabel, redPlayerLabel);
-            _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
-            _currentPlayerPresenter.ShowCurrentPlayer();
-        }
 
         private void NotifyPlayerIsReady()
         {
@@ -423,6 +392,14 @@ namespace Src.ScenesInitializers
             var playerToken = playerDataCreator.GetAccessToken();
             var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
             playerReadinessSender.SendPlayerReadiness(playerToken);
+        }
+        
+        private void SetUpActionPointsUI()
+        {
+            var bluePlayer = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetId());
+            var redPlayer = _game.GetPlayer(_game.GetAllPlayersIds().Find(id => id != bluePlayer.Id));
+            _blueActionPointsUI = new ActionPointsUI(blueActionPointsText, blueActionPointsBanner, bluePlayer);
+            _redActionPointsUI = new ActionPointsUI(redActionPointsText, redActionPointsBanner, redPlayer);
         }
     }
 }
