@@ -24,14 +24,17 @@ namespace Src.Auth.REST
             request.Content = encodedParams;
 
             var response = await _httpClient.SendAsync(request);
-            if (response.StatusCode == HttpStatusCode.OK)
-            {
-                var responseContent = await response.Content.ReadAsStringAsync();
-                var data = JsonConvert.DeserializeObject<T>(responseContent);
-                return data;
-            }
-
-            throw new HttpClientRequestException(await response.Content.ReadAsStringAsync(), response.StatusCode);
+            if (response.StatusCode != HttpStatusCode.OK)
+                throw new HttpClientRequestException(
+                    await response.Content.ReadAsStringAsync(), response.StatusCode);
+            
+            var responseContent = await response.Content.ReadAsStringAsync();
+            var data = JsonConvert.DeserializeObject<T>(responseContent);
+            return data;
+        }
+        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+        {
+            return _httpClient.SendAsync(request);
         }
     }
 }

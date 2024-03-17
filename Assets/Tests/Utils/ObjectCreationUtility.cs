@@ -331,15 +331,6 @@ namespace Tests.Utils
             return new Player(actionPoints, timer, new List<PlacementType> { PlacementType.Knight }, id);
         }
 
-        public static IPlayerDataProvider GetPlayerDataProvider(bool authorized = true, string token = "token", int id = 1)
-        {
-            var mock = new Mock<IPlayerDataProvider>();
-            mock.Setup(x => x.IsAuthorized()).Returns(authorized);
-            mock.Setup(x => x.GetAccessToken()).Returns(token);
-            mock.Setup(x => x.GetId()).Returns(id);
-            return mock.Object;
-        }
-        
         public static IPossibleMovesListProvider GetPossibleMovesListProvider()
         {
             var mock = new Mock<IPossibleMovesListProvider>();

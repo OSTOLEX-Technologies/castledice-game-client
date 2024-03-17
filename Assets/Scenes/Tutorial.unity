@@ -207,6 +207,8 @@ Transform:
   m_Children:
   - {fileID: 1299859425}
   - {fileID: 486270686}
+  - {fileID: 98995021}
+  - {fileID: 1901779081}
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 40, y: 45, z: 0}
@@ -243,6 +245,106 @@ MonoBehaviour:
   m_RequiresDepthTexture: 0
   m_RequiresColorTexture: 0
   m_Version: 2
+--- !u!1 &98995020
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 98995021}
+  - component: {fileID: 98995022}
+  m_Layer: 0
+  m_Name: BlueCastleHP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &98995021
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98995020}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -9.475232, y: -9.229307, z: 17.159542}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2097276316}
+  - {fileID: 1826525246}
+  - {fileID: 352206152}
+  m_Father: {fileID: 30934009}
+  m_RootOrder: 2
+  m_LocalEulerAnglesHint: {x: 40, y: 45, z: 0}
+--- !u!114 &98995022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 98995020}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d29dc281e004f9da31a1218a8ff32b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarElementPrefab: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  elementSpacing: {x: 2.3, y: 0}
+  damagedSprite: {fileID: 21300000, guid: 061aeee5a74e647b583b0a962c170863, type: 3}
+--- !u!1001 &227462435
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1901779081}
+    m_Modifications:
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_Name
+      value: CastleHealthBarElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+--- !u!4 &227462436 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  m_PrefabInstance: {fileID: 227462435}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &247296288
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,6 +467,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &352206151
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 98995021}
+    m_Modifications:
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_Name
+      value: CastleHealthBarElement (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+--- !u!4 &352206152 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  m_PrefabInstance: {fileID: 352206151}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &396189201
 GameObject:
   m_ObjectHideFlags: 0
@@ -1141,6 +1293,8 @@ MonoBehaviour:
   enemyActionPointsText: {fileID: 1242043856}
   botMoveDelayMilliseconds: 500
   allowedPositionsScenariosConfig: {fileID: 11400000, guid: 76b8a50489aae0b4a9440753acd45856, type: 2}
+  blueCastleHeathBar: {fileID: 98995022}
+  redCastleHeathBar: {fileID: 1901779080}
 --- !u!1 &1500419343
 GameObject:
   m_ObjectHideFlags: 0
@@ -1211,6 +1365,8 @@ MonoBehaviour:
   blueActionPointsBanner: {fileID: 0}
   redActionPointsText: {fileID: 0}
   redActionPointsBanner: {fileID: 0}
+  blueCastleHeathBar: {fileID: 0}
+  redCastleHeathBar: {fileID: 0}
 --- !u!4 &1500419345
 Transform:
   m_ObjectHideFlags: 0
@@ -1368,6 +1524,206 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &1826525245
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 98995021}
+    m_Modifications:
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_Name
+      value: CastleHealthBarElement (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+--- !u!4 &1826525246 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  m_PrefabInstance: {fileID: 1826525245}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &1858465686
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1901779081}
+    m_Modifications:
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_Name
+      value: CastleHealthBarElement (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_RootOrder
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 4.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+--- !u!4 &1858465687 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  m_PrefabInstance: {fileID: 1858465686}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1901779079
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1901779081}
+  - component: {fileID: 1901779080}
+  m_Layer: 0
+  m_Name: RedCastleHP
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1901779080
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901779079}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d29dc281e004f9da31a1218a8ff32b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  healthBarElementPrefab: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  elementSpacing: {x: 2.3, y: 0}
+  damagedSprite: {fileID: 21300000, guid: 061aeee5a74e647b583b0a962c170863, type: 3}
+--- !u!4 &1901779081
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1901779079}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.730544, y: 7.7375, z: 20.562428}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 227462436}
+  - {fileID: 1966798008}
+  - {fileID: 1858465687}
+  m_Father: {fileID: 30934009}
+  m_RootOrder: 3
+  m_LocalEulerAnglesHint: {x: 40, y: 45, z: 0}
+--- !u!1001 &1966798007
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 1901779081}
+    m_Modifications:
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_Name
+      value: CastleHealthBarElement (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_RootOrder
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 2.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+--- !u!4 &1966798008 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  m_PrefabInstance: {fileID: 1966798007}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1995503600 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4576712775376389528, guid: bbb3ba62954e7ed45a88e3f193f0633e, type: 3}
@@ -1422,6 +1778,56 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 11
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1001 &2097276315
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    m_TransformParent: {fileID: 98995021}
+    m_Modifications:
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_Name
+      value: CastleHealthBarElement
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291324, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_RootOrder
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+--- !u!4 &2097276316 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7225042412588291325, guid: 39ea3887d087c4df7a38c692e6b00f56, type: 3}
+  m_PrefabInstance: {fileID: 2097276315}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4576712775014658664
 PrefabInstance:
   m_ObjectHideFlags: 0

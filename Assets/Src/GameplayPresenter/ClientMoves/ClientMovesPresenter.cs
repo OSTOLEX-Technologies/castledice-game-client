@@ -1,8 +1,10 @@
 ﻿using System.Threading.Tasks;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic.MovesLogic;
+using Src.Auth.TokenProviders;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
+using Src.HttpUtils;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -10,16 +12,22 @@ namespace Src.GameplayPresenter.ClientMoves
 {
     public class ClientMovesPresenter
     {
-        private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly IServerMoveApplier _serverMoveApplier;
         private readonly IPossibleMovesListProvider _possibleMovesListProvider;
         private readonly ILocalMoveApplier _localMoveApplier;
         private readonly IMoveToDataConverter _moveToDataConverter;
         private readonly IMovesView _view;
 
-        public ClientMovesPresenter(IPlayerDataProvider playerDataProvider, IServerMoveApplier serverMoveApplier, IPossibleMovesListProvider possibleMovesListProvider, ILocalMoveApplier localMoveApplier, IMoveToDataConverter moveToDataConverter, IMovesView view)
+        public ClientMovesPresenter(
+            IAccessTokenProvider accessTokenProvider,
+            IServerMoveApplier serverMoveApplier, 
+            IPossibleMovesListProvider possibleMovesListProvider, 
+            ILocalMoveApplier localMoveApplier, 
+            IMoveToDataConverter moveToDataConverter, 
+            IMovesView view)
         {
-            _playerDataProvider = playerDataProvider;
+            _accessTokenProvider = accessTokenProvider;
             _serverMoveApplier = serverMoveApplier;
             _possibleMovesListProvider = possibleMovesListProvider;
             _localMoveApplier = localMoveApplier;
@@ -32,17 +40,17 @@ namespace Src.GameplayPresenter.ClientMoves
         public virtual async Task MakeMove(AbstractMove move)
         {
             var moveData = _moveToDataConverter.ConvertToData(move);
-            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(moveData, _playerDataProvider.GetAccessToken());
+            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(moveData, await _accessTokenProvider.GetAccessTokenAsync());
             if (applicationResult == MoveApplicationResult.Applied)
             {
                 _localMoveApplier.ApplyMove(move);
             }
         }
 
-        public virtual void ShowMovesForPosition(Vector2Int position)
+        public virtual async void ShowMovesForPosition(Vector2Int position)
         {
-            var playerId = _playerDataProvider.GetId();
-            var moves = _possibleMovesListProvider.GetPossibleMoves(position, playerId);
+            var localPlayerId = await new PlayerIdProvider().GetLocalPlayerId();
+            var moves = _possibleMovesListProvider.GetPossibleMoves(position, localPlayerId);
             _view.ShowMovesList(moves);
         }
 
