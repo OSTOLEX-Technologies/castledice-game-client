@@ -83,3 +83,4 @@ CodeCoverage/
 Assets/Src/Auth/AuthKeys/
 Assets/Src/Auth/DeepLinking/Config/
 Assets/Plugins/Android/FirebaseApp.androidlib/res/values/google-services.xml
+mono_crash*
