@@ -2,6 +2,7 @@ using System;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
 using castledice_game_logic;
+using Src.Auth.TokenProviders;
 using Src.Caching;
 using Src.Constants;
 using Src.GameplayView.GameCreation;
@@ -14,15 +15,15 @@ namespace Src.GameplayPresenter.GameCreation
         
         private readonly IGameSearcher _gameSearcher;
         private readonly IGameCreator _gameCreator;
-        private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly IAccessTokenProvider _accessTokenProvider;
         private readonly IGameCreationView _view;
         private bool _gameCreationInProcess;
 
-        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, IGameCreationView view)
+        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IAccessTokenProvider accessTokenProvider, IGameCreationView view)
         {
             _gameSearcher = gameSearcher;
             _gameCreator = gameCreator;
-            _playerDataProvider = playerDataProvider;
+            _accessTokenProvider = accessTokenProvider;
             _view = view;
             view.CancelCreationChosen += OnCancelGame;
             view.CreateGameChosen += OnCreateGame;
@@ -32,13 +33,7 @@ namespace Src.GameplayPresenter.GameCreation
         //TODO: Refactor this method as it is too long.
         public virtual async Task CreateGame()
         {
-            var isAuthorized = _playerDataProvider.IsAuthorized();
-            if (!isAuthorized)
-            {
-                _view.ShowNonAuthorizedMessage(MessagesStrings.NonAuthorizedMessage);
-                return;
-            }
-            var accessToken = _playerDataProvider.GetAccessToken();
+            var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
             
             _view.ShowCreationProcessScreen();
             _gameCreationInProcess = true;
@@ -75,7 +70,7 @@ namespace Src.GameplayPresenter.GameCreation
             
             _view.ShowCancelationMessage(MessagesStrings.GameSearchCancelationMessage);
             
-            var accessToken = _playerDataProvider.GetAccessToken();
+            var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
             var canceled = await _gameSearcher.CancelGameSearchAsync(accessToken);
             if (!canceled)
             {

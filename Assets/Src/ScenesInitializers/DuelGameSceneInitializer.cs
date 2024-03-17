@@ -1,10 +1,11 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using castledice_game_logic.Math;
+using Src.Auth.TokenProviders;
 using Src.Caching;
-using Src.GameplayPresenter;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
@@ -40,6 +41,7 @@ using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
 using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
+using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation.CastleHP;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using Src.GameplayView.DestroyedContent;
@@ -56,6 +58,7 @@ using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.GameplayView.Timers;
 using Src.GameplayView.Timers.PlayerTimerViews;
 using Src.GameplayView.Updatables;
+using Src.HttpUtils;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
@@ -64,6 +67,7 @@ using Src.Prototypes.NewActionPoints;
 using Src.TimeManagement;
 using TMPro;
 using UnityEngine;
+using CastleEntity = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.ScenesInitializers
 {
@@ -171,20 +175,30 @@ namespace Src.ScenesInitializers
         private ActionPointsUI _blueActionPointsUI;
         private ActionPointsUI _redActionPointsUI;
     
-    
+        [Header("Castles health bars")]
+        [SerializeField] private CastleHealthBar blueCastleHeathBar;
+        [SerializeField] private CastleHealthBar redCastleHeathBar;
+
+        
         private Game _game;
         private GameStartData _gameStartData;
 
+        private IAccessTokenProvider _accessTokenProvider;
+        private IPlayerIdProvider _playerIdProvider;
         private DuelPlayerColorProvider _playerColorProvider;
 
-        private void Start()
+        private async void Start()
         {
+            _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
+            _playerIdProvider = new PlayerIdProvider();
+
             SetUpUpdaters();
             SetUpGame();
-            SetUpColorProvider();
+            await SetUpColorProvider();
             SetUpInput();
             SetUpGrid();
             SetUpContent();
+            SetupCastleHealth();
             SetUpCells();
             SetUpClickDetectors();
             SetUpClientMoves();
@@ -192,12 +206,12 @@ namespace Src.ScenesInitializers
             SetUpPlacedUnitsHighlights();
             SetUpNewUnitsHighlights();
             SetUpActionPointsGiving();
-            SetUpCamera();
-            SetUpCellMovesHighlights();
+            await SetUpCamera();
+            await SetUpCellMovesHighlights();
             SetUpGameOver();
             SetUpTimers();
-            SetUpActionPointsUI();
-            NotifyPlayerIsReady();
+            await SetUpActionPointsUI();
+            await NotifyPlayerIsReady();
         }
     
         private void SetUpUpdaters()
@@ -234,10 +248,10 @@ namespace Src.ScenesInitializers
             _game = gameCreator.CreateGame(_gameStartData);
         }
 
-        private void SetUpColorProvider()
+        private async Task SetUpColorProvider()
         {
-            var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-            var localPlayer = _game.GetPlayer(playerDataProvider.GetId());
+            var localPlayerId = await _playerIdProvider.GetLocalPlayerId();
+            var localPlayer = _game.GetPlayer(localPlayerId);
             _playerColorProvider = new DuelPlayerColorProvider(localPlayer);
         }
 
@@ -269,12 +283,12 @@ namespace Src.ScenesInitializers
             _gridGenerator.GenerateGrid(_gameStartData.BoardData.CellsPresence);
         }
 
-        private void SetUpCellMovesHighlights()
+        private async Task SetUpCellMovesHighlights()
         {
             cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
             var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
             _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
-            var player = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetId());
+            var player = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
             var observer = new CellMovesHighlightObserver(_game, player);
             _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(player,
                 new CellMovesListProvider(_game), observer, _cellMovesHighlightView);
@@ -300,7 +314,6 @@ namespace Src.ScenesInitializers
         {
             var instantiator = new Instantiator();
             var playersList = _game.GetAllPlayers();
-            var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
             var playerNumberProvider = new PlayerNumberProvider(playersList);
             var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
         
@@ -326,16 +339,39 @@ namespace Src.ScenesInitializers
             _destroyedContentView = new DestroyedContentView(grid, contentVisualsCreator, destroyedContentTransparencyConfig);
             _destroyedContentPresenter = new DestroyedContentPresenter(_game, _destroyedContentView);
         }
+        
+        private void SetupCastleHealth()
+        {
+            var board = _game.GetBoard();
+            var firstCastle = board[0, 0].GetContent().
+                Find(x => x is CastleEntity) as CastleEntity;
+            var secondCastle = board[
+                    board.GetLength(0) - 1,
+                    board.GetLength(1) - 1
+                ].GetContent().
+                Find(x => x is CastleEntity) as CastleEntity;
+            var firstCastleColor = _playerColorProvider.GetPlayerColor(firstCastle.GetOwner());
+           
+            var bFirstCastleIsOurs = firstCastleColor == PlayerColor.Blue;
+
+            var initialDurability = firstCastle.GetMaxDurability();
+            blueCastleHeathBar.Init(initialDurability);
+            redCastleHeathBar.Init(initialDurability);
+            
+            firstCastle.Hit += bFirstCastleIsOurs ? 
+                blueCastleHeathBar.ApplyHit : redCastleHeathBar.ApplyHit;
+            secondCastle.Hit += bFirstCastleIsOurs ? 
+                redCastleHeathBar.ApplyHit : blueCastleHeathBar.ApplyHit;
+        }
 
         private void SetUpClientMoves()
         {
             _movesView = new MovesView(_cellClickDetectors);
-            var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
             var serverMovesApplier = new ServerMoveApplier(ClientsHolder.GetClient(ClientType.GameServerClient));
             ApproveMoveMessageHandler.SetDTOAccepter(serverMovesApplier);
             var localMovesApplier = new LocalMovesApplier(_game);
             var possibleMovesProvider = new PossibleMovesListProvider(_game);
-            _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider,
+            _clientMovesPresenter = new ClientMovesPresenter(_accessTokenProvider, serverMovesApplier, possibleMovesProvider,
                 localMovesApplier, new MoveToDataConverter(), _movesView);
         }
 
@@ -374,9 +410,9 @@ namespace Src.ScenesInitializers
             GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
         }
 
-        private void SetUpCamera()
+        private async Task SetUpCamera()
         {
-            var playerId = Singleton<IPlayerDataProvider>.Instance.GetId();
+            var playerId = await _playerIdProvider.GetLocalPlayerId();
             var playerIndex = _game.GetAllPlayersIds().IndexOf(playerId);
             if (playerIndex == 1)
             {
@@ -386,17 +422,16 @@ namespace Src.ScenesInitializers
             }
         }
 
-        private void NotifyPlayerIsReady()
+        private async Task NotifyPlayerIsReady()
         {
-            var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
-            var playerToken = playerDataCreator.GetAccessToken();
+            var playerToken = await _accessTokenProvider.GetAccessTokenAsync();
             var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
             playerReadinessSender.SendPlayerReadiness(playerToken);
         }
         
-        private void SetUpActionPointsUI()
+        private async Task SetUpActionPointsUI()
         {
-            var bluePlayer = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetId());
+            var bluePlayer = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
             var redPlayer = _game.GetPlayer(_game.GetAllPlayersIds().Find(id => id != bluePlayer.Id));
             _blueActionPointsUI = new ActionPointsUI(blueActionPointsText, blueActionPointsBanner, bluePlayer);
             _redActionPointsUI = new ActionPointsUI(redActionPointsText, redActionPointsBanner, redPlayer);

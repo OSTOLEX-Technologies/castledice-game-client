@@ -4,9 +4,9 @@ using Riptide.Transports.Tcp;
 using Riptide.Utils;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
+using Src.Auth.TokenProviders;
 using Src.Caching;
 using Src.Components;
-using Src.GameplayPresenter;
 using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
@@ -24,7 +24,6 @@ using Src.NetworkingModule.Errors;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.PeerUpdaters;
 using Src.SceneTransitionCommands;
-using Src.Stubs;
 using UnityEngine;
 
 namespace Src.ScenesInitializers
@@ -39,22 +38,19 @@ namespace Src.ScenesInitializers
         [SerializeField] private GameObject gameCreationProcessScreen;
         [SerializeField] private UnityPeerUpdater peerUpdater;
         [SerializeField] private FirebaseLogout firebaseLogout;
-
+        
         private GameCreationPresenter _gameCreationPresenter;
         private GameNotSavedErrorPresenter _gameNotSavedErrorPresenter;
         private GameNotSavedErrorView _gameNotSavedErrorView;
     
-        private void Start()
+        private IAccessTokenProvider _accessTokenProvider;
+        
+        private async void Start()
         {
             RiptideLogger.Initialize(Debug.Log,Debug.Log,Debug.LogWarning, Debug.LogError, false);
-        
-            //Setting up player data provider
-            if (!Singleton<IPlayerDataProvider>.Registered)
-            {
-                Singleton<IPlayerDataProvider>.Register(new PlayerDataProviderStub());
-            }
-            var playerDataProvider = Singleton<IPlayerDataProvider>.Instance as PlayerDataProviderStub; //TODO: replace stub with real implementation
-        
+
+            _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
+
             //Setting up client
             ClientWrapper clientWrapper;
             if (!ClientsHolder.HasClient(ClientType.GameServerClient))
@@ -68,7 +64,7 @@ namespace Src.ScenesInitializers
             
                 //Initializing player
                 var playerInitializer = new PlayerInitializer(clientWrapper);
-                playerInitializer.InitializePlayer(playerDataProvider.GetAccessToken());
+                playerInitializer.InitializePlayer(await _accessTokenProvider.GetAccessTokenAsync());
             }
             else
             {
@@ -88,7 +84,7 @@ namespace Src.ScenesInitializers
             var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
             var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
                 turnSwitchConditionsConfigProvider, gameBuilder);
-            _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
+            _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, _accessTokenProvider, gameCreationView);
         
             //Setting up error handling
             _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, gameCreationProcessScreen);

@@ -8,5 +8,7 @@ namespace Src.Auth.REST
     {
         public Task<T> Request<T>(HttpMethod requestMethodType, string uri,
             IEnumerable<KeyValuePair<string, string>> requestParams);
+
+        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request);
     }
 }

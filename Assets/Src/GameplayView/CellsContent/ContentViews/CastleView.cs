@@ -1,19 +1,19 @@
 ﻿using castledice_game_logic.GameObjects;
 using Src.GameplayView.CellsContent.ContentAudio.CastleAudio;
 using Src.GameplayView.ContentVisuals;
-using CastleGO = castledice_game_logic.GameObjects.Castle;
+using CastleEntity = castledice_game_logic.GameObjects.Castle;
 
 namespace Src.GameplayView.CellsContent.ContentViews
 {
     public class CastleView : ContentView
     {
-        private CastleGO _castle;
+        private CastleEntity _castle;
         private CastleAudio _audio;
         private CastleVisual _visual;
         
         public override Content Content => _castle;
 
-        public void Init(CastleGO castle, CastleVisual visual, CastleAudio audio)
+        public void Init(CastleEntity castle, CastleVisual visual, CastleAudio audio)
         {
             _audio = audio;
             _audio.DestroySoundPlayed += OnDestroySoundPlayed;
@@ -23,7 +23,7 @@ namespace Src.GameplayView.CellsContent.ContentViews
             SetAsChildAndCenter(visual.gameObject);
             SetAsChildAndCenter(audio.gameObject);
         }
-        
+
         public override void StartView()
         {
 
