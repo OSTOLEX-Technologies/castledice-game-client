@@ -5,7 +5,6 @@ namespace Src.LoadingScenes
         Intro,
         Auth,
         MainMenu,
-        Explore,
         DuelGame,
     }
 }
