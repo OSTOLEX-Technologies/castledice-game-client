@@ -18,12 +18,12 @@ namespace Src.Stubs
             _id = number;
         }
 
-        public string GetAccessToken()
+        public string GetAccessTokenAsync()
         {
             return _id.ToString();
         }
 
-        public int GetId()
+        public int GetIdAsync()
         {
             return _id;
         }

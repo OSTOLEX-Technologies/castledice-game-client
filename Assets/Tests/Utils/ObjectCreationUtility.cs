@@ -335,8 +335,8 @@ namespace Tests.Utils
         {
             var mock = new Mock<IPlayerDataProvider>();
             mock.Setup(x => x.IsAuthorized()).Returns(authorized);
-            mock.Setup(x => x.GetAccessToken()).Returns(token);
-            mock.Setup(x => x.GetId()).Returns(id);
+            mock.Setup(x => x.GetAccessTokenAsync()).Returns(token);
+            mock.Setup(x => x.GetIdAsync()).Returns(id);
             return mock.Object;
         }
         

@@ -15,7 +15,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ActionPointsCountTests
             var gameMock = GetGameMock();
             gameMock.Setup(g => g.GetCurrentPlayer()).Returns(GetPlayer(playerId + 1));
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
-            playerDataProviderMock.Setup(p => p.GetId()).Returns(playerId);
+            playerDataProviderMock.Setup(p => p.GetIdAsync()).Returns(playerId);
             var viewMock = new Mock<IActionPointsCountView>();
             var presenter = new ActionPointsCountPresenter(playerDataProviderMock.Object, gameMock.Object, viewMock.Object);
             
@@ -34,7 +34,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ActionPointsCountTests
             gameMock.Setup(g => g.GetCurrentPlayer()).Returns(player);
             gameMock.Setup(g => g.GetPlayer(playerId)).Returns(player);
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
-            playerDataProviderMock.Setup(p => p.GetId()).Returns(playerId);
+            playerDataProviderMock.Setup(p => p.GetIdAsync()).Returns(playerId);
             var viewMock = new Mock<IActionPointsCountView>();
             var presenter = new ActionPointsCountPresenter(playerDataProviderMock.Object, gameMock.Object, viewMock.Object);
             
@@ -50,7 +50,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ActionPointsCountTests
             var player = GetPlayer();
             gameMock.Setup(g => g.GetPlayer(playerId)).Returns(player);
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
-            playerDataProviderMock.Setup(p => p.GetId()).Returns(playerId);
+            playerDataProviderMock.Setup(p => p.GetIdAsync()).Returns(playerId);
             var viewMock = new Mock<IActionPointsCountView>();
             var presenterMock = new Mock<ActionPointsCountPresenter>(playerDataProviderMock.Object, gameMock.Object, viewMock.Object);
             var presenter = presenterMock.Object;
@@ -68,7 +68,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ActionPointsCountTests
             player.ActionPoints.Amount = 5;
             gameMock.Setup(g => g.GetPlayer(playerId)).Returns(player);
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
-            playerDataProviderMock.Setup(p => p.GetId()).Returns(playerId);
+            playerDataProviderMock.Setup(p => p.GetIdAsync()).Returns(playerId);
             var viewMock = new Mock<IActionPointsCountView>();
             var presenterMock = new Mock<ActionPointsCountPresenter>(playerDataProviderMock.Object, gameMock.Object, viewMock.Object);
             var presenter = presenterMock.Object; //Forcing constructor call

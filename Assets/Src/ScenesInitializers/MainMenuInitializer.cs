@@ -4,6 +4,7 @@ using Riptide.Transports.Tcp;
 using Riptide.Utils;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
+using Src.Auth.TokenProviders;
 using Src.Caching;
 using Src.Components;
 using Src.GameplayPresenter;
@@ -44,16 +45,12 @@ namespace Src.ScenesInitializers
         private GameNotSavedErrorPresenter _gameNotSavedErrorPresenter;
         private GameNotSavedErrorView _gameNotSavedErrorView;
     
-        private void Start()
+        private async void Start()
         {
             RiptideLogger.Initialize(Debug.Log,Debug.Log,Debug.LogWarning, Debug.LogError, false);
         
-            //Setting up player data provider
-            if (!Singleton<IPlayerDataProvider>.Registered)
-            {
-                Singleton<IPlayerDataProvider>.Register(new PlayerDataProviderStub());
-            }
-            var playerDataProvider = Singleton<IPlayerDataProvider>.Instance as PlayerDataProviderStub; //TODO: replace stub with real implementation
+            //Setting up access token provider
+            var accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
         
             //Setting up client
             ClientWrapper clientWrapper;
@@ -68,7 +65,7 @@ namespace Src.ScenesInitializers
             
                 //Initializing player
                 var playerInitializer = new PlayerInitializer(clientWrapper);
-                playerInitializer.InitializePlayer(playerDataProvider.GetAccessToken());
+                playerInitializer.InitializePlayer(await accessTokenProvider.GetAccessTokenAsync());
             }
             else
             {
@@ -88,7 +85,7 @@ namespace Src.ScenesInitializers
             var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
             var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
                 turnSwitchConditionsConfigProvider, gameBuilder);
-            _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
+            _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, accessTokenProvider, gameCreationView);
         
             //Setting up error handling
             _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, gameCreationProcessScreen);

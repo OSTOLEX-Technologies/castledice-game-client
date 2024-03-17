@@ -4,12 +4,12 @@ namespace Tests.Manual
 {
     public class PlayerDataProviderStub : IPlayerDataProvider
     {
-        public string GetAccessToken()
+        public string GetAccessTokenAsync()
         {
             return "token";
         }
 
-        public int GetId()
+        public int GetIdAsync()
         {
             return 1;
         }

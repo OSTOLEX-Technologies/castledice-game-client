@@ -2,8 +2,8 @@
 {
     public interface IPlayerDataProvider
     {
-        string GetAccessToken();
-        int GetId();
+        string GetAccessTokenAsync();
+        int GetIdAsync();
         bool IsAuthorized();
     }
 }

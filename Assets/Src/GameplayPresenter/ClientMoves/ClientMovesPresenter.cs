@@ -32,7 +32,7 @@ namespace Src.GameplayPresenter.ClientMoves
         public virtual async Task MakeMove(AbstractMove move)
         {
             var moveData = _moveToDataConverter.ConvertToData(move);
-            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(moveData, _playerDataProvider.GetAccessToken());
+            var applicationResult = await _serverMoveApplier.ApplyMoveAsync(moveData, _playerDataProvider.GetAccessTokenAsync());
             if (applicationResult == MoveApplicationResult.Applied)
             {
                 _localMoveApplier.ApplyMove(move);
@@ -41,7 +41,7 @@ namespace Src.GameplayPresenter.ClientMoves
 
         public virtual void ShowMovesForPosition(Vector2Int position)
         {
-            var playerId = _playerDataProvider.GetId();
+            var playerId = _playerDataProvider.GetIdAsync();
             var moves = _possibleMovesListProvider.GetPossibleMoves(position, playerId);
             _view.ShowMovesList(moves);
         }

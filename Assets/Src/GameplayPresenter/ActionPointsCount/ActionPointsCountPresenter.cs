@@ -20,7 +20,7 @@ namespace Src.GameplayPresenter.ActionPointsCount
 
         private void SubscribeToPlayerEvents()
         {
-            var player = _game.GetPlayer(_playerDataProvider.GetId());
+            var player = _game.GetPlayer(_playerDataProvider.GetIdAsync());
             player.ActionPoints.ActionPointsIncreased += OnActionPointsModified;
             player.ActionPoints.ActionPointsDecreased += OnActionPointsModified;
         }
@@ -32,7 +32,7 @@ namespace Src.GameplayPresenter.ActionPointsCount
 
         public virtual void UpdateActionPointsCount()
         {
-            var playerId = _playerDataProvider.GetId();
+            var playerId = _playerDataProvider.GetIdAsync();
             if (!IsCurrentPlayer(playerId))
             {
                 _view.HideActionPointsCount();

@@ -237,7 +237,7 @@ namespace Src.ScenesInitializers
         private void SetUpColorProvider()
         {
             var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-            var localPlayer = _game.GetPlayer(playerDataProvider.GetId());
+            var localPlayer = _game.GetPlayer(playerDataProvider.GetIdAsync());
             _playerColorProvider = new DuelPlayerColorProvider(localPlayer);
         }
 
@@ -274,7 +274,7 @@ namespace Src.ScenesInitializers
             cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
             var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
             _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
-            var player = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetId());
+            var player = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetIdAsync());
             var observer = new CellMovesHighlightObserver(_game, player);
             _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(player,
                 new CellMovesListProvider(_game), observer, _cellMovesHighlightView);
@@ -376,7 +376,7 @@ namespace Src.ScenesInitializers
 
         private void SetUpCamera()
         {
-            var playerId = Singleton<IPlayerDataProvider>.Instance.GetId();
+            var playerId = Singleton<IPlayerDataProvider>.Instance.GetIdAsync();
             var playerIndex = _game.GetAllPlayersIds().IndexOf(playerId);
             if (playerIndex == 1)
             {
@@ -389,14 +389,14 @@ namespace Src.ScenesInitializers
         private void NotifyPlayerIsReady()
         {
             var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
-            var playerToken = playerDataCreator.GetAccessToken();
+            var playerToken = playerDataCreator.GetAccessTokenAsync();
             var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
             playerReadinessSender.SendPlayerReadiness(playerToken);
         }
         
         private void SetUpActionPointsUI()
         {
-            var bluePlayer = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetId());
+            var bluePlayer = _game.GetPlayer(Singleton<IPlayerDataProvider>.Instance.GetIdAsync());
             var redPlayer = _game.GetPlayer(_game.GetAllPlayersIds().Find(id => id != bluePlayer.Id));
             _blueActionPointsUI = new ActionPointsUI(blueActionPointsText, blueActionPointsBanner, bluePlayer);
             _redActionPointsUI = new ActionPointsUI(redActionPointsText, redActionPointsBanner, redPlayer);

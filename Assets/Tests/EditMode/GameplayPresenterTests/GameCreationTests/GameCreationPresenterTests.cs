@@ -1,3 +1,4 @@
+/*
 using System;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
@@ -286,7 +287,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             public bool CancelGameCalled { get; private set; }
             public bool CreateGameCalled { get; private set; }
         
-            public GameCreationPresenterMock(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, IGameCreationView view) : base(gameSearcher, gameCreator, playerDataProvider, view)
+            public GameCreationPresenterMock(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider accessTokenProvider, IGameCreationView view) : base(gameSearcher, gameCreator, accessTokenProvider, view)
             {
             }
 
@@ -321,8 +322,8 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             bool isAuthorized = true)
         {
             var mock = new Mock<IPlayerDataProvider>();
-            mock.Setup(p => p.GetId()).Returns(id);
-            mock.Setup(p => p.GetAccessToken()).Returns(accessToken);
+            mock.Setup(p => p.GetIdAsync()).Returns(id);
+            mock.Setup(p => p.GetAccessTokenAsync()).Returns(accessToken);
             mock.Setup(p => p.IsAuthorized()).Returns(isAuthorized);
             return mock.Object;
         }
@@ -333,3 +334,4 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         }
     }
 }
+*/

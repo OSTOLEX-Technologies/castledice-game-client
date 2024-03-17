@@ -39,7 +39,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
         public void ShowMovesForPosition_ShouldPassIdFromGivenPlayerDataProvider_ToGivenPossibleMovesListProvider([ValueSource(nameof(Ids))]int id)
         {
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
-            playerDataProviderMock.Setup(p => p.GetId()).Returns(id);
+            playerDataProviderMock.Setup(p => p.GetIdAsync()).Returns(id);
             var possibleMovesListProviderMock = new Mock<IPossibleMovesListProvider>();
             possibleMovesListProviderMock.Setup(p => p.GetPossibleMoves(It.IsAny<Vector2Int>(), It.IsAny<int>())).Returns(new List<AbstractMove>());
             var presenter = new ClientMovesPresenterBuilder
@@ -95,7 +95,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ClientMovesTests
             var expectedMoveData = new Mock<MoveData>(1, new Vector2Int(1, 1));
             var converter = new Mock<IMoveToDataConverter>();
             var playerDataProviderMock = new Mock<IPlayerDataProvider>();
-            playerDataProviderMock.Setup(p => p.GetAccessToken()).Returns(playerToken);
+            playerDataProviderMock.Setup(p => p.GetAccessTokenAsync()).Returns(playerToken);
             converter.Setup(c => c.ConvertToData(move)).Returns(expectedMoveData.Object);
             var serverMoveApplierMock = new Mock<IServerMoveApplier>();
             var presenter = new ClientMovesPresenterBuilder
