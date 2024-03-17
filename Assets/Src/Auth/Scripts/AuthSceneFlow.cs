@@ -2,6 +2,7 @@ using Src.Auth.AuthTokenSaver;
 using Src.SceneTransitionCommands;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Src.Auth.Scripts
 {
@@ -15,6 +16,9 @@ namespace Src.Auth.Scripts
         private Canvas processingCanvas;
         [SerializeField, InspectorName("Auth Canvas")]
         private Canvas authCanvas;
+        
+        [SerializeField, InspectorName("Auth Buttons")] 
+        private Button[] authButtons;
 
         [SerializeField, InspectorName("Processing Canvas Label")]
         private TextMeshProUGUI processingCanvasLabel;
@@ -28,7 +32,9 @@ namespace Src.Auth.Scripts
         private void Start()
         {
             if (_bFlowInProgress) return;
-
+            
+            ControlAuthButtons(false);
+            
             authCanvas.gameObject.SetActive(false);
             processingCanvas.gameObject.SetActive(true);
             processingCanvasLabel.SetText(InitializingLabelText);
@@ -44,7 +50,7 @@ namespace Src.Auth.Scripts
             _authView = authView;
             _authTokenSaver = authTokenSaver;
             _sceneTransitionHandler = sceneTransitionHandler;
-            
+
             processingCanvasLabel.SetText(LoadingLabelText);
             SubscribeOnAuthCompleted();
 
@@ -58,6 +64,7 @@ namespace Src.Auth.Scripts
             }
             else
             {
+                ControlAuthButtons(true);
                 processingCanvas.gameObject.SetActive(false);
                 authCanvas.gameObject.SetActive(true);
             }
@@ -70,6 +77,14 @@ namespace Src.Auth.Scripts
                 _sceneTransitionHandler.HandleTransitionCommand();
                 _authView.AuthCompleted -= SubscribeOnAuthCompleted;
             };
+        }
+
+        private void ControlAuthButtons(bool bEnable)
+        {
+            foreach (var button in authButtons)
+            {
+                button.interactable = bEnable;
+            }
         }
     }
 }
