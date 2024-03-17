@@ -1,4 +1,6 @@
 using Src.Auth.AuthTokenSaver;
+using Src.Auth.TokenProviders;
+using Src.Caching;
 using Src.SceneTransitionCommands;
 using UnityEngine;
 
@@ -19,6 +21,7 @@ namespace Src.Components
         
         public void Logout()
         {
+            Singleton<IAccessTokenProvider>.Unregister();
             _saver.DeleteAuthTokens();
             _authSceneTransitionHandler.HandleTransitionCommand();
         }

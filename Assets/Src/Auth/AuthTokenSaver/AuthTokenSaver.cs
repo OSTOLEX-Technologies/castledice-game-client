@@ -64,6 +64,7 @@ namespace Src.Auth.AuthTokenSaver
                     GetStorePrefNameByAuthType(
                         (AuthType)type));
             }
+            _saver.DeleteStringValue(LastLoginStoreInfoPrefName);
         }
 
         #endregion
