@@ -33,10 +33,10 @@ RectTransform:
   m_Father: {fileID: 6744498688713045002}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0, y: 0}
-  m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 25, y: 14.4}
-  m_SizeDelta: {x: 92.7616, y: 52.1782}
+  m_AnchorMin: {x: 0.01, y: 0.01}
+  m_AnchorMax: {x: 0.99, y: 0.99}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &6744498687651410091
 CanvasRenderer:
@@ -66,7 +66,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: c8183c60128c1924bbb8376452895379, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 9fe77ef32bc1547ce866d5a06536c061, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -213,8 +213,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9babd6667742641dfa02610a039e4c71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  itemAvatar: {fileID: 6744498687651410090}
   itemClickButton: {fileID: 2710845904516623941}
+  itemAvatar: {fileID: 6744498687651410090}
 --- !u!114 &6744498688713045003
 MonoBehaviour:
   m_ObjectHideFlags: 0
