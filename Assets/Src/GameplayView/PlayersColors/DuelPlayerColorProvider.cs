@@ -5,16 +5,16 @@ namespace Src.GameplayView.PlayersColors
 {
     public class DuelPlayerColorProvider : IPlayerColorProvider
     {
-        private readonly IPlayerDataProvider _playerDataProvider;
+        private readonly Player _localPlayer;
 
-        public DuelPlayerColorProvider(IPlayerDataProvider playerDataProvider)
+        public DuelPlayerColorProvider(Player localPlayer)
         {
-            _playerDataProvider = playerDataProvider;
+            _localPlayer = localPlayer;
         }
 
         public PlayerColor GetPlayerColor(Player player)
         {
-            return _playerDataProvider.GetId() == player.Id ? PlayerColor.Blue : PlayerColor.Red;
+            return player == _localPlayer ? PlayerColor.Blue : PlayerColor.Red;
         }
     }
 }

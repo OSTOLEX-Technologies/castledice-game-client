@@ -134,11 +134,7 @@ namespace Tests.Utils
             return data;
         }
         
-        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), params PlacementType[] placementTypes)
-        {
-            return new PlayerData(id, placementTypes.ToList(), timeSpan);
-        }
-        
+
         public static TurnSwitchConditionsConfig GetTurnSwitchConditionsConfig()
         {
             return new TurnSwitchConditionsConfig(new List<TscType> { TscType.SwitchByActionPoints });
@@ -273,7 +269,10 @@ namespace Tests.Utils
             return new PlayerData(id, placementTypes ?? new List<PlacementType>(), timeSpan);
         }
         
-
+        public static PlayerData GetPlayerData(int id = 0, TimeSpan timeSpan = new(), params PlacementType[] placementTypes)
+        {
+            return new PlayerData(id, placementTypes.ToList(), timeSpan);
+        }
         
         public static Board GetFullNByNBoard(int size)
         {
@@ -293,27 +292,25 @@ namespace Tests.Utils
             return new Mock<ContentData>().Object;
         }
         
-        public static Content GetPlayerOwnedContent()
-        {
-            return GetPlayerOwnedContent(GetPlayer());
-        }
-
-        public static Content GetPlayerOwnedContent(Player owner)
-        {
-            var contentMock = new Mock<Content>();
-            var playerOwnedMock = contentMock.As<IPlayerOwned>();
-            playerOwnedMock.Setup(x => x.GetOwner()).Returns(owner);
-            return contentMock.Object;
-        }
-        
         public static Content GetCellContent()
         {
             return new ObstacleMock();
+        }
+
+        public static CastleGO GetCastle(Player player, int durability = 3, int maxDurability = 3,
+            int maxFreeDurability = 1, int captureHitCost = 1)
+        {
+            return new CastleGO(player, durability, maxDurability, maxFreeDurability, captureHitCost);
         }
         
         public static CastleGO GetCastle()
         {
             return new CastleGO(GetPlayer(id: 1), 3, 3, 1, 1);
+        }
+
+        public static Knight GetKnight(Player player, int placementCost = 1, int health = 2)
+        {
+            return new Knight(player, placementCost, health);
         }
         
         public static Knight GetKnight()
@@ -352,8 +349,17 @@ namespace Tests.Utils
 
         public static AbstractMove GetMove()
         {
-            var mock = new Mock<AbstractMove>(GetPlayer(), new Vector2Int(0, 0));
-            return mock.Object;
+            return GetMove(GetPlayer());
+        }
+
+        public static AbstractMove GetMove(Player player)
+        {
+            return GetMove(player, new Vector2Int(0, 0));
+        }
+        
+        public static AbstractMove GetMove(Player player, Vector2Int position)
+        {
+            return new PlaceMove(player, position, GetKnight());
         }
         
         public static List<Renderer> GetRenderersListWithMaterial(Material material, int count)
@@ -502,6 +508,26 @@ namespace Tests.Utils
             for (var i = 0; i < count; i++)
             {
                 list.Add(new Mock<IGridCell>());
+            }
+            return list;
+        }
+        
+        public static List<int> GetRandomIntList(int count)
+        {
+            var list = new List<int>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(_random.Next());
+            }
+            return list;
+        }
+        
+        public static List<int> GetRandomIntList(int min, int max, int count)
+        {
+            var list = new List<int>();
+            for (var i = 0; i < count; i++)
+            {
+                list.Add(_random.Next(min, max));
             }
             return list;
         }

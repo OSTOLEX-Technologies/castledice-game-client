@@ -15,9 +15,9 @@ namespace Src.GameplayPresenter.ClientMoves
         private readonly IPossibleMovesListProvider _possibleMovesListProvider;
         private readonly ILocalMoveApplier _localMoveApplier;
         private readonly IMoveToDataConverter _moveToDataConverter;
-        private readonly IClientMovesView _view;
+        private readonly IMovesView _view;
 
-        public ClientMovesPresenter(IPlayerDataProvider playerDataProvider, IServerMoveApplier serverMoveApplier, IPossibleMovesListProvider possibleMovesListProvider, ILocalMoveApplier localMoveApplier, IMoveToDataConverter moveToDataConverter, IClientMovesView view)
+        public ClientMovesPresenter(IPlayerDataProvider playerDataProvider, IServerMoveApplier serverMoveApplier, IPossibleMovesListProvider possibleMovesListProvider, ILocalMoveApplier localMoveApplier, IMoveToDataConverter moveToDataConverter, IMovesView view)
         {
             _playerDataProvider = playerDataProvider;
             _serverMoveApplier = serverMoveApplier;

@@ -18,7 +18,7 @@ namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
         public void Click_ShouldInvokeClickedEventWithPosition_GivenInInit([ValueSource(nameof(Positions))]Vector2Int position)
         {
             var gameObject = new GameObject();
-            var detector = gameObject.AddComponent<UnityCellClickDetector>();
+            var detector = gameObject.AddComponent<CellClickDetector>();
             detector.Init(position);
             Vector2Int eventPosition = default;
             var clicked = false;

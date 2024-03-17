@@ -1,0 +1,29 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49b9f98e113546c2ae7c2b5403a952c6, type: 3}
+  m_Name: TutorialGameStartDataConfig
+  m_EditorClassIdentifier: 
+  boardWidth: 10
+  boardLength: 10
+  cellType: 0
+  playerCastleConfig:
+    MaxFreeDurability: 3
+    MaxDurability: 3
+    Durability: 3
+    CaptureHitCost: 1
+  enemyCastleConfig:
+    MaxFreeDurability: 3
+    MaxDurability: 3
+    Durability: 3
+    CaptureHitCost: 1
+  knightPlacementCost: 1
+  knightHealth: 2
