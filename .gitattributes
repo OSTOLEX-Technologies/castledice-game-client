@@ -58,3 +58,4 @@
 *.prefab linguist-generated=true
 *.asset linguist-generated=true
 Assets/Firebase/Plugins/x86_64/FirebaseCppApp-11_7_0.bundle filter=lfs diff=lfs merge=lfs -text
+Assets/Cinematics/cinematic_intro.mp4 filter=lfs diff=lfs merge=lfs -text
