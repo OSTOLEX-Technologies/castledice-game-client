@@ -1,6 +1,10 @@
 fileFormatVersion: 2
+<<<<<<<< HEAD:Assets/Scenes/DuelGame.meta
 guid: aee0b8a5adee8be41b182ffa4f312905
 folderAsset: yes
+========
+guid: 8a846bc2232f9384c9214f3883806eda
+>>>>>>>> feature/auth-tokens-saving:Assets/MetaMask/Installer/Packages/external-dependency-manager-1.2.175.unitypackage.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
