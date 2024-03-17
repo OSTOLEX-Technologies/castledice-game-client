@@ -1,10 +1,6 @@
 fileFormatVersion: 2
-<<<<<<<< HEAD:Assets/GeneratedLocalRepo.meta
 guid: 17fcc03a0429b4dee979547321dd7616
 folderAsset: yes
-========
-guid: d367fe89fd3c8ca4a9c6c14ff2d75669
->>>>>>>> feature/auth-tokens-saving:Assets/MetaMask/Installer/Packages/demo.unitypackage.meta
 DefaultImporter:
   externalObjects: {}
   userData: 
