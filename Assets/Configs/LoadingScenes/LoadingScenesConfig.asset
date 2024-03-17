@@ -23,3 +23,5 @@ MonoBehaviour:
     sceneName: DuelGame
   - sceneType: 4
     sceneName: Cinematic
+  - sceneType: 5
+    sceneName: Tutorial
