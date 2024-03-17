@@ -368,7 +368,7 @@ namespace Src.ScenesInitializers
             var moveDelay = TimeSpan.FromMilliseconds(botMoveDelayMilliseconds);
             var localMoveApplier = new LocalMovesApplier(_game);
             var situationsToPositions = new Dictionary<IGameSituation, List<Vector2Int>>();
-            var unconnectedValuesCutter = new DfsUnconnectedValuesCutter<SimpleCellState>();
+            var unconnectedValuesCutter = new DfsUnconnectedValuesCutter();
             var board = _game.GetBoard();
             var unitChecker = new PlayerUnitChecker();
             var unitsPositionsSearcher = new UnitsPositionsSearcher(board, unitChecker);

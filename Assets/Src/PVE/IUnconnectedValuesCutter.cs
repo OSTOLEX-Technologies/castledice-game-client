@@ -1,6 +1,8 @@
-﻿namespace Src.PVE
+﻿using Src.PVE.Calculators;
+
+namespace Src.PVE
 {
-    public interface IUnconnectedValuesCutter<T>
+    public interface IUnconnectedValuesCutter
     {
         /// <summary>
         /// CutUnconnectedValues checks if cells with unitState are connected to cells with baseState.
@@ -23,6 +25,10 @@
         /// <param name="unitState"></param>
         /// <param name="baseState"></param>
         /// <param name="freeState"></param>
-        void CutUnconnectedValues(T[,] matrix, T unitState, T baseState, T freeState);
+        void CutUnconnectedValues(
+            SimpleCellState[,] matrix, 
+            SimpleCellState unitState, 
+            SimpleCellState baseState, 
+            SimpleCellState freeState);
     }
 }

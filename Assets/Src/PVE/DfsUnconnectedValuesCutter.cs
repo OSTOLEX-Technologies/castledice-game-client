@@ -1,13 +1,18 @@
 ﻿using System.Collections.Generic;
 using castledice_game_logic.Math;
+using Src.PVE.Calculators;
 
 namespace Src.PVE
 {
-    public class DfsUnconnectedValuesCutter<T> : IUnconnectedValuesCutter<T>
+    public class DfsUnconnectedValuesCutter : IUnconnectedValuesCutter
     {
         private bool[,] _connectedCells;
         
-        public void CutUnconnectedValues(T[,] inputMatrix, T unitState, T baseState, T freeState)
+        public void CutUnconnectedValues(
+            SimpleCellState[,] inputMatrix, 
+            SimpleCellState unitState, 
+            SimpleCellState baseState, 
+            SimpleCellState freeState)
         {
             _connectedCells = new bool[inputMatrix.GetLength(0), inputMatrix.GetLength(1)];
             var basePositions = GetBasePositions(inputMatrix, baseState);
@@ -23,7 +28,11 @@ namespace Src.PVE
             SetNotConnectedCellsFree(inputMatrix, freeState);
         }
 
-        private void MarkUnknownCellsAsConnected(T[,] matrixCopy, T unitState, T baseState, T freeState)
+        private void MarkUnknownCellsAsConnected(
+            SimpleCellState[,] matrixCopy, 
+            SimpleCellState unitState, 
+            SimpleCellState baseState, 
+            SimpleCellState freeState)
         {
             for (int i = 0; i < matrixCopy.GetLength(0); i++)
             {
@@ -37,7 +46,9 @@ namespace Src.PVE
             }
         }
 
-        private void SetNotConnectedCellsFree(T[,] matrixCopy, T freeState)
+        private void SetNotConnectedCellsFree(
+            SimpleCellState[,] matrixCopy, 
+            SimpleCellState freeState)
         {
             for (int i = 0; i < matrixCopy.GetLength(0); i++)
             {
@@ -51,7 +62,12 @@ namespace Src.PVE
             }
         }
 
-        private void MarkConnectedCells(int basePositionX, int basePositionY, T[,] inputMatrix, T baseState, T unitState)
+        private void MarkConnectedCells(
+            int basePositionX, 
+            int basePositionY, 
+            SimpleCellState[,] inputMatrix, 
+            SimpleCellState baseState, 
+            SimpleCellState unitState)
         {
             _connectedCells[basePositionX, basePositionY] = true;
             for (int i = -1; i <= 1; i++)
@@ -75,7 +91,10 @@ namespace Src.PVE
             }
         }
         
-        private void SetAllUnitCellsFree(T[,] inputMatrix, T freeState, T unitState)
+        private void SetAllUnitCellsFree(
+            SimpleCellState[,] inputMatrix, 
+            SimpleCellState freeState, 
+            SimpleCellState unitState)
         {
             for (int i = 0; i < inputMatrix.GetLength(0); i++)
             {
@@ -89,7 +108,9 @@ namespace Src.PVE
             }
         }
 
-        private List<Vector2Int> GetBasePositions(T[,] inputMatrix, T baseState)
+        private List<Vector2Int> GetBasePositions(
+            SimpleCellState[,] inputMatrix, 
+            SimpleCellState baseState)
         {
             var basePositions = new List<Vector2Int>();
             for (int i = 0; i < inputMatrix.GetLength(0); i++)

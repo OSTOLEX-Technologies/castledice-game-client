@@ -191,7 +191,7 @@ namespace Tests.EditMode.PVETests.CalculatorsTests
             }
             //Setting up values cutter
             var positionsToCut = new List<Vector2Int>{(2, 2), (3, 3), (4, 4) };
-            var unconnectedValuesCutterMock = new Mock<IUnconnectedValuesCutter<SimpleCellState>>();
+            var unconnectedValuesCutterMock = new Mock<IUnconnectedValuesCutter>();
             //Making values cutter set Neither to positions from positionsToCut
             unconnectedValuesCutterMock
                 .Setup(u => u.CutUnconnectedValues(It.IsAny<SimpleCellState[,]>(), SimpleCellState.Unit, SimpleCellState.Base, SimpleCellState.Neither))
@@ -224,13 +224,13 @@ namespace Tests.EditMode.PVETests.CalculatorsTests
         private class SimpleArmyStateCalculatorBuilder
         {
             public Vector2Int BoardSize { get; set; }
-            public IUnconnectedValuesCutter<SimpleCellState> UnconnectedValuesCutter { get; set; }
+            public IUnconnectedValuesCutter UnconnectedValuesCutter { get; set; }
             public IUnitsPositionsSearcher UnitsPositionsSearcher { get; set; }
             public IBasePositionsCalculator BasePositionsCalculator { get; set; }
 
             public SimpleArmyStateCalculatorBuilder()
             {
-                var unconnectedValuesCutterMock = new Mock<IUnconnectedValuesCutter<SimpleCellState>>();
+                var unconnectedValuesCutterMock = new Mock<IUnconnectedValuesCutter>();
                 UnconnectedValuesCutter = unconnectedValuesCutterMock.Object;
                 var unitsPositionsSearcherMock = new Mock<IUnitsPositionsSearcher>();
                 unitsPositionsSearcherMock.Setup(u => u.GetUnitsPositions(It.IsAny<Player>())).Returns(new List<Vector2Int>());

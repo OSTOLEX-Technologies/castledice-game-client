@@ -8,12 +8,12 @@ namespace Src.PVE.Calculators
 {
     public class SimpleArmyStateCalculator : ISimpleArmyStateCalculator
     {
-        private readonly IUnconnectedValuesCutter<SimpleCellState> _unconnectedValuesCutter;
+        private readonly IUnconnectedValuesCutter _unconnectedValuesCutter;
         private readonly IUnitsPositionsSearcher _unitsPositionsSearcher;
         private readonly IBasePositionsCalculator _basePositionsCalculator;
         private readonly Vector2Int _boardSize;
 
-        public SimpleArmyStateCalculator(IUnconnectedValuesCutter<SimpleCellState> unconnectedValuesCutter, IUnitsPositionsSearcher unitsPositionsSearcher, IBasePositionsCalculator basePositionsCalculator, Vector2Int boardSize)
+        public SimpleArmyStateCalculator(IUnconnectedValuesCutter unconnectedValuesCutter, IUnitsPositionsSearcher unitsPositionsSearcher, IBasePositionsCalculator basePositionsCalculator, Vector2Int boardSize)
         {
             if (boardSize.X <= 0 || boardSize.Y <= 0)
             {
