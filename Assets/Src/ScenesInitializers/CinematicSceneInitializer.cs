@@ -7,13 +7,15 @@ namespace Src.ScenesInitializers
 {
     public class CinematicSceneInitializer: MonoBehaviour
     {
+        private const string CinematicPassedPlayerPrefsKey = "CinematicViewed";
+        
         [SerializeField] private VideoPlayer videoPlayer;
         [SerializeField] private SceneLoader sceneLoader;
         
         private void Awake()
         {
             videoPlayer.loopPointReached += EndReached;
-            if (PlayerPrefs.GetInt("CinematicViewed", 0) == 1)
+            if (PlayerPrefs.GetInt(CinematicPassedPlayerPrefsKey, 0) == 1)
             {
                 EndReached(videoPlayer);
             }
@@ -22,13 +24,13 @@ namespace Src.ScenesInitializers
         private void EndReached(VideoPlayer vp)
         {
             vp.Stop();
-            PlayerPrefs.SetInt("CinematicViewed", 1);
+            PlayerPrefs.SetInt(CinematicPassedPlayerPrefsKey, 1);
             GoToNextScene();
         }
 
         private void GoToNextScene()
         {
-            if (PlayerPrefs.GetInt("TutorialPassed", 0) == 0)
+            if (PlayerPrefs.GetInt(TutorialSceneInitializer.TutorialPassedPlayerPrefsKey, 0) == 0)
             {
                 sceneLoader.LoadSceneWithTransition(SceneType.Tutorial);
             }

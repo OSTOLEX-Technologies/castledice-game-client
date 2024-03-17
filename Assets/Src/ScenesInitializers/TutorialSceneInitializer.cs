@@ -5,6 +5,8 @@ using castledice_game_data_logic;
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
+using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
+using Src.Components;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
@@ -52,6 +54,7 @@ using Src.GameplayView.PlayersNumbers;
 using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.General.MoveConditions;
 using Src.General.NumericSequences;
+using Src.LoadingScenes;
 using Src.PlayerInput;
 using Src.Prototypes.NewActionPoints;
 using Src.PVE;
@@ -75,6 +78,8 @@ namespace Src.ScenesInitializers
 {
     public class TutorialSceneInitializer : MonoBehaviour
     {
+        public const string TutorialPassedPlayerPrefsKey = "TutorialPassed";
+        
         [Header("Ids")]
         [SerializeField] private int playerId = 0;
         [SerializeField] private int enemyId = 1;
@@ -89,6 +94,8 @@ namespace Src.ScenesInitializers
         [Header("Cameras")]
         [SerializeField] private Camera playerCamera;
 
+        [Header("SceneLoader")]
+        [SerializeField] private SceneLoader sceneLoader;        
 
         [Header("Clicks detection")] 
         [SerializeField] private CellClickDetectorsConfig cellClickDetectorsConfig;
@@ -186,7 +193,7 @@ namespace Src.ScenesInitializers
         [Header("Castles health bars")]
         [SerializeField] private CastleHealthBar blueCastleHeathBar;
         [SerializeField] private CastleHealthBar redCastleHeathBar;
-        
+
         private void Start()
         {
             SetUpGameAndPlayers();
@@ -205,8 +212,8 @@ namespace Src.ScenesInitializers
             SetUpCellMovesHighlights();
             SetUpGameOver();
             SetUpActionPointsUI();
-            
             GiveActionPointsToCurrentPlayer();
+            HandleGameOver();
         }
 
 
@@ -447,6 +454,19 @@ namespace Src.ScenesInitializers
         {
             _playerActionPointsUI = new ActionPointsUI(playerActionPointsText, playerBanner, _player);
             _enemyActionPointsUI = new ActionPointsUI(enemyActionPointsText, enemyBanner, _enemy);
+        }
+
+        private void HandleGameOver()
+        {
+            _game.Win += (_, _) =>
+            {
+                PlayerPrefs.SetInt(TutorialPassedPlayerPrefsKey, 1);
+            };
+        }
+
+        public void LoadAuthSceneAfterWin()
+        {
+            sceneLoader.LoadSceneWithTransition(SceneType.Auth);
         }
     }
 }
