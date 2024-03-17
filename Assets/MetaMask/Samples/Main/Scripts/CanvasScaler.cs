@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace MetaMask.Samples.Main.Scripts
+namespace MetaMask.Unity.Samples
 {
     public class CanvasScaler : MonoBehaviour
     {

@@ -1,12 +1,12 @@
 using System;
 using System.Collections;
-using MetaMask.Runtime.Models;
+using MetaMask.Models;
 using UnityEngine;
 using UnityEngine.UI;
 using ZXing;
 using ZXing.QrCode;
 
-namespace MetaMask.Scripts.Transports.Unity.UGUI
+namespace MetaMask.Transports.Unity.UI
 {
 
     public class MetaMaskUnityUIQRImage : MonoBehaviour, IMetaMaskUnityTransportListener

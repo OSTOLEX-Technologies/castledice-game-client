@@ -1,7 +1,8 @@
 ﻿using System.Collections.Generic;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Messages
+using MetaMask.SocketIOClient.Transport;
+
+namespace MetaMask.SocketIOClient.Messages
 {
     public class PingMessage : IMessage
     {

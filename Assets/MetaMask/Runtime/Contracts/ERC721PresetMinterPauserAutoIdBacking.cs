@@ -14,10 +14,10 @@
 using System;
 using System.Numerics;
 using System.Threading.Tasks;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime;
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
+using evm.net;
+using evm.net.Models;
 
-namespace MetaMask.Runtime.Contracts
+namespace MetaMask.Contracts
 {
 	public class ERC721PresetMinterPauserAutoIdBacking : Contract, ERC721PresetMinterPauserAutoId
 	{

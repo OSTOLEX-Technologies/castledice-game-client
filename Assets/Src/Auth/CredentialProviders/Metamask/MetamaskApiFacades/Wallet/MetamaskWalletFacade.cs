@@ -1,6 +1,6 @@
 using System;
-using MetaMask.Runtime;
-using MetaMask.Scripts;
+using MetaMask;
+using MetaMask.Unity;
 using Object = UnityEngine.Object;
 
 namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet

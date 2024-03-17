@@ -1,4 +1,4 @@
-﻿namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime
+﻿namespace evm.net
 {
     public interface ILegacyProvider
     {

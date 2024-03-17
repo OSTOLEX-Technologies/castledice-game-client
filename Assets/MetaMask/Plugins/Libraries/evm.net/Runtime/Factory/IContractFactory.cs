@@ -1,6 +1,6 @@
-using evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models;
+using evm.net.Models;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Factory
+namespace evm.net.Factory
 {
     public interface IContractFactory
     {

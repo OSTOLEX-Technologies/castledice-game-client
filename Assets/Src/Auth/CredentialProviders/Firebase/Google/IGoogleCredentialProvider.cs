@@ -6,5 +6,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
     public interface IGoogleCredentialProvider
     {
         public Task<GoogleJwtStore> GetCredentialAsync();
+
+        public void InterruptProviderInit();
     }
 }

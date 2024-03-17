@@ -6,7 +6,7 @@ using System.Text;
 using System.Threading;
 using System.Threading.Tasks;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport
+namespace MetaMask.SocketIOClient.Transport
 {
     public class SystemNetWebSocketsClientWebSocket : IClientWebSocket
     {

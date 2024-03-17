@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.JwtManagement;
@@ -61,6 +62,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             private Mock<IUrlOpener> _authUrlOpener;
             private Mock<ILocalHttpPortListener> _localHttpListener;
             private Mock<IGoogleJwtConverter> _jwtConverter;
+            private Mock<IAuthTokenSaver> _authTokenSaver;
 
             internal GoogleCredentialProviderBuilder()
             {
@@ -73,6 +75,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                 _authUrlOpener = new Mock<IUrlOpener>();
                 _localHttpListener = new Mock<ILocalHttpPortListener>();
                 _jwtConverter = new Mock<IGoogleJwtConverter>();
+                _authTokenSaver = new Mock<IAuthTokenSaver>();
             }
             
             public void SetRequestAdapterAuth(GoogleIdTokenResponse responseStub)
@@ -119,7 +122,8 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                     _googleRestRequestsAdapter.Object,
                     _authUrlOpener.Object,
                     _localHttpListener.Object,
-                    _jwtConverter.Object);
+                    _jwtConverter.Object,
+                    _authTokenSaver.Object);
             }
         }
 
@@ -132,7 +136,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             );
             private static readonly GoogleIdTokenResponse NoSavedTokensResponseStub = new()
             {
-                AccessToken = NoSavedTokensCredentials.AccessToken.Token,
+                AccessToken = NoSavedTokensCredentials.accessToken.Token,
                 ExpiresInSeconds = Int32.MaxValue
             };
 
@@ -143,7 +147,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             );
             private static readonly GoogleIdTokenResponse ExpiredTokenResponseStub = new()
             {
-                AccessToken = ExpiredTokenCredentials.AccessToken.Token,
+                AccessToken = ExpiredTokenCredentials.accessToken.Token,
                 ExpiresInSeconds = 0
             };
 
@@ -154,7 +158,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             );
             private static readonly GoogleIdTokenResponse ValidTokenResponseStub = new()
             {
-                AccessToken = ValidTokenCredentials.AccessToken.Token,
+                AccessToken = ValidTokenCredentials.accessToken.Token,
                 ExpiresInSeconds = Int32.MaxValue
             };
             

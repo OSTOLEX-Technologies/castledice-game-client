@@ -1,8 +1,9 @@
 ﻿using System;
 using System.Collections.Generic;
-using MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Transport;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient
+using MetaMask.SocketIOClient.Transport;
+
+namespace MetaMask.SocketIOClient
 {
     public sealed class SocketIOOptions
     {

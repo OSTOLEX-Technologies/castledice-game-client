@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
-using MetaMask.Scripts.Transports.Unity.UGUI;
+using MetaMask.Transports.Unity.UI;
+using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.Caching;
@@ -11,6 +12,9 @@ namespace Src.Auth
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
+        [SerializeField, InspectorName("Main Auth Canvas")]
+        private Canvas mainAuthCanvas;
+        
         [SerializeField, InspectorName("Metamask Auth Cancellation Canvas")]
         private Canvas metamaskAuthCancellationCanvas;
         
@@ -22,16 +26,29 @@ namespace Src.Auth
 
         private AuthController _authController;
         private IMetamaskWalletFacade _metamaskWalletFacade;
+        private IFirebaseCredentialProvider _firebaseCredentialProvider;
 
         private MetaMaskUnityUIHandler _qrCodeHandlerCanvas;
         
         private Action _metamaskProviderDisconnected;
 
         #region PublicMethods
+        public void HideAuthUI()
+        {
+            mainAuthCanvas.gameObject.SetActive(false);
+            metamaskAuthCancellationCanvas.gameObject.SetActive(false);
+            signInMessageCanvas.gameObject.SetActive(false);
+            if (_qrCodeHandlerCanvas is not null)
+            {
+                _qrCodeHandlerCanvas.gameObject.SetActive(false);
+            }
+        }
+        
         public void LoginWithGoogle()
         {
             Login(AuthType.Google);
         }
+
         public void LoginWithMetamask()
         {
             if (_qrCodeHandlerCanvas is not null)
@@ -42,10 +59,10 @@ namespace Src.Auth
             metamaskAuthCancellationCanvas.gameObject.SetActive(true);
             Login(AuthType.Metamask);
         }
-        
+
         public void Login(AuthType authType)
         {
-            AuthTypeChosen?.Invoke(this, authType);
+            AuthTypeChosen?.Invoke(authType);
         }
 
         public void CancelMetamaskAuth()
@@ -61,10 +78,12 @@ namespace Src.Auth
         #region Init
         public void Init(
             IMetamaskWalletFacade metamaskWalletFacade, 
-            AuthController controller)
+            AuthController controller,
+            IFirebaseCredentialProvider firebaseCredentialProvider)
         {
             _metamaskWalletFacade = metamaskWalletFacade;
             _authController = controller;
+            _firebaseCredentialProvider = firebaseCredentialProvider;
 
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
         }
@@ -85,7 +104,9 @@ namespace Src.Auth
 
             await WaitUntilMetamaskDisconnects();
             
-            AuthCompleted?.Invoke(this, EventArgs.Empty);
+            HideAuthUI();
+            
+            AuthCompleted?.Invoke();
         }
         #endregion
         
@@ -105,11 +126,19 @@ namespace Src.Auth
 
             await disconnectTsc.Task;
         }
+
+        private void OnApplicationFocus(bool hasFocus)
+        {
+            if (hasFocus)
+            {
+                _firebaseCredentialProvider.InterruptGoogleProviderInit();
+            }
+        }
         #endregion
         
 
-        public event EventHandler<AuthType> AuthTypeChosen;
+        public event Action<AuthType> AuthTypeChosen;
         
-        public event EventHandler AuthCompleted;
+        public event Action AuthCompleted;
     }
 }
