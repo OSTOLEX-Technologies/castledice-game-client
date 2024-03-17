@@ -52,6 +52,7 @@ using Src.GameplayView.PlayersRotations.RotationsByOrder;
 using Src.General.MoveConditions;
 using Src.General.NumericSequences;
 using Src.PlayerInput;
+using Src.Prototypes.NewActionPoints;
 using Src.PVE;
 using Src.PVE.Calculators;
 using Src.PVE.Checkers;
@@ -64,6 +65,7 @@ using Src.Tutorial;
 using Src.Tutorial.ActionPointsGiving;
 using Src.Tutorial.BotConfiguration;
 using Tests.EditMode.GeneralTests;
+using TMPro;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -134,13 +136,10 @@ namespace Src.ScenesInitializers
         private TutorialMovesPresenter _movesPresenter;
         
         [Header("Action points giving")]
-        [SerializeField] private int popupDisappearTimeMilliseconds;
-        [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
-        [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
         [SerializeField] private IntSequenceConfig playerActionPointsSequenceConfig;
         [SerializeField] private IntSequenceConfig enemyActionPointsSequenceConfig;
         private TutorialActionPointsGivingPresenter _actionPointsGivingPresenter;
-        private ActionPointsGivingView _actionPointsGivingView;
+        private IActionPointsGivingView _actionPointsGivingView;
 
         [Header("Placed units highlights")]
         [SerializeField] private ColoredHighlightPrefabConfig coloredHighlightPrefabConfig;
@@ -166,6 +165,14 @@ namespace Src.ScenesInitializers
         [SerializeField] private GameObject drawScreen;
         private GameOverPresenter _gameOverPresenter;
         private GameOverView _gameOverView;
+
+        [Header("Action points UI")] 
+        [SerializeField] private GameObject playerBanner;
+        [SerializeField] private TextMeshProUGUI playerActionPointsText;
+        [SerializeField] private GameObject enemyBanner;
+        [SerializeField] private TextMeshProUGUI enemyActionPointsText;
+        private ActionPointsUI _playerActionPointsUI;
+        private ActionPointsUI _enemyActionPointsUI;
         
         private DuelPlayerColorProvider _playerColorProvider;
 
@@ -190,9 +197,12 @@ namespace Src.ScenesInitializers
             SetUpNewUnitsHighlights();
             SetUpCellMovesHighlights();
             SetUpGameOver();
+            SetUpActionPointsUI();
             
             GiveActionPointsToCurrentPlayer();
         }
+
+
 
         private void SetUpGameAndPlayers()
         {
@@ -300,13 +310,11 @@ namespace Src.ScenesInitializers
             _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => Debug.Log("Right move picked");
         }
 
+
+        
         private void SetUpActionPointsGiving()
         {
-            var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
-            var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
-            _actionPointsGivingView =
-                new ActionPointsGivingView(_playerColorProvider,
-                    popupDemonstrator);
+            _actionPointsGivingView = new StubActionPointsView();
             var playerActionPointsSequence = new IntSequence(playerActionPointsSequenceConfig.Sequence.ToList(), playerActionPointsSequenceConfig.DefaultNumber);
             var enemyActionPointsSequence = new IntSequence(enemyActionPointsSequenceConfig.Sequence.ToList(), enemyActionPointsSequenceConfig.DefaultNumber);
             var sequenceProvider = new DictPlayerIntSequenceProvider(new Dictionary<Player, IIntSequence>
@@ -408,6 +416,12 @@ namespace Src.ScenesInitializers
             _gameOverView = new GameOverView(_playerColorProvider,
                 blueWinnerScreen, redWinnerScreen, drawScreen);
             _gameOverPresenter = new GameOverPresenter(_game, _gameOverView);
+        }
+        
+        private void SetUpActionPointsUI()
+        {
+            _playerActionPointsUI = new ActionPointsUI(playerActionPointsText, playerBanner, _player);
+            _enemyActionPointsUI = new ActionPointsUI(enemyActionPointsText, enemyBanner, _enemy);
         }
     }
 }
