@@ -22,5 +22,10 @@ namespace Tests.Utils.Mocks
         {
             Values[name] = value;
         }
+
+        public void DeleteStringValue(string name)
+        {
+            Values = new Dictionary<string, string>();
+        }
     }
 }

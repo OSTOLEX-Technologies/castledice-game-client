@@ -34,7 +34,7 @@ namespace Src.ScenesInitializers
         private IFirebaseCredentialProvider _firebaseCredentialProvider;
         
         private AuthController _authController;
-        private AuthSceneTransitionHandler _transitionHandler;
+        private SceneTransitionHandler _transitionHandler;
 
         private void Awake()
         {
@@ -56,7 +56,7 @@ namespace Src.ScenesInitializers
                 _singletonCacher, 
                 authView);
 
-            _transitionHandler = new AuthSceneTransitionHandler(sceneLoader, SceneType.MainMenu);
+            _transitionHandler = new SceneTransitionHandler(sceneLoader, SceneType.MainMenu);
 
             authView.Init(_metamaskWalletFacade, _authController, _firebaseCredentialProvider);
             

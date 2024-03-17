@@ -3,12 +3,12 @@ using Src.LoadingScenes;
 
 namespace Src.SceneTransitionCommands
 {
-    public class AuthSceneTransitionHandler : ISceneTransitionHandler
+    public class SceneTransitionHandler : ISceneTransitionHandler
     {
         private readonly SceneLoader _sceneLoader;
         private readonly SceneType _sceneType;
 
-        public AuthSceneTransitionHandler(SceneLoader sceneLoader, SceneType sceneType)
+        public SceneTransitionHandler(SceneLoader sceneLoader, SceneType sceneType)
         {
             _sceneLoader = sceneLoader;
             _sceneType = sceneType;

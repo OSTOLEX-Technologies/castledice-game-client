@@ -20,5 +20,10 @@ namespace Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver
         {
             PlayerPrefs.SetString(name, value);
         }
+
+        public void DeleteStringValue(string name)
+        {
+            PlayerPrefs.DeleteKey(name);
+        }
     }
 }

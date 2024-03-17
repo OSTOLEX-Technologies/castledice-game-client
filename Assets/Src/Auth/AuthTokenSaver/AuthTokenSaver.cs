@@ -53,6 +53,22 @@ namespace Src.Auth.AuthTokenSaver
         #endregion
 
 
+        #region Deleting Store
+
+        public void DeleteAuthTokens()
+        {
+            var types = Enum.GetValues(typeof(AuthType));
+            foreach (var type in types)
+            {
+                _saver.DeleteStringValue(
+                    GetStorePrefNameByAuthType(
+                        (AuthType)type));
+            }
+        }
+
+        #endregion
+
+
         #region Last Login Info
 
         public bool TryGetLastLoginInfo(out AuthType authType)

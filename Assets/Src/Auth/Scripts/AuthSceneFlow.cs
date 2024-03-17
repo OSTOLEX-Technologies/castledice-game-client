@@ -21,7 +21,7 @@ namespace Src.Auth.Scripts
         
         private IAuthView _authView;
         private IAuthTokenSaver _authTokenSaver;
-        private AuthSceneTransitionHandler _sceneTransitionHandler;
+        private SceneTransitionHandler _sceneTransitionHandler;
 
         private bool _bFlowInProgress;
 
@@ -37,7 +37,7 @@ namespace Src.Auth.Scripts
         public void StartSceneFlow(
             IAuthView authView,
             IAuthTokenSaver authTokenSaver,
-            AuthSceneTransitionHandler sceneTransitionHandler)
+            SceneTransitionHandler sceneTransitionHandler)
         {
             _bFlowInProgress = true;
             
