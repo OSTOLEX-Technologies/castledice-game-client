@@ -13,9 +13,15 @@ MonoBehaviour:
   m_Name: LoadingScenesConfig
   m_EditorClassIdentifier: 
   sceneNames:
+  - sceneType: 0
+    sceneName: GameIntro
   - sceneType: 1
     sceneName: Auth
   - sceneType: 2
     sceneName: MainMenu
   - sceneType: 3
     sceneName: DuelGame
+  - sceneType: 4
+    sceneName: Cinematic
+  - sceneType: 5
+    sceneName: Tutorial
