@@ -14,12 +14,22 @@ namespace Src.ScenesInitializers
 
         private void Awake()
         {
-            audioStopEventHandler.AudioPlaybackEnded += LoadAuthScene;
+            audioStopEventHandler.AudioPlaybackEnded += LoadNextScene;
         }
 
-        private void LoadAuthScene(AudioClip clip)
+        private void LoadNextScene(AudioClip clip)
         {
-            sceneLoader.LoadSceneAsync(SceneType.Auth);
+            if (PlayerPrefs.GetInt("CinematicViewed", 0) == 0)
+            {
+                sceneLoader.LoadSceneAsync(SceneType.Cinematic);
+            } else if (PlayerPrefs.GetInt("TutorialPassed", 0) == 0)
+            {
+                sceneLoader.LoadSceneWithTransition(SceneType.Tutorial);
+            }
+            else 
+            {
+                sceneLoader.LoadSceneWithTransition(SceneType.Auth);
+            }
         }
     }
 }

@@ -14,10 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   sceneNames:
   - sceneType: 0
-    sceneName: Intro
+    sceneName: GameIntro
   - sceneType: 1
     sceneName: Auth
   - sceneType: 2
     sceneName: MainMenu
-  - sceneType: 4
+  - sceneType: 3
     sceneName: DuelGame
+  - sceneType: 4
+    sceneName: Cinematic

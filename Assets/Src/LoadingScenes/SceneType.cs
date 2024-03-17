@@ -2,9 +2,11 @@ namespace Src.LoadingScenes
 {
     public enum SceneType
     {
-        Intro,
+        GameIntro,
         Auth,
         MainMenu,
         DuelGame,
+        Cinematic,
+        Tutorial
     }
 }
