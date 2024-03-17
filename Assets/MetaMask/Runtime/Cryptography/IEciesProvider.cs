@@ -1,4 +1,4 @@
-﻿namespace MetaMask.Runtime.Cryptography
+﻿namespace MetaMask.Cryptography
 {
 
     /// <summary>

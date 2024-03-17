@@ -1,5 +1,12 @@
 ﻿using System.Threading.Tasks;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Metamask;
+using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
+using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
+using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
+using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
+using Src.Auth.JwtManagement.Converters.Metamask;
+using Src.Auth.REST;
 
 namespace Src.Auth.TokenProviders.TokenProvidersFactory
 {
@@ -7,9 +14,16 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
     {
         private readonly IMetamaskBackendCredentialProvider _backendCredentialProvider;
 
-        public MetamaskTokenProvidersCreator(IMetamaskBackendCredentialProvider backendCredentialProvider)
+        public MetamaskTokenProvidersCreator(IAuthTokenSaver authTokenSaver)
         {
-            _backendCredentialProvider = backendCredentialProvider;
+            _backendCredentialProvider = new MetamaskBackendCredentialProvider(
+                new MetamaskWalletFacade(),
+                new MetamaskSignerFacade(),
+                new MetamaskRestRequestsAdapter(
+                    new HttpClientRequestAdapter(),
+                    new MetamaskBackendUrlProvider()),
+                new MetamaskJwtConverter(),
+                authTokenSaver);
         }
 
         public async Task<MetamaskTokenProvider> GetTokenProviderAsync()

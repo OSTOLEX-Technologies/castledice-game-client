@@ -1,6 +1,6 @@
 using Newtonsoft.Json;
 
-namespace evm.net.MetaMask.Plugins.Libraries.evm.net.Runtime.Models.ABI
+namespace evm.net.Models.ABI
 {
     public class ContractArtifact
     {

@@ -1,7 +1,7 @@
 using System.Collections.Generic;
-using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Interfaces;
+using EventEmitter.NET.Interfaces;
 
-namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime
+namespace EventEmitter.NET
 {
     /// <summary>
     /// An EventProvider that triggers any events by their eventId using C# EventHandlers and the EventHandlerMap.

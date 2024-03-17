@@ -1,7 +1,7 @@
 ﻿using System.Threading.Tasks;
 using UnityEngine;
 
-namespace MetaMask.Scripts.Utilities
+namespace MetaMask.Unity.Utils
 {
     public class WaitForTask<T> : CustomYieldInstruction
     {

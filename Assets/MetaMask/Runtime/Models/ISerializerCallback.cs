@@ -1,4 +1,4 @@
-namespace MetaMask.Runtime.Models
+namespace MetaMask.Models
 {
     /// <summary>
     /// A model or type used as <see cref="MetaMaskEthereumRequest.Parameters"/> field can

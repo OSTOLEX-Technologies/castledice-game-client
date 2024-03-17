@@ -1,4 +1,4 @@
-﻿namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient
+﻿namespace MetaMask.SocketIOClient
 {
     public class DisconnectReason
     {

@@ -1,7 +1,7 @@
 using System.Text.Json.Serialization;
 using Newtonsoft.Json;
 
-namespace MetaMask.Runtime.Models
+namespace MetaMask.Models
 {
     public class AnalyticsResponse
     {

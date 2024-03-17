@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
+using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Metamask;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
@@ -24,7 +25,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
             Assert.AreSame(
-                MetamaskCredentialProviderDirector.NoSavedTokensCredentials.AccessToken.Token, 
+                MetamaskCredentialProviderDirector.NoSavedTokensCredentials.accessToken.Token, 
                 result);
         }
         
@@ -36,7 +37,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
             Assert.AreSame(
-                MetamaskCredentialProviderDirector.ExpiredTokenCredentials.AccessToken.Token, 
+                MetamaskCredentialProviderDirector.ExpiredTokenCredentials.accessToken.Token, 
                 result);
         }
         
@@ -48,7 +49,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
 
             var result = await metamaskBackendCredentialProvider.GetCredentialAsync();
             Assert.AreSame(
-                MetamaskCredentialProviderDirector.ValidTokenCredentials.AccessToken.Token, 
+                MetamaskCredentialProviderDirector.ValidTokenCredentials.accessToken.Token, 
                 result);
         }
         
@@ -63,6 +64,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             private Mock<IMetamaskSignerFacade> _signerFacade;
             private Mock<IMetamaskRestRequestsAdapter> _metamaskRestRequestsAdapter;
             private Mock<IMetamaskJwtConverter> _jwtConverter;
+            private Mock<IAuthTokenSaver> _authTokenSaver;
 
             internal MetamaskBackendCredentialProviderBuilder()
             {
@@ -78,6 +80,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                 _signerFacade = new Mock<IMetamaskSignerFacade>();
                 _metamaskRestRequestsAdapter = new Mock<IMetamaskRestRequestsAdapter>();
                 _jwtConverter = new Mock<IMetamaskJwtConverter>();
+                _authTokenSaver = new Mock<IAuthTokenSaver>();
             }
             
             public void SetRequestWalletFacade()
@@ -128,7 +131,8 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
                     _walletFacade.Object,
                     _signerFacade.Object,
                     _metamaskRestRequestsAdapter.Object,
-                    _jwtConverter.Object);
+                    _jwtConverter.Object,
+                    _authTokenSaver.Object);
             }
         }
 

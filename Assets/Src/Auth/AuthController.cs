@@ -1,7 +1,6 @@
 ﻿using System;
 using Src.Auth.Exceptions.Authorization;
 using Src.Auth.Exceptions.HttpRequests;
-using Src.Auth.TokenProviders;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
 using Src.Caching;
 
@@ -28,12 +27,11 @@ namespace Src.Auth
             _view.AuthTypeChosen -= OnAuthTypeChosenAsync;
         }
         
-        private async void OnAuthTypeChosenAsync(object sender, AuthType authType)
+        private async void OnAuthTypeChosenAsync(AuthType authType)
         {
             try
             {
-                IAccessTokenProvider tokenProvider =
-                    await _tokenProvidersStrategy.GetAccessTokenProviderAsync(authType);
+                var tokenProvider = await _tokenProvidersStrategy.GetAccessTokenProviderAsync(authType);
                 _cacher.CacheObject(tokenProvider);
                 TokenProviderLoaded?.Invoke(this, EventArgs.Empty);
             }

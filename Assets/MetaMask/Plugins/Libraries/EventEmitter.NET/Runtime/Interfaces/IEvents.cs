@@ -1,4 +1,4 @@
-namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Interfaces
+namespace EventEmitter.NET.Interfaces
 {
     /// <summary>
     /// An interface that represents a class that triggers events that can be listened to.

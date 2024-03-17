@@ -1,9 +1,10 @@
 using System.Collections;
+
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 
-namespace MetaMask.Samples.Main.Scripts.Visuals
+namespace MetaMask.Unity.Samples
 {
     public class ButtonEffect : MonoBehaviour, IPointerClickHandler, IPointerEnterHandler, IPointerExitHandler
     {

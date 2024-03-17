@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d26d1ed7b0944f0cb5e106bec72bc6fd, type: 3}
   m_Name: LoadingScenesConfig
   m_EditorClassIdentifier: 
-  transitionSceneAsset: {fileID: 102900000, guid: d0a5d8e5d8cd54b76ac43f3178cc493c, type: 3}
   sceneNames:
   - sceneType: 0
     sceneName: Intro
@@ -20,7 +19,5 @@ MonoBehaviour:
     sceneName: Auth
   - sceneType: 2
     sceneName: MainMenu
-  - sceneType: 3
-    sceneName: Explore
   - sceneType: 4
     sceneName: DuelGame

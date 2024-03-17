@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+
 using Newtonsoft.Json;
 
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Newtonsoft.Json
+namespace MetaMask.SocketIOClient.Newtonsoft.Json
 {
     internal class ByteArrayConverter : JsonConverter
     {

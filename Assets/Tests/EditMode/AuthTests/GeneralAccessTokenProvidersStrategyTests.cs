@@ -20,22 +20,24 @@ namespace Tests.EditMode.AuthTests
         {
             var firebaseUserStub = FirebaseAuth.GetAuth(FirebaseApp.DefaultInstance).CurrentUser;
             var metamaskBackendCredentialsProviderMock = new Mock<IMetamaskBackendCredentialProvider>();
-            
+
             var expectedFirebaseTokenProvider = new FirebaseTokenProvider(firebaseUserStub);
-            var expectedMetamaskTokenProvider = new MetamaskTokenProvider(metamaskBackendCredentialsProviderMock.Object);
+            var expectedMetamaskTokenProvider =
+                new MetamaskTokenProvider(metamaskBackendCredentialsProviderMock.Object);
 
             var firebaseTokenProviderFactoryMock = new Mock<IFirebaseTokenProvidersCreator>();
-            firebaseTokenProviderFactoryMock.Setup(s => 
-                s.GetTokenProviderAsync(FirebaseAuthProviderType.Google)).ReturnsAsync(expectedFirebaseTokenProvider);
+            firebaseTokenProviderFactoryMock.Setup(s =>
+                s.GetTokenProviderAsync(AuthType.Google)).ReturnsAsync(expectedFirebaseTokenProvider);
             var metamaskTokenProviderFactoryMock = new Mock<IMetamaskTokenProvidersCreator>();
-            metamaskTokenProviderFactoryMock.Setup(s => 
+            metamaskTokenProviderFactoryMock.Setup(s =>
                 s.GetTokenProviderAsync()).ReturnsAsync(expectedMetamaskTokenProvider);
 
-            
-            var generalProviderStrategy = new GeneralAccessTokenProvidersStrategy(firebaseTokenProviderFactoryMock.Object, metamaskTokenProviderFactoryMock.Object);
+
+            var generalProviderStrategy = new GeneralAccessTokenProvidersStrategy(
+                firebaseTokenProviderFactoryMock.Object,
+                metamaskTokenProviderFactoryMock.Object);
             var actualTokenProvider = await generalProviderStrategy.GetAccessTokenProviderAsync(authType);
-            
-            
+
             if (authType.Equals(AuthType.Metamask))
             {
                 Assert.AreSame(expectedMetamaskTokenProvider, actualTokenProvider);

@@ -2,10 +2,10 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Reflection;
-using EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime.Model;
+using EventEmitter.NET.Model;
 using Newtonsoft.Json;
 
-namespace EventEmitter.NET.MetaMask.Plugins.Libraries.EventEmitter.NET.Runtime
+namespace EventEmitter.NET
 {
     /// <summary>
     /// A class that can delegate the process of both listening for specific events (by their event id) with a static

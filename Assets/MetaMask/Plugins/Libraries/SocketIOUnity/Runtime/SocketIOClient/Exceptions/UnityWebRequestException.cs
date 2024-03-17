@@ -1,4 +1,4 @@
-namespace MetaMask.Plugins.Libraries.SocketIOUnity.Runtime.SocketIOClient.Exceptions
+namespace MetaMask.SocketIOClient.Transport
 {
 
     [System.Serializable]

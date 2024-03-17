@@ -14,7 +14,7 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
             _auth = FirebaseAuth.DefaultInstance;
         }
         
-        public async Task<FirebaseTokenProvider> GetTokenProviderAsync(FirebaseAuthProviderType authProviderType)
+        public async Task<FirebaseTokenProvider> GetTokenProviderAsync(AuthType authProviderType)
         {
             var credentials = await _firebaseCredentialProvider.GetCredentialAsync(authProviderType);
             var user = await _auth.SignInAndRetrieveDataWithCredentialAsync(credentials); 
