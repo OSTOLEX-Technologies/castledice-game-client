@@ -61,6 +61,7 @@ using Src.PlayerInput;
 using Src.Prototypes;
 using Src.Prototypes.NewActionPoints;
 using Src.PVE;
+using Src.PVE.BotTriggers;
 using Src.PVE.Calculators;
 using Src.PVE.Checkers;
 using Src.PVE.GameSituations;
@@ -463,7 +464,7 @@ namespace Src.ScenesInitializers
             //Configuring delays
             var delayer = new AsyncDelayer();
             var delaysSequence = new IntSequence(botMovesDelaysConfig.Sequence.ToList(), botMovesDelaysConfig.DefaultNumber);
-            _bot = new ConfigurableDelaysBot(localMoveApplier, bestMoveSearcher, _game, _enemy, delayer, delaysSequence);
+            _bot = new Bot(localMoveApplier, bestMoveSearcher, _enemy, new OpportunityDelayedBotMoveTrigger(_game, _enemy, 1));
         }
         
         private void SetUpPlacedUnitsHighlights()

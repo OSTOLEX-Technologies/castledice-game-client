@@ -1,37 +1,31 @@
 ﻿using System.Threading.Tasks;
 using castledice_game_logic;
 using Src.GameplayPresenter.GameWrappers;
+using Src.PVE.BotTriggers;
 using Src.PVE.MoveSearchers;
 
 namespace Src.PVE
 {
-    public abstract class Bot
+    public class Bot
     {
         private readonly ILocalMoveApplier _localMoveApplier;
         private readonly IBestMoveSearcher _bestMoveSearcher;
-        private readonly Game _game;
+        private readonly IBotMoveTrigger _moveTrigger;
         private readonly Player _botPlayer;
-
-        private bool BotCanMove => _game.GetCurrentPlayer() == _botPlayer && _botPlayer.ActionPoints.Amount > 0;
         
-        protected Bot(ILocalMoveApplier localMoveApplier, IBestMoveSearcher bestMoveSearcher, Game game, Player botPlayer)
+        public Bot(ILocalMoveApplier localMoveApplier, IBestMoveSearcher bestMoveSearcher, Player botPlayer, IBotMoveTrigger moveTrigger)
         {
             _localMoveApplier = localMoveApplier;
             _bestMoveSearcher = bestMoveSearcher;
-            _game = game;
             _botPlayer = botPlayer;
-            _game.MoveApplied += (sender, move) => TryMakeMove();
-            _botPlayer.ActionPoints.ActionPointsIncreased += (sender, args) => TryMakeMove();
+            _moveTrigger = moveTrigger;
+            _moveTrigger.ShouldMakeMove += TryMakeMove;
         }
         
-        protected virtual async Task TryMakeMove()
+        private void TryMakeMove()
         {
-            if (!BotCanMove) return;
             var bestMove = _bestMoveSearcher.GetBestMove(_botPlayer.Id);
-            await Delay();
             _localMoveApplier.ApplyMove(bestMove);
         }
-
-        protected abstract Task Delay();
     }
 }
