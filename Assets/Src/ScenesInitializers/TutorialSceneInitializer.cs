@@ -1,8 +1,10 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using castledice_game_data_logic;
 using castledice_game_logic;
+using castledice_game_logic.GameObjects;
 using castledice_game_logic.Math;
 using castledice_game_logic.MovesLogic;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
@@ -56,6 +58,7 @@ using Src.General.MoveConditions;
 using Src.General.NumericSequences;
 using Src.LoadingScenes;
 using Src.PlayerInput;
+using Src.Prototypes;
 using Src.Prototypes.NewActionPoints;
 using Src.PVE;
 using Src.PVE.Calculators;
@@ -71,6 +74,8 @@ using Src.Tutorial.BotConfiguration;
 using Tests.EditMode.GeneralTests;
 using TMPro;
 using UnityEngine;
+using UnityEngine.Audio;
+using Button = UnityEngine.UI.Button;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 using CastleEntity = castledice_game_logic.GameObjects.Castle;
 
@@ -188,14 +193,30 @@ namespace Src.ScenesInitializers
         [Header("Bot configuration")]
         [SerializeField] private int botMoveDelayMilliseconds;
         [SerializeField] private AllowedPositionsScenariosConfig allowedPositionsScenariosConfig;
+        [SerializeField] private IntSequenceConfig botMovesDelaysConfig;
         private Bot _bot;
         
         [Header("Castles health bars")]
         [SerializeField] private CastleHealthBar blueCastleHeathBar;
         [SerializeField] private CastleHealthBar redCastleHeathBar;
+        
+        [Header("Audio")]
+        [SerializeField] private AudioMixer mixer;
+
+        [Header("Transitions")] 
+        [SerializeField] private float introFadeSeconds;
+        [SerializeField] private CanvasGroup introCanvasGroup;
+        
+        [Header("Tutorial controller")]
+        [SerializeField] private TutorialController tutorialController;
+        [SerializeField] private Button screenClickDetector;
+        private BlockableRaycaster3D _raycaster;
+        
 
         private void Start()
         {
+            mixer.SetFloat("KnightsVolume", -80);
+
             SetUpGameAndPlayers();
             SetUpPlayerColorProvider();
             SetUpInputHandling();
@@ -212,10 +233,34 @@ namespace Src.ScenesInitializers
             SetUpCellMovesHighlights();
             SetUpGameOver();
             SetUpActionPointsUI();
-            GiveActionPointsToCurrentPlayer();
             HandleGameOver();
+            SetUpController();
+            
+            GiveActionPointsToCurrentPlayer();
+            
+            StartCoroutine(Intro());
         }
 
+        private IEnumerator Intro()
+        {
+            yield return new WaitForSeconds(0.2f);
+            var elapsedTime = 0f;
+            while (elapsedTime < introFadeSeconds)
+            {
+                elapsedTime += Time.deltaTime;
+                introCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsedTime / introFadeSeconds);
+                yield return null;
+            }
+            mixer.SetFloat("KnightsVolume", 0);
+        }
+
+        private void SetUpController()
+        {
+            _movesPresenter.WrongMovePicked += (object sender, AbstractMove move) => tutorialController.WrongMoveApplied();
+            _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => tutorialController.RightMoveApplied();
+            screenClickDetector.onClick.AddListener(tutorialController.ScreenClicked);
+            tutorialController.Init(_raycaster);
+        }
 
 
         private void SetUpGameAndPlayers()
@@ -226,6 +271,7 @@ namespace Src.ScenesInitializers
             _player = _game.GetPlayer(playerId);
             _enemy = _game.GetPlayer(enemyId);
         }
+        
 
         private void SetUpPlayerColorProvider()
         {
@@ -254,7 +300,9 @@ namespace Src.ScenesInitializers
         {
             var cameraWrapper = new CameraWrapper(playerCamera);
             var raycaster = new Raycaster3D(new RaycastHitProvider());
-            _touchInputHandler = new TouchInputHandler(cameraWrapper, raycaster);
+            var blockableRaycaster = new BlockableRaycaster3D(raycaster);
+            _raycaster = blockableRaycaster;
+            _touchInputHandler = new TouchInputHandler(cameraWrapper, _raycaster);
             _playerInputReader = new PlayerInputReader(_touchInputHandler);
             _playerInputReader.Enable();
         }
@@ -411,8 +459,11 @@ namespace Src.ScenesInitializers
                     Enhanciveness = 1,
                     Harmfulness = 1
                 });
+            
+            //Configuring delays
             var delayer = new AsyncDelayer();
-            _bot = new SteadyBot(localMoveApplier, bestMoveSearcher, _game, _enemy, moveDelay, delayer);
+            var delaysSequence = new IntSequence(botMovesDelaysConfig.Sequence.ToList(), botMovesDelaysConfig.DefaultNumber);
+            _bot = new ConfigurableDelaysBot(localMoveApplier, bestMoveSearcher, _game, _enemy, delayer, delaysSequence);
         }
         
         private void SetUpPlacedUnitsHighlights()

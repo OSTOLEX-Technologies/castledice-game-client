@@ -74,7 +74,7 @@ namespace Src.Tutorial
             var contentData = new List<ContentData>
             {
                 playerCastleData,
-                enemyCastleData
+                enemyCastleData,
             };
             var boardData = new BoardData(boardLength, boardWidth, cellType, cellsPresence, contentData);
             var placeablesConfigData = new PlaceablesConfigData(
@@ -89,7 +89,7 @@ namespace Src.Tutorial
                 tscConfigData, 
                 new List<PlayerData>
                 {
-                    enemyData, playerData
+                    enemyData, playerData  
                 });
             return gameStartData;
         }

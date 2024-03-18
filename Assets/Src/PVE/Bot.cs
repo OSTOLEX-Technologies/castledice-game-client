@@ -12,7 +12,7 @@ namespace Src.PVE
         private readonly Game _game;
         private readonly Player _botPlayer;
 
-        private bool IsBotMove => _game.GetCurrentPlayer() == _botPlayer;
+        private bool BotCanMove => _game.GetCurrentPlayer() == _botPlayer && _botPlayer.ActionPoints.Amount > 0;
         
         protected Bot(ILocalMoveApplier localMoveApplier, IBestMoveSearcher bestMoveSearcher, Game game, Player botPlayer)
         {
@@ -26,7 +26,7 @@ namespace Src.PVE
         
         protected virtual async Task TryMakeMove()
         {
-            if (!IsBotMove) return;
+            if (!BotCanMove) return;
             var bestMove = _bestMoveSearcher.GetBestMove(_botPlayer.Id);
             await Delay();
             _localMoveApplier.ApplyMove(bestMove);
