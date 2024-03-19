@@ -259,6 +259,14 @@ namespace Src.ScenesInitializers
         {
             _movesPresenter.WrongMovePicked += (object sender, AbstractMove move) => tutorialController.WrongMoveApplied();
             _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => tutorialController.RightMoveApplied();
+            _game.TurnSwitched += (_, _) =>
+            {
+                var isPlayerTurn = _game.GetCurrentPlayer() == _player;
+                if (isPlayerTurn)
+                {
+                    tutorialController.PlayerTurn();
+                }
+            };
             screenClickDetector.onClick.AddListener(tutorialController.ScreenClicked);
             tutorialController.Init(_raycaster);
         }

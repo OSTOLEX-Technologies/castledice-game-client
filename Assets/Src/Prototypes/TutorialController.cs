@@ -10,6 +10,7 @@ namespace Src.Prototypes
         [SerializeField] private List<int> framesToSwitchByClick;
         [SerializeField] private List<int> framesToSwitchByRightMove;
         [SerializeField] private List<int> framesWhereRaycastShouldBeBlocked;
+        [SerializeField] private List<int> framesToSwitchByPlayerTurn;
         private int _currentFrameIndex;
         private GameObject _currentFrame;
         private BlockableRaycaster3D _raycaster;
@@ -34,6 +35,12 @@ namespace Src.Prototypes
         public void RightMoveApplied()
         {
             if (!framesToSwitchByRightMove.Contains(_currentFrameIndex)) return;
+            SwitchToNextFrame();
+        }
+
+        public void PlayerTurn()
+        {
+            if (!framesToSwitchByPlayerTurn.Contains(_currentFrameIndex)) return;
             SwitchToNextFrame();
         }
 
