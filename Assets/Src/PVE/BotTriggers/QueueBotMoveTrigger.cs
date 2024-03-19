@@ -16,24 +16,21 @@ namespace Src.PVE.BotTriggers
         public QueueBotMoveTrigger(Queue<IBotMoveTrigger> triggers)
         {
             _triggers = triggers;
-            SwitchToNextTrigger();
+            if (_triggers.Count <= 0) return;
+            _currentTrigger = _triggers.Dequeue();
+            _currentTrigger.ShouldMakeMove += InvokeAndSwitchToNextTrigger;
         }
-
-        private void SwitchToNextTrigger()
+        
+        private void InvokeAndSwitchToNextTrigger()
         {
             if (_currentTrigger != null)
             {
-                _currentTrigger.ShouldMakeMove -= InvokeShouldMakeMove;
-                _currentTrigger.ShouldMakeMove -= SwitchToNextTrigger;
+                _currentTrigger.ShouldMakeMove -= InvokeAndSwitchToNextTrigger;
             }
+
             if (_triggers.Count <= 0) return;
             _currentTrigger = _triggers.Dequeue();
-            _currentTrigger.ShouldMakeMove += InvokeShouldMakeMove;
-            _currentTrigger.ShouldMakeMove += SwitchToNextTrigger;
-        }
-        
-        private void InvokeShouldMakeMove()
-        {
+            _currentTrigger.ShouldMakeMove += InvokeAndSwitchToNextTrigger;
             ShouldMakeMove?.Invoke();
         }
     }

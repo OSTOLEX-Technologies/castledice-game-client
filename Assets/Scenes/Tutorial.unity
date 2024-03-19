@@ -4346,7 +4346,7 @@ MonoBehaviour:
   enemyActionPointsText: {fileID: 1242043856}
   botMoveDelayMilliseconds: 500
   allowedPositionsScenariosConfig: {fileID: 11400000, guid: 76b8a50489aae0b4a9440753acd45856, type: 2}
-  botMovesDelaysConfig: {fileID: 11400000, guid: f6132eb4dcba76741931fb66ee8d209a, type: 2}
+  botCommander: {fileID: 0}
   blueCastleHeathBar: {fileID: 98995022}
   redCastleHeathBar: {fileID: 1901779080}
   mixer: {fileID: 24100000, guid: be8574fe25f0e4244ab5638011c23c8d, type: 2}
@@ -6767,7 +6767,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!224 &2090333709
 RectTransform:
   m_ObjectHideFlags: 0

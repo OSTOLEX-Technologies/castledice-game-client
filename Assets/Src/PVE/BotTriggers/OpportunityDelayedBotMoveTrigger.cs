@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading.Tasks;
 using castledice_game_logic;
+using Src.General.NumericSequences;
 
 namespace Src.PVE.BotTriggers
 {
@@ -8,17 +9,17 @@ namespace Src.PVE.BotTriggers
     {
         private readonly Game _game;
         private readonly Player _botPlayer;
-        private readonly int _delayMilliseconds;
+        private readonly IIntSequence _delays;
         
         private bool BotCanMakeMove => _game.GetCurrentPlayer() == _botPlayer && _botPlayer.ActionPoints.Amount > 0;
         
         public event Action ShouldMakeMove;
         
-        public OpportunityDelayedBotMoveTrigger(Game game, Player botPlayer, int delayMilliseconds)
+        public OpportunityDelayedBotMoveTrigger(Game game, Player botPlayer, IIntSequence delayMilliseconds)
         {
             _game = game;
             _botPlayer = botPlayer;
-            _delayMilliseconds = delayMilliseconds;
+            _delays = delayMilliseconds;
             _game.MoveApplied += (_,_) => TryTriggerBot();
             _botPlayer.ActionPoints.ActionPointsIncreased += (_,_) => TryTriggerBot();
         }
@@ -26,7 +27,7 @@ namespace Src.PVE.BotTriggers
         private async void TryTriggerBot()
         {
             if (!BotCanMakeMove) return;
-            await Task.Delay(_delayMilliseconds);
+            await Task.Delay(_delays.Next());
             ShouldMakeMove?.Invoke();
         }
     }

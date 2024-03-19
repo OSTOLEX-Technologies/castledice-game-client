@@ -194,7 +194,7 @@ namespace Src.ScenesInitializers
         [Header("Bot configuration")]
         [SerializeField] private int botMoveDelayMilliseconds;
         [SerializeField] private AllowedPositionsScenariosConfig allowedPositionsScenariosConfig;
-        [SerializeField] private IntSequenceConfig botMovesDelaysConfig;
+        [SerializeField] private BotCommander botCommander;
         private Bot _bot;
         
         [Header("Castles health bars")]
@@ -460,11 +460,21 @@ namespace Src.ScenesInitializers
                     Enhanciveness = 1,
                     Harmfulness = 1
                 });
+
+
+
             
-            //Configuring delays
-            var delayer = new AsyncDelayer();
-            var delaysSequence = new IntSequence(botMovesDelaysConfig.Sequence.ToList(), botMovesDelaysConfig.DefaultNumber);
-            _bot = new Bot(localMoveApplier, bestMoveSearcher, _enemy, new OpportunityDelayedBotMoveTrigger(_game, _enemy, 1));
+            _bot = new Bot(localMoveApplier, bestMoveSearcher, _enemy,
+                new OpportunityDelayedBotMoveTrigger(_game, _enemy, 
+                    new IntSequence(new List<int>
+                    {
+                        1,
+                        1,
+                        1,
+                        1,
+                        1,
+                        1
+                    }, 600)));
         }
         
         private void SetUpPlacedUnitsHighlights()
