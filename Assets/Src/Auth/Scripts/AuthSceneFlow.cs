@@ -14,9 +14,7 @@ namespace Src.Auth.Scripts
 
         [SerializeField, InspectorName("Processing Canvas")]
         private Canvas processingCanvas;
-        [SerializeField, InspectorName("Auth Canvas")]
-        private Canvas authCanvas;
-        
+
         [SerializeField, InspectorName("Auth Buttons")] 
         private Button[] authButtons;
 
@@ -35,7 +33,6 @@ namespace Src.Auth.Scripts
             
             ControlAuthButtons(false);
             
-            authCanvas.gameObject.SetActive(false);
             processingCanvas.gameObject.SetActive(true);
             processingCanvasLabel.SetText(InitializingLabelText);
         }
@@ -59,14 +56,13 @@ namespace Src.Auth.Scripts
                 processingCanvasLabel.SetText(ImmediateLoginFromSavedTokenLabelText);
                 processingCanvas.gameObject.SetActive(true);
                 
-                _authView.HideAuthUI();
+                ControlAuthButtons(false);
                 _authView.Login(authType);
             }
             else
             {
                 ControlAuthButtons(true);
                 processingCanvas.gameObject.SetActive(false);
-                authCanvas.gameObject.SetActive(true);
             }
         }
         
@@ -74,6 +70,7 @@ namespace Src.Auth.Scripts
         {
             _authView.AuthCompleted += () =>
             {
+                ControlAuthButtons(false);
                 _sceneTransitionHandler.HandleTransitionCommand();
                 _authView.AuthCompleted -= SubscribeOnAuthCompleted;
             };
