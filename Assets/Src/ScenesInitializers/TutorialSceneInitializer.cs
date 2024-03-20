@@ -207,12 +207,18 @@ namespace Src.ScenesInitializers
         [Header("Transitions")] 
         [SerializeField] private float introFadeSeconds;
         [SerializeField] private CanvasGroup introCanvasGroup;
+        [SerializeField] private GameObject introGameObject;
         
         [Header("Tutorial controller")]
         [SerializeField] private TutorialController tutorialController;
         [SerializeField] private Button screenClickDetector;
         private BlockableRaycaster3D _raycaster;
-        
+
+
+        private void Awake()
+        {
+            introGameObject.SetActive(true);
+        }
 
         private void Start()
         {
