@@ -1760,6 +1760,7 @@ MonoBehaviour:
   blueWinnerScreen: {fileID: 8317343790580066247}
   redWinnerScreen: {fileID: 8317343790085242007}
   drawScreen: {fileID: 8317343789972965597}
+  gameUI: {fileID: 8674514081866498140}
   playerBanner: {fileID: 635134183}
   playerActionPointsText: {fileID: 635134182}
   enemyBanner: {fileID: 1995503600}
@@ -1770,7 +1771,7 @@ MonoBehaviour:
   blueCastleHeathBar: {fileID: 98995022}
   redCastleHeathBar: {fileID: 1901779080}
   mixer: {fileID: 24100000, guid: be8574fe25f0e4244ab5638011c23c8d, type: 2}
-  introFadeSeconds: 1
+  introFadeSeconds: 1.5
   introCanvasGroup: {fileID: 2090333710}
   introGameObject: {fileID: 2090333708}
   tutorialController: {fileID: 1705111113}
