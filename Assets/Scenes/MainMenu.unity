@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 303853028}
-  m_IndirectSpecularColor: {r: 0.18252397, g: 0.22820571, b: 0.30719048, a: 1}
+  m_IndirectSpecularColor: {r: 0.18254378, g: 0.22825451, b: 0.30721018, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -13866,6 +13866,10 @@ PrefabInstance:
     - target: {fileID: 1492894540740930001, guid: 396cf8236ceef46a4b4330450f29b8ec, type: 3}
       propertyPath: m_Name
       value: RulesPopUp | Canvas
+      objectReference: {fileID: 0}
+    - target: {fileID: 1492894540740930001, guid: 396cf8236ceef46a4b4330450f29b8ec, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1492894540740930028, guid: 396cf8236ceef46a4b4330450f29b8ec, type: 3}
       propertyPath: m_Pivot.x
