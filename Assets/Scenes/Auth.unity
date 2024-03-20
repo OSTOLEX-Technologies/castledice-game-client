@@ -646,6 +646,7 @@ GameObject:
   - component: {fileID: 662510566}
   - component: {fileID: 662510565}
   - component: {fileID: 662510564}
+  - component: {fileID: 662510568}
   m_Layer: 5
   m_Name: Main Auth | Canvas
   m_TagString: Untagged
@@ -712,7 +713,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!224 &662510567
 RectTransform:
@@ -737,6 +738,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &662510568
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 662510563}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16505a8640ef415fb1b319d6da4c86e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &874769401
 GameObject:
   m_ObjectHideFlags: 0
@@ -928,6 +941,7 @@ GameObject:
   - component: {fileID: 1030544710}
   - component: {fileID: 1030544709}
   - component: {fileID: 1030544708}
+  - component: {fileID: 1030544712}
   m_Layer: 5
   m_Name: Progress | Canvas
   m_TagString: Untagged
@@ -994,7 +1008,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 1
+  m_SortingOrder: -1
   m_TargetDisplay: 0
 --- !u!224 &1030544711
 RectTransform:
@@ -1017,6 +1031,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1030544712
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1030544707}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16505a8640ef415fb1b319d6da4c86e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1037518298
 GameObject:
   m_ObjectHideFlags: 0
@@ -1297,6 +1323,7 @@ GameObject:
   - component: {fileID: 1222523650}
   - component: {fileID: 1222523649}
   - component: {fileID: 1222523648}
+  - component: {fileID: 1222523652}
   m_Layer: 5
   m_Name: 'Metamask Auth Cancellation | Canvas '
   m_TagString: Untagged
@@ -1386,6 +1413,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1222523652
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1222523647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16505a8640ef415fb1b319d6da4c86e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1265297900
 GameObject:
   m_ObjectHideFlags: 0
@@ -1443,6 +1482,7 @@ GameObject:
   - component: {fileID: 1358323242}
   - component: {fileID: 1358323241}
   - component: {fileID: 1358323240}
+  - component: {fileID: 1358323244}
   m_Layer: 5
   m_Name: Auth Error Message | Canvas
   m_TagString: Untagged
@@ -1509,7 +1549,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 2
+  m_SortingOrder: 5
   m_TargetDisplay: 0
 --- !u!224 &1358323243
 RectTransform:
@@ -1533,6 +1573,18 @@ RectTransform:
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &1358323244
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1358323239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a16505a8640ef415fb1b319d6da4c86e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1455817803
 GameObject:
   m_ObjectHideFlags: 0
@@ -1888,7 +1940,7 @@ Canvas:
   m_SortingBucketNormalizedSize: 0
   m_AdditionalShaderChannelsFlag: 25
   m_SortingLayerID: 0
-  m_SortingOrder: 0
+  m_SortingOrder: -2
   m_TargetDisplay: 0
 --- !u!224 &1577851643
 RectTransform:
