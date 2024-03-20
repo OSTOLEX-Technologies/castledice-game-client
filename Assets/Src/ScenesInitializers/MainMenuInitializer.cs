@@ -31,7 +31,6 @@ namespace Src.ScenesInitializers
     public class MainMenuInitializer : MonoBehaviour
     {
         [SerializeField] private UnityErrorPopup errorPopup;
-        [SerializeField] private string duelModeSceneName;
         [SerializeField] private SceneLoader sceneLoader;
         [SerializeField] private GameServerConnectionConfig gameServerConnectionConfig;
         [SerializeField] private UnityGameCreationView gameCreationView;
