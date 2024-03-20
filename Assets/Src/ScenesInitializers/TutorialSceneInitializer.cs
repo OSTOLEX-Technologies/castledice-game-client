@@ -178,6 +178,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private GameObject blueWinnerScreen;
         [SerializeField] private GameObject redWinnerScreen;
         [SerializeField] private GameObject drawScreen;
+        [SerializeField] private GameObject gameUI;
         private GameOverPresenter _gameOverPresenter;
         private GameOverView _gameOverView;
 
@@ -213,6 +214,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private TutorialController tutorialController;
         [SerializeField] private Button screenClickDetector;
         private BlockableRaycaster3D _raycaster;
+        
 
 
         private void Awake()
@@ -283,6 +285,10 @@ namespace Src.ScenesInitializers
             _gameStartData = gameStartDataConfig.GetGameStartData(playerId, enemyId);
             var gameCreator = GetGameCreator();
             _game = gameCreator.CreateGame();
+            _game.Win += (_, _) =>
+            {
+                gameUI.SetActive(false);
+            };
             _player = _game.GetPlayer(playerId);
             _enemy = _game.GetPlayer(enemyId);
         }
