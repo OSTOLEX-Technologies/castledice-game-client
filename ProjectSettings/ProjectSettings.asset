@@ -135,7 +135,8 @@ PlayerSettings:
     16:9: 1
     Others: 1
   bundleVersion: 0.0.1
-  preloadedAssets: []
+  preloadedAssets:
+  - {fileID: 11400000, guid: 3c347b1390b1c9b4c92674c8746358f8, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
@@ -251,8 +252,8 @@ PlayerSettings:
   AndroidTargetDevices: 0
   AndroidSplashScreenScale: 0
   androidSplashScreen: {fileID: 0}
-  AndroidKeystoreName: /Users/gglinker/Documents/OSTOLEX/ostolex.keystore
-  AndroidKeyaliasName: castledice
+  AndroidKeystoreName: C:/Users/User/Desktop/tempkeysotre/user.keystore
+  AndroidKeyaliasName: mehanari keysotre
   AndroidBuildApkPerCpuArchitecture: 0
   AndroidTVCompatibility: 0
   AndroidIsGame: 1

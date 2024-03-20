@@ -17,8 +17,8 @@ namespace Src.NetworkingModule.MessageHandlers
         [MessageHandler((ushort)ServerToClientMessageType.SwitchTimer)]
         private static void HandleSwitchTimerMessage(Message message)
         {
-            var dto = message.GetSwitchTimerDTO();
-            _DTOAccepter.AcceptSwitchTimerDTO(dto);
+            //var dto = message.GetSwitchTimerDTO();
+            //_DTOAccepter.AcceptSwitchTimerDTO(dto);
         }
     }
 }

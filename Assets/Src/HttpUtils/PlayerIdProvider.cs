@@ -8,7 +8,7 @@ namespace Src.HttpUtils
 {
     public class PlayerIdProvider : IPlayerIdProvider
     {
-        private const string AuthServiceUrl = "http://auth.castledice.xyz:8000";
+        private const string AuthServiceUrl = "http://auth.castledice.xyz:8000/me";
         
         public async Task<int> GetLocalPlayerId()
         {
