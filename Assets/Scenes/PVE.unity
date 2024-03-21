@@ -329,6 +329,28 @@ Camera:
   m_CorrespondingSourceObject: {fileID: 7413156913186573621, guid: ca2b42d512b49443190d1f2351523f51, type: 3}
   m_PrefabInstance: {fileID: 208260483}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &208260485 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7413156914520217157, guid: ca2b42d512b49443190d1f2351523f51, type: 3}
+  m_PrefabInstance: {fileID: 208260483}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d29dc281e004f9da31a1218a8ff32b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &208260486 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7413156913250633091, guid: ca2b42d512b49443190d1f2351523f51, type: 3}
+  m_PrefabInstance: {fileID: 208260483}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 62d29dc281e004f9da31a1218a8ff32b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &247296288
 GameObject:
   m_ObjectHideFlags: 0
@@ -1452,6 +1474,8 @@ MonoBehaviour:
   newUnitsHighlightsColorConfig: {fileID: 11400000, guid: 8ababd8e40c3ac04f87b4ccaedd9c1b2, type: 2}
   fixedUpdaterBehaviour: {fileID: 396189204}
   updaterBehaviour: {fileID: 396189202}
+  blueCastleHeathBar: {fileID: 208260486}
+  redCastleHeathBar: {fileID: 208260485}
   playerBanner: {fileID: 755594796}
   playerActionPointsText: {fileID: 755594795}
   enemyBanner: {fileID: 1425223284}

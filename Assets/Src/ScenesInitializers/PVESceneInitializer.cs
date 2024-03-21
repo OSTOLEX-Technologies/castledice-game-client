@@ -47,6 +47,7 @@ using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
 using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
+using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation.CastleHP;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
 using Src.GameplayView.DestroyedContent;
@@ -72,6 +73,7 @@ using Src.TimeManagement;
 using TMPro;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
+using CastleEntity = castledice_game_logic.GameObjects.Castle;
 
 public class PVESceneInitializer : MonoBehaviour
 {
@@ -168,6 +170,9 @@ public class PVESceneInitializer : MonoBehaviour
     private readonly Updater _updater = new();
     private readonly Updater _fixedUpdater = new();
     
+    [Header("Castles health bars")]
+    [SerializeField] private CastleHealthBar blueCastleHeathBar;
+    [SerializeField] private CastleHealthBar redCastleHeathBar;
     
     [Header("Action points UI")] 
     [SerializeField] private GameObject playerBanner;
@@ -197,6 +202,7 @@ public class PVESceneInitializer : MonoBehaviour
         SetUpInput();
         SetUpGrid();
         SetUpContent();
+        SetupCastleHealth();
         SetUpCells();
         SetUpClickDetectors();
         SetUpClientMoves();
@@ -334,6 +340,24 @@ public class PVESceneInitializer : MonoBehaviour
         var contentVisualsCreator = new VisitorContentVisualCreator(knightVisualCreator, cachingTreeVisualCreator, castleVisualCreator);
         _destroyedContentView = new DestroyedContentView(grid, contentVisualsCreator, destroyedContentTransparencyConfig);
         _destroyedContentPresenter = new DestroyedContentPresenter(_game, _destroyedContentView);
+    }
+    
+    private void SetupCastleHealth()
+    {
+        var board = _game.GetBoard();
+        var playerCastle = board[0, 0].GetContent().
+            Find(x => x is CastleEntity) as CastleEntity;
+        var enemyCastle = board[
+            board.GetLength(0) - 1,
+            board.GetLength(1) - 1
+        ].GetContent().Find(x => x is CastleEntity) as CastleEntity;
+            
+        var initialDurability = playerCastle.GetMaxDurability();
+        blueCastleHeathBar.Init(initialDurability);
+        redCastleHeathBar.Init(initialDurability);
+            
+        playerCastle.Hit += blueCastleHeathBar.ApplyHit;
+        enemyCastle.Hit += redCastleHeathBar.ApplyHit;
     }
     
     private class ServerMoveApplierStub : IServerMoveApplier
