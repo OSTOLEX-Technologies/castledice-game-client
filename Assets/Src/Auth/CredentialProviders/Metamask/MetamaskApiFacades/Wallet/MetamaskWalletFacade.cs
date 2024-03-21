@@ -1,6 +1,7 @@
 using System;
 using MetaMask;
 using MetaMask.Unity;
+using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
 namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
@@ -28,7 +29,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         {
             if (_wallet is null || !_wallet.IsConnected)
             {
-                OnDisconnected?.Invoke(this, EventArgs.Empty);
+                OnDisconnected?.Invoke();
                 return;
             }
             
@@ -46,7 +47,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
             _wallet.WalletConnectedHandler -= OnWalletConnected;
             
             IMetamaskWalletFacade.WalletConnected = true;
-            OnConnected?.Invoke(sender, args);
+            OnConnected?.Invoke();
         }
 
         private void OnWalletDisconnected(object sender, EventArgs args)
@@ -61,10 +62,10 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
             Object.Destroy(metamaskUnityComponentGameObject);
             GC.Collect();
 
-            OnDisconnected?.Invoke(sender, args);
+            OnDisconnected?.Invoke();
         }
 
-        public event EventHandler OnConnected;
-        public event EventHandler OnDisconnected;
+        public event UnityAction OnConnected;
+        public event UnityAction OnDisconnected;
     }
 }

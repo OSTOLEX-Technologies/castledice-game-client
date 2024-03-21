@@ -115,7 +115,7 @@ namespace Src.Auth
         private async Task WaitUntilMetamaskDisconnects()
         {
             var disconnectTsc = new TaskCompletionSource<object>();
-            void OnMetamaskUnityDisconnected(object sender, EventArgs args)
+            void OnMetamaskUnityDisconnected()
             {
                 _metamaskWalletFacade.OnDisconnected -= OnMetamaskUnityDisconnected;
                 disconnectTsc.SetResult(new object());
