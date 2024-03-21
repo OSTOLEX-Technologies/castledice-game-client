@@ -25,3 +25,5 @@ MonoBehaviour:
     sceneName: Cinematic
   - sceneType: 5
     sceneName: Tutorial
+  - sceneType: 6
+    sceneName: PVE

@@ -7,6 +7,7 @@ namespace Src.LoadingScenes
         MainMenu,
         DuelGame,
         Cinematic,
-        Tutorial
+        Tutorial,
+        PVE
     }
 }

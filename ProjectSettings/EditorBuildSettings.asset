@@ -26,5 +26,8 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/DuelGame.unity
     guid: 4c0d3ae4b72dae54097961785cc6389c
+  - enabled: 1
+    path: Assets/Scenes/PVE.unity
+    guid: 9433e25483fbd544097a9094d137c522
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 3c347b1390b1c9b4c92674c8746358f8, type: 2}

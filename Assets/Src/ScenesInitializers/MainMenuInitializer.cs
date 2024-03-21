@@ -48,6 +48,10 @@ namespace Src.ScenesInitializers
         {
             RiptideLogger.Initialize(Debug.Log,Debug.Log,Debug.LogWarning, Debug.LogError, false);
 
+            if (!Singleton<IAccessTokenProvider>.Registered)
+            {
+                return;
+            }
             _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
 
             //Setting up client
