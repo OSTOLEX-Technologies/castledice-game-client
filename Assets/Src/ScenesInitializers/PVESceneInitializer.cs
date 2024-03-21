@@ -421,6 +421,7 @@ public class PVESceneInitializer : MonoBehaviour
             moveEnhancivenessEvaluator,
             moveHarmfulnessEvaluator);
         _bot = new Bot(localMoveApplier, totalPossibleMovesProvider, bestMoveSearcher, _game, 2);
+        _bot.CantMove += () => drawScreen.SetActive(true);
     }
 
     private void SetUpPlacedUnitsHighlights()
