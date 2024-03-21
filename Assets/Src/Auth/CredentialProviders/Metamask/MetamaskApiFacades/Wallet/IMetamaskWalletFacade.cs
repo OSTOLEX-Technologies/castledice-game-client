@@ -1,4 +1,5 @@
 using System;
+using UnityEngine.Events;
 
 namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
 {
@@ -10,7 +11,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         public void Disconnect();
         public string GetPublicAddress();
         
-        public event EventHandler OnConnected;
-        public event EventHandler OnDisconnected;
+        public event UnityAction OnConnected;
+        public event UnityAction OnDisconnected;
     }
 }

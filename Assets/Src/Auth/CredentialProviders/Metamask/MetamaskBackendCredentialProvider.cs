@@ -8,6 +8,7 @@ using Src.Auth.JwtManagement;
 using Src.Auth.JwtManagement.Converters.Metamask;
 using Src.Auth.REST.REST_Request_Proxies.Metamask;
 using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
+using UnityEngine.Events;
 
 namespace Src.Auth.CredentialProviders.Metamask
 {
@@ -73,11 +74,11 @@ namespace Src.Auth.CredentialProviders.Metamask
         private async Task WaitForWalletConnect()
         {
             var tcs = new TaskCompletionSource<object>();
-            void OnConnectedCallback(object o, EventArgs eventArgs) => tcs.SetResult(new object());
-            _walletFacade.OnConnected += OnConnectedCallback;
+            void ConnectedCallback() => tcs.SetResult(new object());
+            _walletFacade.OnConnected += ConnectedCallback;
             _walletFacade.Connect();
             await tcs.Task;
-            _walletFacade.OnConnected -= OnConnectedCallback;
+            _walletFacade.OnConnected -= ConnectedCallback;
         }
 
         private async Task<string> ObtainAndSignNonce()
