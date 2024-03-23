@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Src.Auth.AuthKeys;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
@@ -48,7 +49,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
                 var authResponse = await GetAuthData();;
                 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
-                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
+                // _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
                 
 
                 PrintTokens();
@@ -56,20 +57,21 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             }
 
             PrintTokens();
-            
-            if (!_tokenStore.accessToken.Valid)
-            {
-                Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
-                var refreshResponse = await RefreshAccessToken();
 
-                _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
-                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
-                
-                PrintTokens();
+            if (_tokenStore.accessToken.Valid)
+            {
+                Debug.Log("GOOGLE TOKEN IS VALID");
                 return _tokenStore;
             }
 
-            Debug.Log("GOOGLE TOKEN IS VALID");
+
+            Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
+            var refreshResponse = await RefreshAccessToken();
+
+            _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
+            _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
+                
+            PrintTokens();
             return _tokenStore;
         }
 

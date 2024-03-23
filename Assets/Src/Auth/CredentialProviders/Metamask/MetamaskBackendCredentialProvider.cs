@@ -58,16 +58,13 @@ namespace Src.Auth.CredentialProviders.Metamask
                 
                 return "metamask_access_token_stub";
             }
+
+            if (_tokenStore.accessToken.Valid) return _tokenStore.accessToken.Token;
             
-            if (!_tokenStore.accessToken.Valid)
-            {
-                var refreshResponse = await RefreshTokens();
-                _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
-                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
+            var refreshResponse = await RefreshTokens();
+            _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
+            _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
                 
-                return _tokenStore.accessToken.Token;
-            }
-            
             return _tokenStore.accessToken.Token;
         }
 
