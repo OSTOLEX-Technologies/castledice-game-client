@@ -30,7 +30,9 @@ namespace Src.NetworkingModule
         {
             return Client.Connect(hostAddress, maxConnectionAttempts, messageHandlerGroupId, message);
         }
-        
+
+        public bool IsConnected => Client.IsConnected;
+
         private void OnDisconnected(object sender, DisconnectedEventArgs e)
         {
             Disconnected?.Invoke(this, e);

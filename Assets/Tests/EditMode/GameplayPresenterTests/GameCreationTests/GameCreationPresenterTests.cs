@@ -5,10 +5,12 @@ using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
 using Src;
+using Src.Auth.TokenProviders;
 using Src.Caching;
 using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayView.GameCreation;
+using Src.NetworkingModule;
 using Tests.Utils.Mocks;
 using static Tests.Utils.ObjectCreationUtility;
 
@@ -34,12 +36,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             {
             }
 
-            public void ShowNonAuthorizedMessage(string message)
+            public void ShowNoConnectionMessage()
             {
-            }
-
-            public void HideNonAuthorizedMessage()
-            {
+                throw new NotImplementedException();
             }
 
             public void ChooseCreateGame()
@@ -63,28 +62,14 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             var presenter = new GameCreationPresenterBuilder
             {
                 GameCreationView = viewMock.Object,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
 
             presenter.CreateGame();
 
             viewMock.Verify(v => v.ShowCreationProcessScreen(), Times.Once);
         }
-
-        [Test]
-        public void CreateGame_ShouldCallShowNonAuthorizedMessage_IfPlayerIsNotAuthorized()
-        {
-            var viewMock = new Mock<IGameCreationView>();
-            var presenter = new GameCreationPresenterBuilder
-            {
-                GameCreationView = viewMock.Object,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: false)
-            }.Build();
-
-            presenter.CreateGame();
-
-            viewMock.Verify(v => v.ShowNonAuthorizedMessage(It.IsAny<string>()), Times.Once);
-        }
+        
 
         [Test]
         public async Task CreateGame_ShouldRegisterGameInstance_IntoSingleton()
@@ -95,7 +80,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             var presenter = new GameCreationPresenterBuilder
             {
                 GameCreator = gameCreatorMock.Object,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
 
             await presenter.CreateGame();
@@ -117,7 +102,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             var presenter = new GameCreationPresenterBuilder
             {
                 GameSearcher = gameSearcherMock.Object,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
         
             await presenter.CreateGame();
@@ -138,7 +123,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             var presenter = new GameCreationPresenterBuilder
             {
                 GameSearcher = gameSearcherMock.Object,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
             var gameCreatedEventInvoked = false;
             presenter.GameCreated += (sender, args) => gameCreatedEventInvoked = true;
@@ -162,7 +147,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             {
                 GameCreationView = viewMock.Object,
                 GameSearcher = gameSearcher,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
 
             var gameCreationOperation = presenter.CreateGame();
@@ -188,7 +173,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             {
                 GameCreationView = viewMock.Object,
                 GameSearcher = gameSearcher,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
 
             presenter.CreateGame();
@@ -211,7 +196,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             {
                 GameCreationView = viewMock.Object,
                 GameSearcher = gameSearcher,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
 
             presenter.CancelGame();
@@ -233,7 +218,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             {
                 GameCreationView = viewMock.Object,
                 GameSearcher = gameSearcher,
-                PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
+                AccessTokenProvider = new Mock<IAccessTokenProvider>().Object
             }.Build();
 
             presenter.CreateGame();
@@ -246,7 +231,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         public void CreateGame_ShouldBeCalled_IfChooseCreateGameOnViewIsCalled()
         {
             var view = new TestGameCreationView();
-            var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), view);
+            var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), new Mock<IAccessTokenProvider>().Object, view, new Mock<IClientWrapper>().Object);
             var testObject = presenterMock.Object;
         
             view.ChooseCreateGame();
@@ -258,12 +243,46 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         public void CancelGame_ShouldBeCalled_IfChooseCancelGameOnViewIsCalled()
         {
             var view = new TestGameCreationView();
-            var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), view);
+            var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), new Mock<IAccessTokenProvider>().Object, view, new Mock<IClientWrapper>().Object);
             var testObject = presenterMock.Object;
         
             view.ChooseCancelGame();
         
             presenterMock.Verify(p => p.CancelGame(), Times.Once);
+        }
+
+        [Test]
+        public async Task CreateGame_ShouldCallShowNoConnectionMessageOnView_IfClientIsNotConnected()
+        {
+            var clientWrapperMock = new Mock<IClientWrapper>();
+            clientWrapperMock.Setup(c => c.IsConnected).Returns(false);
+            var viewMock = new Mock<IGameCreationView>();
+            var presenter = new GameCreationPresenterBuilder
+            {
+                ClientWrapper = clientWrapperMock.Object,
+                GameCreationView = viewMock.Object,
+            }.Build();
+            
+            await presenter.CreateGame();
+            
+            viewMock.Verify(v => v.ShowNoConnectionMessage(), Times.Once);
+        }
+        
+        [Test]
+        public async Task CreateGame_ShouldNotCallShowNoConnectionMessageOnView_IfClientIsConnected()
+        {
+            var clientWrapperMock = new Mock<IClientWrapper>();
+            clientWrapperMock.Setup(c => c.IsConnected).Returns(true);
+            var viewMock = new Mock<IGameCreationView>();
+            var presenter = new GameCreationPresenterBuilder
+            {
+                ClientWrapper = clientWrapperMock.Object,
+                GameCreationView = viewMock.Object,
+            }.Build();
+            
+            await presenter.CreateGame();
+            
+            viewMock.Verify(v => v.ShowNoConnectionMessage(), Times.Never);
         }
     
     
@@ -286,7 +305,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             public bool CancelGameCalled { get; private set; }
             public bool CreateGameCalled { get; private set; }
         
-            public GameCreationPresenterMock(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider playerDataProvider, IGameCreationView view) : base(gameSearcher, gameCreator, playerDataProvider, view)
+            public GameCreationPresenterMock(IGameSearcher gameSearcher, IGameCreator gameCreator, IAccessTokenProvider accessTokenProvider, IGameCreationView view, IClientWrapper clientWrapper) : base(gameSearcher, gameCreator, accessTokenProvider, view, clientWrapper)
             {
             }
 
@@ -307,13 +326,21 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
         {
             public IGameSearcher GameSearcher { get; set; } = new GameSearcherMock();
             public IGameCreator GameCreator { get; set; } = GetMockObject<IGameCreator>();
-            public IPlayerDataProvider PlayerDataProvider { get; set; } = GetMockObject<IPlayerDataProvider>();
+            public IAccessTokenProvider AccessTokenProvider { get; set; } = GetMockObject<IAccessTokenProvider>();
             public IGameCreationView GameCreationView { get; set; } = GetMockObject<IGameCreationView>();
+            public IClientWrapper ClientWrapper { get; set; } = GetMockObject<IClientWrapper>();
+
+            public GameCreationPresenterBuilder()
+            {
+                var clientWrapperMock = new Mock<IClientWrapper>();
+                clientWrapperMock.Setup(c => c.IsConnected).Returns(true);
+                ClientWrapper = clientWrapperMock.Object;
+            }
 
             public GameCreationPresenter Build()
             {
-                return new GameCreationPresenter(GameSearcher, GameCreator, PlayerDataProvider,
-                    GameCreationView);
+                return new GameCreationPresenter(GameSearcher, GameCreator, AccessTokenProvider,
+                    GameCreationView, ClientWrapper);
             }
         }
 

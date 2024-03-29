@@ -9,8 +9,7 @@ namespace Src.GameplayView.GameCreation
         public void HideCreationProcessScreen();
         public void ShowCancelationMessage(string message);
         public void HideCancelationMessage();
-        public void ShowNonAuthorizedMessage(string message);
-        public void HideNonAuthorizedMessage();
+        public void ShowNoConnectionMessage();
 
         /// <summary>
         /// This method should invoke <see cref="CreateGameChosen"/> event.

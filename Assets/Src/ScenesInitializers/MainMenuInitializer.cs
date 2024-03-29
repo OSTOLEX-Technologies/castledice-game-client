@@ -2,6 +2,7 @@ using System;
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
+using Src.Auth.TokenProviders;
 using Src.Caching;
 using Src.Components;
 using Src.GameplayPresenter;
@@ -42,12 +43,8 @@ public class MainMenuInitializer : MonoBehaviour
     {
         RiptideLogger.Initialize(Debug.Log,Debug.Log,Debug.LogWarning, Debug.LogError, false);
         
-        //Setting up player data provider
-        if (!Singleton<IPlayerDataProvider>.Registered)
-        {
-            Singleton<IPlayerDataProvider>.Register(new PlayerDataProviderStub());
-        }
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance as PlayerDataProviderStub; //TODO: replace stub with real implementation
+        //Setting up access token provider
+        var accessTokenProvider = Singleton<IAccessTokenProvider>.Instance as IAccessTokenProvider; //TODO: replace stub with real implementation
         
         //Setting up client
         ClientWrapper clientWrapper;
@@ -59,10 +56,6 @@ public class MainMenuInitializer : MonoBehaviour
             ClientsHolder.AddClient(ClientType.GameServerClient, clientWrapper);
             peerUpdater.SetPeer(client);
             peerUpdater.StartUpdating();
-            
-            //Initializing player
-            var playerInitializer = new PlayerInitializer(clientWrapper);
-            playerInitializer.InitializePlayer(playerDataProvider.GetAccessToken());
         }
         else
         {
@@ -82,7 +75,7 @@ public class MainMenuInitializer : MonoBehaviour
         var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
         var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
             turnSwitchConditionsConfigProvider, gameBuilder);
-        _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, playerDataProvider, gameCreationView);
+        _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, accessTokenProvider, gameCreationView, clientWrapper);
         
         //Setting up error handling
         _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, gameCreationProcessScreen);
