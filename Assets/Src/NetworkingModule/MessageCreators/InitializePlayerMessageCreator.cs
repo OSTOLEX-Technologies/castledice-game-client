@@ -1,13 +1,26 @@
 ﻿using System.Threading.Tasks;
+using castledice_events_logic.ClientToServer;
+using castledice_riptide_dto_adapters.Extensions;
 using Riptide;
+using Tests.EditMode.NetworkingModuleTests.DTOCreators;
 
 namespace Src.NetworkingModule.MessageCreators
 {
     public class InitializePlayerMessageCreator : IAsyncMessageCreator
     {
-        public Task<Message> GetMessageAsync()
+        private readonly IAsyncInitializePlayerDTOCreator _dtoCreator;
+
+        public InitializePlayerMessageCreator(IAsyncInitializePlayerDTOCreator dtoCreator)
         {
-            throw new System.NotImplementedException();
+            _dtoCreator = dtoCreator;
+        }
+
+        public async Task<Message> GetMessageAsync()
+        {
+            var message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerMessageType.InitializePlayer);    
+            var dto = await _dtoCreator.GetDTOAsync();
+            message.AddInitializePlayerDTO(dto);
+            return message;
         }
 
     }
