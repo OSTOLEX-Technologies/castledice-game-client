@@ -17,7 +17,7 @@ namespace Src.NetworkingModule.MessageCreators
 
         public async Task<Message> GetMessageAsync()
         {
-            var message = Message.Create(MessageSendMode.Reliable, (ushort)ClientToServerMessageType.InitializePlayer);    
+            var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.InitializePlayer);    
             var dto = await _dtoCreator.GetDTOAsync();
             message.AddInitializePlayerDTO(dto);
             return message;

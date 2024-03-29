@@ -6,14 +6,14 @@ namespace Src.GameplayView.ServerConnection
 {
     public class ServerConnectionView : IServerConnectionView
     {
-        private readonly GameObject _connectionMessage;
+        private readonly GameObject _connectingMessage;
         private readonly GameObject _connectionFailedMessage;
         private readonly TextMeshProUGUI _connectionFailedReasonText;
         private readonly IRejectReasonMessagesConfig _rejectReasonMessagesConfig;
 
-        public ServerConnectionView(GameObject connectionMessage, GameObject connectionFailedMessage, TextMeshProUGUI connectionFailedReasonText, IRejectReasonMessagesConfig rejectReasonMessagesConfig)
+        public ServerConnectionView(GameObject connectingMessage, GameObject connectionFailedMessage, TextMeshProUGUI connectionFailedReasonText, IRejectReasonMessagesConfig rejectReasonMessagesConfig)
         {
-            _connectionMessage = connectionMessage;
+            _connectingMessage = connectingMessage;
             _connectionFailedMessage = connectionFailedMessage;
             _connectionFailedReasonText = connectionFailedReasonText;
             _rejectReasonMessagesConfig = rejectReasonMessagesConfig;
@@ -21,17 +21,18 @@ namespace Src.GameplayView.ServerConnection
 
         public void ShowConnectingMessage()
         {
-            throw new System.NotImplementedException();
+            _connectingMessage.SetActive(true);
         }
 
         public void HideConnectingMessage()
         {
-            throw new System.NotImplementedException();
+            _connectingMessage.SetActive(false);
         }
 
         public void ShowConnectionFailedMessage(RejectReason reason)
         {
-            throw new System.NotImplementedException();
+            _connectionFailedMessage.SetActive(true);
+            _connectionFailedReasonText.text = _rejectReasonMessagesConfig.GetRejectReasonMessage(reason);
         }
     }
 }

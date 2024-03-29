@@ -3,6 +3,8 @@ using UnityEngine;
 
 namespace Src.GameplayView.ServerConnection
 {
+    [CreateAssetMenu(fileName = "RejectReasonMessagesConfig", menuName = "Configs/RejectReasonMessagesConfig")]
+
     public class RejectReasonMessagesConfig : ScriptableObject, IRejectReasonMessagesConfig
     {
         [SerializeField] private string noConnection;

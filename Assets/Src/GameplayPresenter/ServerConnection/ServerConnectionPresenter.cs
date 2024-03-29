@@ -12,14 +12,12 @@ namespace Src.GameplayPresenter.ServerConnection
         private readonly IServerConnectionView _view;
         private readonly IClientWrapper _clientWrapper;
         private readonly IServerConnectionConfig _connectionConfig;
-        private readonly IAsyncMessageCreator _initializationMessageCreator;
 
-        public ServerConnectionPresenter(IServerConnectionView view, IClientWrapper clientWrapper, IServerConnectionConfig connectionConfig, IAsyncMessageCreator initializationMessageCreator)
+        public ServerConnectionPresenter(IServerConnectionView view, IClientWrapper clientWrapper, IServerConnectionConfig connectionConfig)
         {
             _view = view;
             _clientWrapper = clientWrapper;
             _connectionConfig = connectionConfig;
-            _initializationMessageCreator = initializationMessageCreator;
             _clientWrapper.Connected += OnConnected;
             _clientWrapper.ConnectionFailed += OnConnectionFailed;
         }
@@ -36,13 +34,12 @@ namespace Src.GameplayPresenter.ServerConnection
         }
 
 
-        public async Task TryConnectToServer()
+        public void TryConnectToServer()
         {
             _view.ShowConnectingMessage();
             var hostAddress = _connectionConfig.HostAddress;
             var maxConnectionAttempts = _connectionConfig.MaxConnectionAttempts;
-            var initializationMessage = await _initializationMessageCreator.GetMessageAsync();
-            _clientWrapper.Connect(hostAddress, maxConnectionAttempts, message: initializationMessage);
+            _clientWrapper.Connect(hostAddress, maxConnectionAttempts);
         }
         
     }

@@ -1,19 +1,17 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Moq;
 using NUnit.Framework;
 using Riptide;
 using Src.GameplayPresenter.ServerConnection;
 using Src.GameplayView.ServerConnection;
 using Src.NetworkingModule;
-using Src.NetworkingModule.MessageCreators;
 
 namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
 {
     public class ServerConnectionPresenterTests
     {
         [Test]
-        public async Task TryConnectToServer_ShouldShowConnectingMessage_OnView()
+        public void TryConnectToServer_ShouldShowConnectingMessage_OnView()
         {
             var viewMock = new Mock<IServerConnectionView>();
             var presenter = new ServerConnectionPresenterBuilder
@@ -21,13 +19,13 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
                 View = viewMock.Object
             }.Build();
             
-            await presenter.TryConnectToServer();
+            presenter.TryConnectToServer();
             
             viewMock.Verify(x => x.ShowConnectingMessage(), Times.Once);
         }
 
         [Test]
-        public async Task TryConnectToServer_ShouldCallConnectOnClientWrapper_WithParametersFromConnectionConfig()
+        public void TryConnectToServer_ShouldCallConnectOnClientWrapper_WithParametersFromConnectionConfig()
         {
             var rnd = new System.Random();
             var hostAddress = rnd.Next().ToString();
@@ -42,31 +40,14 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
                 ClientWrapper = clientWrapperMock.Object
             }.Build();
             
-            await presenter.TryConnectToServer();
+            presenter.TryConnectToServer();
             
             clientWrapperMock.Verify(x => x.Connect(hostAddress, maxConnectionAttempts, It.IsAny<byte>(), It.IsAny<Message>()), Times.Once);
         }
+        
 
         [Test]
-        public async Task TryConnectToServer_ShouldCallConnectOnClientWrapper_WithInitializationMessageFromCreator()
-        {
-            var message = Message.Create();
-            var initializationMessageCreatorMock = new Mock<IAsyncMessageCreator>();
-            initializationMessageCreatorMock.Setup(x => x.GetMessageAsync()).ReturnsAsync(message);
-            var clientWrapperMock = new Mock<IClientWrapper>();
-            var presenter = new ServerConnectionPresenterBuilder
-            {
-                InitializationMessageCreator = initializationMessageCreatorMock.Object,
-                ClientWrapper = clientWrapperMock.Object
-            }.Build();
-            
-            await presenter.TryConnectToServer();
-            
-            clientWrapperMock.Verify(x => x.Connect(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<byte>(), message), Times.Once);
-        }
-
-        [Test]
-        public async Task TryConnectToServer_ShouldCallConnectOnClientWrapper_Once()
+        public void TryConnectToServer_ShouldCallConnectOnClientWrapper_Once()
         {
             var clientWrapperMock = new Mock<IClientWrapper>();
             var presenter = new ServerConnectionPresenterBuilder
@@ -74,7 +55,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
                 ClientWrapper = clientWrapperMock.Object
             }.Build();
             
-            await presenter.TryConnectToServer();
+            presenter.TryConnectToServer();
             
             clientWrapperMock.Verify(x => x.Connect(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<byte>(), It.IsAny<Message>()), Times.Once);
         }
@@ -139,7 +120,6 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
             public IServerConnectionView View { get; set; }
             public IClientWrapper ClientWrapper { get; set; }
             public IServerConnectionConfig ConnectionConfig { get; set; }
-            public IAsyncMessageCreator InitializationMessageCreator { get; set; }
     
             public ServerConnectionPresenterBuilder()
             {
@@ -149,14 +129,11 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
                 ClientWrapper = clientWrapperMock.Object;
                 var connectionConfigMock = new Mock<IServerConnectionConfig>();
                 ConnectionConfig = connectionConfigMock.Object;
-                var initializationMessageCreatorMock = new Mock<IAsyncMessageCreator>();
-                initializationMessageCreatorMock.Setup(x => x.GetMessageAsync()).ReturnsAsync(Message.Create());
-                InitializationMessageCreator = initializationMessageCreatorMock.Object;
             }
             
             public ServerConnectionPresenter Build()
             {
-                return new ServerConnectionPresenter(View, ClientWrapper, ConnectionConfig, InitializationMessageCreator);
+                return new ServerConnectionPresenter(View, ClientWrapper, ConnectionConfig);
             }
         }
     }
