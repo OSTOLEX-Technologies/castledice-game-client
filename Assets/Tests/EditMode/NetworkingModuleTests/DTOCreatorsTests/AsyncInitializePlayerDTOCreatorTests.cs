@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using Src.Auth.TokenProviders;
-using Tests.EditMode.NetworkingModuleTests.DTOCreators;
+using Src.NetworkingModule.DTOCreators;
 
 namespace Tests.EditMode.NetworkingModuleTests.DTOCreatorsTests
 {

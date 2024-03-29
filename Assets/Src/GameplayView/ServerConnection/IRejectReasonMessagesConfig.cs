@@ -1,6 +1,6 @@
 ﻿using Riptide;
 
-namespace Src.GameplayPresenter.ServerConnection
+namespace Src.GameplayView.ServerConnection
 {
     public interface IRejectReasonMessagesConfig
     {

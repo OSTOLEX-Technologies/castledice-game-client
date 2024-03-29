@@ -2,7 +2,7 @@
 using castledice_events_logic.ClientToServer;
 using Src.Auth.TokenProviders;
 
-namespace Tests.EditMode.NetworkingModuleTests.DTOCreators
+namespace Src.NetworkingModule.DTOCreators
 {
     public class AsyncInitializePlayerDTOCreator : IAsyncInitializePlayerDTOCreator
     {

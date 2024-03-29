@@ -5,8 +5,8 @@ using castledice_riptide_dto_adapters.Extensions;
 using Moq;
 using NUnit.Framework;
 using Riptide;
+using Src.NetworkingModule.DTOCreators;
 using Src.NetworkingModule.MessageCreators;
-using Tests.EditMode.NetworkingModuleTests.DTOCreators;
 
 namespace Tests.EditMode.NetworkingModuleTests.MessageCreatorsTests
 {

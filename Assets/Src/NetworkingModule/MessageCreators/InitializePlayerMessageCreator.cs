@@ -2,7 +2,7 @@
 using castledice_events_logic.ClientToServer;
 using castledice_riptide_dto_adapters.Extensions;
 using Riptide;
-using Tests.EditMode.NetworkingModuleTests.DTOCreators;
+using Src.NetworkingModule.DTOCreators;
 
 namespace Src.NetworkingModule.MessageCreators
 {
