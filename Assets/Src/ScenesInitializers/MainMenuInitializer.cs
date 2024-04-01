@@ -23,6 +23,7 @@ using Src.NetworkingModule.Errors;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.PeerUpdaters;
 using UnityEngine;
+using UnityEngine.UI;
 
 namespace Src.ScenesInitializers
 {
@@ -38,13 +39,16 @@ namespace Src.ScenesInitializers
         private GameNotSavedErrorPresenter _gameNotSavedErrorPresenter;
         private GameNotSavedErrorView _gameNotSavedErrorView;
     
+        [Header("Server connection")]
         [SerializeField] private GameObject connectingMessage;
         [SerializeField] private GameObject connectionFailedMessage;
         [SerializeField] private TMPro.TextMeshProUGUI connectionFailedReasonText;
         [SerializeField] private RejectReasonMessagesConfig rejectReasonMessagesConfig;
         [SerializeField] private ServerConnectionConfig serverConnectionConfig;
+        [SerializeField] private Button connectButton;
         private ServerConnectionPresenter _serverConnectionPresenter;
         private ServerConnectionView _serverConnectionView;
+        private ConnectButtonHandler _connectButtonHandler;
     
         private void Start()
         {
@@ -72,7 +76,9 @@ namespace Src.ScenesInitializers
             var serverConnectionView = new ServerConnectionView(connectingMessage, connectionFailedMessage, connectionFailedReasonText, rejectReasonMessagesConfig);
             _serverConnectionView = serverConnectionView;
             _serverConnectionPresenter = new ServerConnectionPresenter(_serverConnectionView, clientWrapper, serverConnectionConfig);
-            _serverConnectionPresenter.TryConnectToServer();
+            _connectButtonHandler = new ConnectButtonHandler(connectButton, _serverConnectionPresenter, clientWrapper);
+            _serverConnectionPresenter.ConnectToServer();
+            
         
             //Setting up game creation presenter
             var gameSearcher = new GameSearcher(clientWrapper);

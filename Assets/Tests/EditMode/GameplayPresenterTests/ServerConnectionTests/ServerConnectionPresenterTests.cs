@@ -11,7 +11,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
     public class ServerConnectionPresenterTests
     {
         [Test]
-        public void TryConnectToServer_ShouldShowConnectingMessage_OnView()
+        public void ConnectToServer_ShouldShowConnectingMessage_OnView()
         {
             var viewMock = new Mock<IServerConnectionView>();
             var presenter = new ServerConnectionPresenterBuilder
@@ -19,13 +19,13 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
                 View = viewMock.Object
             }.Build();
             
-            presenter.TryConnectToServer();
+            presenter.ConnectToServer();
             
             viewMock.Verify(x => x.ShowConnectingMessage(), Times.Once);
         }
 
         [Test]
-        public void TryConnectToServer_ShouldCallConnectOnClientWrapper_WithParametersFromConnectionConfig()
+        public void ConnectToServer_ShouldCallConnectOnClientWrapper_WithParametersFromConnectionConfig()
         {
             var rnd = new System.Random();
             var hostAddress = rnd.Next().ToString();
@@ -40,14 +40,14 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
                 ClientWrapper = clientWrapperMock.Object
             }.Build();
             
-            presenter.TryConnectToServer();
+            presenter.ConnectToServer();
             
             clientWrapperMock.Verify(x => x.Connect(hostAddress, maxConnectionAttempts, It.IsAny<byte>(), It.IsAny<Message>()), Times.Once);
         }
         
 
         [Test]
-        public void TryConnectToServer_ShouldCallConnectOnClientWrapper_Once()
+        public void ConnectToServer_ShouldCallConnectOnClientWrapper_Once()
         {
             var clientWrapperMock = new Mock<IClientWrapper>();
             var presenter = new ServerConnectionPresenterBuilder
@@ -55,7 +55,7 @@ namespace Tests.EditMode.GameplayPresenterTests.ServerConnectionTests
                 ClientWrapper = clientWrapperMock.Object
             }.Build();
             
-            presenter.TryConnectToServer();
+            presenter.ConnectToServer();
             
             clientWrapperMock.Verify(x => x.Connect(It.IsAny<string>(), It.IsAny<int>(), It.IsAny<byte>(), It.IsAny<Message>()), Times.Once);
         }

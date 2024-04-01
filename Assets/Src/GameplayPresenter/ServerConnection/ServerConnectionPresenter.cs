@@ -1,13 +1,11 @@
 ﻿using System;
-using System.Threading.Tasks;
 using Riptide;
 using Src.GameplayView.ServerConnection;
 using Src.NetworkingModule;
-using Src.NetworkingModule.MessageCreators;
 
 namespace Src.GameplayPresenter.ServerConnection
 {
-    public class ServerConnectionPresenter
+    public class ServerConnectionPresenter : IServerConnectionPresenter
     {
         private readonly IServerConnectionView _view;
         private readonly IClientWrapper _clientWrapper;
@@ -34,7 +32,7 @@ namespace Src.GameplayPresenter.ServerConnection
         }
 
 
-        public void TryConnectToServer()
+        public void ConnectToServer()
         {
             _view.ShowConnectingMessage();
             var hostAddress = _connectionConfig.HostAddress;
