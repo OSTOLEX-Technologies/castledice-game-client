@@ -3,7 +3,7 @@ using castledice_game_logic.Time;
 using JetBrains.Annotations;
 using Src.GameplayView.Updatables;
 
-namespace Src.TimeManagement
+namespace Src.General.TimeManagement
 {
     public class UpdatablePlayerTimer : IPlayerTimer, IUpdatable
     {

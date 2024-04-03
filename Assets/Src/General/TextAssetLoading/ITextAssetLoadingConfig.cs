@@ -1,6 +1,6 @@
 using UnityEngine;
 
-namespace Src.TextAssetLoading
+namespace Src.General.TextAssetLoading
 {
     public interface ITextAssetLoadingConfig
     {

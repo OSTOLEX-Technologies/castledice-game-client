@@ -1,10 +1,9 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
-using UnityEngine;
 using System.Linq;
+using UnityEngine;
 
-namespace Src.LoadingScenes
+namespace Src.General.LoadingScenes
 {
     [CreateAssetMenu(fileName = "LoadingScenesConfig", menuName = "Configs/LoadingScenes/LoadingScenesConfig")]
 

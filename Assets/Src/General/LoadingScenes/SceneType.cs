@@ -1,4 +1,4 @@
-namespace Src.LoadingScenes
+namespace Src.General.LoadingScenes
 {
     public enum SceneType
     {

@@ -1,4 +1,4 @@
-﻿namespace Src.Caching
+﻿namespace Src.General.Caching
 {
     public class SingletonCacher : IObjectCacher
     {

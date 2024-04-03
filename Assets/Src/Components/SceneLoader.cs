@@ -1,4 +1,4 @@
-using Src.LoadingScenes;
+using Src.General.LoadingScenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 

@@ -1,6 +1,6 @@
 ﻿using System;
 
-namespace Src.Caching
+namespace Src.General.Caching
 {
     public static class Singleton<T>
     {

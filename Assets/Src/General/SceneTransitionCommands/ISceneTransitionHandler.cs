@@ -1,6 +1,6 @@
 using System;
 
-namespace Src.SceneTransitionCommands
+namespace Src.General.SceneTransitionCommands
 {
     public interface ISceneTransitionHandler
     {

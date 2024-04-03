@@ -10,10 +10,10 @@ using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendU
 using Src.Auth.JwtManagement.Converters.Metamask;
 using Src.Auth.REST;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
-using Src.Caching;
 using Src.Components;
-using Src.LoadingScenes;
-using Src.SceneTransitionCommands;
+using Src.General.Caching;
+using Src.General.LoadingScenes;
+using Src.General.SceneTransitionCommands;
 using UnityEngine;
 
 namespace Src.ScenesInitializers

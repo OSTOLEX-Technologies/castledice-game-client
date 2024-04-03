@@ -1,4 +1,4 @@
-﻿namespace Src.TimeManagement
+﻿namespace Src.General.TimeManagement
 {
     public class FixedTimeDeltaProvider : ITimeDeltaProvider
     {

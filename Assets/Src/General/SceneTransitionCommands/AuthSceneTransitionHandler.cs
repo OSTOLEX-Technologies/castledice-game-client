@@ -1,8 +1,8 @@
 using System;
 using Src.Components;
-using Src.LoadingScenes;
+using Src.General.LoadingScenes;
 
-namespace Src.SceneTransitionCommands
+namespace Src.General.SceneTransitionCommands
 {
     public class AuthSceneTransitionHandler : ISceneTransitionHandler
     {

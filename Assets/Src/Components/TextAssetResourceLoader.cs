@@ -1,4 +1,4 @@
-using Src.TextAssetLoading;
+using Src.General.TextAssetLoading;
 using UnityEngine;
 
 namespace Src.Components
