@@ -1,14 +1,14 @@
 using System;
+using castledice_events_logic.ServerToClient;
 using castledice_riptide_dto_adapters.Extensions;
 using Riptide;
 
 namespace Src.GameplayPresenter.PlayerInitialization.NetworkBridges
 {
-    public class PlayerInitializationResultMessageAccepter : IPlayerInitializationResultEventsEmitter
+    public class PlayerInitializationResultDtoAccepter : IPlayerInitializationResultEventsEmitter
     {
-        public void AcceptMessage(Message message)
+        public void AcceptDto(PlayerInitializationResultDTO dto)
         {
-            var dto = message.GetPlayerInitializationResultDTO();
             if (dto.IsSuccessful)
             {
                 InitializationSucceed?.Invoke(this, EventArgs.Empty);

@@ -10,29 +10,27 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
     {
         
         [Test]
-        public void AcceptMessage_ShouldInvokeInitializationSucceed_IfMessageHasDto_WithSuccessTrue()
+        public void AcceptDto_ShouldInvokeInitializationSucceed_IfIsSuccessfulIsTrue()
         {
-            var handler = new PlayerInitializationResultMessageAccepter();
-            var message = Message.Create();
-            message.AddPlayerInitializationResultDTO(new PlayerInitializationResultDTO(true));
+            var handler = new PlayerInitializationResultDtoAccepter();
+            var dto = new PlayerInitializationResultDTO(true);
             var initializationSucceedInvoked = false;
             handler.InitializationSucceed += (sender, args) => initializationSucceedInvoked = true;
             
-            handler.AcceptMessage(message);
+            handler.AcceptDto(dto);
             
             Assert.IsTrue(initializationSucceedInvoked);
         }
         
         [Test]
-        public void AcceptMessage_ShouldInvokeInitializationFailed_IfAcceptedMessageHasDto_WithSuccessFalse()
+        public void AcceptDto_ShouldInvokeInitializationFailed_IfIsSuccessfulIsFalse()
         {
-            var handler = new PlayerInitializationResultMessageAccepter();
-            var message = Message.Create();
-            message.AddPlayerInitializationResultDTO(new PlayerInitializationResultDTO(false));
+            var handler = new PlayerInitializationResultDtoAccepter();
+            var dto = new PlayerInitializationResultDTO(false);
             var initializationFailedInvoked = false;
             handler.InitializationFailed += (sender, args) => initializationFailedInvoked = true;
             
-            handler.AcceptMessage(message);
+            handler.AcceptDto(dto);
             
             Assert.IsTrue(initializationFailedInvoked);
         }
