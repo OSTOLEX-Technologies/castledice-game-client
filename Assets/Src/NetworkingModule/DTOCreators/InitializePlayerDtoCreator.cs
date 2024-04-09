@@ -4,16 +4,16 @@ using Src.Auth.TokenProviders;
 
 namespace Src.NetworkingModule.DTOCreators
 {
-    public class AsyncInitializePlayerDTOCreator : IAsyncInitializePlayerDTOCreator
+    public class InitializePlayerDtoCreator : IInitializePlayerDtoCreator
     {
         private readonly IAccessTokenProvider _accessTokenProvider;
 
-        public AsyncInitializePlayerDTOCreator(IAccessTokenProvider accessTokenProvider)
+        public InitializePlayerDtoCreator(IAccessTokenProvider accessTokenProvider)
         {
             _accessTokenProvider = accessTokenProvider;
         }
 
-        public async Task<InitializePlayerDTO> GetDTOAsync()
+        public async Task<InitializePlayerDTO> CreateAsync()
         {
             var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
             return new InitializePlayerDTO(accessToken);

@@ -8,9 +8,9 @@ namespace Src.NetworkingModule.MessageCreators
 {
     public class InitializePlayerMessageCreator : IAsyncMessageCreator
     {
-        private readonly IAsyncInitializePlayerDTOCreator _dtoCreator;
+        private readonly IInitializePlayerDtoCreator _dtoCreator;
 
-        public InitializePlayerMessageCreator(IAsyncInitializePlayerDTOCreator dtoCreator)
+        public InitializePlayerMessageCreator(IInitializePlayerDtoCreator dtoCreator)
         {
             _dtoCreator = dtoCreator;
         }
@@ -18,7 +18,7 @@ namespace Src.NetworkingModule.MessageCreators
         public async Task<Message> GetMessageAsync()
         {
             var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.InitializePlayer);    
-            var dto = await _dtoCreator.GetDTOAsync();
+            var dto = await _dtoCreator.CreateAsync();
             message.AddInitializePlayerDTO(dto);
             return message;
         }

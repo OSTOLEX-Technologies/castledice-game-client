@@ -15,9 +15,9 @@ namespace Tests.EditMode.NetworkingModuleTests.MessageCreatorsTests
         [Test]
         public async Task GetMessageAsync_ShouldReturnMessage_WithInitializePlayerDTO_FromCreator()
         {
-            var dtoCreatorMock = new Mock<IAsyncInitializePlayerDTOCreator>();
+            var dtoCreatorMock = new Mock<IInitializePlayerDtoCreator>();
             var expectedDTO = new InitializePlayerDTO(new Random().Next().ToString());
-            dtoCreatorMock.Setup(creator => creator.GetDTOAsync()).ReturnsAsync(expectedDTO);
+            dtoCreatorMock.Setup(creator => creator.CreateAsync()).ReturnsAsync(expectedDTO);
             var messageCreator = new InitializePlayerMessageCreatorBuilder
             {
                 DtoCreator = dtoCreatorMock.Object
@@ -54,12 +54,12 @@ namespace Tests.EditMode.NetworkingModuleTests.MessageCreatorsTests
 
         private class InitializePlayerMessageCreatorBuilder
         {
-            public IAsyncInitializePlayerDTOCreator DtoCreator { get; set; }
+            public IInitializePlayerDtoCreator DtoCreator { get; set; }
             
             public InitializePlayerMessageCreatorBuilder()
             {
-                var dtoCreatorMock = new Mock<IAsyncInitializePlayerDTOCreator>();
-                dtoCreatorMock.Setup(creator => creator.GetDTOAsync()).ReturnsAsync(new InitializePlayerDTO(new Random().Next().ToString()));
+                var dtoCreatorMock = new Mock<IInitializePlayerDtoCreator>();
+                dtoCreatorMock.Setup(creator => creator.CreateAsync()).ReturnsAsync(new InitializePlayerDTO(new Random().Next().ToString()));
                 DtoCreator = dtoCreatorMock.Object;
             }
             

@@ -3,8 +3,8 @@ using castledice_events_logic.ClientToServer;
 
 namespace Src.NetworkingModule.DTOCreators
 {
-    public interface IAsyncInitializePlayerDTOCreator
+    public interface IInitializePlayerDtoCreator
     {
-        Task<InitializePlayerDTO> GetDTOAsync();
+        Task<InitializePlayerDTO> CreateAsync();
     }
 }

@@ -14,9 +14,9 @@ namespace Tests.EditMode.NetworkingModuleTests.DTOCreatorsTests
             var expectedToken = new Random().Next().ToString();
             var accessTokenProviderMock = new Mock<IAccessTokenProvider>();
             accessTokenProviderMock.Setup(provider => provider.GetAccessTokenAsync()).ReturnsAsync(expectedToken);
-            var dtoCreator = new AsyncInitializePlayerDTOCreator(accessTokenProviderMock.Object);
+            var dtoCreator = new InitializePlayerDtoCreator(accessTokenProviderMock.Object);
             
-            var actualDTO = dtoCreator.GetDTOAsync().Result;
+            var actualDTO = dtoCreator.CreateAsync().Result;
             
             Assert.AreEqual(expectedToken, actualDTO.VerificationKey);
         }

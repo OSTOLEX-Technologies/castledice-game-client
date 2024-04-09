@@ -12,6 +12,6 @@ namespace Src.GameplayPresenter.PlayerInitialization.NetworkBridges
         }
 
         public event EventHandler InitializationSucceed;
-        public event EventHandler<PlayerInitializationResultDTO> InitializationFailed;
+        public event EventHandler InitializationFailed;
     }
 }

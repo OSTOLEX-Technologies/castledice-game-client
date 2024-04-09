@@ -1,8 +1,8 @@
 using System;
 using System.Threading.Tasks;
-using Src.Auth.TokenProviders;
 using Src.GameplayPresenter.PlayerInitialization.Caching;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
+using IInitializePlayerDtoCreator = Src.NetworkingModule.DTOCreators.IInitializePlayerDtoCreator;
 
 namespace Src.GameplayPresenter.PlayerInitialization
 {
@@ -11,27 +11,39 @@ namespace Src.GameplayPresenter.PlayerInitialization
         private readonly IPlayerInitializationView _view;
         private readonly IInitializePlayerDtoSender _dtoSender;
         private readonly IPlayerInitializationResultEventsEmitter _initializationResultEventsEmitter;
-        private readonly IAccessTokenProvider _accessTokenProvider;
+        private readonly IInitializePlayerDtoCreator _dtoCreator;
         private readonly IPlayerInitializationSaver _initializationSaver;
 
-        public PlayerInitializationPresenter(IPlayerInitializationView view, IInitializePlayerDtoSender dtoSender, IPlayerInitializationResultEventsEmitter initializationResultEventsEmitter, IAccessTokenProvider accessTokenProvider, IPlayerInitializationSaver initializationSaver)
+        public PlayerInitializationPresenter(IPlayerInitializationView view, IInitializePlayerDtoSender dtoSender, IPlayerInitializationResultEventsEmitter initializationResultEventsEmitter, IInitializePlayerDtoCreator dtoCreator, IPlayerInitializationSaver initializationSaver)
         {
             _view = view;
             _dtoSender = dtoSender;
             _initializationResultEventsEmitter = initializationResultEventsEmitter;
             _initializationResultEventsEmitter.InitializationSucceed += OnInitializationSucceed;
-            _accessTokenProvider = accessTokenProvider;
+            _initializationResultEventsEmitter.InitializationFailed += OnInitializationFailed;
+            _dtoCreator = dtoCreator;
             _initializationSaver = initializationSaver;
+        }
+
+        private void OnInitializationFailed(object sender, EventArgs e)
+        {
+            _view.HideProcessMessage();
+            _initializationSaver.SetInitialization(false);
+            _view.ShowFailureMessage();
         }
 
         private void OnInitializationSucceed(object sender, EventArgs e)
         {
             _view.HideProcessMessage();
+            _initializationSaver.SetInitialization(true);
         }
+        
 
         public async Task StartInitialization()
         {
             _view.ShowProcessMessage();
+            var dto = await _dtoCreator.CreateAsync();
+            _dtoSender.SendDto(dto);
         }
     }
 }
