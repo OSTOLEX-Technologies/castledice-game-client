@@ -6,7 +6,7 @@ using Src.NetworkingModule.DTOCreators;
 
 namespace Tests.EditMode.NetworkingModuleTests.DTOCreatorsTests
 {
-    public class AsyncInitializePlayerDTOCreatorTests
+    public class InitializePlayerDtoCreatorTests
     {
         [Test]
         public void GetDTOAsync_ShouldReturnInitializePlayerDTO_WithAccessTokenFromProvider()

@@ -54,7 +54,7 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests.Networ
             sender.SendDto(new InitializePlayerDTO("test"));
             var actualMessageType = sentMessage.GetByte();
             
-            Assert.AreEqual(ClientToServerMessageType.InitializePlayer, actualMessageType);
+            Assert.AreEqual((ushort)ClientToServerMessageType.InitializePlayer, actualMessageType);
         }
     }
 }

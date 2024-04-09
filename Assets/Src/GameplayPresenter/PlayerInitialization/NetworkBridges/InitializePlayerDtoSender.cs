@@ -16,7 +16,7 @@ namespace Src.GameplayPresenter.PlayerInitialization.NetworkBridges
 
         public void SendDto(InitializePlayerDTO dto)
         {
-            var message = Message.Create(MessageSendMode.Unreliable, ClientToServerMessageType.CancelGame);
+            var message = Message.Create(MessageSendMode.Reliable, ClientToServerMessageType.InitializePlayer);
             message.AddInitializePlayerDTO(dto);
             _messageSender.Send(message);
         }
