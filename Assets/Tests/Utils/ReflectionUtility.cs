@@ -33,5 +33,11 @@ namespace Tests
             var field = obj.GetType().GetField(fieldName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Instance);
             field.SetValue(obj, null);
         }
+        
+        public static void CallPrivateStaticMethod(this object obj, string methodName, params object[] parameters)
+        {
+            var method = obj.GetType().GetMethod(methodName, System.Reflection.BindingFlags.NonPublic | System.Reflection.BindingFlags.Static);
+            method.Invoke(obj, parameters);
+        }
     }
 }
