@@ -14,12 +14,15 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
     public class PlayerInitializationPresenterTests
     {
         [Test]
-        public async Task StartInitialization_ShouldCall_ShowProcessMessage_OnView()
+        public async Task StartInitialization_ShouldCall_ShowProcessMessage_OnView_IfDtoCanBeSent()
         {
             var viewMock = new Mock<IPlayerInitializationView>();
+            var dtoSenderMock = new Mock<IInitializePlayerDtoSender>();
+            dtoSenderMock.Setup(x => x.CanSend).Returns(true);
             var presenter = new PlayerInitializationPresenterBuilder
             {
-                View = viewMock.Object
+                View = viewMock.Object,
+                DtoSender = dtoSenderMock.Object
             }.Build();
 
             await presenter.StartInitialization();
@@ -28,10 +31,11 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
         }
         
         [Test]
-        public async Task StartInitialization_ShouldSendDto_FromCreator_ViaSender()
+        public async Task StartInitialization_ShouldSendDto_FromCreator_ViaSender_IfDtoCanBeSent()
         {
             var expectedDto = new InitializePlayerDTO("thisstringdoesntreallymatterhere");
             var senderMock = new Mock<IInitializePlayerDtoSender>();
+            senderMock.Setup(x => x.CanSend).Returns(true);
             var dtoCreatorMock = new Mock<IInitializePlayerDtoCreator>();
             dtoCreatorMock.Setup(x => x.CreateAsync()).ReturnsAsync(expectedDto);
             var presenter = new PlayerInitializationPresenterBuilder
@@ -43,6 +47,55 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
             await presenter.StartInitialization();
             
             senderMock.Verify(x => x.SendDto(expectedDto));
+        }
+        
+        [Test]
+        public async Task StartInitialization_ShouldNotCall_ShowProcessMessage_OnView_IfDtoCannotBeSent()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var dtoSenderMock = new Mock<IInitializePlayerDtoSender>();
+            dtoSenderMock.Setup(x => x.CanSend).Returns(false);
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                DtoSender = dtoSenderMock.Object
+            }.Build();
+
+            await presenter.StartInitialization();
+            
+            viewMock.Verify(x => x.ShowProcessMessage(), Times.Never);
+        }
+        
+        [Test]
+        public async Task StartInitialization_ShouldNotCall_SendDto_IfDtoCannotBeSent()
+        {
+            var senderMock = new Mock<IInitializePlayerDtoSender>();
+            senderMock.Setup(x => x.CanSend).Returns(false);
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                DtoSender = senderMock.Object
+            }.Build();
+            
+            await presenter.StartInitialization();
+            
+            senderMock.Verify(x => x.SendDto(It.IsAny<InitializePlayerDTO>()), Times.Never);
+        }
+        
+        [Test]
+        public async Task StartInitialization_ShouldCall_ShowFailureMessage_OnView_IfDtoCannotBeSent()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var dtoSenderMock = new Mock<IInitializePlayerDtoSender>();
+            dtoSenderMock.Setup(x => x.CanSend).Returns(false);
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                DtoSender = dtoSenderMock.Object
+            }.Build();
+
+            await presenter.StartInitialization();
+            
+            viewMock.Verify(x => x.ShowFailureMessage());
         }
 
         [Test]
@@ -185,6 +238,13 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
             public IInitializePlayerDtoCreator DtoCreator = new Mock<IInitializePlayerDtoCreator>().Object;
             public IPlayerInitializationSaver InitializationSaver = new Mock<IPlayerInitializationSaver>().Object;
 
+            public PlayerInitializationPresenterBuilder()
+            {
+                var senderMock = new Mock<IInitializePlayerDtoSender>();
+                senderMock.Setup(x => x.CanSend).Returns(true);
+                DtoSender = senderMock.Object;
+            }
+            
             public PlayerInitializationPresenter Build()
             {
                 return new PlayerInitializationPresenter(

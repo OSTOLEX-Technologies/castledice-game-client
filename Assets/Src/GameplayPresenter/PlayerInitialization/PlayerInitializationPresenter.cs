@@ -41,6 +41,11 @@ namespace Src.GameplayPresenter.PlayerInitialization
 
         public async Task StartInitialization()
         {
+            if (!_dtoSender.CanSend)
+            {
+                _view.ShowFailureMessage();
+                return;
+            }
             _view.ShowProcessMessage();
             var dto = await _dtoCreator.CreateAsync();
             _dtoSender.SendDto(dto);
