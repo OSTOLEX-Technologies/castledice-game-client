@@ -12,6 +12,9 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpa
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
+using Src.GameplayPresenter.PlayerInitialization;
+using Src.GameplayPresenter.PlayerInitialization.Caching;
+using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
 using Src.GameplayPresenter.ServerConnection;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
@@ -19,6 +22,7 @@ using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
 using Src.NetworkingModule;
+using Src.NetworkingModule.DTOCreators;
 using Src.NetworkingModule.Errors;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.PeerUpdaters;
@@ -49,6 +53,12 @@ namespace Src.ScenesInitializers
         private ServerConnectionPresenter _serverConnectionPresenter;
         private ServerConnectionView _serverConnectionView;
         private ConnectButtonHandler _connectButtonHandler;
+        
+        [Header("Player initialization")]
+        [SerializeField] private GameObject successMessage;
+        [SerializeField] private GameObject failureMessage;
+        private PlayerInitializationPresenter _playerInitializationPresenter;
+        private PlayerInitializationView _playerInitializationView;
     
         private void Start()
         {
@@ -79,6 +89,7 @@ namespace Src.ScenesInitializers
             _connectButtonHandler = new ConnectButtonHandler(connectButton, _serverConnectionPresenter, clientWrapper);
             _serverConnectionPresenter.ConnectToServer();
             
+            
         
             //Setting up game creation presenter
             var gameSearcher = new GameSearcher(clientWrapper);
@@ -101,8 +112,23 @@ namespace Src.ScenesInitializers
             var errorPresentersProvider = new ErrorPresentersProvider(_gameNotSavedErrorPresenter);
             var serverErrorsRouter = new ServerErrorsRouter(errorPresentersProvider);
             ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
+            
+            //Setting up player initialization
+            var playerInitializationView = new PlayerInitializationView(successMessage, failureMessage);
+            _playerInitializationView = playerInitializationView;
+            var initializePlayerDtoSender = new InitializePlayerDtoSender(clientWrapper);
+            var initializePlayerDtoCreator = new InitializePlayerDtoCreator(accessTokenProvider);
+            var playerInitializationResultDtoAccepter = new PlayerInitializationResultDtoAccepter();
+            var initializationSaver = new InitializationCacher();
+            PlayerInitializationResultMessageHandler.SetDtoAccepter(playerInitializationResultDtoAccepter);
+            _playerInitializationPresenter = new PlayerInitializationPresenter(_playerInitializationView, 
+                initializePlayerDtoSender, 
+                playerInitializationResultDtoAccepter, 
+                initializePlayerDtoCreator, 
+                initializationSaver);
         
             _gameCreationPresenter.GameCreated += OnGameCreated;
+            clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitialization();
         }
 
         private void OnGameCreated(object sender, EventArgs e)

@@ -2,7 +2,7 @@ using UnityEngine;
 
 namespace Src.GameplayPresenter.PlayerInitialization
 {
-    public class PlayerInitializationView
+    public class PlayerInitializationView : IPlayerInitializationView
     {
         private readonly GameObject _processMessage;
         private readonly GameObject _failureMessage;

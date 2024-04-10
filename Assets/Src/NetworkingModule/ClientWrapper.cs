@@ -7,6 +7,8 @@ namespace Src.NetworkingModule
     {
         public Client Client { get; private set; }
         
+        public bool CanSend => Client.IsConnected;
+        
         public event EventHandler<DisconnectedEventArgs> Disconnected;
         
         public event EventHandler Connected;
@@ -25,6 +27,7 @@ namespace Src.NetworkingModule
         {
             Client.Send(message);
         }
+
 
         public bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0, Message message = null)
         {

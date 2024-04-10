@@ -56,5 +56,19 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests.Networ
             
             Assert.AreEqual((ushort)ClientToServerMessageType.InitializePlayer, actualMessageType);
         }
+        
+        [Test]
+        [Repeat(50)]
+        public void CanSend_ShouldReturnMessageSenderCanSend()
+        {
+            var messageSenderMock = new Mock<IMessageSender>();
+            var expected = new Random().Next() % 2 == 0;
+            messageSenderMock.Setup(x => x.CanSend).Returns(expected);
+            var sender = new InitializePlayerDtoSender(messageSenderMock.Object);
+            
+            var actual = sender.CanSend;
+            
+            Assert.AreEqual(expected, actual);
+        }
     }
 }

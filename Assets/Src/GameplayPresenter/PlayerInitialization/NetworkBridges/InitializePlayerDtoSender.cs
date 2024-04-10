@@ -20,5 +20,7 @@ namespace Src.GameplayPresenter.PlayerInitialization.NetworkBridges
             message.AddInitializePlayerDTO(dto);
             _messageSender.Send(message);
         }
+
+        public bool CanSend => _messageSender.CanSend;
     }
 }
