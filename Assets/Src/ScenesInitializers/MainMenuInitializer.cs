@@ -128,7 +128,7 @@ namespace Src.ScenesInitializers
                 initializationSaver);
         
             _gameCreationPresenter.GameCreated += OnGameCreated;
-            clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitialization();
+            clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitializationAsync();
         }
 
         private void OnGameCreated(object sender, EventArgs e)

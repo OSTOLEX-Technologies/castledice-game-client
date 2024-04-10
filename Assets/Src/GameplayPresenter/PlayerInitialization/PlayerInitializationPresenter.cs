@@ -6,7 +6,7 @@ using IInitializePlayerDtoCreator = Src.NetworkingModule.DTOCreators.IInitialize
 
 namespace Src.GameplayPresenter.PlayerInitialization
 {
-    public class PlayerInitializationPresenter
+    public class PlayerInitializationPresenter : IPlayerInitializationPresenter
     {
         private readonly IPlayerInitializationView _view;
         private readonly IInitializePlayerDtoSender _dtoSender;
@@ -39,7 +39,7 @@ namespace Src.GameplayPresenter.PlayerInitialization
         }
         
 
-        public async Task StartInitialization()
+        public async Task StartInitializationAsync()
         {
             if (!_dtoSender.CanSend)
             {
