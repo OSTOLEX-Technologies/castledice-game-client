@@ -2,7 +2,8 @@ using System;
 using System.Threading.Tasks;
 using Src.GameplayPresenter.PlayerInitialization.Caching;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
-using IInitializePlayerDtoCreator = Src.NetworkingModule.DTOCreators.IInitializePlayerDtoCreator;
+using Src.NetworkingModule;
+using Src.NetworkingModule.DTOCreators;
 
 namespace Src.GameplayPresenter.PlayerInitialization
 {
@@ -13,8 +14,9 @@ namespace Src.GameplayPresenter.PlayerInitialization
         private readonly IPlayerInitializationResultEventsEmitter _initializationResultEventsEmitter;
         private readonly IInitializePlayerDtoCreator _dtoCreator;
         private readonly IPlayerInitializationSaver _initializationSaver;
+        private readonly IDisconnectedEventEmitter _disconnectedEventEmitter;
 
-        public PlayerInitializationPresenter(IPlayerInitializationView view, IInitializePlayerDtoSender dtoSender, IPlayerInitializationResultEventsEmitter initializationResultEventsEmitter, IInitializePlayerDtoCreator dtoCreator, IPlayerInitializationSaver initializationSaver)
+        public PlayerInitializationPresenter(IPlayerInitializationView view, IInitializePlayerDtoSender dtoSender, IPlayerInitializationResultEventsEmitter initializationResultEventsEmitter, IInitializePlayerDtoCreator dtoCreator, IPlayerInitializationSaver initializationSaver, IDisconnectedEventEmitter disconnectedEventEmitter)
         {
             _view = view;
             _dtoSender = dtoSender;
@@ -23,6 +25,13 @@ namespace Src.GameplayPresenter.PlayerInitialization
             _initializationResultEventsEmitter.InitializationFailed += OnInitializationFailed;
             _dtoCreator = dtoCreator;
             _initializationSaver = initializationSaver;
+            _disconnectedEventEmitter = disconnectedEventEmitter;
+            _disconnectedEventEmitter.Disconnected += (_, _) => OnDisconnected();
+        }
+
+        private void OnDisconnected()
+        {
+            _view.HideProcessMessage();
         }
 
         private void OnInitializationFailed(object sender, EventArgs e)
@@ -41,11 +50,7 @@ namespace Src.GameplayPresenter.PlayerInitialization
 
         public async Task StartInitializationAsync()
         {
-            if (!_dtoSender.CanSend)
-            {
-                _view.ShowFailureMessage();
-                return;
-            }
+            if (!_dtoSender.CanSend) return;
             _view.ShowProcessMessage();
             var dto = await _dtoCreator.CreateAsync();
             _dtoSender.SendDto(dto);

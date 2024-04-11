@@ -55,10 +55,12 @@ namespace Src.ScenesInitializers
         private ConnectButtonHandler _connectButtonHandler;
         
         [Header("Player initialization")]
-        [SerializeField] private GameObject successMessage;
+        [SerializeField] private GameObject processMessage;
         [SerializeField] private GameObject failureMessage;
+        [SerializeField] private Button initializeButton;
         private PlayerInitializationPresenter _playerInitializationPresenter;
         private PlayerInitializationView _playerInitializationView;
+        private InitializeButtonHandler _initializeButtonHandler; 
     
         private void Start()
         {
@@ -114,7 +116,7 @@ namespace Src.ScenesInitializers
             ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
             
             //Setting up player initialization
-            var playerInitializationView = new PlayerInitializationView(successMessage, failureMessage);
+            var playerInitializationView = new PlayerInitializationView(processMessage, failureMessage);
             _playerInitializationView = playerInitializationView;
             var initializePlayerDtoSender = new InitializePlayerDtoSender(clientWrapper);
             var initializePlayerDtoCreator = new InitializePlayerDtoCreator(accessTokenProvider);
@@ -125,7 +127,12 @@ namespace Src.ScenesInitializers
                 initializePlayerDtoSender, 
                 playerInitializationResultDtoAccepter, 
                 initializePlayerDtoCreator, 
-                initializationSaver);
+                initializationSaver, 
+                clientWrapper);
+            _initializeButtonHandler = new InitializeButtonHandler(_playerInitializationPresenter, 
+                clientWrapper, 
+                playerInitializationResultDtoAccepter, 
+                initializeButton);
         
             _gameCreationPresenter.GameCreated += OnGameCreated;
             clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitializationAsync();

@@ -3,7 +3,7 @@ using Riptide;
 
 namespace Src.NetworkingModule
 {
-    public interface IClientWrapper : IMessageSender
+    public interface IClientWrapper : IMessageSender, IDisconnectedEventEmitter
     {
         bool Connect(string hostAddress, int maxConnectionAttempts = 5, byte messageHandlerGroupId = 0,
             Message message = null);
@@ -11,8 +11,6 @@ namespace Src.NetworkingModule
         bool IsConnected { get; }
         
         Client Client { get; }
-        
-        event EventHandler<DisconnectedEventArgs> Disconnected;
         
         event EventHandler Connected;
         

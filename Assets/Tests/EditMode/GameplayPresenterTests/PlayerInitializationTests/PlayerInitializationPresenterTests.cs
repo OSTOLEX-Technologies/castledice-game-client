@@ -1,12 +1,13 @@
 using System;
 using System.Threading.Tasks;
 using castledice_events_logic.ClientToServer;
-using castledice_events_logic.ServerToClient;
 using Moq;
 using NUnit.Framework;
+using Riptide;
 using Src.GameplayPresenter.PlayerInitialization;
 using Src.GameplayPresenter.PlayerInitialization.Caching;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
+using Src.NetworkingModule;
 using Src.NetworkingModule.DTOCreators;
 
 namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
@@ -79,23 +80,6 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
             await presenter.StartInitializationAsync();
             
             senderMock.Verify(x => x.SendDto(It.IsAny<InitializePlayerDTO>()), Times.Never);
-        }
-        
-        [Test]
-        public async Task StartInitializationAsync_ShouldCall_ShowFailureMessage_OnView_IfDtoCannotBeSent()
-        {
-            var viewMock = new Mock<IPlayerInitializationView>();
-            var dtoSenderMock = new Mock<IInitializePlayerDtoSender>();
-            dtoSenderMock.Setup(x => x.CanSend).Returns(false);
-            var presenter = new PlayerInitializationPresenterBuilder
-            {
-                View = viewMock.Object,
-                DtoSender = dtoSenderMock.Object
-            }.Build();
-
-            await presenter.StartInitializationAsync();
-            
-            viewMock.Verify(x => x.ShowFailureMessage());
         }
 
         [Test]
@@ -230,13 +214,32 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
             viewMock.Verify(v => v.ShowFailureMessage());
         }
 
+        [Test]
+        public async Task Presenter_ShouldCall_HideProcessMessage_OnView_IfDisconnected()
+        {
+            var disconnectedEventEmitterMock = new Mock<IDisconnectedEventEmitter>();
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                DisconnectedEventEmitter = disconnectedEventEmitterMock.Object
+            }.Build();
+            
+            disconnectedEventEmitterMock.Raise(
+                x => x.Disconnected += 
+                    null, new object(), new DisconnectedEventArgs(It.IsAny<DisconnectReason>(), It.IsAny<Message>()));
+            
+            viewMock.Verify(v => v.HideProcessMessage());
+        }
+
         private class PlayerInitializationPresenterBuilder
         {
             public IPlayerInitializationView View = new Mock<IPlayerInitializationView>().Object;
-            public IInitializePlayerDtoSender DtoSender = new Mock<IInitializePlayerDtoSender>().Object;
+            public IInitializePlayerDtoSender DtoSender;
             public IPlayerInitializationResultEventsEmitter InitializationResultEventsEmitter = new Mock<IPlayerInitializationResultEventsEmitter>().Object;
             public IInitializePlayerDtoCreator DtoCreator = new Mock<IInitializePlayerDtoCreator>().Object;
             public IPlayerInitializationSaver InitializationSaver = new Mock<IPlayerInitializationSaver>().Object;
+            public IDisconnectedEventEmitter DisconnectedEventEmitter = new Mock<IDisconnectedEventEmitter>().Object;
 
             public PlayerInitializationPresenterBuilder()
             {
@@ -252,7 +255,8 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
                     DtoSender,
                     InitializationResultEventsEmitter,
                     DtoCreator,
-                    InitializationSaver);
+                    InitializationSaver,
+                    DisconnectedEventEmitter);
             }
         }
     }
