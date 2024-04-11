@@ -1,6 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
+using Riptide;
 using Src.GameplayPresenter.PlayerInitialization;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
 using Src.NetworkingModule;
@@ -72,6 +73,26 @@ namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
             }.Build();
             
             eventsEmitterMock.Raise(e => e.InitializationSucceed += null, this, EventArgs.Empty);
+            
+            Assert.IsFalse(button.gameObject.activeSelf);
+        }
+
+        [Test]
+        public void Handler_ShouldSetButtonInactive_IfClientDisconnected()
+        {
+            var clientWrapperMock = new Mock<IClientWrapper>();
+            var button = new GameObject().AddComponent<Button>();
+            button.gameObject.SetActive(true);
+            var handler = new InitializeButtonHandlerBuilder
+            {
+                ClientWrapper = clientWrapperMock.Object,
+                Button = button
+            }.Build();
+            
+            clientWrapperMock.Raise(c => c.Disconnected += null, 
+                this, 
+                new DisconnectedEventArgs(It.IsAny<DisconnectReason>(), 
+                    It.IsAny<Message>()));
             
             Assert.IsFalse(button.gameObject.activeSelf);
         }

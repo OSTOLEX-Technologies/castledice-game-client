@@ -1,4 +1,5 @@
 ﻿using System;
+using Riptide;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
 using Src.NetworkingModule;
 using UnityEngine.UI;
@@ -21,6 +22,12 @@ namespace Src.GameplayPresenter.PlayerInitialization
             _button.onClick.AddListener(OnButtonClicked);
             _eventsEmitter.InitializationFailed += OnInitializationFailed;
             _eventsEmitter.InitializationSucceed += OnInitializationSucceed;
+            _clientWrapper.Disconnected += OnDisconnected;
+        }
+
+        private void OnDisconnected(object sender, DisconnectedEventArgs e)
+        {
+            _button.gameObject.SetActive(false);
         }
 
         private void OnInitializationSucceed(object sender, EventArgs e)
