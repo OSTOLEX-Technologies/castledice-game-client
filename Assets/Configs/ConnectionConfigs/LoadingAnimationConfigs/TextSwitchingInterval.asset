@@ -9,8 +9,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 27e9464088524fd38d4961e03e8fd6af, type: 3}
-  m_Name: GameServerConnectionConfig
+  m_Script: {fileID: 11500000, guid: 07d2e4b0c6ef4363a8b88c483509a57b, type: 3}
+  m_Name: TextSwitchingInterval
   m_EditorClassIdentifier: 
-  ip: 135.181.41.45
-  port: 7779
+  value: 0.5

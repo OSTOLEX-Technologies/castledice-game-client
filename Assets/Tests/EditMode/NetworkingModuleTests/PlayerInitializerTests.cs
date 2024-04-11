@@ -3,6 +3,7 @@ using castledice_riptide_dto_adapters.Extensions;
 using NUnit.Framework;
 using Src.NetworkingModule;
 using Tests.Utils.Mocks;
+using UnityEngine;
 
 namespace Tests.EditMode.NetworkingModuleTests
 {
@@ -20,9 +21,9 @@ namespace Tests.EditMode.NetworkingModuleTests
             playerInitializer.InitializePlayer(playerToken);
             var message = messageSender.SentMessage;
             message.GetByte();
-            message.GetByte();
             var actualDTO = message.GetInitializePlayerDTO();
             
+            Debug.Log(actualDTO.VerificationKey);
             Assert.AreEqual(expectedDTO, actualDTO);
         }
 
@@ -34,7 +35,7 @@ namespace Tests.EditMode.NetworkingModuleTests
             
             playerInitializer.InitializePlayer("sometoken");
             var message = messageSender.SentMessage;
-            var actualMessageId = message.GetUShort();
+            var actualMessageId = message.GetByte();
             
             Assert.AreEqual((ushort)ClientToServerMessageType.InitializePlayer, actualMessageId);
         }

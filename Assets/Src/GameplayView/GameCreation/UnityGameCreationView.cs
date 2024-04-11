@@ -7,6 +7,7 @@ namespace Src.GameplayView.GameCreation
     public class UnityGameCreationView : MonoBehaviour, IGameCreationView
     {
         [SerializeField] private GameObject creationProcessScreen;
+        [SerializeField] private GameObject noConnectionMessage;
         
         public void ShowCreationProcessScreen()
         {
@@ -28,14 +29,9 @@ namespace Src.GameplayView.GameCreation
 
         }
 
-        public void ShowNonAuthorizedMessage(string message)
+        public void ShowNoConnectionMessage()
         {
-
-        }
-
-        public void HideNonAuthorizedMessage()
-        {
-            
+            noConnectionMessage.SetActive(true);
         }
 
         public void ChooseCreateGame()
