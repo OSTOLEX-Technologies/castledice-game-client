@@ -48,14 +48,13 @@ namespace Src.Auth.CredentialProviders.Metamask
                     await WaitForWalletConnect();
                 }
                 
-                // var signedNonce = await ObtainAndSignNonce();
-                // var accessResponse = await Auth(signedNonce);
-                //
-                // _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
-                // _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
-                // return _tokenStore.AccessToken.Token;
+                var nonce = await ObtainNonce();
+                var signedNonce = await _signerFacade.Sign(nonce);
+                var accessResponse = await Auth(signedNonce);
+                                _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
+                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
                 
-                return "metamask_access_token_stub";
+                return _tokenStore.accessToken.Token;
             }
             
             if (!_tokenStore.accessToken.Valid)
@@ -80,13 +79,13 @@ namespace Src.Auth.CredentialProviders.Metamask
             _walletFacade.OnConnected -= OnConnectedCallback;
         }
 
-        private async Task<string> ObtainAndSignNonce()
+        private async Task<string> ObtainNonce()
         {
-            var nonce = await _metamaskRestRequestsAdapter.GetNonce(
+            var response = await _metamaskRestRequestsAdapter.GetNonce(
                 new MetamaskNonceRequestDtoProxy(_walletFacade.GetPublicAddress()));
-
-            return await _signerFacade.Sign(nonce.Nonce);
+            return response.Nonce;
         }
+        
 
         private async Task<MetamaskAccessTokenResponse> Auth(string signedNonce)
         {

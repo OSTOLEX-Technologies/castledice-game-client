@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using System.Net.Http;
 using System.Threading.Tasks;
 using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.BackendUrlProvider;
@@ -21,7 +22,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter
         public async Task<MetamaskNonceResponse> GetNonce(MetamaskNonceRequestDtoProxy requestParams)
         {
             return await _httpClientRequestAdapter.Request<MetamaskNonceResponse>(
-                HttpMethod.Get, 
+               HttpMethod.Get, 
                 _urlProvider.GetNonceUrl,
                 requestParams.AsDictionary());
         }
