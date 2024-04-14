@@ -2,7 +2,7 @@
 using castledice_game_logic;
 using castledice_game_logic.GameConfiguration;
 
-namespace Src.GameplayPresenter.GameCreation
+namespace Src.GameplayPresenter.GameCreation.Creators.GameCreator
 {
     public interface IGameBuilder
     {

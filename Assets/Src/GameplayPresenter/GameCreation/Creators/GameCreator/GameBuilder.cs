@@ -4,7 +4,7 @@ using castledice_game_logic;
 using castledice_game_logic.GameConfiguration;
 using JetBrains.Annotations;
 
-namespace Src.GameplayPresenter.GameCreation
+namespace Src.GameplayPresenter.GameCreation.Creators.GameCreator
 {
     public class GameBuilder : IGameBuilder
     {

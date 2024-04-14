@@ -9,15 +9,16 @@ using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
+using Src.GameplayPresenter.GameCreation.Creators.GameCreator;
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
+using Src.GameplayPresenter.GameCreation.GameSearching;
 using Src.GameplayPresenter.PlayerInitialization;
 using Src.GameplayPresenter.PlayerInitialization.Caching;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
 using Src.GameplayPresenter.ServerConnection;
 using Src.GameplayView.Errors;
-using Src.GameplayView.GameCreation;
 using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
@@ -35,7 +36,6 @@ namespace Src.ScenesInitializers
     {
         [SerializeField] private UnityErrorPopup errorPopup;
         [SerializeField] private SceneLoader sceneLoader;
-        [SerializeField] private UnityGameCreationView gameCreationView;
         [SerializeField] private GameObject gameCreationProcessScreen;
         [SerializeField] private UnityPeerUpdater peerUpdater;
 
@@ -94,8 +94,8 @@ namespace Src.ScenesInitializers
             
         
             //Setting up game creation presenter
-            var gameSearcher = new GameSearcher(clientWrapper);
-            GameCreationMessageHandler.SetDTOAccepter(gameSearcher);
+            //var gameSearcher = new GameSearcher(clientWrapper);
+            //GameCreationMessageHandler.SetDTOAccepter(gameSearcher);
             var cellsGeneratorProvider = new MatrixCellsGeneratorCreator();
             var contentToCoordinateProvider = new ContentToCoordinateCreator();
             var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
@@ -106,7 +106,7 @@ namespace Src.ScenesInitializers
             var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
             var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
                 turnSwitchConditionsConfigProvider, gameBuilder);
-            _gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, accessTokenProvider, gameCreationView, clientWrapper);
+            //_gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, accessTokenProvider, gameCreationView, clientWrapper);
         
             //Setting up error handling
             _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, gameCreationProcessScreen);
@@ -134,7 +134,7 @@ namespace Src.ScenesInitializers
                 playerInitializationResultDtoAccepter, 
                 initializeButton);
         
-            _gameCreationPresenter.GameCreated += OnGameCreated;
+            //_gameCreationPresenter.GameCreated += OnGameCreated;
             clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitializationAsync();
         }
 

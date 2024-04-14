@@ -1,7 +1,7 @@
 ﻿using castledice_game_data_logic;
 using castledice_game_logic;
 
-namespace Src.GameplayPresenter.GameCreation
+namespace Src.GameplayPresenter.GameCreation.Creators.GameCreator
 {
     public interface IGameCreator
     {

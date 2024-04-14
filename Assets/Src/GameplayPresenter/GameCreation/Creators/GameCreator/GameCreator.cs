@@ -5,7 +5,7 @@ using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 
-namespace Src.GameplayPresenter.GameCreation
+namespace Src.GameplayPresenter.GameCreation.Creators.GameCreator
 {
     public class GameCreator : IGameCreator
     {
