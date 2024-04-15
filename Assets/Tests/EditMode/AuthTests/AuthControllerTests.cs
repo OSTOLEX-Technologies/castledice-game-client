@@ -15,23 +15,20 @@ namespace Tests.EditMode.AuthTests
         [TestCaseSource(nameof(GetAuthTypes))]
         public void OnAuthTypeChosen_ShouldCacheAccessTokenProvider_ObtainedFromStrategy(AuthType authType)
         {
-            var bCached = false;
-            
             var usedTokenProvider = new Mock<IAccessTokenProvider>().Object;
-            var cacherMock = new Mock<IObjectCacher>();
-            cacherMock.Setup(a => a.CacheObject(usedTokenProvider))
-                .Callback<IAccessTokenProvider>((_) => bCached = true);
             var providersStrategyMock = new Mock<IAccessTokenProvidersStrategy>();
             providersStrategyMock.Setup(s => s.GetAccessTokenProviderAsync(authType)).ReturnsAsync(usedTokenProvider);
-
+            
+            var cacherMock = new Mock<IObjectCacher>();
             var authViewMock = new Mock<IAuthView>();
-            authViewMock.Setup(a => a.Login(authType)).Raises(a => a.AuthTypeChosen += null, authType);
-
 
             var controller = new AuthController(providersStrategyMock.Object, cacherMock.Object, authViewMock.Object);
+            authViewMock.Raise(x => x.AuthTypeChosen += null, authType);
             authViewMock.Object.Login(authType);
 
-            Assert.IsTrue(bCached);
+            cacherMock.Verify(
+                x => x.CacheObject(usedTokenProvider), 
+                Times.Once);
         }
 
         public static IEnumerable<AuthType> GetAuthTypes()

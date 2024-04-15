@@ -39,37 +39,38 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             _authTokenSaver.TryGetTokenStoreByAuthType(out var tempTokenStore, AuthType.Google);
             _tokenStore = tempTokenStore as GoogleJwtStore;
         }
-        
+
         public async Task<GoogleJwtStore> GetCredentialAsync()
         {
+            if (TokenIsStored && _tokenStore.accessToken.Valid)
+            {
+                Debug.Log("GOOGLE TOKEN IS VALID");
+                return _tokenStore;
+            }
+
             if (!TokenIsStored)
             {
                 Debug.Log("GOOGLE TOKENS AREN'T STORED");
-                var authResponse = await GetAuthData();;
-                
+                var authResponse = await GetAuthData();
+                ;
+
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
                 _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
-                
+
 
                 PrintTokens();
                 return _tokenStore;
             }
 
             PrintTokens();
-            
-            if (!_tokenStore.accessToken.Valid)
-            {
-                Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
-                var refreshResponse = await RefreshAccessToken();
 
-                _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
-                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
-                
-                PrintTokens();
-                return _tokenStore;
-            }
+            Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
+            var refreshResponse = await RefreshAccessToken();
 
-            Debug.Log("GOOGLE TOKEN IS VALID");
+            _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
+            _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
+
+            PrintTokens();
             return _tokenStore;
         }
 

@@ -24,7 +24,7 @@ namespace Tests.EditMode.AuthTests.TokenSaving
         }
 
         [Test]
-        public void TryGetStringValue_ShouldReturnValid()
+        public void TryGetStringValue_ShouldReturnValid_AfterSaving()
         {
             var saver = new StringSaver();
 
@@ -37,7 +37,7 @@ namespace Tests.EditMode.AuthTests.TokenSaving
         }
 
         [Test]
-        public void TryGetStringValue_ShouldFail()
+        public void TryGetStringValue_ShouldFail_IfNoSuchKeyExists()
         {
             var saver = new StringSaver();
             PlayerPrefs.DeleteKey(SamplePrefName);

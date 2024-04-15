@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System;
+using System.Threading.Tasks;
 using Firebase.Auth;
 using Src.Auth.CredentialProviders.Firebase.Google;
 using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
@@ -11,6 +12,7 @@ namespace Src.Auth.CredentialProviders.Firebase
         private readonly IFirebaseInternalCredentialProviderCreator _internalCredentialProviderCreator;
         private readonly IFirebaseCredentialFormatter _firebaseCredentialFormatter;
 
+        private AuthType _chosenAuthType;
         private IGoogleCredentialProvider _googleCredentialProvider;
 
         public FirebaseCredentialProvider(
@@ -23,6 +25,7 @@ namespace Src.Auth.CredentialProviders.Firebase
         
         public async Task<Credential> GetCredentialAsync(AuthType authProviderType)
         {
+            _chosenAuthType = authProviderType;
             switch (authProviderType)
             {
                 case AuthType.Google:
@@ -37,9 +40,15 @@ namespace Src.Auth.CredentialProviders.Firebase
             }
         }
 
-        public void InterruptGoogleProviderInit()
+        public void InterruptProviderInit()
         {
-            _googleCredentialProvider?.InterruptProviderInit();
+            switch (_chosenAuthType)
+            {
+                case AuthType.Google: _googleCredentialProvider?.InterruptProviderInit();
+                    break;
+                
+                default: throw new ArgumentException();
+            }
         }
     }
 }

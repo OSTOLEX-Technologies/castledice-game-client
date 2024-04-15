@@ -131,7 +131,7 @@ namespace Src.Auth
         {
             if (hasFocus)
             {
-                _firebaseCredentialProvider.InterruptGoogleProviderInit();
+                _firebaseCredentialProvider.InterruptProviderInit();
             }
         }
         #endregion
