@@ -9,7 +9,7 @@ namespace Src.GameplayPresenter.GameCreation.GameSearching
         public void Cancel();
 
         public event Action<GameStartData> GameFound;
-        public event Action<GameSearchFailReason> SearchFailed;
+        public event Action<SearchFailReason> SearchFailed;
         public event Action CancellationApproved;
     }
 }

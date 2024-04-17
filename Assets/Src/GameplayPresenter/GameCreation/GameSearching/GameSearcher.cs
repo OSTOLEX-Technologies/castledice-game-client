@@ -8,7 +8,7 @@ namespace Src.GameplayPresenter.GameCreation.GameSearching
     public class GameSearcher : IGameSearcher, IGameCreationDTOAccepter
     {
         public event Action<GameStartData> GameFound;
-        public event Action<GameSearchFailReason> SearchFailed;
+        public event Action<SearchFailReason> SearchFailed;
         public event Action CancellationApproved;
         
         public void Search()
