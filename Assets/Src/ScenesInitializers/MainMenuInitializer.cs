@@ -6,6 +6,7 @@ using Src.Auth.TokenProviders;
 using Src.Components;
 using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
+using Src.GameplayPresenter.GameCreation.CreationHandling;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
@@ -14,6 +15,9 @@ using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameCreation.GameSearching;
+using Src.GameplayPresenter.GameCreation.GameSearching.CancelRequesting;
+using Src.GameplayPresenter.GameCreation.GameSearching.GameRequesting;
+using Src.GameplayPresenter.GameCreation.GameSearching.MessageHandlers;
 using Src.GameplayPresenter.PlayerInitialization;
 using Src.GameplayPresenter.PlayerInitialization.Caching;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
@@ -27,6 +31,7 @@ using Src.NetworkingModule.DTOCreators;
 using Src.NetworkingModule.Errors;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.PeerUpdaters;
+using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -34,19 +39,30 @@ namespace Src.ScenesInitializers
 {
     public class MainMenuInitializer : MonoBehaviour
     {
-        [SerializeField] private UnityErrorPopup errorPopup;
+        
         [SerializeField] private SceneLoader sceneLoader;
-        [SerializeField] private GameObject gameCreationProcessScreen;
         [SerializeField] private UnityPeerUpdater peerUpdater;
 
+        [Header("Game creation")]
+        [SerializeField] private GameObject matchmakingScreen;
+        [SerializeField] private GameObject cancelationScreen;
+        [SerializeField] private GameObject searchFailedMessage;
+        [SerializeField] private TextMeshProUGUI searchFailedMessageTextMesh;
+        [SerializeField] private FailMessagesConfig failMessagesConfig;
+        [SerializeField] private Button playButton;
+        [SerializeField] private Button cancelButton;
         private GameCreationPresenter _gameCreationPresenter;
+        private GameCreationView _gameCreationView;
+        
+        [Header("Errors")]
+        [SerializeField] private UnityErrorPopup errorPopup;
         private GameNotSavedErrorPresenter _gameNotSavedErrorPresenter;
         private GameNotSavedErrorView _gameNotSavedErrorView;
     
         [Header("Server connection")]
         [SerializeField] private GameObject connectingMessage;
         [SerializeField] private GameObject connectionFailedMessage;
-        [SerializeField] private TMPro.TextMeshProUGUI connectionFailedReasonText;
+        [SerializeField] private TextMeshProUGUI connectionFailedReasonText;
         [SerializeField] private RejectReasonMessagesConfig rejectReasonMessagesConfig;
         [SerializeField] private ServerConnectionConfig serverConnectionConfig;
         [SerializeField] private Button connectButton;
@@ -56,7 +72,7 @@ namespace Src.ScenesInitializers
         
         [Header("Player initialization")]
         [SerializeField] private GameObject processMessage;
-        [SerializeField] private GameObject failureMessage;
+        [SerializeField] private GameObject initializationFailureMessage;
         [SerializeField] private Button initializeButton;
         private PlayerInitializationPresenter _playerInitializationPresenter;
         private PlayerInitializationView _playerInitializationView;
@@ -91,11 +107,35 @@ namespace Src.ScenesInitializers
             _connectButtonHandler = new ConnectButtonHandler(connectButton, _serverConnectionPresenter, clientWrapper);
             _serverConnectionPresenter.ConnectToServer();
             
+            //Setting up player initialization
+            var playerInitializationView = new PlayerInitializationView(processMessage, initializationFailureMessage);
+            _playerInitializationView = playerInitializationView;
+            var initializePlayerDtoSender = new InitializePlayerDtoSender(clientWrapper);
+            var initializePlayerDtoCreator = new InitializePlayerDtoCreator(accessTokenProvider);
+            var playerInitializationResultDtoAccepter = new PlayerInitializationResultDtoAccepter();
+            var initializationCacher = new InitializationCacher();
+            PlayerInitializationResultMessageHandler.SetDtoAccepter(playerInitializationResultDtoAccepter);
+            _playerInitializationPresenter = new PlayerInitializationPresenter(_playerInitializationView, 
+                initializePlayerDtoSender, 
+                playerInitializationResultDtoAccepter, 
+                initializePlayerDtoCreator, 
+                initializationCacher, 
+                clientWrapper);
+            _initializeButtonHandler = new InitializeButtonHandler(_playerInitializationPresenter, 
+                clientWrapper, 
+                playerInitializationResultDtoAccepter, 
+                initializeButton);
+            clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitializationAsync();
             
         
             //Setting up game creation presenter
-            //var gameSearcher = new GameSearcher(clientWrapper);
-            //GameCreationMessageHandler.SetDTOAccepter(gameSearcher);
+            var requestGameDtoSender = new RequestGameDtoSender(clientWrapper);
+            var requestGameDtoCreator = new RequestGameDtoCreator(accessTokenProvider);
+            var gameRequester = new GameRequester(requestGameDtoCreator, requestGameDtoSender);
+            var cancelGameDtoSender = new CancelGameDtoSender(clientWrapper);
+            var cancelGameDtoCreator = new CancelGameDtoCreator(accessTokenProvider);
+            var gameCancelRequester = new GameCancelRequester(cancelGameDtoCreator, cancelGameDtoSender);
+            var gameSearcher = new GameSearcher(gameRequester, gameCancelRequester, clientWrapper, initializationCacher);
             var cellsGeneratorProvider = new MatrixCellsGeneratorCreator();
             var contentToCoordinateProvider = new ContentToCoordinateCreator();
             var spawnersProvider = new CoordinateContentSpawnerCreator(contentToCoordinateProvider);
@@ -106,41 +146,25 @@ namespace Src.ScenesInitializers
             var turnSwitchConditionsConfigProvider = new TurnSwitchConditionsConfigCreator();
             var gameCreator = new GameCreator(playersListProvider, boardConfigProvider, placeablesConfigProvider, 
                 turnSwitchConditionsConfigProvider, gameBuilder);
-            //_gameCreationPresenter = new GameCreationPresenter(gameSearcher, gameCreator, accessTokenProvider, gameCreationView, clientWrapper);
+            var sceneLoadingGameCreationHandler = new SceneLoadingGameCreationHandler(sceneLoader, SceneType.DuelGame);
+            CreateGameMessageHandler.SetDtoAccepter(gameSearcher);
+            CancelGameResultMessageHandler.SetDtoAccepter(gameSearcher);
+            var gameCreationHandler = new CachingGameCreationHandlerDecorator(sceneLoadingGameCreationHandler, new SingletonCacher());
+            _gameCreationView = new GameCreationView(playButton, 
+                cancelButton, 
+                matchmakingScreen, 
+                cancelationScreen, 
+                searchFailedMessage, searchFailedMessageTextMesh, 
+                failMessagesConfig);
+            _gameCreationPresenter = new GameCreationPresenter(_gameCreationView, gameSearcher, gameCreator, gameCreationHandler);
         
             //Setting up error handling
-            _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, gameCreationProcessScreen);
+            _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, matchmakingScreen);
             _gameNotSavedErrorPresenter = new GameNotSavedErrorPresenter(_gameNotSavedErrorView);
             var errorPresentersProvider = new ErrorPresentersProvider(_gameNotSavedErrorPresenter);
             var serverErrorsRouter = new ServerErrorsRouter(errorPresentersProvider);
             ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
             
-            //Setting up player initialization
-            var playerInitializationView = new PlayerInitializationView(processMessage, failureMessage);
-            _playerInitializationView = playerInitializationView;
-            var initializePlayerDtoSender = new InitializePlayerDtoSender(clientWrapper);
-            var initializePlayerDtoCreator = new InitializePlayerDtoCreator(accessTokenProvider);
-            var playerInitializationResultDtoAccepter = new PlayerInitializationResultDtoAccepter();
-            var initializationSaver = new InitializationCacher();
-            PlayerInitializationResultMessageHandler.SetDtoAccepter(playerInitializationResultDtoAccepter);
-            _playerInitializationPresenter = new PlayerInitializationPresenter(_playerInitializationView, 
-                initializePlayerDtoSender, 
-                playerInitializationResultDtoAccepter, 
-                initializePlayerDtoCreator, 
-                initializationSaver, 
-                clientWrapper);
-            _initializeButtonHandler = new InitializeButtonHandler(_playerInitializationPresenter, 
-                clientWrapper, 
-                playerInitializationResultDtoAccepter, 
-                initializeButton);
-        
-            //_gameCreationPresenter.GameCreated += OnGameCreated;
-            clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitializationAsync();
-        }
-
-        private void OnGameCreated(object sender, EventArgs e)
-        {
-            sceneLoader.LoadScene(SceneType.DuelGame);
         }
     }
 }
