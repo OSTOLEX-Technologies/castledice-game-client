@@ -41,7 +41,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             viewMock.Raise(x => x.PlayChosen += null);
             
-            searcherMock.Verify(x => x.Search(), Times.Once);
+            searcherMock.Verify(x => x.SearchAsync(), Times.Once);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             viewMock.Raise(x => x.CancelChosen += null);
             
-            searcherMock.Verify(x => x.Cancel(), Times.Once);
+            searcherMock.Verify(x => x.CancelAsync(), Times.Once);
         }
         
         [Test]
