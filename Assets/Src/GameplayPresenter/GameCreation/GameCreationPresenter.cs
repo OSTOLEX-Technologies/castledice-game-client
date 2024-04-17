@@ -25,15 +25,15 @@ namespace Src.GameplayPresenter.GameCreation
             _gameCreationHandler = gameCreationHandler;
         }
 
-        private void OnPlayChosen()
+        private async void OnPlayChosen()
         {
             _view.ShowMatchmakingScreen();
-            _gameSearcher.Search();
+            await _gameSearcher.SearchAsync();
         }
-        private void OnCancelChosen()
+        private async void OnCancelChosen()
         {
             _view.ShowCancellationScreen();
-            _gameSearcher.Cancel();
+            await _gameSearcher.CancelAsync();
         }
         private void OnGameFound(GameStartData startData)
         {
@@ -46,7 +46,7 @@ namespace Src.GameplayPresenter.GameCreation
             _view.HideMatchmakingScreen();
             _view.HideCancellationScreen();
         }
-        private void OnSearchFailed(GameSearchFailReason reason)
+        private void OnSearchFailed(SearchFailReason reason)
         {
             _view.ShowFail(reason);
         }

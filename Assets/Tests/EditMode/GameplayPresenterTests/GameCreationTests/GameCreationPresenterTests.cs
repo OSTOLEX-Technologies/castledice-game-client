@@ -41,7 +41,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             viewMock.Raise(x => x.PlayChosen += null);
             
-            searcherMock.Verify(x => x.Search(), Times.Once);
+            searcherMock.Verify(x => x.SearchAsync(), Times.Once);
         }
 
         [Test]
@@ -71,7 +71,7 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             
             viewMock.Raise(x => x.CancelChosen += null);
             
-            searcherMock.Verify(x => x.Cancel(), Times.Once);
+            searcherMock.Verify(x => x.CancelAsync(), Times.Once);
         }
         
         [Test]
@@ -181,15 +181,15 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
                 GameSearcher = searcherMock.Object,
             }.Build();
             
-            searcherMock.Raise(x => x.SearchFailed += null, It.IsAny<GameSearchFailReason>());
+            searcherMock.Raise(x => x.SearchFailed += null, It.IsAny<SearchFailReason>());
             
             viewMock.Verify(x => x.ShowFail(
-                It.IsAny<GameSearchFailReason>()));
+                It.IsAny<SearchFailReason>()));
         }
 
         [Test]
         [TestCaseSource(nameof(GetReasons))]
-        public void Presenter_ShouldPassFailReason_ToView_IfSearchFailed(GameSearchFailReason reason)
+        public void Presenter_ShouldPassFailReason_ToView_IfSearchFailed(SearchFailReason reason)
         {
             var viewMock = new Mock<IGameCreationView>();
             var searcherMock = new Mock<IGameSearcher>();
@@ -230,12 +230,12 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             }
         }
 
-        public static IEnumerable<GameSearchFailReason> GetReasons()
+        public static IEnumerable<SearchFailReason> GetReasons()
         {
-            var reasons = Enum.GetValues(typeof(GameSearchFailReason));
+            var reasons = Enum.GetValues(typeof(SearchFailReason));
             foreach (var reason in reasons)
             {
-                yield return (GameSearchFailReason) reason;
+                yield return (SearchFailReason) reason;
             }
         }
     }

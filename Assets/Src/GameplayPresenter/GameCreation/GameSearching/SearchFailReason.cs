@@ -1,6 +1,6 @@
 namespace Src.GameplayPresenter.GameCreation.GameSearching
 {
-    public enum GameSearchFailReason
+    public enum SearchFailReason
     {
         NotInitialized,
         NotConnected,
