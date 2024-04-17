@@ -1,11 +1,10 @@
 ﻿using System;
 using castledice_events_logic.ServerToClient;
 using castledice_game_data_logic;
-using Src.NetworkingModule.DTOAccepters;
 
 namespace Src.GameplayPresenter.GameCreation.GameSearching
 {
-    public class GameSearcher : IGameSearcher, IGameCreationDTOAccepter
+    public class GameSearcher : IGameSearcher, ICreateGameDtoAccepter, ICancelGameResultDtoAccepter
     {
         public event Action<GameStartData> GameFound;
         public event Action<SearchFailReason> SearchFailed;
@@ -21,13 +20,12 @@ namespace Src.GameplayPresenter.GameCreation.GameSearching
             throw new NotImplementedException();
         }
 
-        
-        public void AcceptCreateGameDTO(CreateGameDTO dto)
+        public void AcceptCreateGameDto(CreateGameDTO dto)
         {
             throw new NotImplementedException();
         }
 
-        public void AcceptCancelGameResultDTO(CancelGameResultDTO dto)
+        public void AcceptCancelGameResultDto(CancelGameResultDTO cancelGameResultDto)
         {
             throw new NotImplementedException();
         }
