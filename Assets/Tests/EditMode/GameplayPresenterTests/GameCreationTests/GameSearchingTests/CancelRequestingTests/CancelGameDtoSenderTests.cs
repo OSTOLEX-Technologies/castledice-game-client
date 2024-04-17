@@ -4,12 +4,12 @@ using castledice_riptide_dto_adapters.Extensions;
 using Moq;
 using NUnit.Framework;
 using Riptide;
-using Src.GameplayPresenter.GameCreation.GameSearching.GameRequesting;
+using Src.GameplayPresenter.GameCreation.GameSearching.CancelRequesting;
 using Src.NetworkingModule;
 
-namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.GameSearchingTests.GameRequestingTests
+namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.GameSearchingTests.CancelRequestingTests
 {
-    public class RequestGameDtoSenderTests
+    public class CancelGameDtoSenderTests
     {
         [Test]
         public void SendDto_ShouldSendMessage_WithReliableSendMode()
@@ -18,42 +18,42 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.GameSearchingT
             Message sentMessage = null;
             messageSenderMock.Setup(sender => sender.Send(It.IsAny<Message>()))
                 .Callback<Message>((message) => sentMessage = message);
-            var sender = new RequestGameDtoSender(messageSenderMock.Object);
-
-            sender.SendDto(new RequestGameDTO(new Random().Next().ToString()));
+            var sender = new CancelGameDtoSender(messageSenderMock.Object);
+            
+            sender.SendDto(new CancelGameDTO(new Random().Next().ToString()));
             
             Assert.AreEqual(MessageSendMode.Reliable, sentMessage.SendMode);
         }
         
         [Test]
-        public void SendDto_ShouldSendMessage_WithRequestGameMessageType()
+        public void SendDto_ShouldSendMessage_WithCancelGameMessageType()
         {
             var messageSenderMock = new Mock<IMessageSender>();
             Message sentMessage = null;
             messageSenderMock.Setup(sender => sender.Send(It.IsAny<Message>()))
                 .Callback<Message>((message) => sentMessage = message);
-            var sender = new RequestGameDtoSender(messageSenderMock.Object);
+            var sender = new CancelGameDtoSender(messageSenderMock.Object);
             
-            sender.SendDto(new RequestGameDTO(new Random().Next().ToString()));
+            sender.SendDto(new CancelGameDTO(new Random().Next().ToString()));
 
             var messageType = (ClientToServerMessageType)sentMessage.GetByte();
-            Assert.AreEqual(ClientToServerMessageType.RequestGame, messageType);
+            Assert.AreEqual(ClientToServerMessageType.CancelGame, messageType);
         }
-
+        
         [Test]
         public void SendDto_ShouldSendMessage_WithGivenDto()
         {
-            var expectedDto = new RequestGameDTO(new Random().Next().ToString());
+            var expectedDto = new CancelGameDTO(new Random().Next().ToString());
             var messageSenderMock = new Mock<IMessageSender>();
             Message sentMessage = null;
             messageSenderMock.Setup(sender => sender.Send(It.IsAny<Message>()))
                 .Callback<Message>((message) => sentMessage = message);
-            var sender = new RequestGameDtoSender(messageSenderMock.Object);
+            var sender = new CancelGameDtoSender(messageSenderMock.Object);
             
             sender.SendDto(expectedDto);
 
             sentMessage.GetByte();
-            var sentDto = sentMessage.GetRequestGameDTO();
+            var sentDto = sentMessage.GetCancelGameDTO();
             Assert.AreEqual(expectedDto, sentDto);
         }
     }
