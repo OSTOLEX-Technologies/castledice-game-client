@@ -5,9 +5,9 @@ namespace Src.MainMenu.Views
     public class SettingsPopupView
     {
         private string _name;
-        private int _sound;
-        private int _music;
-        private int _voice;
+        private float _sound;
+        private float _music;
+        private float _voice;
         private Sprite _avatar;
         
         public void ChangeName(string name)
@@ -15,32 +15,32 @@ namespace Src.MainMenu.Views
             _name = name;
         }
         
-        public void ChangeSound(int sound)
+        public void ChangeSound(float sound)
         {
             _sound = sound;
         }
         
-        public void ChangeMusic(int music)
+        public void ChangeMusic(float music)
         {
             _music = music;
         }
         
-        public void ChangeVoice(int voice)
+        public void ChangeVoice(float voice)
         {
             _voice = voice;
         }
         
-        public int GetSound()
+        public float GetSound()
         {
             return _sound;
         }
 
-        public int GetMusic()
+        public float GetMusic()
         {
             return _music;
         }
 
-        public int GetVoice()
+        public float GetVoice()
         {
             return _voice;
         }
