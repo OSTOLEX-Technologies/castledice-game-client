@@ -3,7 +3,6 @@ using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
 using Src.Auth.TokenProviders;
-using Src.Caching;
 using Src.Components;
 using Src.GameplayPresenter.Errors;
 using Src.GameplayPresenter.GameCreation;
@@ -13,15 +12,17 @@ using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpa
 using Src.GameplayPresenter.GameCreation.Creators.PlaceablesConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
+using Src.GameplayPresenter.PlayerInitialization;
+using Src.GameplayPresenter.PlayerInitialization.Caching;
+using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
 using Src.GameplayPresenter.ServerConnection;
 using Src.GameplayView.Errors;
 using Src.GameplayView.GameCreation;
 using Src.GameplayView.ServerConnection;
-using Src.LoadingScenes;
-using Src.MainMenu.Controllers;
-using Src.MainMenu.Scripts;
-using Src.MainMenu.Views;
+using Src.General.Caching;
+using Src.General.LoadingScenes;
 using Src.NetworkingModule;
+using Src.NetworkingModule.DTOCreators;
 using Src.NetworkingModule.Errors;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.PeerUpdaters;
@@ -52,6 +53,14 @@ namespace Src.ScenesInitializers
         private ServerConnectionPresenter _serverConnectionPresenter;
         private ServerConnectionView _serverConnectionView;
         private ConnectButtonHandler _connectButtonHandler;
+        
+        [Header("Player initialization")]
+        [SerializeField] private GameObject processMessage;
+        [SerializeField] private GameObject failureMessage;
+        [SerializeField] private Button initializeButton;
+        private PlayerInitializationPresenter _playerInitializationPresenter;
+        private PlayerInitializationView _playerInitializationView;
+        private InitializeButtonHandler _initializeButtonHandler; 
     
         private void Start()
         {
@@ -82,6 +91,7 @@ namespace Src.ScenesInitializers
             _connectButtonHandler = new ConnectButtonHandler(connectButton, _serverConnectionPresenter, clientWrapper);
             _serverConnectionPresenter.ConnectToServer();
             
+            
         
             //Setting up game creation presenter
             var gameSearcher = new GameSearcher(clientWrapper);
@@ -104,8 +114,28 @@ namespace Src.ScenesInitializers
             var errorPresentersProvider = new ErrorPresentersProvider(_gameNotSavedErrorPresenter);
             var serverErrorsRouter = new ServerErrorsRouter(errorPresentersProvider);
             ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
+            
+            //Setting up player initialization
+            var playerInitializationView = new PlayerInitializationView(processMessage, failureMessage);
+            _playerInitializationView = playerInitializationView;
+            var initializePlayerDtoSender = new InitializePlayerDtoSender(clientWrapper);
+            var initializePlayerDtoCreator = new InitializePlayerDtoCreator(accessTokenProvider);
+            var playerInitializationResultDtoAccepter = new PlayerInitializationResultDtoAccepter();
+            var initializationSaver = new InitializationCacher();
+            PlayerInitializationResultMessageHandler.SetDtoAccepter(playerInitializationResultDtoAccepter);
+            _playerInitializationPresenter = new PlayerInitializationPresenter(_playerInitializationView, 
+                initializePlayerDtoSender, 
+                playerInitializationResultDtoAccepter, 
+                initializePlayerDtoCreator, 
+                initializationSaver, 
+                clientWrapper);
+            _initializeButtonHandler = new InitializeButtonHandler(_playerInitializationPresenter, 
+                clientWrapper, 
+                playerInitializationResultDtoAccepter, 
+                initializeButton);
         
             _gameCreationPresenter.GameCreated += OnGameCreated;
+            clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitializationAsync();
         }
 
         private void OnGameCreated(object sender, EventArgs e)

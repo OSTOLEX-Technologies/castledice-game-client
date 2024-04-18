@@ -6,7 +6,7 @@ using Src.Auth.DeepLinking.DeepLinkTextInjector;
 using Src.Auth.REST.PortListener.ListenerContextInterpretation;
 using Src.Auth.REST.PortListener.ListenerContextResponse;
 using Src.Components;
-using Src.TextAssetLoading;
+using Src.General.TextAssetLoading;
 
 namespace Src.Auth.REST.PortListener
 {

@@ -11,5 +11,7 @@ namespace Tests.Utils.Mocks
         {
             SentMessage = message;
         }
+
+        public bool CanSend { get; }
     }
 }

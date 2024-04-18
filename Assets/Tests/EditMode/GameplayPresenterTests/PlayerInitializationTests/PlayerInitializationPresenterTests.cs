@@ -1,0 +1,263 @@
+using System;
+using System.Threading.Tasks;
+using castledice_events_logic.ClientToServer;
+using Moq;
+using NUnit.Framework;
+using Riptide;
+using Src.GameplayPresenter.PlayerInitialization;
+using Src.GameplayPresenter.PlayerInitialization.Caching;
+using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
+using Src.NetworkingModule;
+using Src.NetworkingModule.DTOCreators;
+
+namespace Tests.EditMode.GameplayPresenterTests.PlayerInitializationTests
+{
+    public class PlayerInitializationPresenterTests
+    {
+        [Test]
+        public async Task StartInitializationAsync_ShouldCall_ShowProcessMessage_OnView_IfDtoCanBeSent()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var dtoSenderMock = new Mock<IInitializePlayerDtoSender>();
+            dtoSenderMock.Setup(x => x.CanSend).Returns(true);
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                DtoSender = dtoSenderMock.Object
+            }.Build();
+
+            await presenter.StartInitializationAsync();
+            
+            viewMock.Verify(x => x.ShowProcessMessage());
+        }
+        
+        [Test]
+        public async Task StartInitializationAsync_ShouldSendDto_FromCreator_ViaSender_IfDtoCanBeSent()
+        {
+            var expectedDto = new InitializePlayerDTO("thisstringdoesntreallymatterhere");
+            var senderMock = new Mock<IInitializePlayerDtoSender>();
+            senderMock.Setup(x => x.CanSend).Returns(true);
+            var dtoCreatorMock = new Mock<IInitializePlayerDtoCreator>();
+            dtoCreatorMock.Setup(x => x.CreateAsync()).ReturnsAsync(expectedDto);
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                DtoSender = senderMock.Object,
+                DtoCreator = dtoCreatorMock.Object
+            }.Build();
+            
+            await presenter.StartInitializationAsync();
+            
+            senderMock.Verify(x => x.SendDto(expectedDto));
+        }
+        
+        [Test]
+        public async Task StartInitializationAsync_ShouldNotCall_ShowProcessMessage_OnView_IfDtoCannotBeSent()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var dtoSenderMock = new Mock<IInitializePlayerDtoSender>();
+            dtoSenderMock.Setup(x => x.CanSend).Returns(false);
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                DtoSender = dtoSenderMock.Object
+            }.Build();
+
+            await presenter.StartInitializationAsync();
+            
+            viewMock.Verify(x => x.ShowProcessMessage(), Times.Never);
+        }
+        
+        [Test]
+        public async Task StartInitializationAsync_ShouldNotCall_SendDto_IfDtoCannotBeSent()
+        {
+            var senderMock = new Mock<IInitializePlayerDtoSender>();
+            senderMock.Setup(x => x.CanSend).Returns(false);
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                DtoSender = senderMock.Object
+            }.Build();
+            
+            await presenter.StartInitializationAsync();
+            
+            senderMock.Verify(x => x.SendDto(It.IsAny<InitializePlayerDTO>()), Times.Never);
+        }
+
+        [Test]
+        public async Task Presenter_ShouldCall_HideProcessMessage_OnView_IfInitializationSucceed()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var eventsEmitterMock = new Mock<IPlayerInitializationResultEventsEmitter>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                InitializationResultEventsEmitter = eventsEmitterMock.Object,
+            }.Build();
+
+            eventsEmitterMock.Raise(
+                x => x.InitializationSucceed += 
+                    null, viewMock.Object, EventArgs.Empty);
+            
+            viewMock.Verify(v => v.HideProcessMessage());
+        }
+        
+        [Test]
+        public async Task Presenter_ShouldNotCall_ShowProcessMessage_OnView_IfInitializationSucceed()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var eventsEmitterMock = new Mock<IPlayerInitializationResultEventsEmitter>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                InitializationResultEventsEmitter = eventsEmitterMock.Object,
+            }.Build();
+
+            eventsEmitterMock.Raise(
+                x => x.InitializationSucceed += 
+                    null, viewMock.Object, EventArgs.Empty);
+            
+            viewMock.Verify(v => v.ShowProcessMessage(), Times.Never);
+        }
+
+        [Test]
+        public async Task Presenter_ShouldSaveInitializationAsTrue_IfInitializationSucceed()
+        {
+            var saverMock = new Mock<IPlayerInitializationSaver>();
+            var initialization = false;
+            saverMock.Setup(x => x.SetInitialization(It.IsAny<bool>()))
+                .Callback<bool>(x => initialization = x);
+            var eventsEmitterMock = new Mock<IPlayerInitializationResultEventsEmitter>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                InitializationSaver = saverMock.Object,
+                InitializationResultEventsEmitter = eventsEmitterMock.Object,
+            }.Build();
+            
+            eventsEmitterMock.Raise(
+                x => x.InitializationSucceed += 
+                    null, new object(), EventArgs.Empty);
+            
+            Assert.IsTrue(initialization);
+        }
+        
+        [Test]
+        public async Task Presenter_ShouldSaveInitializationAsFalse_IfInitializationFailed()
+        {
+            var saverMock = new Mock<IPlayerInitializationSaver>();
+            var initialization = true;
+            saverMock.Setup(x => x.SetInitialization(It.IsAny<bool>()))
+                .Callback<bool>(x => initialization = x);
+            var eventsEmitterMock = new Mock<IPlayerInitializationResultEventsEmitter>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                InitializationSaver = saverMock.Object,
+                InitializationResultEventsEmitter = eventsEmitterMock.Object,
+            }.Build();
+            
+            eventsEmitterMock.Raise(
+                x => x.InitializationFailed += 
+                    null, new object(),  EventArgs.Empty);
+            
+            Assert.IsFalse(initialization);
+        }
+        
+        [Test]
+        public async Task Presenter_ShouldCall_HideProcessMessage_OnView_IfInitializationFailed()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var eventsEmitterMock = new Mock<IPlayerInitializationResultEventsEmitter>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                InitializationResultEventsEmitter = eventsEmitterMock.Object,
+            }.Build();
+
+            eventsEmitterMock.Raise(
+                x => x.InitializationFailed += 
+                    null, viewMock.Object, EventArgs.Empty);
+            
+            viewMock.Verify(v => v.HideProcessMessage());
+        }
+        
+        [Test]
+        public async Task Presenter_ShouldNotCall_ShowProcessMessage_OnView_IfInitializationFailed()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var eventsEmitterMock = new Mock<IPlayerInitializationResultEventsEmitter>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                InitializationResultEventsEmitter = eventsEmitterMock.Object,
+            }.Build();
+
+            eventsEmitterMock.Raise(
+                x => x.InitializationFailed += 
+                    null, viewMock.Object, EventArgs.Empty);
+            
+            viewMock.Verify(v => v.ShowProcessMessage(), Times.Never);
+        }
+        
+        [Test]
+        public async Task Presenter_ShouldCall_ShowFailureMessage_OnView_IfInitializationFailed()
+        {
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var eventsEmitterMock = new Mock<IPlayerInitializationResultEventsEmitter>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                InitializationResultEventsEmitter = eventsEmitterMock.Object,
+            }.Build();
+
+            eventsEmitterMock.Raise(
+                x => x.InitializationFailed += 
+                    null, viewMock.Object, EventArgs.Empty);
+            
+            viewMock.Verify(v => v.ShowFailureMessage());
+        }
+
+        [Test]
+        public async Task Presenter_ShouldCall_HideProcessMessage_OnView_IfDisconnected()
+        {
+            var disconnectedEventEmitterMock = new Mock<IDisconnectedEventEmitter>();
+            var viewMock = new Mock<IPlayerInitializationView>();
+            var presenter = new PlayerInitializationPresenterBuilder
+            {
+                View = viewMock.Object,
+                DisconnectedEventEmitter = disconnectedEventEmitterMock.Object
+            }.Build();
+            
+            disconnectedEventEmitterMock.Raise(
+                x => x.Disconnected += 
+                    null, new object(), new DisconnectedEventArgs(It.IsAny<DisconnectReason>(), It.IsAny<Message>()));
+            
+            viewMock.Verify(v => v.HideProcessMessage());
+        }
+
+        private class PlayerInitializationPresenterBuilder
+        {
+            public IPlayerInitializationView View = new Mock<IPlayerInitializationView>().Object;
+            public IInitializePlayerDtoSender DtoSender;
+            public IPlayerInitializationResultEventsEmitter InitializationResultEventsEmitter = new Mock<IPlayerInitializationResultEventsEmitter>().Object;
+            public IInitializePlayerDtoCreator DtoCreator = new Mock<IInitializePlayerDtoCreator>().Object;
+            public IPlayerInitializationSaver InitializationSaver = new Mock<IPlayerInitializationSaver>().Object;
+            public IDisconnectedEventEmitter DisconnectedEventEmitter = new Mock<IDisconnectedEventEmitter>().Object;
+
+            public PlayerInitializationPresenterBuilder()
+            {
+                var senderMock = new Mock<IInitializePlayerDtoSender>();
+                senderMock.Setup(x => x.CanSend).Returns(true);
+                DtoSender = senderMock.Object;
+            }
+            
+            public PlayerInitializationPresenter Build()
+            {
+                return new PlayerInitializationPresenter(
+                    View,
+                    DtoSender,
+                    InitializationResultEventsEmitter,
+                    DtoCreator,
+                    InitializationSaver,
+                    DisconnectedEventEmitter);
+            }
+        }
+    }
+}

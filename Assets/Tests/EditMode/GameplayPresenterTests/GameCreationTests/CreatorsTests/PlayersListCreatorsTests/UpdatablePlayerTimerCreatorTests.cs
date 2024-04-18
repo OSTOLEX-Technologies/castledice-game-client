@@ -3,7 +3,7 @@ using Moq;
 using NUnit.Framework;
 using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayView.Updatables;
-using Src.TimeManagement;
+using Src.General.TimeManagement;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests.CreatorsTests.PlayersListCreatorsTests
 {
