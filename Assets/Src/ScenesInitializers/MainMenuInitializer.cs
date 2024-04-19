@@ -26,6 +26,9 @@ using Src.GameplayView.Errors;
 using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
+using Src.MainMenu.Controllers;
+using Src.MainMenu.Scripts;
+using Src.MainMenu.Views;
 using Src.NetworkingModule;
 using Src.NetworkingModule.DTOCreators;
 using Src.NetworkingModule.Errors;
@@ -58,7 +61,10 @@ namespace Src.ScenesInitializers
         [SerializeField] private UnityErrorPopup errorPopup;
         private GameNotSavedErrorPresenter _gameNotSavedErrorPresenter;
         private GameNotSavedErrorView _gameNotSavedErrorView;
-    
+
+        [Header("Settings")] 
+        [SerializeField] private SettingsPopup settingsPopup;
+        
         [Header("Server connection")]
         [SerializeField] private GameObject connectingMessage;
         [SerializeField] private GameObject connectionFailedMessage;
@@ -165,6 +171,12 @@ namespace Src.ScenesInitializers
             var serverErrorsRouter = new ServerErrorsRouter(errorPresentersProvider);
             ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
             
+            //Setting up settings popup
+            var settingsPopupView = new SettingsPopupView();
+            var settingsPopupController = new SettingsPopupController(settingsPopupView);
+            settingsPopup.SettingsPopupController = settingsPopupController;
+            settingsPopup.SettingsPopupView = settingsPopupView;
+            settingsPopup.Init();
         }
     }
 }
