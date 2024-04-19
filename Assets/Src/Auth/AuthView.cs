@@ -4,7 +4,7 @@ using MetaMask.Transports.Unity.UI;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
-using Src.Caching;
+using Src.General.Caching;
 using TMPro;
 using UnityEngine;
 

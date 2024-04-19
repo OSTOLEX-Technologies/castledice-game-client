@@ -2,7 +2,7 @@
 using Src.Auth.Exceptions.Authorization;
 using Src.Auth.Exceptions.HttpRequests;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
-using Src.Caching;
+using Src.General.Caching;
 
 namespace Src.Auth
 {

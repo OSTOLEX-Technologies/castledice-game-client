@@ -6,10 +6,10 @@ using Src.Auth.CredentialProviders.Firebase.Google.CredentialFormatter;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.Scripts;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
-using Src.Caching;
 using Src.Components;
-using Src.LoadingScenes;
-using Src.SceneTransitionCommands;
+using Src.General.Caching;
+using Src.General.LoadingScenes;
+using Src.General.SceneTransitionCommands;
 using UnityEngine;
 
 namespace Src.ScenesInitializers

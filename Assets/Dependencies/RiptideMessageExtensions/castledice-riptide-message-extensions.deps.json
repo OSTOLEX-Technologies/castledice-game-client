@@ -9,8 +9,8 @@
     ".NETStandard,Version=v2.1/": {
       "castledice-riptide-message-extensions/1.0.0": {
         "dependencies": {
-          "RiptideNetworking.Riptide": "2.0.0",
-          "castledice-events-logic": "0.0.1-dev3-timer-switch",
+          "RiptideNetworking.Riptide": "2.1.0",
+          "castledice-events-logic": "0.0.1-dev4-initialization-result",
           "castledice-game-data-logic": "0.0.1-dev5",
           "castledice-game-logic": "0.0.1-dev5"
         },
@@ -18,7 +18,7 @@
           "castledice-riptide-message-extensions.dll": {}
         }
       },
-      "castledice-events-logic/0.0.1-dev3-timer-switch": {
+      "castledice-events-logic/0.0.1-dev4-initialization-result": {
         "dependencies": {
           "castledice-game-data-logic": "0.0.1-dev5",
           "castledice-game-logic": "0.0.1-dev5"
@@ -61,11 +61,11 @@
           }
         }
       },
-      "RiptideNetworking.Riptide/2.0.0": {
+      "RiptideNetworking.Riptide/2.1.0": {
         "runtime": {
           "lib/netstandard2.0/RiptideNetworking.dll": {
-            "assemblyVersion": "2.0.0.0",
-            "fileVersion": "2.0.0.0"
+            "assemblyVersion": "2.1.0.0",
+            "fileVersion": "2.1.0.0"
           }
         }
       }
@@ -77,12 +77,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "castledice-events-logic/0.0.1-dev3-timer-switch": {
+    "castledice-events-logic/0.0.1-dev4-initialization-result": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-0OXeBQGTpHSv2AIW9QkVvv1Okm4BKN8U/lYmPN3qobEvzZHfepDkx3t5PpljvX4tveJDoanvcoCrFTo8I+IzlA==",
-      "path": "castledice-events-logic/0.0.1-dev3-timer-switch",
-      "hashPath": "castledice-events-logic.0.0.1-dev3-timer-switch.nupkg.sha512"
+      "sha512": "sha512-mTrB9pzesBvlRyZCoSiNrZ+q5nWNOJK5y5L/dNjo77pqOWTz2/dG9LBPKBYin2DAMXy2gr3PMKZkbRBcjhhv8g==",
+      "path": "castledice-events-logic/0.0.1-dev4-initialization-result",
+      "hashPath": "castledice-events-logic.0.0.1-dev4-initialization-result.nupkg.sha512"
     },
     "castledice-game-data-logic/0.0.1-dev5": {
       "type": "package",
@@ -105,12 +105,12 @@
       "path": "newtonsoft.json/13.0.3",
       "hashPath": "newtonsoft.json.13.0.3.nupkg.sha512"
     },
-    "RiptideNetworking.Riptide/2.0.0": {
+    "RiptideNetworking.Riptide/2.1.0": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-xk5JdlK7A4m+aE8fclcLkjX4+NrZJVZ0woNx/PCUgkDbcYlE9d8PUzWg1KMy2+CgO29zu4jgCqlW9knI327V9Q==",
-      "path": "riptidenetworking.riptide/2.0.0",
-      "hashPath": "riptidenetworking.riptide.2.0.0.nupkg.sha512"
+      "sha512": "sha512-ScKBL2VsjrdAdnNd05pnvmAzBwLwAh9G34zeXYmIdNEigKdHN4oGx2DYrbQsFidZCvN9X7PiRAHcEgMcsnEu9w==",
+      "path": "riptidenetworking.riptide/2.1.0",
+      "hashPath": "riptidenetworking.riptide.2.1.0.nupkg.sha512"
     }
   }
 }

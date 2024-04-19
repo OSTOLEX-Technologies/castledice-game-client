@@ -5,5 +5,6 @@ namespace Src.NetworkingModule
     public interface IMessageSender
     {
         public void Send(Message message);
+        public bool CanSend { get; }
     }
 }

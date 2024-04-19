@@ -1,91 +1,54 @@
-using System;
-using System.Threading.Tasks;
 using castledice_game_data_logic;
-using castledice_game_logic;
-using Src.Auth.TokenProviders;
-using Src.Caching;
-using Src.Constants;
-using Src.GameplayView.GameCreation;
+using Src.GameplayPresenter.GameCreation.CreationHandling;
+using Src.GameplayPresenter.GameCreation.Creators.GameCreator;
+using Src.GameplayPresenter.GameCreation.GameSearching;
 
 namespace Src.GameplayPresenter.GameCreation
 {
     public class GameCreationPresenter
     {
-        public event EventHandler GameCreated;
-        
+        private readonly IGameCreationView _view;
         private readonly IGameSearcher _gameSearcher;
         private readonly IGameCreator _gameCreator;
-        private readonly IAccessTokenProvider _accessTokenProvider;
-        private readonly IGameCreationView _view;
-        private bool _gameCreationInProcess;
+        private readonly IGameCreationHandler _gameCreationHandler;
 
-        public GameCreationPresenter(IGameSearcher gameSearcher, IGameCreator gameCreator, IAccessTokenProvider accessTokenProvider, IGameCreationView view)
+        public GameCreationPresenter(IGameCreationView view, IGameSearcher gameSearcher, IGameCreator gameCreator, IGameCreationHandler gameCreationHandler)
         {
-            _gameSearcher = gameSearcher;
-            _gameCreator = gameCreator;
-            _accessTokenProvider = accessTokenProvider;
             _view = view;
-            view.CancelCreationChosen += OnCancelGame;
-            view.CreateGameChosen += OnCreateGame;
+            _view.PlayChosen += OnPlayChosen;
+            _view.CancelChosen += OnCancelChosen;
+            _gameSearcher = gameSearcher;
+            _gameSearcher.GameFound += OnGameFound;
+            _gameSearcher.CancellationApproved += OnCancellationApproved;
+            _gameSearcher.SearchFailed += OnSearchFailed;
+            _gameCreator = gameCreator;
+            _gameCreationHandler = gameCreationHandler;
         }
 
-        
-        //TODO: Refactor this method as it is too long.
-        public virtual async Task CreateGame()
+        private async void OnPlayChosen()
         {
-            var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
-            
-            _view.ShowCreationProcessScreen();
-            _gameCreationInProcess = true;
-            var gameSearchResult = await _gameSearcher.SearchGameAsync(accessToken);
-            _gameCreationInProcess = false;
-            _view.HideCreationProcessScreen();
-            
-            if (gameSearchResult.Status == GameSearchResult.ResultStatus.Canceled)
-            {
-                _view.HideCancelationMessage();
-            }
-            else if (gameSearchResult.Status == GameSearchResult.ResultStatus.Success)
-            {
-                var gameStartData = gameSearchResult.GameStartData;
-                var game = _gameCreator.CreateGame(gameStartData);
-                if (Singleton<Game>.Registered) //TODO: Refactor this and get rid of singleton
-                {
-                    Singleton<Game>.Unregister();
-                }
-
-                if (Singleton<GameStartData>.Registered)
-                {
-                    Singleton<GameStartData>.Unregister();
-                }
-                Singleton<Game>.Register(game);
-                Singleton<GameStartData>.Register(gameStartData);
-                GameCreated?.Invoke(this, EventArgs.Empty);
-            }
+            _view.ShowMatchmakingScreen();
+            await _gameSearcher.SearchAsync();
         }
-
-        public virtual async Task CancelGame()
+        private async void OnCancelChosen()
         {
-            if (!_gameCreationInProcess) return;
-            
-            _view.ShowCancelationMessage(MessagesStrings.GameSearchCancelationMessage);
-            
-            var accessToken = await _accessTokenProvider.GetAccessTokenAsync();
-            var canceled = await _gameSearcher.CancelGameSearchAsync(accessToken);
-            if (!canceled)
-            {
-                _view.HideCancelationMessage();
-            }
+            _view.ShowCancellationScreen();
+            await _gameSearcher.CancelAsync();
+        }
+        private void OnGameFound(GameStartData startData)
+        {
+            var game = _gameCreator.CreateGame(startData);
+            _gameCreationHandler.HandleCreatedGame(game, startData);
         }
         
-        private async void OnCreateGame(object sender, EventArgs e)
+        private void OnCancellationApproved()
         {
-            await CreateGame();
+            _view.HideMatchmakingScreen();
+            _view.HideCancellationScreen();
         }
-
-        private async void OnCancelGame(object sender, EventArgs e)
+        private void OnSearchFailed(SearchFailReason reason)
         {
-            await CancelGame();
+            _view.ShowFail(reason);
         }
     }
 }

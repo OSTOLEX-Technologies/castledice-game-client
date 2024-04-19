@@ -29,7 +29,6 @@ namespace Tests.EditMode.NetworkingModuleTests
             await applyTask;
             var sentMessage = messageSender.SentMessage;
             sentMessage.GetByte();
-            sentMessage.GetByte();
             var actualDTO = sentMessage.GetMoveFromClientDTO();
             
             Assert.AreEqual(expectedDTO, actualDTO);

@@ -21,7 +21,6 @@ namespace Tests.EditMode.NetworkingModuleTests
             readinessSender.SendPlayerReadiness(verificationKey);
             var message = messageSender.SentMessage;
             message.GetByte();
-            message.GetByte();
             var actualDTO = message.GetPlayerReadyDTO();
             
             Assert.AreEqual(expectedDTO, actualDTO);
@@ -35,7 +34,7 @@ namespace Tests.EditMode.NetworkingModuleTests
             
             readinessSender.SendPlayerReadiness("sometoken");
             var message = messageSender.SentMessage;
-            var actualMessageId = message.GetUShort();
+            var actualMessageId = message.GetByte();
             
             Assert.AreEqual((ushort)ClientToServerMessageType.PlayerReady, actualMessageId);
         }

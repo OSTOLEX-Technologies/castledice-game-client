@@ -1,5 +1,5 @@
 ﻿using NUnit.Framework;
-using Src.Caching;
+using Src.General.Caching;
 
 namespace Tests.EditMode.CachingTests
 {

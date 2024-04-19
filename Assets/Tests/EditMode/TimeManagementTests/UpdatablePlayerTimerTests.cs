@@ -1,7 +1,7 @@
 ﻿using System;
 using Moq;
 using NUnit.Framework;
-using Src.TimeManagement;
+using Src.General.TimeManagement;
 using static Tests.Utils.ObjectCreationUtility;
 
 namespace Tests.EditMode.TimeManagementTests

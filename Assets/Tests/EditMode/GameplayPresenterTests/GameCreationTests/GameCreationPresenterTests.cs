@@ -1,335 +1,242 @@
 using System;
-using System.Threading.Tasks;
+using System.Collections.Generic;
 using castledice_game_data_logic;
 using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
-using Src;
-using Src.Caching;
-using Src.GameplayPresenter;
 using Src.GameplayPresenter.GameCreation;
-using Src.GameplayView.GameCreation;
-using Tests.Utils.Mocks;
-using static Tests.Utils.ObjectCreationUtility;
+using Src.GameplayPresenter.GameCreation.CreationHandling;
+using Src.GameplayPresenter.GameCreation.Creators.GameCreator;
+using Src.GameplayPresenter.GameCreation.GameSearching;
+using Tests.Utils;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
 {
     public class GameCreationPresenterTests
     {
-        // private class TestGameCreationView : IGameCreationView
-        // {
-        //     public void ShowCreationProcessScreen()
-        //     {
-        //     }
-        //
-        //     public void HideCreationProcessScreen()
-        //     {
-        //     }
-        //
-        //     public void ShowCancelationMessage(string message)
-        //     {
-        //     }
-        //
-        //     public void HideCancelationMessage()
-        //     {
-        //     }
-        //
-        //     public void ShowNonAuthorizedMessage(string message)
-        //     {
-        //     }
-        //
-        //     public void HideNonAuthorizedMessage()
-        //     {
-        //     }
-        //
-        //     public void ChooseCreateGame()
-        //     {
-        //         CreateGameChosen?.Invoke(this, EventArgs.Empty);
-        //     }
-        //
-        //     public void ChooseCancelGame()
-        //     {
-        //         CancelCreationChosen?.Invoke(this, EventArgs.Empty);
-        //     }
-        //
-        //     public event EventHandler CancelCreationChosen;
-        //     public event EventHandler CreateGameChosen;
-        // }
-        //
-        // [Test]
-        // public void CreateGame_ShouldCallShowCreationProcessScreen_BeforeGameFound()
-        // {
-        //     var viewMock = new Mock<IGameCreationView>();
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameCreationView = viewMock.Object,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //
-        //     presenter.CreateGame();
-        //
-        //     viewMock.Verify(v => v.ShowCreationProcessScreen(), Times.Once);
-        // }
-        //
-        // [Test]
-        // public void CreateGame_ShouldCallShowNonAuthorizedMessage_IfPlayerIsNotAuthorized()
-        // {
-        //     var viewMock = new Mock<IGameCreationView>();
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameCreationView = viewMock.Object,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: false)
-        //     }.Build();
-        //
-        //     presenter.CreateGame();
-        //
-        //     viewMock.Verify(v => v.ShowNonAuthorizedMessage(It.IsAny<string>()), Times.Once);
-        // }
-        //
-        // [Test]
-        // public async Task CreateGame_ShouldRegisterGameInstance_IntoSingleton()
-        // {
-        //     var expectedGame = GetGame();
-        //     var gameCreatorMock = new Mock<IGameCreator>();
-        //     gameCreatorMock.Setup(g => g.CreateGame(It.IsAny<GameStartData>())).Returns(expectedGame);
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameCreator = gameCreatorMock.Object,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //
-        //     await presenter.CreateGame();
-        //     var actualGame = Singleton<Game>.Instance;
-        //     
-        //     Assert.AreSame(expectedGame, actualGame);
-        // }
-        //
-        // [Test]
-        // public async Task CreateGame_ShouldRegisterGameStartData_IntoSingleton()
-        // {
-        //     var expectedGameStartData = GetGameStartData();
-        //     var gameSearcherMock = new Mock<IGameSearcher>();
-        //     gameSearcherMock.Setup(g => g.SearchGameAsync(It.IsAny<string>())).ReturnsAsync(new GameSearchResult
-        //     {
-        //         Status = GameSearchResult.ResultStatus.Success,
-        //         GameStartData = expectedGameStartData
-        //     });
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameSearcher = gameSearcherMock.Object,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //
-        //     await presenter.CreateGame();
-        //     var actualGameStartData = Singleton<GameStartData>.Instance;
-        //
-        //     Assert.AreSame(expectedGameStartData, actualGameStartData);
-        // }
-        //
-        // [Test]
-        // public async Task CreateGame_ShouldInvokeGameCreatedEvent_IfGameCreated()
-        // {
-        //     var gameSearcherMock = new Mock<IGameSearcher>();
-        //     gameSearcherMock.Setup(g => g.SearchGameAsync(It.IsAny<string>())).ReturnsAsync(new GameSearchResult
-        //     {
-        //         Status = GameSearchResult.ResultStatus.Success,
-        //         GameStartData = GetGameStartData()
-        //     });
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameSearcher = gameSearcherMock.Object,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //     var gameCreatedEventInvoked = false;
-        //     presenter.GameCreated += (sender, args) => gameCreatedEventInvoked = true;
-        //
-        //     await presenter.CreateGame();
-        //
-        //     Assert.IsTrue(gameCreatedEventInvoked);
-        // }
-        //
-        // [Test]
-        // public async Task CreateGame_ShouldHideLoadingScreenAndCancelingMessage_IfGameCreationIsCanceled()
-        // {
-        //     var viewMock = new Mock<IGameCreationView>();
-        //     var gameSearcher = new GameSearcherMock
-        //     {
-        //         CancelTimeMilliseconds = 0,
-        //         SearchTimeMilliseconds = 100,
-        //         CanBeCanceled = true
-        //     };
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameCreationView = viewMock.Object,
-        //         GameSearcher = gameSearcher,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //
-        //     var gameCreationOperation = presenter.CreateGame();
-        //     var cancelationOperation = presenter.CancelGame();
-        //     await gameCreationOperation;
-        //     await cancelationOperation;
-        //
-        //     viewMock.Verify(v => v.HideCancelationMessage(), Times.Once);
-        //     viewMock.Verify(v => v.HideCreationProcessScreen(), Times.Once);
-        // }
-        //
-        // [Test]
-        // public void CancelGame_ShouldCallShowCancelationMessage_IfGameCreationInProcess()
-        // {
-        //     var viewMock = new Mock<IGameCreationView>();
-        //     var gameSearcher = new GameSearcherMock
-        //     {
-        //         SearchTimeMilliseconds = 100,
-        //         CancelTimeMilliseconds = 0,
-        //         CanBeCanceled = true
-        //     };
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameCreationView = viewMock.Object,
-        //         GameSearcher = gameSearcher,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //
-        //     presenter.CreateGame();
-        //     presenter.CancelGame();
-        //
-        //     viewMock.Verify(v => v.ShowCancelationMessage(It.IsAny<string>()), Times.Once);
-        // }
-        //
-        // [Test]
-        // public void CancelGame_ShouldNotCallShowCancelationMessage_IfGameCreationIsNotInProcess()
-        // {
-        //     var viewMock = new Mock<IGameCreationView>();
-        //     var gameSearcher = new GameSearcherMock
-        //     {
-        //         SearchTimeMilliseconds = 100,
-        //         CancelTimeMilliseconds = 0,
-        //         CanBeCanceled = true
-        //     };
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameCreationView = viewMock.Object,
-        //         GameSearcher = gameSearcher,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //
-        //     presenter.CancelGame();
-        //
-        //     viewMock.Verify(v => v.ShowCancelationMessage(It.IsAny<string>()), Times.Never);
-        // }
-        //
-        // [Test]
-        // //This case assumes that game creation process is going.
-        // public async Task CancelGame_ShouldHideCancelationMessage_IfCancelationIsNotSuccessful()
-        // {
-        //     var viewMock = new Mock<IGameCreationView>();
-        //     var gameSearcher = new GameSearcherMock
-        //     {
-        //         SearchTimeMilliseconds = 100,
-        //         CanBeCanceled = false
-        //     };
-        //     var presenter = new GameCreationPresenterBuilder
-        //     {
-        //         GameCreationView = viewMock.Object,
-        //         GameSearcher = gameSearcher,
-        //         PlayerDataProvider = GetPlayerDataProvider(isAuthorized: true)
-        //     }.Build();
-        //
-        //     presenter.CreateGame();
-        //     await presenter.CancelGame();
-        //
-        //     viewMock.Verify(v => v.HideCancelationMessage(), Times.Once);
-        // }
-        //
-        // [Test]
-        // public void CreateGame_ShouldBeCalled_IfChooseCreateGameOnViewIsCalled()
-        // {
-        //     var view = new TestGameCreationView();
-        //     var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), view);
-        //     var testObject = presenterMock.Object;
-        //
-        //     view.ChooseCreateGame();
-        //
-        //     presenterMock.Verify(p => p.CreateGame(), Times.Once);
-        // }
-        //
-        // [Test]
-        // public void CancelGame_ShouldBeCalled_IfChooseCancelGameOnViewIsCalled()
-        // {
-        //     var view = new TestGameCreationView();
-        //     var presenterMock = new Mock<GameCreationPresenter>(new GameSearcherMock(), GetMockObject<IGameCreator>(), GetPlayerDataProvider(isAuthorized: true), view);
-        //     var testObject = presenterMock.Object;
-        //
-        //     view.ChooseCancelGame();
-        //
-        //     presenterMock.Verify(p => p.CancelGame(), Times.Once);
-        // }
-        //
-        //
-        // [TearDown]
-        // public void UnregisterSingletons()
-        // {
-        //     try
-        //     {
-        //         Singleton<Game>.Unregister();
-        //         Singleton<GameStartData>.Unregister();
-        //     }
-        //     catch (Exception e)
-        //     {
-        //         // ignored
-        //     }
-        // }
-        //
-        // public class GameCreationPresenterMock : GameCreationPresenter
-        // {
-        //     public bool CancelGameCalled { get; private set; }
-        //     public bool CreateGameCalled { get; private set; }
-        //
-        //     public GameCreationPresenterMock(IGameSearcher gameSearcher, IGameCreator gameCreator, IPlayerDataProvider accessTokenProvider, IGameCreationView view) : base(gameSearcher, gameCreator, accessTokenProvider, view)
-        //     {
-        //     }
-        //
-        //     public override Task CancelGame()
-        //     {
-        //         CancelGameCalled = true;
-        //         return Task.CompletedTask;
-        //     }
-        //
-        //     public override Task CreateGame()
-        //     {
-        //         CreateGameCalled = true;
-        //         return Task.CompletedTask;
-        //     }
-        // }
-        //
-        // public class GameCreationPresenterBuilder
-        // {
-        //     public IGameSearcher GameSearcher { get; set; } = new GameSearcherMock();
-        //     public IGameCreator GameCreator { get; set; } = GetMockObject<IGameCreator>();
-        //     public IPlayerDataProvider PlayerDataProvider { get; set; } = GetMockObject<IPlayerDataProvider>();
-        //     public IGameCreationView GameCreationView { get; set; } = GetMockObject<IGameCreationView>();
-        //
-        //     public GameCreationPresenter Build()
-        //     {
-        //         return new GameCreationPresenter(GameSearcher, GameCreator, PlayerDataProvider,
-        //             GameCreationView);
-        //     }
-        // }
-        //
-        // public static IPlayerDataProvider GetPlayerDataProvider(int id = 1, string accessToken = "sometoken",
-        //     bool isAuthorized = true)
-        // {
-        //     var mock = new Mock<IPlayerDataProvider>();
-        //     mock.Setup(p => p.GetId()).Returns(id);
-        //     mock.Setup(p => p.GetAccessToken()).Returns(accessToken);
-        //     mock.Setup(p => p.IsAuthorized()).Returns(isAuthorized);
-        //     return mock.Object;
-        // }
-        //
-        // public static T GetMockObject<T>() where T: class
-        // {
-        //     return new Mock<T>().Object;
-        // }
+        [Test]
+        public void Presenter_ShouldShowMatchmakingScreen_IfPlayChosen()
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object
+            }.Build();
+            
+            viewMock.Raise(x => x.PlayChosen += null);
+            
+            viewMock.Verify(x => x.ShowMatchmakingScreen());
+        }
+
+        [Test]
+        public void Presenter_ShouldSearchGameOnce_IfPlayChosen()
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+            
+            viewMock.Raise(x => x.PlayChosen += null);
+            
+            searcherMock.Verify(x => x.SearchAsync(), Times.Once);
+        }
+
+        [Test]
+        public void Presenter_ShowCancellationScreen_IfCancelChosen()
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object
+            }.Build();
+            
+            viewMock.Raise(x => x.CancelChosen += null);
+            
+            viewMock.Verify(x => x.ShowCancellationScreen());
+        }
+        
+        [Test]
+        public void Presenter_ShouldCancelGameSearchOnce_IfCancelChosen()
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+            
+            viewMock.Raise(x => x.CancelChosen += null);
+            
+            searcherMock.Verify(x => x.CancelAsync(), Times.Once);
+        }
+        
+        [Test]
+        public void Presenter_ShouldPassGameStartDataOnce_ToGameCreator_IfGameFound()
+        {
+            var gameCreatorMock = new Mock<IGameCreator>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var startData = ObjectCreationUtility.GetGameStartData();
+            var presenter = new PresenterBuilder()
+            {
+                GameCreator = gameCreatorMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+
+            searcherMock.Raise(x => x.GameFound += null, startData);
+
+            gameCreatorMock.Verify(x => x.CreateGame(startData), Times.Once);
+        }
+        
+        [Test]
+        public void Presenter_ShouldPassGameStartDataOnce_ToGameCreationHandler_IfGameFound()
+        {
+            var gameCreationHandlerMock = new Mock<IGameCreationHandler>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var startData = ObjectCreationUtility.GetGameStartData();
+            var presenter = new PresenterBuilder()
+            {
+                GameCreationHandler = gameCreationHandlerMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+
+            searcherMock.Raise(x => x.GameFound += null, startData);
+
+            gameCreationHandlerMock.Verify(
+                x => x.HandleCreatedGame(
+                It.IsAny<Game>(), startData), 
+                Times.Once);
+        }
+        
+        [Test]
+        public void Presenter_ShouldPassCreatedGame_FromCreator_ToGameCreationHandler_IfGameFound()
+        {
+            var game = ObjectCreationUtility.GetGame();
+            var gameCreatorMock = new Mock<IGameCreator>();
+            gameCreatorMock.Setup(
+                x => x.CreateGame(
+                    It.IsAny<GameStartData>())).Returns(game);
+            var gameCreationHandlerMock = new Mock<IGameCreationHandler>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var presenter = new PresenterBuilder()
+            {
+                GameCreationHandler = gameCreationHandlerMock.Object,
+                GameSearcher = searcherMock.Object,
+                GameCreator = gameCreatorMock.Object,
+            }.Build();
+
+            searcherMock.Raise(
+                x => x.GameFound += null, 
+                It.IsAny<GameStartData>());
+
+            gameCreationHandlerMock.Verify(
+                x => x.HandleCreatedGame(
+                    game, It.IsAny<GameStartData>()), 
+                Times.Once);
+        }
+        
+        [Test]
+        public void Presenter_ShouldHideMatchmakingScreen_IfCancellationApproved()
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+            
+            searcherMock.Raise(x => x.CancellationApproved += null);
+            
+            viewMock.Verify(x => x.HideMatchmakingScreen());
+        }
+        
+        [Test]
+        public void Presenter_ShouldHideCancellationScreen_IfCancellationApproved()
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+            
+            searcherMock.Raise(x => x.CancellationApproved += null);
+            
+            viewMock.Verify(x => x.HideCancellationScreen());
+        }
+        
+        [Test]
+        public void Presenter_ShouldShowFailOnce_IfSearchFailed()
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+            
+            searcherMock.Raise(x => x.SearchFailed += null, It.IsAny<SearchFailReason>());
+            
+            viewMock.Verify(x => x.ShowFail(
+                It.IsAny<SearchFailReason>()));
+        }
+
+        [Test]
+        [TestCaseSource(nameof(GetReasons))]
+        public void Presenter_ShouldPassFailReason_ToView_IfSearchFailed(SearchFailReason reason)
+        {
+            var viewMock = new Mock<IGameCreationView>();
+            var searcherMock = new Mock<IGameSearcher>();
+            var presenter = new PresenterBuilder()
+            {
+                View = viewMock.Object,
+                GameSearcher = searcherMock.Object,
+            }.Build();
+            
+            searcherMock.Raise(x => x.SearchFailed += null, reason);
+            
+            viewMock.Verify(x => x.ShowFail(
+                reason), Times.Once);
+        }
+        
+        private class PresenterBuilder
+        {
+            public IGameCreationView View;
+            public IGameSearcher GameSearcher;
+            public IGameCreator GameCreator;
+            public IGameCreationHandler GameCreationHandler;
+
+            public PresenterBuilder()
+            {
+                View = new Mock<IGameCreationView>().Object;
+                GameSearcher = new Mock<IGameSearcher>().Object;
+                GameCreator = new Mock<IGameCreator>().Object;
+                GameCreationHandler = new Mock<IGameCreationHandler>().Object;
+            }
+
+            public GameCreationPresenter Build()
+            {
+                return new GameCreationPresenter(
+                    View,
+                    GameSearcher,
+                    GameCreator,
+                    GameCreationHandler);
+            }
+        }
+
+        public static IEnumerable<SearchFailReason> GetReasons()
+        {
+            var reasons = Enum.GetValues(typeof(SearchFailReason));
+            foreach (var reason in reasons)
+            {
+                yield return (SearchFailReason) reason;
+            }
+        }
     }
 }

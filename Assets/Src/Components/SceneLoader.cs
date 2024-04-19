@@ -1,10 +1,10 @@
-using Src.LoadingScenes;
+using Src.General.LoadingScenes;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 namespace Src.Components
 {
-    public class SceneLoader : MonoBehaviour
+    public class SceneLoader : MonoBehaviour, ISceneLoader
     {
         [SerializeField, InspectorName("LoadingScenes Config")]
         private LoadingScenesConfig loadingScenesConfig;

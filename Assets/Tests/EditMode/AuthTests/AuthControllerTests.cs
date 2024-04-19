@@ -5,7 +5,7 @@ using NUnit.Framework;
 using Src.Auth;
 using Src.Auth.TokenProviders;
 using Src.Auth.TokenProviders.TokenProvidersFactory;
-using Src.Caching;
+using Src.General.Caching;
 
 namespace Tests.EditMode.AuthTests
 {

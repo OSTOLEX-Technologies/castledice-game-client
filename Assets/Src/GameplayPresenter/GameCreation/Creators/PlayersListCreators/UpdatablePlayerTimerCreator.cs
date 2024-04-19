@@ -1,7 +1,7 @@
 ﻿using System;
 using castledice_game_logic.Time;
 using Src.GameplayView.Updatables;
-using Src.TimeManagement;
+using Src.General.TimeManagement;
 
 namespace Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators
 {
