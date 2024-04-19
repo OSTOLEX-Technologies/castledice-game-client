@@ -1,7 +1,7 @@
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.TokenProviders;
-using Src.Caching;
-using Src.SceneTransitionCommands;
+using Src.General.Caching;
+using Src.General.SceneTransitionCommands;
 using UnityEngine;
 
 namespace Src.Components

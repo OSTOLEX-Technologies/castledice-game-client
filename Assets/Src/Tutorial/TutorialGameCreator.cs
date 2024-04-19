@@ -1,5 +1,5 @@
 ﻿using castledice_game_logic;
-using Src.GameplayPresenter.GameCreation;
+using Src.GameplayPresenter.GameCreation.Creators.GameCreator;
 
 namespace Src.Tutorial
 {

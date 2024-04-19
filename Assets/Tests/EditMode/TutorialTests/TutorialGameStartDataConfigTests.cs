@@ -44,7 +44,7 @@ namespace Tests.EditMode.TutorialTests
         public void GetGameStartData_ShouldReturnGameStartData_WithProperlySetVersion()
         {
             var config = ScriptableObject.CreateInstance<TutorialGameStartDataConfig>();
-            var expectedVersion = config.GetPrivateConst<string>(VersionFieldName);
+            var expectedVersion = config.GetPrivateStaticField<string>(VersionFieldName);
             
             var gameStartData = config.GetGameStartData(0, 1);
             

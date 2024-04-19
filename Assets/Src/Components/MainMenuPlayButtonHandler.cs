@@ -1,7 +1,5 @@
-using System.Collections;
-using System.Collections.Generic;
 using Src.Components;
-using Src.LoadingScenes;
+using Src.General.LoadingScenes;
 using UnityEngine;
 
 public class MainMenuPlayButtonHandler : MonoBehaviour

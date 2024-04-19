@@ -1,5 +1,5 @@
 using Src.Components;
-using Src.LoadingScenes;
+using Src.General.LoadingScenes;
 using UnityEngine;
 
 namespace Src.ScenesInitializers

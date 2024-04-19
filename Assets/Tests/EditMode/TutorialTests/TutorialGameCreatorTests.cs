@@ -2,7 +2,7 @@
 using Moq;
 using NUnit.Framework;
 using static Tests.Utils.ObjectCreationUtility;
-using Src.GameplayPresenter.GameCreation;
+using Src.GameplayPresenter.GameCreation.Creators.GameCreator;
 using Src.Tutorial;
 
 namespace Tests.EditMode.TutorialTests

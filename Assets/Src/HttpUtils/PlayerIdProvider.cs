@@ -1,8 +1,7 @@
 using System.Threading.Tasks;
-using castledice_game_logic;
 using Src.Auth.REST;
 using Src.Auth.TokenProviders;
-using Src.Caching;
+using Src.General.Caching;
 
 namespace Src.HttpUtils
 {

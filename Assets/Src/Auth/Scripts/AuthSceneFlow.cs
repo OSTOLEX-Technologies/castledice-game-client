@@ -1,5 +1,5 @@
 using Src.Auth.AuthTokenSaver;
-using Src.SceneTransitionCommands;
+using Src.General.SceneTransitionCommands;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;

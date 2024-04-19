@@ -1,10 +1,10 @@
 using System.Collections.Generic;
+using System.Threading.Tasks;
 using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using castledice_game_logic.Math;
-using Src.GameplayPresenter;
-using Src.GameplayPresenter.ActionPointsCount;
+using Src.Auth.TokenProviders;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
@@ -12,7 +12,6 @@ using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.DestroyedContent;
-using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
@@ -62,11 +61,11 @@ using Src.GameplayView.Timers.PlayerTimerViews;
 using Src.GameplayView.Updatables;
 using Src.General.Caching;
 using Src.General.TimeManagement;
+using Src.HttpUtils;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
-using TMPro;
 using UnityEngine;
 
 public class DuelGameSceneInitializer : MonoBehaviour
@@ -83,20 +82,20 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private GameOverView _gameOverView;
     
     [Header("Clicks detection")]
-    [SerializeField] private UnityCellClickDetectorsConfig cellClickDetectorsConfig;
-    [SerializeField] private UnityCellClickDetectorsFactory cellClickDetectorsFactory;
+    [SerializeField] private CellClickDetectorsConfig cellClickDetectorsConfig;
+    [SerializeField] private CellClickDetectorsFactory cellClickDetectorsFactory;
     private List<ICellClickDetector> _cellClickDetectors;
     private TouchInputHandler _touchInputHandler;
     private PlayerInputReader _inputReader;
     
     [Header("Grid")]
-    [SerializeField] private UnityGrid grid;
-    [SerializeField] private UnitySquareGridGenerationConfig gridGenerationConfig;
+    [SerializeField] private GameObjectsGrid grid;
+    [SerializeField] private SquareGridGenerationConfig gridGenerationConfig;
     private SquareGridGenerator _gridGenerator;
     
     [Header("Cells")]
-    [SerializeField] private UnitySquareCellsFactory cellsFactory;
-    [SerializeField] private UnitySquareCellAssetsConfig assetsConfig;
+    [SerializeField] private SquareCellsFactory cellsFactory;
+    [SerializeField] private SquareCellAssetsConfig assetsConfig;
     private SquareCellsViewGenerator3D _cellsViewGenerator;
     
     [Header("Content configs")]
@@ -120,7 +119,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private CellsContentView _contentView;
     
     //Moves
-    private ClientMovesView _clientMovesView;
+    private MovesView _clientMovesView;
     private ClientMovesPresenter _clientMovesPresenter;
     private ServerMovesPresenter _serverMovesPresenter;
     
@@ -130,12 +129,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
     private ActionPointsGivingPresenter _actionPointsGivingPresenter;
     private ActionPointsGivingView _actionPointsGivingView;
-    
-    [Header("Action points count")]
-    [SerializeField] private TextMeshProUGUI actionPointsLabel;
-    [SerializeField] private TextMeshProUGUI actionPointsText;
-    private ActionPointsCountPresenter _actionPointsCountPresenter;
-    private ActionPointsCountView _actionPointsCountView;
     
     [Header("Move highlights")]
     [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
@@ -183,11 +176,19 @@ public class DuelGameSceneInitializer : MonoBehaviour
     
     private Game _game;
     private GameStartData _gameStartData;
-
-    private void Start()
+    private Player _localPlayer;
+    private DuelPlayerColorProvider _playerColorProvider;
+    private PlayerIdProvider _playerIdProvider;
+    private IAccessTokenProvider _accessTokenProvider;
+    
+    private async void Start()
     {
-        SetUpUpdaters();
         SetUpGame();
+        _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
+        _playerIdProvider = new PlayerIdProvider();
+        _localPlayer = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
+        
+        SetUpUpdaters();
         SetUpInput();
         SetUpGrid();
         SetUpContent();
@@ -200,12 +201,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpActionPointsGiving();
         SetUpCamera();
         SetUpCellMovesHighlights();
-        SetUpActionPointsCount();
         SetUpCurrentPlayerLabel();
         SetUpCurrentPlayerLabel();
         SetUpGameOver();
         SetUpTimers();
-        NotifyPlayerIsReady();
+        await NotifyPlayerIsReady();
     }
     
     private void SetUpUpdaters()
@@ -216,7 +216,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpTimers()
     {
-        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
         var highlighterForPlayerProvider = new PlayerColorHighlighterProvider(redPlayerHighlighter, bluePlayerHighlighter,
             playerColorProvider);
         var timeViewForPlayerProvider =
@@ -245,7 +245,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpGameOver()
     {
-        _gameOverView = new GameOverView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+        _gameOverView = new GameOverView(new DuelPlayerColorProvider(_localPlayer),
             blueWinnerScreen, redWinnerScreen, drawScreen);
         _gameOverPresenter = new GameOverPresenter(_game, _gameOverView);
     }
@@ -276,9 +276,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
         cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
         var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
         _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
-        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
-        _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(playerDataCreator,
-            new CellMovesListProvider(_game), _game, _cellMovesHighlightView);
+        _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_localPlayer,
+            new CellMovesListProvider(_game), new CellMovesHighlightObserver(_game, _localPlayer), _cellMovesHighlightView);
     }
 
     private void SetUpClickDetectors()
@@ -301,8 +300,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         var instantiator = new Instantiator();
         var playersList = _game.GetAllPlayers();
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        var playerColorProvider = new DuelPlayerColorProvider(playerDataProvider);
+        var playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
         var playerNumberProvider = new PlayerNumberProvider(playersList);
         var playerRotationProvider = new PlayerOrderRotationProvider(playerOrderRotations, playerNumberProvider);
         
@@ -331,13 +329,12 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpClientMoves()
     {
-        _clientMovesView = new ClientMovesView(_cellClickDetectors);
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
+        _clientMovesView = new MovesView(_cellClickDetectors);
         var serverMovesApplier = new ServerMoveApplier(ClientsHolder.GetClient(ClientType.GameServerClient));
         ApproveMoveMessageHandler.SetDTOAccepter(serverMovesApplier);
         var localMovesApplier = new LocalMovesApplier(_game);
         var possibleMovesProvider = new PossibleMovesListProvider(_game);
-        _clientMovesPresenter = new ClientMovesPresenter(playerDataProvider, serverMovesApplier, possibleMovesProvider,
+        _clientMovesPresenter = new ClientMovesPresenter(_accessTokenProvider, serverMovesApplier, possibleMovesProvider,
             localMovesApplier, new MoveToDataConverter(), _clientMovesView);
     }
 
@@ -352,7 +349,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpPlacedUnitsHighlights()
     {
         var instantiator = new Instantiator();
-        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
         var objectsColorProvider = new PlayerObjectsColorProvider(placedUnitsHighlightsColorConfig, playerColorProvider);
         var underlineCreator = new ColoredHighlightCreator(coloredHighlightPrefabConfig, instantiator);
         _placedUnitsHighlightsView = new PlacedUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
@@ -362,7 +359,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void SetUpNewUnitsHighlights()
     {
         var instantiator = new Instantiator();
-        var playerColorProvider = new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance);
+        var playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
         var objectsColorProvider = new PlayerObjectsColorProvider(newUnitsHighlightsColorConfig, playerColorProvider);
         var underlineCreator = new ColoredHighlightCreator(newUnitsHighlightsPrefabConfig, instantiator);
         _newUnitsHighlightsView = new NewUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
@@ -374,7 +371,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
         var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
         _actionPointsGivingView =
-            new ActionPointsGivingView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+            new ActionPointsGivingView(new DuelPlayerColorProvider(_localPlayer),
                 popupDemonstrator);
         _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
             new ActionPointsGiver(_game), _actionPointsGivingView);
@@ -382,17 +379,9 @@ public class DuelGameSceneInitializer : MonoBehaviour
         GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
     }
 
-    private void SetUpActionPointsCount()
-    {
-        var playerDataProvider = Singleton<IPlayerDataProvider>.Instance;
-        _actionPointsCountView = new ActionPointsCountView(actionPointsText, actionPointsLabel);
-        _actionPointsCountPresenter = new ActionPointsCountPresenter(playerDataProvider, _game,
-            _actionPointsCountView);
-    }
-
     private void SetUpCamera()
     {
-        var playerId = Singleton<IPlayerDataProvider>.Instance.GetId();
+        var playerId = _localPlayer.Id;
         var playerIndex = _game.GetAllPlayersIds().IndexOf(playerId);
         if (playerIndex == 1)
         {
@@ -404,17 +393,15 @@ public class DuelGameSceneInitializer : MonoBehaviour
     
     private void SetUpCurrentPlayerLabel()
     {
-        _currentPlayerView = new CurrentPlayerView(new DuelPlayerColorProvider(Singleton<IPlayerDataProvider>.Instance),
+        _currentPlayerView = new CurrentPlayerView(new DuelPlayerColorProvider(_localPlayer),
             bluePlayerLabel, redPlayerLabel);
         _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
         _currentPlayerPresenter.ShowCurrentPlayer();
     }
 
-    private void NotifyPlayerIsReady()
+    private async Task NotifyPlayerIsReady()
     {
-        var playerDataCreator = Singleton<IPlayerDataProvider>.Instance;
-        var playerToken = playerDataCreator.GetAccessToken();
         var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
-        playerReadinessSender.SendPlayerReadiness(playerToken);
+        playerReadinessSender.SendPlayerReadiness(await _accessTokenProvider.GetAccessTokenAsync());
     }
 }
