@@ -10,7 +10,6 @@ using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
-using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.DestroyedContent;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
@@ -43,7 +42,6 @@ using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
-using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
@@ -134,12 +132,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
     private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
     private CellMovesHighlightView _cellMovesHighlightView;
-
-    [Header("Current player label")] 
-    [SerializeField] private GameObject bluePlayerLabel;
-    [SerializeField] private GameObject redPlayerLabel;
-    private CurrentPlayerPresenter _currentPlayerPresenter;
-    private CurrentPlayerView _currentPlayerView;
     
     [Header("Destroyed content")]
     [SerializeField] private TransparencyConfig destroyedContentTransparencyConfig;
@@ -182,12 +174,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
     
     private async void Start()
     {
+        SetUpUpdaters();
         SetUpGame();
         _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
         _playerIdProvider = new PlayerIdProvider();
         _localPlayer = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
-        
-        SetUpUpdaters();
         SetUpInput();
         SetUpGrid();
         SetUpContent();
@@ -200,8 +191,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpActionPointsGiving();
         SetUpCamera();
         SetUpCellMovesHighlights();
-        SetUpCurrentPlayerLabel();
-        SetUpCurrentPlayerLabel();
         SetUpGameOver();
         SetUpTimers();
         await NotifyPlayerIsReady();
@@ -388,14 +377,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
             camera.transform.localPosition = Vector3.zero;
             camera.transform.localEulerAngles = Vector3.zero;
         }
-    }
-    
-    private void SetUpCurrentPlayerLabel()
-    {
-        _currentPlayerView = new CurrentPlayerView(new DuelPlayerColorProvider(_localPlayer),
-            bluePlayerLabel, redPlayerLabel);
-        _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
-        _currentPlayerPresenter.ShowCurrentPlayer();
     }
 
     private async Task NotifyPlayerIsReady()
