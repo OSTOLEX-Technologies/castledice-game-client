@@ -34,6 +34,10 @@ namespace Src.GameplayPresenter.ServerConnection
 
         public void ConnectToServer()
         {
+            if (_clientWrapper.IsConnected)
+            {
+                return;
+            }
             _view.ShowConnectingMessage();
             var hostAddress = _connectionConfig.HostAddress;
             var maxConnectionAttempts = _connectionConfig.MaxConnectionAttempts;

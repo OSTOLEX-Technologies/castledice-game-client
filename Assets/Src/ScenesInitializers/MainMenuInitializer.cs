@@ -175,8 +175,14 @@ namespace Src.ScenesInitializers
                 _clientWrapper,
                 playerInitializationResultDtoAccepter,
                 initializeButton);
-            _clientWrapper.Connected += async (sender, args) => await _playerInitializationPresenter.StartInitializationAsync();
+            _clientWrapper.Connected += OnConnected;
         }
+
+        private async void OnConnected(object sender, EventArgs e)
+        {
+            await _playerInitializationPresenter.StartInitializationAsync();
+        }
+
 
         private void SetUpServerConnection()
         {
@@ -213,6 +219,14 @@ namespace Src.ScenesInitializers
         private void SetUpAccessTokenProvider()
         {
             _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
+        }
+
+        private void OnDestroy()
+        {
+            _clientWrapper.Connected -= OnConnected;
+            _connectButtonHandler.Dispose();
+            _playerInitializationPresenter.Dispose();
+            _initializeButtonHandler.Dispose();
         }
     }
 }

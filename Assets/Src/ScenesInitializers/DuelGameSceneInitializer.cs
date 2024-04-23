@@ -1,11 +1,11 @@
 using System.Collections.Generic;
-using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using Src.Auth.TokenProviders;
+using Src.Components;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
@@ -21,6 +21,7 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
+using Src.GameplayPresenter.InGameDisconnectHandling;
 using Src.GameplayPresenter.NewUnitsHighlights;
 using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayPresenter.ServerMoves;
@@ -58,6 +59,7 @@ using Src.GameplayView.Timers;
 using Src.GameplayView.Timers.PlayerTimerViews;
 using Src.GameplayView.Updatables;
 using Src.General.Caching;
+using Src.General.LoadingScenes;
 using Src.General.TimeManagement;
 using Src.HttpUtils;
 using Src.NetworkingModule;
@@ -66,6 +68,7 @@ using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DuelGameSceneInitializer : MonoBehaviour
 {
@@ -168,7 +171,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private UpdaterBehaviour updaterBehaviour;
     private readonly Updater _updater = new();
     private readonly Updater _fixedUpdater = new();
-    
+
+    [Header("Disconnect handling")] 
+    [SerializeField] private GameObject _disconnectedPopup;
+    [SerializeField] private Button _returnToMenuButton;
+    private InGameDisconnectHandler _disconnectHandler;
+
+    [Header("Scene loading")]
+    [SerializeField] private SceneLoader _sceneLoader;
     
     private Game _game;
     private GameStartData _gameStartData;
@@ -201,9 +211,16 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpCellMovesHighlights();
         SetUpGameOver();
         SetUpTimers();
+        SetUpDisconnectHandling();
         await NotifyPlayerIsReady();
     }
-    
+
+    private void SetUpDisconnectHandling()
+    {
+        _disconnectHandler = new InGameDisconnectHandler(ClientsHolder.GetClient(ClientType.GameServerClient),
+            _disconnectedPopup, _returnToMenuButton, _sceneLoader, SceneType.MainMenu);
+    }
+
     private void SetUpUpdaters()
     {
         updaterBehaviour.Init(_updater);
@@ -258,6 +275,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void OnDestroy()
     {
         _inputReader.Disable();
+        _disconnectHandler.Dispose();
     }
 
 
@@ -401,4 +419,5 @@ public class DuelGameSceneInitializer : MonoBehaviour
         var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
         playerReadinessSender.SendPlayerReadiness(await _accessTokenProvider.GetAccessTokenAsync());
     }
+    
 }
