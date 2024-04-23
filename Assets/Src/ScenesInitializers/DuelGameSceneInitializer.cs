@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Security.Cryptography.X509Certificates;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
 using castledice_game_data_logic.MoveConverters;
@@ -128,6 +129,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private TextMeshProUGUI redActionPointsText;
     private ActionPointsUI _blueActionPointsUI;
     private ActionPointsUI _redActionPointsUI;
+    private IActionPointsGivingPresenter _actionPointsGivingPresenter;
+    private IActionPointsGivingView _actionPointsGivingView;
     
     [Header("Move highlights")]
     [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
@@ -192,7 +195,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpServerMoves();
         SetUpPlacedUnitsHighlights();
         SetUpNewUnitsHighlights();
-        SetUpActionPoints();
+        SetUpActionPointsGiving();
+        SetUpActionPointsCountUI();
         SetUpCamera();
         SetUpCellMovesHighlights();
         SetUpGameOver();
@@ -357,8 +361,24 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _newUnitsHighlightsView = new NewUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
         _newUnitsHighlightsPresenter = new NewUnitsHighlightsPresenter(_game, _newUnitsHighlightsView);
     }
+
+
+    public class ActionPointsGivingViewStub : IActionPointsGivingView
+    {
+        public void ShowActionPointsForPlayer(Player player, int amount)
+        {
+        }
+    }
     
-    private void SetUpActionPoints()
+    private void SetUpActionPointsGiving()
+    {
+        _actionPointsGivingView = new ActionPointsGivingViewStub();
+        _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
+            new ActionPointsGiver(_game), _actionPointsGivingView);
+        GiveActionPointsMessageHandler.SetAccepter(new GiveActionPointsAccepter(_actionPointsGivingPresenter));
+    }
+    
+    private void SetUpActionPointsCountUI()
     {
         _blueActionPointsUI = new ActionPointsUI(blueActionPointsText, blueBanner, _localPlayer);
         _redActionPointsUI = new ActionPointsUI(redActionPointsText, redBanner, _enemyPlayer);
