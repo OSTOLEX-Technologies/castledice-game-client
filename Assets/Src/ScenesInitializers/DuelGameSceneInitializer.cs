@@ -63,6 +63,7 @@ using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
+using TMPro;
 using UnityEngine;
 
 public class DuelGameSceneInitializer : MonoBehaviour
@@ -119,13 +120,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private MovesView _clientMovesView;
     private ClientMovesPresenter _clientMovesPresenter;
     private ServerMovesPresenter _serverMovesPresenter;
-    
-    [Header("Action points giving")]
-    [SerializeField] private int popupDisappearTimeMilliseconds;
-    [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
-    [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
-    private ActionPointsGivingPresenter _actionPointsGivingPresenter;
-    private ActionPointsGivingView _actionPointsGivingView;
+
+    [Header("Action points")] 
+    [SerializeField] private GameObject blueBanner;
+    [SerializeField] private TextMeshProUGUI blueActionPointsText;
+    [SerializeField] private GameObject redBanner;
+    [SerializeField] private TextMeshProUGUI redActionPointsText;
+    private ActionPointsUI _blueActionPointsUI;
+    private ActionPointsUI _redActionPointsUI;
     
     [Header("Move highlights")]
     [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
@@ -168,6 +170,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private Game _game;
     private GameStartData _gameStartData;
     private Player _localPlayer;
+    private Player _enemyPlayer;
     private DuelPlayerColorProvider _playerColorProvider;
     private PlayerIdProvider _playerIdProvider;
     private IAccessTokenProvider _accessTokenProvider;
@@ -179,6 +182,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
         _playerIdProvider = new PlayerIdProvider();
         _localPlayer = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
+        _enemyPlayer = _game.GetAllPlayers().Find(p => p != _localPlayer);
         SetUpInput();
         SetUpGrid();
         SetUpContent();
@@ -188,7 +192,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpServerMoves();
         SetUpPlacedUnitsHighlights();
         SetUpNewUnitsHighlights();
-        SetUpActionPointsGiving();
+        SetUpActionPoints();
         SetUpCamera();
         SetUpCellMovesHighlights();
         SetUpGameOver();
@@ -354,17 +358,10 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _newUnitsHighlightsPresenter = new NewUnitsHighlightsPresenter(_game, _newUnitsHighlightsView);
     }
     
-    private void SetUpActionPointsGiving()
+    private void SetUpActionPoints()
     {
-        var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
-        var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
-        _actionPointsGivingView =
-            new ActionPointsGivingView(new DuelPlayerColorProvider(_localPlayer),
-                popupDemonstrator);
-        _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
-            new ActionPointsGiver(_game), _actionPointsGivingView);
-        var actionPointsGivingAccepter = new GiveActionPointsAccepter(_actionPointsGivingPresenter);
-        GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
+        _blueActionPointsUI = new ActionPointsUI(blueActionPointsText, blueBanner, _localPlayer);
+        _redActionPointsUI = new ActionPointsUI(redActionPointsText, redBanner, _enemyPlayer);
     }
 
     private void SetUpCamera()
