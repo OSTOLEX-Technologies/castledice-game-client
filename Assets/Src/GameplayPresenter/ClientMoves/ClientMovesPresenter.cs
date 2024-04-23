@@ -5,7 +5,6 @@ using Src.Auth.TokenProviders;
 using Src.GameplayPresenter.GameWrappers;
 using Src.GameplayView.ClientMoves;
 using Src.HttpUtils;
-using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayPresenter.ClientMoves

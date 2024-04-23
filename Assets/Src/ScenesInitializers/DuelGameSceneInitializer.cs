@@ -26,7 +26,6 @@ using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayPresenter.Timers;
 using Src.GameplayView;
-using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
