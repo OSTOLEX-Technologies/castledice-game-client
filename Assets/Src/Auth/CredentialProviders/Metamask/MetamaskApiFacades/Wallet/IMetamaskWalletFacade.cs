@@ -10,7 +10,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         public void Disconnect();
         public string GetPublicAddress();
         
-        public event EventHandler OnConnected;
-        public event EventHandler OnDisconnected;
+        public event Action OnConnected;
+        public event Action OnDisconnected;
     }
 }

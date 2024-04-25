@@ -5,6 +5,7 @@ using System.Net.Http;
 using System.Threading.Tasks;
 using Newtonsoft.Json;
 using Src.Auth.Exceptions.HttpRequests;
+using UnityEngine;
 
 namespace Src.Auth.REST
 {
@@ -24,7 +25,7 @@ namespace Src.Auth.REST
         {
             var parametrizedUri = FormatUriWithParams(uri, requestParams);
             
-            var request = new HttpRequestMessage(requestMethodType, uri);
+            var request = new HttpRequestMessage(requestMethodType, parametrizedUri);
 
             return await SendResponse<T>(request);
         }
@@ -36,7 +37,7 @@ namespace Src.Auth.REST
         {
             var parametrizedUri = FormatUriWithParams(uri, requestParams);
             
-            var request = new HttpRequestMessage(requestMethodType, uri);
+            var request = new HttpRequestMessage(requestMethodType, parametrizedUri);
             
             var encodedContent = new FormUrlEncodedContent(requestBodyContent);
             request.Content = encodedContent;
@@ -51,6 +52,7 @@ namespace Src.Auth.REST
                 throw new HttpClientRequestException(await response.Content.ReadAsStringAsync(), response.StatusCode);
             
             var responseContent = await response.Content.ReadAsStringAsync();
+            Debug.LogWarning("Response: " + responseContent);
             var data = JsonConvert.DeserializeObject<T>(responseContent);
             return data;
         }
