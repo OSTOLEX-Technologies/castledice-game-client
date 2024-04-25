@@ -24,7 +24,8 @@ namespace Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter
         {
             try
             {
-                var res = await _httpClientRequestAdapter.Request<GoogleIdTokenResponse>(HttpMethod.Post, TokenAccessUri,
+                var res = await _httpClientRequestAdapter.Request<GoogleIdTokenResponse>(
+                    HttpMethod.Post, TokenAccessUri,
                     requestParams.AsDictionary());
                 tcs.SetResult(res);
             }

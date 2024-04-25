@@ -6,7 +6,15 @@ namespace Src.Auth.REST
 {
     public interface IHttpClientRequestAdapter
     {
-        public Task<T> Request<T>(HttpMethod requestMethodType, string uri,
+        public Task<T> Request<T>(
+            HttpMethod requestMethodType, 
+            string uri,
+            IEnumerable<KeyValuePair<string, string>> requestParams,
+            IEnumerable<KeyValuePair<string, string>> requestBodyContent);
+
+        public Task<T> Request<T>(
+            HttpMethod requestMethodType, 
+            string uri, 
             IEnumerable<KeyValuePair<string, string>> requestParams);
     }
 }
