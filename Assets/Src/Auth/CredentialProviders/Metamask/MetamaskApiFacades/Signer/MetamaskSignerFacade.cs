@@ -20,7 +20,8 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer
                     MetaMaskUnity.Instance.Wallet.SelectedAddress,
                 }
             };
-            return await wallet.Request(request) as string;
+            
+            return (await wallet.Request(request)) as string;
         }
     }
 }

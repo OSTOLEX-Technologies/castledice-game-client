@@ -47,6 +47,7 @@ namespace Src.Auth.REST
 
         private async Task<T> SendResponse<T>(HttpRequestMessage request)
         {
+            Debug.LogWarning("Sending to: " + request.RequestUri);
             var response = await _httpClient.SendAsync(request);
             if (response.StatusCode != HttpStatusCode.OK)
                 throw new HttpClientRequestException(await response.Content.ReadAsStringAsync(), response.StatusCode);

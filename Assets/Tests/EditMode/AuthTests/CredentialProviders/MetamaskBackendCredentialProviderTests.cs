@@ -86,7 +86,7 @@ namespace Tests.EditMode.AuthTests.CredentialProviders
             public void SetRequestWalletFacade()
             {
                 _walletFacade.Setup(a => a.Connect()).Raises(
-                    a => a.OnConnected += null, _walletFacade.Object, EventArgs.Empty);
+                    a => a.Connected += null, _walletFacade.Object, EventArgs.Empty);
             }
             public void SetRequestSignerFacade()
             {

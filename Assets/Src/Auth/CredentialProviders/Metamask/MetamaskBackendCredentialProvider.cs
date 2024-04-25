@@ -1,4 +1,3 @@
-using System;
 using System.Threading.Tasks;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer;
@@ -46,7 +45,7 @@ namespace Src.Auth.CredentialProviders.Metamask
             {
                 if (!IMetamaskWalletFacade.WalletConnected)
                 {
-                    await WaitForWalletConnect();
+                    await WaitForWalletAuthorize();
                 }
                 
                 var nonce = await ObtainNonce();
@@ -70,14 +69,14 @@ namespace Src.Auth.CredentialProviders.Metamask
             return _tokenStore.accessToken.Token;
         }
 
-        private async Task WaitForWalletConnect()
+        private async Task WaitForWalletAuthorize()
         {
             var tcs = new TaskCompletionSource<object>();
-            void OnConnectedCallback() => tcs.SetResult(new object());
-            _walletFacade.OnConnected += OnConnectedCallback;
+            void OnAuthorizedCallback() => tcs.SetResult(new object());
+            _walletFacade.Authorized += OnAuthorizedCallback;
             _walletFacade.Connect();
             await tcs.Task;
-            _walletFacade.OnConnected -= OnConnectedCallback;
+            _walletFacade.Authorized -= OnAuthorizedCallback;
         }
 
         private async Task<string> ObtainNonce()
@@ -96,7 +95,6 @@ namespace Src.Auth.CredentialProviders.Metamask
                     _walletFacade.GetPublicAddress(),
                     signedNonce));
 
-            Debug.LogError(accessResponse.EncodedJwt + " ||||| " + accessResponse.RefreshToken);
             return accessResponse;
         }
         
