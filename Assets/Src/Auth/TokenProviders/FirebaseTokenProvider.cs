@@ -14,7 +14,7 @@ namespace Src.Auth.TokenProviders
         
         public Task<string> GetAccessTokenAsync()
         {
-            return _user.TokenAsync(true);
+            return _user.TokenAsync(false);
         }
     }
 }
