@@ -227,6 +227,7 @@ namespace Src.ScenesInitializers
             _connectButtonHandler.Dispose();
             _playerInitializationPresenter.Dispose();
             _initializeButtonHandler.Dispose();
+            _serverConnectionPresenter.Dispose();
         }
     }
 }

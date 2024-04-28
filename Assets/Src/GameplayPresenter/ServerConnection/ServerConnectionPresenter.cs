@@ -5,7 +5,7 @@ using Src.NetworkingModule;
 
 namespace Src.GameplayPresenter.ServerConnection
 {
-    public class ServerConnectionPresenter : IServerConnectionPresenter
+    public class ServerConnectionPresenter : IServerConnectionPresenter, IDisposable
     {
         private readonly IServerConnectionView _view;
         private readonly IClientWrapper _clientWrapper;
@@ -43,6 +43,11 @@ namespace Src.GameplayPresenter.ServerConnection
             var maxConnectionAttempts = _connectionConfig.MaxConnectionAttempts;
             _clientWrapper.Connect(hostAddress, maxConnectionAttempts);
         }
-        
+
+        public void Dispose()
+        {
+            _clientWrapper.Connected -= OnConnected;
+            _clientWrapper.ConnectionFailed -= OnConnectionFailed;
+        }
     }
 }
