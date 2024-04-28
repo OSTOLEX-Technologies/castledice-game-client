@@ -1,3 +1,4 @@
+using System;
 using castledice_game_data_logic;
 using Src.GameplayPresenter.GameCreation.CreationHandling;
 using Src.GameplayPresenter.GameCreation.Creators.GameCreator;
@@ -5,7 +6,7 @@ using Src.GameplayPresenter.GameCreation.GameSearching;
 
 namespace Src.GameplayPresenter.GameCreation
 {
-    public class GameCreationPresenter
+    public class GameCreationPresenter : IDisposable
     {
         private readonly IGameCreationView _view;
         private readonly IGameSearcher _gameSearcher;
@@ -49,6 +50,15 @@ namespace Src.GameplayPresenter.GameCreation
         private void OnSearchFailed(SearchFailReason reason)
         {
             _view.ShowFail(reason);
+        }
+
+        public void Dispose()
+        {
+            _view.PlayChosen -= OnPlayChosen;
+            _view.CancelChosen -= OnCancelChosen;
+            _gameSearcher.GameFound -= OnGameFound;
+            _gameSearcher.CancellationApproved -= OnCancellationApproved;
+            _gameSearcher.SearchFailed -= OnSearchFailed;
         }
     }
 }
