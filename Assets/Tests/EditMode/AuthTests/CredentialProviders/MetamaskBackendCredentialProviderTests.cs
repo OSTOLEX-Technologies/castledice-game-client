@@ -9,6 +9,7 @@ using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
 using Src.Auth.JwtManagement;
 using Src.Auth.JwtManagement.Converters.Metamask;
+using Src.Auth.JwtManagement.DtoConverters.Metamask;
 using Src.Auth.JwtManagement.Tokens;
 using Src.Auth.REST.REST_Request_Proxies.Metamask;
 using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;

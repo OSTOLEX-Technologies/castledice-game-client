@@ -5,6 +5,7 @@ using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter;
 using Src.Auth.JwtManagement;
 using Src.Auth.JwtManagement.Converters.Metamask;
+using Src.Auth.JwtManagement.DtoConverters.Metamask;
 using Src.Auth.REST.REST_Request_Proxies.Metamask;
 using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
 using UnityEngine;
@@ -47,24 +48,30 @@ namespace Src.Auth.CredentialProviders.Metamask
                 {
                     await WaitForWalletAuthorize();
                 }
-                
-                var nonce = await ObtainNonce();
+
+                var walletPublicAddress = _walletFacade.GetPublicAddress();
+                var nonce = await ObtainNonce(walletPublicAddress);
+                Debug.LogError(nonce);
                 var signedNonce = await _signerFacade.Sign(nonce);
-                var accessResponse = await Auth(signedNonce);
+                Debug.LogError("signed:\n" + signedNonce);
+                var accessResponse = await Auth(walletPublicAddress, signedNonce);
                 _tokenStore = _jwtConverter.FromMetamaskAuthResponse(accessResponse);
                 _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
+                
+                PrintTokens();
                 
                 return _tokenStore.accessToken.Token;
             }
             
-            if (!_tokenStore.accessToken.Valid)
-            {
-                var refreshResponse = await RefreshTokens();
-                _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
-                _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
-                
-                return _tokenStore.accessToken.Token;
-            }
+            PrintTokens();
+
+            if (_tokenStore.accessToken.Valid) return _tokenStore.accessToken.Token;
+            
+            var refreshResponse = await RefreshTokens();
+            _tokenStore = _jwtConverter.FromMetamaskRefreshResponse(refreshResponse);
+            _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Metamask);
+            
+            PrintTokens();
             
             return _tokenStore.accessToken.Token;
         }
@@ -79,21 +86,18 @@ namespace Src.Auth.CredentialProviders.Metamask
             _walletFacade.Authorized -= OnAuthorizedCallback;
         }
 
-        private async Task<string> ObtainNonce()
+        private async Task<string> ObtainNonce(string publicAddress)
         {
             var response = await _metamaskRestRequestsAdapter.GetNonce(
-                new MetamaskNonceRequestDtoProxy(_walletFacade.GetPublicAddress()));
-            Debug.LogError(response.Nonce);
+                new MetamaskNonceRequestDtoProxy(publicAddress));
             return response.Nonce;
         }
         
 
-        private async Task<MetamaskAccessTokenResponse> Auth(string signedNonce)
+        private async Task<MetamaskAccessTokenResponse> Auth(string publicAddress, string signedNonce)
         {
             var accessResponse = await _metamaskRestRequestsAdapter.AuthenticateAndGetTokens(
-                new MetamaskAuthRequestDtoProxy(
-                    _walletFacade.GetPublicAddress(),
-                    signedNonce));
+                new MetamaskAuthRequestDtoProxy(publicAddress, signedNonce));
 
             return accessResponse;
         }
@@ -104,6 +108,13 @@ namespace Src.Auth.CredentialProviders.Metamask
                 new MetamaskRefreshRequestDtoProxy(_tokenStore.refreshToken.Token));
 
             return refreshResponse;
+        }
+        
+        private void PrintTokens()
+        {
+            Debug.Log($"TOKENS:\n " +
+                      $"Access: {_tokenStore.accessToken.Token}\n " +
+                      $"Refresh: {_tokenStore.refreshToken.Token}");
         }
     }
 }
