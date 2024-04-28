@@ -14,6 +14,8 @@ namespace Src.GameplayPresenter.GameCreation.GameSearching
         public event Action<GameStartData> GameFound;
         public event Action<SearchFailReason> SearchFailed;
         public event Action CancellationApproved;
+        
+        public event Action CancellationFailed;
 
         private readonly IGameRequester _gameRequester;
         private readonly IGameCancelRequester _cancelRequester;
@@ -45,7 +47,11 @@ namespace Src.GameplayPresenter.GameCreation.GameSearching
 
         public async Task CancelAsync()
         {
-            if (!_clientWrapper.IsConnected || !_initializationProvider.Initialized) return;
+            if (!_clientWrapper.IsConnected || !_initializationProvider.Initialized)
+            {
+                CancellationFailed?.Invoke();
+                return;
+            }
             await _cancelRequester.RequestCancelAsync();
         }
 

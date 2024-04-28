@@ -1,5 +1,4 @@
-﻿using System.Threading.Tasks;
-using Moq;
+﻿using Moq;
 using NUnit.Framework;
 using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.PlayersColors;

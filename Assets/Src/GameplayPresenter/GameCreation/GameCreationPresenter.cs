@@ -22,6 +22,7 @@ namespace Src.GameplayPresenter.GameCreation
             _gameSearcher.GameFound += OnGameFound;
             _gameSearcher.CancellationApproved += OnCancellationApproved;
             _gameSearcher.SearchFailed += OnSearchFailed;
+            _gameSearcher.CancellationFailed += OnCancellationFailed;
             _gameCreator = gameCreator;
             _gameCreationHandler = gameCreationHandler;
         }
@@ -47,8 +48,15 @@ namespace Src.GameplayPresenter.GameCreation
             _view.HideMatchmakingScreen();
             _view.HideCancellationScreen();
         }
+        
+        private void OnCancellationFailed()
+        {
+            _view.HideCancellationScreen();
+        }
+        
         private void OnSearchFailed(SearchFailReason reason)
         {
+            _view.HideMatchmakingScreen();
             _view.ShowFail(reason);
         }
 
@@ -58,6 +66,7 @@ namespace Src.GameplayPresenter.GameCreation
             _view.CancelChosen -= OnCancelChosen;
             _gameSearcher.GameFound -= OnGameFound;
             _gameSearcher.CancellationApproved -= OnCancellationApproved;
+            _gameSearcher.CancellationFailed -= OnCancellationFailed;
             _gameSearcher.SearchFailed -= OnSearchFailed;
         }
     }

@@ -899,7 +899,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 468774806}
-  stringsListConfig: {fileID: 11400000, guid: abda8cdec464fcd47867a8a78a56cde3, type: 2}
+  stringsListConfig: {fileID: 11400000, guid: 7c48e96ecf603c24da08a044bcdf7ce3, type: 2}
   intervalConfig: {fileID: 11400000, guid: 49963a3a59143fa4797a6682d9a3a0a6, type: 2}
 --- !u!1 &468774808 stripped
 GameObject:
