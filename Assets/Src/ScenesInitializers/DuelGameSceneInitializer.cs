@@ -12,6 +12,8 @@ using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
 using Src.GameplayPresenter.DestroyedContent;
+using Src.GameplayPresenter.EnemyDisconnect;
+using Src.GameplayPresenter.EnemyDisconnect.NetworkBridges;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
@@ -174,8 +176,14 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     [Header("Disconnect handling")] 
     [SerializeField] private GameObject _disconnectedPopup;
-    [SerializeField] private Button _returnToMenuButton;
+    [SerializeField] private Button _disconnectedPopupButton;
     private InGameDisconnectHandler _disconnectHandler;
+    
+    [Header("Enemy disconnect handling")]
+    [SerializeField] private GameObject _enemyDisconnectedPopup;
+    [SerializeField] private Button _enemyDisconnectedPopupButton;
+    private EnemyDisconnectPresenter _enemyDisconnectPresenter;
+    private IEnemyDisconnectView _enemyDisconnectView;
 
     [Header("Scene loading")]
     [SerializeField] private SceneLoader _sceneLoader;
@@ -212,13 +220,23 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpGameOver();
         SetUpTimers();
         SetUpDisconnectHandling();
+        SetUpEnemyDisconnectHandling();
         await NotifyPlayerIsReady();
+    }
+
+    private void SetUpEnemyDisconnectHandling()
+    {
+        var view = new EnemyDisconnectView(_enemyDisconnectedPopup, _enemyDisconnectedPopupButton);
+        _enemyDisconnectView = view;
+        var eventEmmiter = new DuelPlayerDisconnectedDTOAccepter();
+        PlayerDisconnectedMessageHandler.SetDTOAccepter(eventEmmiter);
+        _enemyDisconnectPresenter = new EnemyDisconnectPresenter(view, eventEmmiter, _sceneLoader);
     }
 
     private void SetUpDisconnectHandling()
     {
         _disconnectHandler = new InGameDisconnectHandler(ClientsHolder.GetClient(ClientType.GameServerClient),
-            _disconnectedPopup, _returnToMenuButton, _sceneLoader, SceneType.MainMenu);
+            _disconnectedPopup, _disconnectedPopupButton, _sceneLoader, SceneType.MainMenu);
     }
 
     private void SetUpUpdaters()
@@ -276,6 +294,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         _inputReader.Disable();
         _disconnectHandler.Dispose();
+        _enemyDisconnectPresenter.Dispose();
     }
 
 

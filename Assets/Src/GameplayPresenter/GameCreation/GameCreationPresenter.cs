@@ -51,6 +51,7 @@ namespace Src.GameplayPresenter.GameCreation
         
         private void OnCancellationFailed()
         {
+            _view.HideMatchmakingScreen();
             _view.HideCancellationScreen();
         }
         

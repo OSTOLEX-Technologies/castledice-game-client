@@ -3088,7 +3088,7 @@ MonoBehaviour:
   connectionFailedMessage: {fileID: 8977001528294372651}
   connectionFailedReasonText: {fileID: 8977001527691485658}
   rejectReasonMessagesConfig: {fileID: 11400000, guid: 3f9b8e08bfa40fb458b04b3afeb3a7ac, type: 2}
-  serverConnectionConfig: {fileID: 11400000, guid: 9dfc325aa1f979f4e8ceed6254d0ba3a, type: 2}
+  serverConnectionConfig: {fileID: 11400000, guid: 0f64862365a0758448d05c67524523b1, type: 2}
   connectButton: {fileID: 65619409}
   processMessage: {fileID: 740634149}
   initializationFailureMessage: {fileID: 1309826212}
