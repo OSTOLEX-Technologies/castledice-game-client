@@ -52,12 +52,10 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             {
                 Debug.Log("GOOGLE TOKENS AREN'T STORED");
                 var authResponse = await GetAuthData();
-                ;
 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
                 _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
-
-
+                
                 PrintTokens();
                 return _tokenStore;
             }
