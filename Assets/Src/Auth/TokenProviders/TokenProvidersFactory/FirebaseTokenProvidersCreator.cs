@@ -3,7 +3,6 @@ using Firebase;
 using Firebase.Auth;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.Exceptions.Authorization;
-using UnityEngine;
 
 namespace Src.Auth.TokenProviders.TokenProvidersFactory
 {
