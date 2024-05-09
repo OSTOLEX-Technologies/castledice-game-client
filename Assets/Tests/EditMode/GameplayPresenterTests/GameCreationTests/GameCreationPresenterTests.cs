@@ -4,10 +4,12 @@ using castledice_game_data_logic;
 using castledice_game_logic;
 using Moq;
 using NUnit.Framework;
+using Src.Components;
 using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.CreationHandling;
 using Src.GameplayPresenter.GameCreation.Creators.GameCreator;
 using Src.GameplayPresenter.GameCreation.GameSearching;
+using Src.GameplayPresenter.GameCreation.Timeout;
 using Tests.Utils;
 
 namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
@@ -211,6 +213,8 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
             public IGameSearcher GameSearcher;
             public IGameCreator GameCreator;
             public IGameCreationHandler GameCreationHandler;
+            public ITimeout Timeout;
+            public ISceneLoader SceneLoader;
 
             public PresenterBuilder()
             {
@@ -218,6 +222,8 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
                 GameSearcher = new Mock<IGameSearcher>().Object;
                 GameCreator = new Mock<IGameCreator>().Object;
                 GameCreationHandler = new Mock<IGameCreationHandler>().Object;
+                Timeout = new Mock<ITimeout>().Object;
+                SceneLoader = new Mock<ISceneLoader>().Object;
             }
 
             public GameCreationPresenter Build()
@@ -226,7 +232,9 @@ namespace Tests.EditMode.GameplayPresenterTests.GameCreationTests
                     View,
                     GameSearcher,
                     GameCreator,
-                    GameCreationHandler);
+                    GameCreationHandler,
+                    Timeout,
+                    SceneLoader);
             }
         }
 

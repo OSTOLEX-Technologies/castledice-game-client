@@ -18,6 +18,7 @@ using Src.GameplayPresenter.GameCreation.GameSearching;
 using Src.GameplayPresenter.GameCreation.GameSearching.CancelRequesting;
 using Src.GameplayPresenter.GameCreation.GameSearching.GameRequesting;
 using Src.GameplayPresenter.GameCreation.GameSearching.MessageHandlers;
+using Src.GameplayPresenter.GameCreation.Timeout;
 using Src.GameplayPresenter.PlayerInitialization;
 using Src.GameplayPresenter.PlayerInitialization.Caching;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
@@ -72,6 +73,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private TextMeshProUGUI connectionFailedReasonText;
         [SerializeField] private RejectReasonMessagesConfig rejectReasonMessagesConfig;
         [SerializeField] private ServerConnectionConfig serverConnectionConfig;
+        [SerializeField] private CoroutineTimeout gameSearchTimeout;
         [SerializeField] private Button connectButton;
         private ServerConnectionPresenter _serverConnectionPresenter;
         private ServerConnectionView _serverConnectionView;
@@ -152,7 +154,13 @@ namespace Src.ScenesInitializers
                 searchFailedMessage, searchFailedMessageTextMesh,
                 failMessagesConfig);
             _gameCreationPresenter =
-                new GameCreationPresenter(_gameCreationView, gameSearcher, gameCreator, gameCreationHandler);
+                new GameCreationPresenter(
+                    _gameCreationView, 
+                    gameSearcher, 
+                    gameCreator, 
+                    gameCreationHandler,
+                    gameSearchTimeout,
+                    sceneLoader);
         }
 
         private void SetUpPlayerInitialization()
