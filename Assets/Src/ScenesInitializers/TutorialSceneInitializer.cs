@@ -11,7 +11,6 @@ using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.DestroyedContent;
-using Src.GameplayPresenter.GameCreation;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
@@ -210,7 +209,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private GameObject introGameObject;
         
         [Header("Tutorial controller")]
-        [SerializeField] private TutorialController tutorialController;
+        [SerializeField] private TutorialScenario tutorialScenario;
         [SerializeField] private Button screenClickDetector;
         private BlockableRaycaster3D _raycaster;
         
@@ -264,18 +263,18 @@ namespace Src.ScenesInitializers
 
         private void SetUpController()
         {
-            _movesPresenter.WrongMovePicked += (object sender, AbstractMove move) => tutorialController.WrongMoveApplied();
-            _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => tutorialController.RightMoveApplied();
+            _movesPresenter.WrongMovePicked += (object sender, AbstractMove move) => tutorialScenario.WrongMoveApplied();
+            _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => tutorialScenario.RightMoveApplied();
             _game.TurnSwitched += (_, _) =>
             {
                 var isPlayerTurn = _game.GetCurrentPlayer() == _player;
                 if (isPlayerTurn)
                 {
-                    tutorialController.PlayerTurn();
+                    tutorialScenario.PlayerTurn();
                 }
             };
-            screenClickDetector.onClick.AddListener(tutorialController.ScreenClicked);
-            tutorialController.Init(_raycaster);
+            screenClickDetector.onClick.AddListener(tutorialScenario.ScreenClicked);
+            tutorialScenario.Init(_raycaster);
         }
 
 

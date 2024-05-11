@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Src.Prototypes
 {
-    public class TutorialController : MonoBehaviour
+    public class TutorialScenario : MonoBehaviour
     {
         [SerializeField] private List<GameObject> frames;
         [SerializeField] private List<int> framesToSwitchByClick;
@@ -27,7 +27,7 @@ namespace Src.Prototypes
 
         public void ScreenClicked()
         {
-            Debug.Log("Screen clicked");
+            Debug.Log("Next button clicked");
             if (!framesToSwitchByClick.Contains(_currentFrameIndex)) return;
             SwitchToNextFrame();
         }
@@ -67,7 +67,7 @@ namespace Src.Prototypes
 
         public void WrongMoveApplied()
         {
-        
+            //TODO: Handle wrong moves
         }
     }
 }

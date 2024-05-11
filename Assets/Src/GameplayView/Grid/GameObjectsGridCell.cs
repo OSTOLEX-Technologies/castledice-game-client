@@ -15,7 +15,7 @@ namespace Src.GameplayView.Grid
         {
             Position = position;
         }
-        
+
         public IEnumerator<GameObject> GetEnumerator()
         {
             return _children.GetEnumerator();
@@ -39,6 +39,7 @@ namespace Src.GameplayView.Grid
         {
             if (!_children.Contains(child)) return false;
             _children.Remove(child);
+            //TODO: remove redundant Destroy() call; transfer it to calling object
             Destroy(child);
             return true;
         }
