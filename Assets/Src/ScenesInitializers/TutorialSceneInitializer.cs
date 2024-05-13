@@ -209,7 +209,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private GameObject introGameObject;
         
         [Header("Tutorial controller")]
-        [SerializeField] private TutorialScenario tutorialScenario;
+        [SerializeField] private TutorialScenario.TutorialScenario tutorialScenario;
         [SerializeField] private Button screenClickDetector;
         private BlockableRaycaster3D _raycaster;
         

@@ -39,8 +39,6 @@ namespace Src.GameplayView.Grid
         {
             if (!_children.Contains(child)) return false;
             _children.Remove(child);
-            //TODO: remove redundant Destroy() call; transfer it to calling object
-            Destroy(child);
             return true;
         }
     }

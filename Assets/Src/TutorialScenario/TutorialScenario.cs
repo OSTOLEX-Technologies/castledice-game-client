@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using Src.PlayerInput;
 using UnityEngine;
 
-namespace Src.Prototypes
+namespace Src.TutorialScenario
 {
     public class TutorialScenario : MonoBehaviour
     {
