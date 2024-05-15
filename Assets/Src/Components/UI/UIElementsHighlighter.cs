@@ -1,42 +1,49 @@
 using System.Collections.Generic;
-using Src.Components.UI;
 using UnityEngine;
 
-public sealed class UIElementsHighlighter : MonoBehaviour
+namespace Src.Components.UI
 {
-    [SerializeField] private AppearingImage shadow;
-    [SerializeField] private List<RectTransform> elementsToHighlight;
-    private Transform[] _elementsOriginalParents;
-    
-    private void Start()
+    public sealed class UIElementsHighlighter : MonoBehaviour
     {
-        _elementsOriginalParents = new Transform[elementsToHighlight.Count];
-        for (int i = 0; i < elementsToHighlight.Count; i++)
-        {
-            var element = elementsToHighlight[i];
-            _elementsOriginalParents[i] = element.parent;
-        }
-    }
+        [SerializeField] private AppearingImage shadow;
+        [SerializeField] private List<RectTransform> elementsToHighlight;
+        
+        public bool Highlighted { get; private set; }
+        
+        private Transform[] _elementsOriginalParents;
     
-    [ContextMenu("Highlight Element")]
-    public void HighlightElements()
-    {
-        foreach (var element in elementsToHighlight)
+        private void Start()
         {
-            element.SetParent(shadow.transform, true);
+            _elementsOriginalParents = new Transform[elementsToHighlight.Count];
+            for (int i = 0; i < elementsToHighlight.Count; i++)
+            {
+                var element = elementsToHighlight[i];
+                _elementsOriginalParents[i] = element.parent;
+            }
         }
-        shadow.Appear();
-    }
+    
+        [ContextMenu("Highlight Element")]
+        public void HighlightElements()
+        {
+            Highlighted = true;
+            foreach (var element in elementsToHighlight)
+            {
+                element.SetParent(shadow.transform, true);
+            }
+            shadow.Appear();
+        }
     
 
     
-    [ContextMenu("Unhighlight Element")]
-    public void UnhighlightElement()
-    {
-        for (int i = 0; i < elementsToHighlight.Count; i++)
+        [ContextMenu("Unhighlight Element")]
+        public void UnhighlightElements()
         {
-            elementsToHighlight[i].SetParent(_elementsOriginalParents[i], true);
+            Highlighted = false;
+            for (int i = 0; i < elementsToHighlight.Count; i++)
+            {
+                elementsToHighlight[i].SetParent(_elementsOriginalParents[i], true);
+            }
+            shadow.Disappear();
         }
-        shadow.Disappear();
     }
 }
