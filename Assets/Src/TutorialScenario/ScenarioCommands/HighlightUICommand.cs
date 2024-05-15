@@ -1,41 +1,36 @@
 using Src.Components.UI;
+using UnityEngine;
 
 namespace Src.TutorialScenario.ScenarioCommands
 {
-    public class HighlightUICommand : ITutorialScenarioCommand
+    public class HighlightUICommand : TutorialScenarioCommand
     {
-        private readonly UIElementsHighlighter _highlighter;
-        private readonly bool _highlight;
+        [SerializeField] private UIElementsHighlighter highlighter;
+        [SerializeField] private bool highlight;
         private bool _cachedHighlightState;
-        
-        public HighlightUICommand(UIElementsHighlighter highlighter, bool highlight)
+
+        public override void Do()
         {
-            _highlighter = highlighter;
-            _highlight = highlight;
-        }
-        
-        public void Do()
-        {
-            _cachedHighlightState = _highlighter.Highlighted;
-            if (_highlight)
+            _cachedHighlightState = highlighter.Highlighted;
+            if (highlight)
             {
-                _highlighter.HighlightElements();
+                highlighter.HighlightElements();
             }
             else
             {
-                _highlighter.UnhighlightElements();
+                highlighter.UnhighlightElements();
             }
         }
 
-        public void Undo()
+        public override void Undo()
         {
             if (_cachedHighlightState)
             {
-                _highlighter.HighlightElements();
+                highlighter.HighlightElements();
             }
             else
             {
-                _highlighter.UnhighlightElements();
+                highlighter.UnhighlightElements();
             }
         }
     }

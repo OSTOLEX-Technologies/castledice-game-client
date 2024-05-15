@@ -56,7 +56,6 @@ using Src.General.LoadingScenes;
 using Src.General.MoveConditions;
 using Src.General.NumericSequences;
 using Src.PlayerInput;
-using Src.Prototypes;
 using Src.Prototypes.NewActionPoints;
 using Src.PVE;
 using Src.PVE.BotTriggers;
@@ -111,7 +110,7 @@ namespace Src.ScenesInitializers
         [Header("Grid")] 
         [SerializeField] private GameObjectsGrid grid;
         [SerializeField] private SquareGridGenerationConfig gridGenerationConfig;
-        private SquareGridGenerator _gridGenerator;
+        [SerializeField] private MonoBehaviourSquareGridGenerator gridGenerator;
         
         [Header("Cells")]
         [SerializeField] private SquareCellsFactory cellsFactory;
@@ -193,7 +192,6 @@ namespace Src.ScenesInitializers
         [Header("Bot configuration")]
         [SerializeField] private int botMoveDelayMilliseconds;
         [SerializeField] private AllowedPositionsScenariosConfig allowedPositionsScenariosConfig;
-        [SerializeField] private BotCommander botCommander;
         private Bot _bot;
         
         [Header("Castles health bars")]
@@ -241,8 +239,7 @@ namespace Src.ScenesInitializers
             SetUpGameOver();
             SetUpActionPointsUI();
             HandleGameOver();
-            SetUpController();
-            
+
             GiveActionPointsToCurrentPlayer();
             
             StartCoroutine(Intro());
@@ -259,22 +256,6 @@ namespace Src.ScenesInitializers
                 yield return null;
             }
             mixer.SetFloat("KnightsVolume", 0);
-        }
-
-        private void SetUpController()
-        {
-            _movesPresenter.WrongMovePicked += (object sender, AbstractMove move) => tutorialScenario.WrongMoveApplied();
-            _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => tutorialScenario.RightMoveApplied();
-            _game.TurnSwitched += (_, _) =>
-            {
-                var isPlayerTurn = _game.GetCurrentPlayer() == _player;
-                if (isPlayerTurn)
-                {
-                    tutorialScenario.PlayerTurn();
-                }
-            };
-            screenClickDetector.onClick.AddListener(tutorialScenario.ScreenClicked);
-            tutorialScenario.Init(_raycaster);
         }
 
 
@@ -328,8 +309,7 @@ namespace Src.ScenesInitializers
 
         private void SetUpGrid()
         {
-            _gridGenerator = new SquareGridGenerator(grid, gridGenerationConfig);
-            _gridGenerator.GenerateGrid(_gameStartData.BoardData.CellsPresence);
+            gridGenerator.GenerateGrid(_gameStartData.BoardData.CellsPresence);
         }
 
         private void SetUpCells()

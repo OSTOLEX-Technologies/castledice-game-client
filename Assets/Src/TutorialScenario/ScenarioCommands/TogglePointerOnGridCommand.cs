@@ -1,28 +1,40 @@
 using Src.GameplayView.Grid;
+using Src.GameplayView.Grid.GridGeneration;
 using Src.Tutorial.HintPointer;
+using UnityEngine;
 
 namespace Src.TutorialScenario.ScenarioCommands
 {
-    public class TogglePointerOnGridCommand : ITutorialScenarioCommand
+    public class TogglePointerOnGridCommand : TutorialScenarioCommand
     {
-        private readonly IGridCell _cell;
-        private readonly IHintPointerPool _pointerPool;
-        private readonly bool _enabled;
-        private HintPointer _cachedPointer;
-
-        public TogglePointerOnGridCommand(
-            IGridCell cell, 
-            IHintPointerPool pointerPool,
-            bool enabled)
+        private enum PointerAction
         {
-            _cell = cell;
-            _pointerPool = pointerPool;
-            _enabled = enabled;
+            Enable,
+            Disable,
         }
         
-        public void Do()
+        [SerializeField] private MonoBehaviourSquareGridGenerator gridGenerator;
+        [SerializeField] private Vector2Int position;
+        [SerializeField] private HintPointerPool pointerPool;
+        [SerializeField] private PointerAction pointerAction;
+        
+        private HintPointer _cachedPointer;
+        private IGridCell _gridCell;
+
+        private void Awake()
         {
-            if (_enabled)
+            gridGenerator.GridGenerated += OnGridGenerated;
+        }
+
+        private void OnGridGenerated(IGrid grid)
+        {
+            gridGenerator.GridGenerated -= OnGridGenerated;
+            _gridCell = grid.GetCell((position.x, position.y));
+        }
+
+        public override void Do()
+        {
+            if (pointerAction.Equals(PointerAction.Enable))
             {
                 AddPointer();
             }
@@ -32,9 +44,9 @@ namespace Src.TutorialScenario.ScenarioCommands
             }
         }
 
-        public void Undo()
+        public override void Undo()
         {
-            if (_enabled)
+            if (pointerAction.Equals(PointerAction.Enable))
             {
                 RemovePointer();
             }
@@ -46,14 +58,14 @@ namespace Src.TutorialScenario.ScenarioCommands
 
         private void AddPointer()
         {
-            _cachedPointer = _pointerPool.Obtain();
-            _cell.AddChild(_cachedPointer.gameObject);
+            _cachedPointer = pointerPool.Obtain();
+            _gridCell.AddChild(_cachedPointer.gameObject);
         }
         
         private void RemovePointer()
         {
-            _cell.RemoveChild(_cachedPointer.gameObject);
-            _pointerPool.Reclaim(_cachedPointer);
+            _gridCell.RemoveChild(_cachedPointer.gameObject);
+            pointerPool.Reclaim(_cachedPointer);
         }
     }
 }

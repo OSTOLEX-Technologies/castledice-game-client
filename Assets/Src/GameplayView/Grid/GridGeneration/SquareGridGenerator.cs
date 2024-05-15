@@ -1,4 +1,5 @@
-﻿using UnityEngine;
+﻿using System;
+using UnityEngine;
 
 namespace Src.GameplayView.Grid.GridGeneration
 {
@@ -26,6 +27,9 @@ namespace Src.GameplayView.Grid.GridGeneration
                     _grid.AddCell((i, j), position);
                 }
             }
+            GridGenerated?.Invoke(_grid);
         }
+
+        public event Action<IGrid> GridGenerated;
     }
 }

@@ -1,73 +1,44 @@
+using System;
 using System.Collections.Generic;
-using Src.PlayerInput;
+using Src.TutorialScenario.FrameChangeTrigger;
+using Src.TutorialScenario.ScenarioFrames;
 using UnityEngine;
 
 namespace Src.TutorialScenario
 {
     public class TutorialScenario : MonoBehaviour
     {
-        [SerializeField] private List<GameObject> frames;
-        [SerializeField] private List<int> framesToSwitchByClick;
-        [SerializeField] private List<int> framesToSwitchByRightMove;
-        [SerializeField] private List<int> framesWhereRaycastShouldBeBlocked;
-        [SerializeField] private List<int> framesToSwitchByPlayerTurn;
-        private int _currentFrameIndex;
-        private GameObject _currentFrame;
-        private BlockableRaycaster3D _raycaster;
-        
-        public void Init(BlockableRaycaster3D raycaster)
-        {
-            _raycaster = raycaster;
-        }
+        [SerializeField] private FrameChangeTriggerBase firstFrameTrigger;
+        [SerializeField] private List<ScenarioFrame> frames;
+        private int _frameIndex;
 
+        public event Action FramesQueueEnded;
+
+        
         private void Start()
         {
-            SwitchToFrame(0);
+            firstFrameTrigger.NextFrameRequested += OnFirstFrameRequested;
         }
 
-        public void ScreenClicked()
+        private void OnFirstFrameRequested()
         {
-            Debug.Log("Next button clicked");
-            if (!framesToSwitchByClick.Contains(_currentFrameIndex)) return;
-            SwitchToNextFrame();
-        }
+            firstFrameTrigger.NextFrameRequested -= OnFirstFrameRequested;
 
-        public void RightMoveApplied()
-        {
-            if (!framesToSwitchByRightMove.Contains(_currentFrameIndex)) return;
-            SwitchToNextFrame();
+            frames[_frameIndex].frameChangeTrigger.NextFrameRequested += OnNextFrameRequested;
+            frames[_frameIndex].command.Do();
         }
-
-        public void PlayerTurn()
+        private void OnNextFrameRequested()
         {
-            if (!framesToSwitchByPlayerTurn.Contains(_currentFrameIndex)) return;
-            SwitchToNextFrame();
-        }
-
-        private void SwitchToNextFrame()
-        {
-            _currentFrameIndex++;
-            SwitchToFrame(_currentFrameIndex);
-        }
-        
-        private void SwitchToFrame(int index)
-        {
-            _currentFrame?.SetActive(false);
-            _currentFrame = frames[index];
-            _currentFrame.SetActive(true);
-            if (framesWhereRaycastShouldBeBlocked.Contains(index))
+            frames[_frameIndex].frameChangeTrigger.NextFrameRequested -= OnNextFrameRequested;
+            
+            if (++_frameIndex >= frames.Count)
             {
-                _raycaster.Block();
+                FramesQueueEnded?.Invoke();
+                return;
             }
-            else
-            {
-                _raycaster.Unblock();
-            }
-        }
 
-        public void WrongMoveApplied()
-        {
-            //TODO: Handle wrong moves
+            frames[_frameIndex].frameChangeTrigger.NextFrameRequested += OnNextFrameRequested;
+            frames[_frameIndex].command.Do();
         }
     }
 }
