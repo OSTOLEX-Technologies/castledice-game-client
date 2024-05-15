@@ -2,8 +2,7 @@ using System.Collections.Generic;
 using Src.Components.UI;
 using UnityEngine;
 
-//TODO: Move shadow to the separate object. 
-public class UIElementsHighlighter : MonoBehaviour
+public sealed class UIElementsHighlighter : MonoBehaviour
 {
     [SerializeField] private AppearingImage shadow;
     [SerializeField] private List<RectTransform> elementsToHighlight;
