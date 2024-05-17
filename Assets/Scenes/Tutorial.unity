@@ -4848,22 +4848,6 @@ RectTransform:
   m_CorrespondingSourceObject: {fileID: 4576712775376389529, guid: bbb3ba62954e7ed45a88e3f193f0633e, type: 3}
   m_PrefabInstance: {fileID: 635134180}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &635134182 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4576712775987210168, guid: bbb3ba62954e7ed45a88e3f193f0633e, type: 3}
-  m_PrefabInstance: {fileID: 635134180}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
---- !u!1 &635134183 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4576712775376389528, guid: bbb3ba62954e7ed45a88e3f193f0633e, type: 3}
-  m_PrefabInstance: {fileID: 635134180}
-  m_PrefabAsset: {fileID: 0}
 --- !u!1 &636696599
 GameObject:
   m_ObjectHideFlags: 0
@@ -7609,7 +7593,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e019a04c843944bab40f19617bc09993, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hintPointerPrefab: {fileID: 3465207665063193534, guid: 01eb3f5001d72400ab6ffaa9d6b4dba6, type: 3}
+  hintPointerPrefab: {fileID: 3636646886992740609, guid: f8f53854c86fc4d10856fae3bb657d0d, type: 3}
   initialPoolAmount: 5
 --- !u!4 &990306244
 Transform:
@@ -10008,8 +9992,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4df4023e497b46ad87cbf768a9b6b28d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 1655379570}
-  enable: 1
+  target: {fileID: 0}
+  enable: 0
 --- !u!1 &1235886620
 GameObject:
   m_ObjectHideFlags: 0
@@ -10146,17 +10130,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1235886620}
   m_CullTransparentMesh: 1
---- !u!114 &1242043856 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 4576712775987210168, guid: bbb3ba62954e7ed45a88e3f193f0633e, type: 3}
-  m_PrefabInstance: {fileID: 4576712775014658664}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: f4688fdb7df04437aeb418b961361dc5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &1247041793
 GameObject:
   m_ObjectHideFlags: 0
@@ -10426,7 +10399,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4df4023e497b46ad87cbf768a9b6b28d, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  target: {fileID: 2014856650}
+  target: {fileID: 0}
   enable: 0
 --- !u!1 &1294514556
 GameObject:
@@ -11297,10 +11270,6 @@ MonoBehaviour:
   redWinnerScreen: {fileID: 8317343790085242007}
   drawScreen: {fileID: 8317343789972965597}
   gameUI: {fileID: 8674514081866498140}
-  playerBanner: {fileID: 635134183}
-  playerActionPointsText: {fileID: 635134182}
-  enemyBanner: {fileID: 1995503600}
-  enemyActionPointsText: {fileID: 1242043856}
   botMoveDelayMilliseconds: 500
   allowedPositionsScenariosConfig: {fileID: 11400000, guid: 76b8a50489aae0b4a9440753acd45856, type: 2}
   blueCastleHeathBar: {fileID: 98995022}
@@ -16278,11 +16247,6 @@ RectTransform:
   m_AnchoredPosition: {x: -0.000091552734, y: 69}
   m_SizeDelta: {x: 242.0813, y: 10.461601}
   m_Pivot: {x: 0.5, y: 0.5}
---- !u!1 &1995503600 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4576712775376389528, guid: bbb3ba62954e7ed45a88e3f193f0633e, type: 3}
-  m_PrefabInstance: {fileID: 4576712775014658664}
-  m_PrefabAsset: {fileID: 0}
 --- !u!224 &1995503601 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 4576712775376389529, guid: bbb3ba62954e7ed45a88e3f193f0633e, type: 3}
