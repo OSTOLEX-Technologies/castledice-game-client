@@ -178,14 +178,6 @@ namespace Src.ScenesInitializers
         [SerializeField] private GameObject gameUI;
         private GameOverPresenter _gameOverPresenter;
         private GameOverView _gameOverView;
-
-        [Header("Action points UI")] 
-        [SerializeField] private GameObject playerBanner;
-        [SerializeField] private TextMeshProUGUI playerActionPointsText;
-        [SerializeField] private GameObject enemyBanner;
-        [SerializeField] private TextMeshProUGUI enemyActionPointsText;
-        private ActionPointsUI _playerActionPointsUI;
-        private ActionPointsUI _enemyActionPointsUI;
         
         private DuelPlayerColorProvider _playerColorProvider;
 
@@ -237,7 +229,6 @@ namespace Src.ScenesInitializers
             SetUpNewUnitsHighlights();
             SetUpCellMovesHighlights();
             SetUpGameOver();
-            SetUpActionPointsUI();
             HandleGameOver();
 
             GiveActionPointsToCurrentPlayer();
@@ -508,12 +499,6 @@ namespace Src.ScenesInitializers
             _gameOverView = new GameOverView(_playerColorProvider,
                 blueWinnerScreen, redWinnerScreen, drawScreen);
             _gameOverPresenter = new GameOverPresenter(_game, _gameOverView);
-        }
-        
-        private void SetUpActionPointsUI()
-        {
-            _playerActionPointsUI = new ActionPointsUI(playerActionPointsText, playerBanner, _player);
-            _enemyActionPointsUI = new ActionPointsUI(enemyActionPointsText, enemyBanner, _enemy);
         }
 
         private void HandleGameOver()
