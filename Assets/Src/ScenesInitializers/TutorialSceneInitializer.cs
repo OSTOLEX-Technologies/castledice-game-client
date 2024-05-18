@@ -166,6 +166,7 @@ namespace Src.ScenesInitializers
         [Header("Move highlights")]
         [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
         [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
+        [SerializeField] private UnityCellMovesHighlightsToggle cellMovesHighlightsToggle;
         private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
         private CellMovesHighlightView _cellMovesHighlightView;
         
@@ -199,8 +200,6 @@ namespace Src.ScenesInitializers
 
         private void Start()
         {
-            mixer.SetFloat("KnightsVolume", -80);
-
             SetUpGameAndPlayers();
             SetUpPlayerColorProvider();
             SetUpInputHandling();
@@ -460,7 +459,9 @@ namespace Src.ScenesInitializers
          {
              cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
              var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
+             highlightsPlacer.HighlightsPlaced += cellMovesHighlightsToggle.Init;
              _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
+             highlightsPlacer.HighlightsPlaced -= cellMovesHighlightsToggle.Init;
              var cellMovesListProvider = new CellMovesListProvider(_game);
              var observer = new CellMovesHighlightObserver(_game, _player);
              _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_player, cellMovesListProvider, observer, _cellMovesHighlightView);
