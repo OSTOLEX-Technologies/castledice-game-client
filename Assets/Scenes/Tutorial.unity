@@ -10433,6 +10433,50 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1294514556}
   m_CullTransparentMesh: 1
+--- !u!1 &1295104326
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1295104328}
+  - component: {fileID: 1295104327}
+  m_Layer: 0
+  m_Name: CellMovesHighlightsToggle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1295104327
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295104326}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 11687e72d3a44b018c51f68330899fb0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &1295104328
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1295104326}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1364.7239, y: 617.14606, z: -5.1732993}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 17
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1299462770
 GameObject:
   m_ObjectHideFlags: 0
@@ -11221,6 +11265,7 @@ MonoBehaviour:
   newUnitsHighlightsColorConfig: {fileID: 11400000, guid: 8ababd8e40c3ac04f87b4ccaedd9c1b2, type: 2}
   cellMoveHighlightsConfig: {fileID: 11400000, guid: 299796ff4d01cc74384058d8e2af43d5, type: 2}
   cellMoveHighlightsFactory: {fileID: 2095275312}
+  cellMovesHighlightsToggle: {fileID: 1295104327}
   blueWinnerScreen: {fileID: 8317343790580066247}
   redWinnerScreen: {fileID: 8317343790085242007}
   drawScreen: {fileID: 8317343789972965597}
@@ -13720,12 +13765,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b47e1a2831b074a40ab523fa9a030a2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  firstFrameTrigger: {fileID: 1705111115}
   frames:
   - command: {fileID: 1229704331}
-    frameChangeTrigger: {fileID: 2090333714}
+    frameChangeTrigger: {fileID: 0}
   - command: {fileID: 1285094322}
-    frameChangeTrigger: {fileID: 1285094321}
+    frameChangeTrigger: {fileID: 0}
 --- !u!4 &1705111114
 Transform:
   m_ObjectHideFlags: 0
