@@ -13,7 +13,7 @@ namespace Src.TutorialScenario
         public event Action FramesQueueEnded;
 
         
-        private void Start()
+        private void Awake()
         {
             frames[_frameIndex].frameChangeTrigger.NextFrameRequested += OnNextFrameRequested;
             frames[_frameIndex].command.Do();
@@ -21,6 +21,8 @@ namespace Src.TutorialScenario
         
         private void OnNextFrameRequested()
         {
+            Debug.Log("Next frame (" + _frameIndex + ") started");
+            
             frames[_frameIndex].frameChangeTrigger.NextFrameRequested -= OnNextFrameRequested;
             
             if (++_frameIndex >= frames.Count)

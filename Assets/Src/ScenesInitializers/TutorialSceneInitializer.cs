@@ -68,6 +68,7 @@ using Src.TimeManagement;
 using Src.Tutorial;
 using Src.Tutorial.ActionPointsGiving;
 using Src.Tutorial.BotConfiguration;
+using Src.TutorialScenario.FrameChangeTrigger;
 using Tests.EditMode.GeneralTests;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
@@ -142,6 +143,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private PositionMoveConditionsListConfig positionMoveConditionsListConfig;
         private MovesView _movesView;
         private TutorialMovesPresenter _movesPresenter;
+        [SerializeField] private RightPlayerMoveFrameChangeTrigger playerMoveListener;
         
         [Header("Action points giving")]
         [SerializeField] private IntSequenceConfig playerActionPointsSequenceConfig;
@@ -346,6 +348,7 @@ namespace Src.ScenesInitializers
             _movesPresenter = new TutorialMovesPresenter(_movesView, possibleMovesListProvider, localMoveApplier, moveConditionsSequence, playerId);
             _movesPresenter.WrongMovePicked += (object sender, AbstractMove move) => Debug.Log("Wrong move picked");
             _movesPresenter.RightMovePicked += (object sender, AbstractMove move) => Debug.Log("Right move picked");
+            playerMoveListener.Init(_movesPresenter);
         }
 
 
