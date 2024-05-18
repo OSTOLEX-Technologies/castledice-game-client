@@ -1,6 +1,6 @@
 namespace Src.TutorialScenario.FrameChangeTrigger
 {
-    public class ButtonFrameChangeTrigger : FrameChangeTriggerBase
+    public class ExternalUnityFrameChangeTrigger : FrameChangeTriggerBase
     {
         public void GoToNextFrame()
         {
