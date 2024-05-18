@@ -187,7 +187,8 @@ namespace Src.ScenesInitializers
         [SerializeField] private CastleHealthBar blueCastleHeathBar;
         [SerializeField] private CastleHealthBar redCastleHeathBar;
 
-        private BlockableRaycaster3D _raycaster;
+        [Header("Raycast detection")]
+        [SerializeField] private BlockableRaycasterHandler raycasterHandler;
 
         public event Action InitializationFinished; 
 
@@ -259,8 +260,8 @@ namespace Src.ScenesInitializers
             var cameraWrapper = new CameraWrapper(playerCamera);
             var raycaster = new Raycaster3D(new RaycastHitProvider());
             var blockableRaycaster = new BlockableRaycaster3D(raycaster);
-            _raycaster = blockableRaycaster;
-            _touchInputHandler = new TouchInputHandler(cameraWrapper, _raycaster);
+            raycasterHandler.Init(blockableRaycaster);
+            _touchInputHandler = new TouchInputHandler(cameraWrapper, blockableRaycaster);
             _playerInputReader = new PlayerInputReader(_touchInputHandler);
             _playerInputReader.Enable();
         }

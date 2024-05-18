@@ -6,8 +6,8 @@ namespace Src.PlayerInput
     public class BlockableRaycaster3D : IRaycaster
     {
         private readonly IRaycaster _raycaster;
-        private bool _blocked;
-        
+        public bool Blocked { get; private set; }
+
         public BlockableRaycaster3D(IRaycaster raycaster)
         {
             _raycaster = raycaster;
@@ -15,17 +15,17 @@ namespace Src.PlayerInput
         
         public void Block()
         {
-            _blocked = true;
+            Blocked = true;
         }
         
         public void Unblock()
         {
-            _blocked = false;
+            Blocked = false;
         }
 
         public List<T> GetRayIntersections<T>(Ray ray)
         {
-            return _blocked ? new List<T>() : _raycaster.GetRayIntersections<T>(ray);
+            return Blocked ? new List<T>() : _raycaster.GetRayIntersections<T>(ray);
         }
     }
 }
