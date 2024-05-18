@@ -6,32 +6,16 @@ namespace Src.TutorialScenario.ScenarioCommands
     public class HighlightUICommand : TutorialScenarioCommand
     {
         [SerializeField] private UIElementsHighlighter highlighter;
-        [SerializeField] private bool highlight;
-        private bool _cachedHighlightState;
+        [SerializeField] private float highlightTimeInSeconds;
 
         public override void Do()
         {
-            _cachedHighlightState = highlighter.Highlighted;
-            if (highlight)
-            {
-                highlighter.HighlightElements();
-            }
-            else
-            {
-                highlighter.UnhighlightElements();
-            }
+            highlighter.HighlightElementsForSeconds(highlightTimeInSeconds);
         }
 
         public override void Undo()
         {
-            if (_cachedHighlightState)
-            {
-                highlighter.HighlightElements();
-            }
-            else
-            {
-                highlighter.UnhighlightElements();
-            }
+            
         }
     }
 }
