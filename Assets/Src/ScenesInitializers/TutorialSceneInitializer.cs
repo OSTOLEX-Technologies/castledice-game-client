@@ -70,8 +70,6 @@ using Src.Tutorial.ActionPointsGiving;
 using Src.Tutorial.BotConfiguration;
 using Tests.EditMode.GeneralTests;
 using UnityEngine;
-using UnityEngine.Audio;
-using Button = UnityEngine.UI.Button;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 using CastleEntity = castledice_game_logic.GameObjects.Castle;
 
@@ -188,15 +186,11 @@ namespace Src.ScenesInitializers
         [Header("Castles health bars")]
         [SerializeField] private CastleHealthBar blueCastleHeathBar;
         [SerializeField] private CastleHealthBar redCastleHeathBar;
-        
-        [Header("Audio")]
-        [SerializeField] private AudioMixer mixer;
 
-        [Header("Tutorial controller")]
-        [SerializeField] private TutorialScenario.TutorialScenario tutorialScenario;
-        [SerializeField] private Button screenClickDetector;
         private BlockableRaycaster3D _raycaster;
-        
+
+        public event Action InitializationFinished; 
+
 
         private void Start()
         {
@@ -218,6 +212,8 @@ namespace Src.ScenesInitializers
             HandleGameOver();
 
             GiveActionPointsToCurrentPlayer();
+            
+            InitializationFinished?.Invoke();
         }
 
 
