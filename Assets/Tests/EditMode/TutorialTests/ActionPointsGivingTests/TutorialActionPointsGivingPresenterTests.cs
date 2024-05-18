@@ -103,7 +103,6 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
             var presenter = new TutorialActionPointsGivingPresenterBuilder
             {
                 Game = gameMock.Object,
-                View = viewMock.Object
             }.Build();
             
             gameMock.Raise(g => g.TurnSwitched += null, gameMock.Object, gameMock.Object);
@@ -121,7 +120,6 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
             var presenter = new TutorialActionPointsGivingPresenterBuilder
             {
                 Game = gameMock.Object,
-                View = viewMock.Object
             }.Build();
             
             gameMock.Raise(g => g.TurnSwitched += null, gameMock.Object, gameMock.Object);
@@ -140,7 +138,6 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
             var presenter = new TutorialActionPointsGivingPresenterBuilder
             {
                 Game = gameMock.Object,
-                View = viewMock.Object,
                 ActionPointsGenerator = actionPointsGeneratorMock.Object
             }.Build();
             
@@ -151,14 +148,11 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
 
         private class TutorialActionPointsGivingPresenterBuilder
         {
-            public IActionPointsGivingView View { get; set; }
             public IActionPointsGenerator ActionPointsGenerator { get; set; }
             public Game Game { get; set; }
 
             public TutorialActionPointsGivingPresenterBuilder()
             {
-                var viewMock = new Mock<IActionPointsGivingView>();
-                View = viewMock.Object;
                 var actionPointsGeneratorMock = new Mock<IActionPointsGenerator>();
                 ActionPointsGenerator = actionPointsGeneratorMock.Object;
                 var game = GetGame();
@@ -166,7 +160,7 @@ namespace Tests.EditMode.TutorialTests.ActionPointsGivingTests
 
             public TutorialActionPointsGivingPresenter Build()
             {
-                return new TutorialActionPointsGivingPresenter(View, ActionPointsGenerator, Game);
+                return new TutorialActionPointsGivingPresenter(ActionPointsGenerator, Game);
             }
         }
     }

@@ -393,7 +393,7 @@ namespace Src.ScenesInitializers
                 {_enemy, enemyActionPointsSequence}
             });
             var actionPointsGenerator = new SequenceActionPointsGenerator(sequenceProvider);
-            _actionPointsGivingPresenter = new TutorialActionPointsGivingPresenter(_actionPointsGivingView, actionPointsGenerator, _game);
+            _actionPointsGivingPresenter = new TutorialActionPointsGivingPresenter(actionPointsGenerator, _game);
         }
         
         private void GiveActionPointsToCurrentPlayer()
