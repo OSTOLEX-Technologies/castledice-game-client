@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using castledice_game_data_logic;
@@ -70,7 +69,6 @@ using Src.Tutorial;
 using Src.Tutorial.ActionPointsGiving;
 using Src.Tutorial.BotConfiguration;
 using Tests.EditMode.GeneralTests;
-using TMPro;
 using UnityEngine;
 using UnityEngine.Audio;
 using Button = UnityEngine.UI.Button;
@@ -193,22 +191,11 @@ namespace Src.ScenesInitializers
         [Header("Audio")]
         [SerializeField] private AudioMixer mixer;
 
-        [Header("Transitions")] 
-        [SerializeField] private float introFadeSeconds;
-        [SerializeField] private CanvasGroup introCanvasGroup;
-        [SerializeField] private GameObject introGameObject;
-        
         [Header("Tutorial controller")]
         [SerializeField] private TutorialScenario.TutorialScenario tutorialScenario;
         [SerializeField] private Button screenClickDetector;
         private BlockableRaycaster3D _raycaster;
         
-
-
-        private void Awake()
-        {
-            introGameObject.SetActive(true);
-        }
 
         private void Start()
         {
@@ -232,21 +219,6 @@ namespace Src.ScenesInitializers
             HandleGameOver();
 
             GiveActionPointsToCurrentPlayer();
-            
-            StartCoroutine(Intro());
-        }
-
-        private IEnumerator Intro()
-        {
-            yield return new WaitForSeconds(0.2f);
-            var elapsedTime = 0f;
-            while (elapsedTime < introFadeSeconds)
-            {
-                elapsedTime += Time.deltaTime;
-                introCanvasGroup.alpha = Mathf.Lerp(1, 0, elapsedTime / introFadeSeconds);
-                yield return null;
-            }
-            mixer.SetFloat("KnightsVolume", 0);
         }
 
 

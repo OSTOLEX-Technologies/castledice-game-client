@@ -1,5 +1,4 @@
 using System.Collections;
-using UnityEngine;
 
 namespace Src.TutorialScenario.FrameChangeTrigger
 {
@@ -7,7 +6,7 @@ namespace Src.TutorialScenario.FrameChangeTrigger
     {
         private IEnumerator Start()
         {
-            yield return new WaitForSeconds(3f);
+            yield return null;
             RequestNextFrame();
         }
     }
