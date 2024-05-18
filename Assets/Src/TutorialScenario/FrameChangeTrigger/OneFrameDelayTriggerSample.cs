@@ -2,7 +2,7 @@ using System.Collections;
 
 namespace Src.TutorialScenario.FrameChangeTrigger
 {
-    public class FirstFrameTriggerDelaySample : FrameChangeTriggerBase
+    public class OneFrameDelayTriggerSample : FrameChangeTriggerBase
     {
         private IEnumerator Start()
         {
