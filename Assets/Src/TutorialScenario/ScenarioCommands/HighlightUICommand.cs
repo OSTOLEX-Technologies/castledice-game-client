@@ -7,10 +7,11 @@ namespace Src.TutorialScenario.ScenarioCommands
     {
         [SerializeField] private UIElementsHighlighter highlighter;
         [SerializeField] private float highlightTimeInSeconds;
+        [SerializeField] private float disappearDelayInSeconds;
 
         public override void Do()
         {
-            highlighter.HighlightElementsForSeconds(highlightTimeInSeconds);
+            highlighter.HighlightElementsForSeconds(highlightTimeInSeconds, disappearDelayInSeconds);
         }
 
         public override void Undo()

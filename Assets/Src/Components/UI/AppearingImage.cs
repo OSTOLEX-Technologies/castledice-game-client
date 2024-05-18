@@ -15,7 +15,7 @@ namespace Src.Components.UI
             _image = GetComponent<Image>();
         }
 
-        public void AppearForSeconds(float seconds)
+        public void AppearInSeconds(float seconds)
         {
             StartCoroutine(Show(seconds));
         }

@@ -1,9 +1,10 @@
 using System.Collections.Generic;
+using Src.TutorialScenario.FrameChangeTrigger;
 using UnityEngine;
 
 namespace Src.Components.UI
 {
-    public sealed class UIElementsHighlighter : MonoBehaviour
+    public sealed class UIElementsHighlighter : FrameChangeTriggerBase
     {
         [SerializeField] private AppearingImage shadow;
         [SerializeField] private List<RectTransform> elementsToHighlight;
@@ -14,6 +15,7 @@ namespace Src.Components.UI
     
         private void Start()
         {
+            shadow.gameObject.SetActive(false);
             _elementsOriginalParents = new Transform[elementsToHighlight.Count];
             for (int i = 0; i < elementsToHighlight.Count; i++)
             {
@@ -22,11 +24,12 @@ namespace Src.Components.UI
             }
         }
         
-        public void HighlightElementsForSeconds(float seconds)
+        public void HighlightElementsForSeconds(float appearSeconds, float disappearDelay)
         {
+            shadow.gameObject.SetActive(true);
             ParentElements();
-            shadow.AppearForSeconds(seconds);
-            Invoke(nameof(UnparentElements), seconds);
+            shadow.AppearInSeconds(appearSeconds);
+            Invoke(nameof(UnparentElements), appearSeconds + disappearDelay);
         }
         
         private void ParentElements()
@@ -45,6 +48,8 @@ namespace Src.Components.UI
             {
                 elementsToHighlight[i].SetParent(_elementsOriginalParents[i], true);
             }
+            shadow.gameObject.SetActive(false);
+            RequestNextFrame();
         }
     }
 }
