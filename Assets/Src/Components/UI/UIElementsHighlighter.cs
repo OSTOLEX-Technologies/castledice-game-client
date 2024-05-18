@@ -21,29 +21,30 @@ namespace Src.Components.UI
                 _elementsOriginalParents[i] = element.parent;
             }
         }
-    
-        [ContextMenu("Highlight Element")]
-        public void HighlightElements()
+        
+        public void HighlightElementsForSeconds(float seconds)
+        {
+            ParentElements();
+            shadow.AppearForSeconds(seconds);
+            Invoke(nameof(UnparentElements), seconds);
+        }
+        
+        private void ParentElements()
         {
             Highlighted = true;
             foreach (var element in elementsToHighlight)
             {
                 element.SetParent(shadow.transform, true);
             }
-            shadow.Appear();
         }
-    
-
-    
-        [ContextMenu("Unhighlight Element")]
-        public void UnhighlightElements()
+        
+        private void UnparentElements()
         {
             Highlighted = false;
             for (int i = 0; i < elementsToHighlight.Count; i++)
             {
                 elementsToHighlight[i].SetParent(_elementsOriginalParents[i], true);
             }
-            shadow.Disappear();
         }
     }
 }

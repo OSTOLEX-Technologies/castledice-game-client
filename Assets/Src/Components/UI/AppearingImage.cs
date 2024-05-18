@@ -7,7 +7,6 @@ namespace Src.Components.UI
     [RequireComponent(typeof(Image))]
     public class AppearingImage : MonoBehaviour
     {
-        [SerializeField] private float transitionTime = 0.5f;
         [SerializeField] [Range(0, 1)] private float targetAlpha = 0.5f;
         private Image _image;
 
@@ -16,42 +15,23 @@ namespace Src.Components.UI
             _image = GetComponent<Image>();
         }
 
-        public void Appear()
+        public void AppearForSeconds(float seconds)
         {
-            StartCoroutine(ShowShadow());
+            StartCoroutine(Show(seconds));
         }
         
-        private IEnumerator ShowShadow()
+        
+        private IEnumerator Show(float seconds)
         {
             var time = 0f;
             var startColor = _image.color;
             var endColor = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
-            while (time < transitionTime)
+            while (time < seconds)
             {
                 time += Time.deltaTime;
-                _image.color = Color.Lerp(startColor, endColor, time / transitionTime);
-                yield return null;
-            }
-        }
-        
-        public void Disappear()
-        {
-            StartCoroutine(HideShadow());
-        }
-    
-        private IEnumerator HideShadow()
-        {
-            var time = 0f;
-            var startColor = _image.color;
-            var endColor = new Color(startColor.r, startColor.g, startColor.b, 0);
-            while (time < transitionTime)
-            {
-                time += Time.deltaTime;
-                _image.color = Color.Lerp(startColor, endColor, time / transitionTime);
+                _image.color = Color.Lerp(startColor, endColor, time / seconds);
                 yield return null;
             }
         }
     }
-    
-
 }
