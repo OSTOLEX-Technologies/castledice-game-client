@@ -5,11 +5,11 @@ namespace Src.TutorialScenario.ScenarioCommands
 {
     public class BotMoveCommand : TutorialScenarioCommand
     {
-        [SerializeField] private MonoBehaviourBotMoveTrigger _botMoveTrigger;
+        [SerializeField] private MonoBehaviourBotMoveTrigger botMoveTrigger;
         
         public override void Do()
         {
-            _botMoveTrigger.TriggerBot();
+            botMoveTrigger.TriggerBot();
         }
 
         public override void Undo()
