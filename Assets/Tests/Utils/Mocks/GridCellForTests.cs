@@ -10,7 +10,8 @@ namespace Tests.Utils.Mocks
     public class GridCellForTests : IGridCell
     {
         public Vector2Int Position { get; set; }
-        public List<GameObject> Children { get; set; } = new();
+        public IEnumerable<GameObject> Children => ChildrenList;
+        public List<GameObject> ChildrenList { get; set; } = new();
             
         public GridCellForTests(Vector2Int position)
         {
@@ -28,17 +29,12 @@ namespace Tests.Utils.Mocks
 
         public void AddChild(GameObject child)
         {
-            Children.Add(child);                
+            ChildrenList.Add(child);                
         }
 
         public bool RemoveChild(GameObject child)
         {
-            return Children.Remove(child);
-        }
-
-        public HintPointer RemoveHintPointerIfAny()
-        {
-            throw new System.NotImplementedException();
+            return ChildrenList.Remove(child);
         }
     }
 }

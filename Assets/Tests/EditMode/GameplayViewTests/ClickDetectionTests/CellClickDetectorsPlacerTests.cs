@@ -58,7 +58,7 @@ namespace Tests.EditMode.GameplayViewTests.ClickDetectionTests
             foreach (var cell in grid)
             {
                 var testCell = cell as GridCellForTests;
-                Assert.Contains(detector.gameObject, testCell.Children);
+                Assert.Contains(detector.gameObject, testCell.ChildrenList);
             }
         }
 

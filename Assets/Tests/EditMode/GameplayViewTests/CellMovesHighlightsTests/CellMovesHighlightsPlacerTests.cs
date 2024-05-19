@@ -28,7 +28,7 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
             foreach (var cell in grid)
             {
                 var testCell = cell as GridCellForTests;
-                Assert.Contains(highlight.gameObject, testCell.Children);
+                Assert.Contains(highlight.gameObject, testCell.ChildrenList);
             }
         }
 

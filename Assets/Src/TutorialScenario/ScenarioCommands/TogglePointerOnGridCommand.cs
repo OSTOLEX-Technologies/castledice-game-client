@@ -73,11 +73,7 @@ namespace Src.TutorialScenario.ScenarioCommands
         
         private void RemovePointer()
         {
-            var pointer = _gridCell.RemoveHintPointerIfAny();
-            if (pointer is not null)
-            {
-                pointerPool.Reclaim(pointer);
-            }
+            pointerPool.RemovePointerAtCell(_gridCell);
         }
     }
 }

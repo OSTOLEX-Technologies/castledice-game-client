@@ -9,6 +9,7 @@ namespace Src.GameplayView.Grid
     public class GameObjectsGridCell : MonoBehaviour, IGridCell
     {
         public Vector2Int Position { get; private set; }
+        public IEnumerable<GameObject> Children => _children;
 
         private readonly List<GameObject> _children = new();
         
@@ -41,13 +42,6 @@ namespace Src.GameplayView.Grid
             if (!_children.Contains(child)) return false;
             _children.Remove(child);
             return true;
-        }
-
-        public HintPointer RemoveHintPointerIfAny()
-        {
-            var hintPointer = transform.GetComponentInChildren<HintPointer>();
-            RemoveChild(hintPointer.gameObject);
-            return hintPointer;
         }
     }
 }

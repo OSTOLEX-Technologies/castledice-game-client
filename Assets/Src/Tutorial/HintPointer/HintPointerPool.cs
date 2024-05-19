@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Src.GameplayView.Grid;
 using UnityEngine;
 
 namespace Src.Tutorial.HintPointer
@@ -37,6 +38,22 @@ namespace Src.Tutorial.HintPointer
             
             SpawnPointer();
             return Obtain();
+        }
+
+        public bool RemovePointerAtCell(IGridCell cell)
+        {
+            var children = cell.Children;
+            foreach (var child in children)
+            {
+                var pointer = child.GetComponent<HintPointer>();
+                if (pointer is null) continue;
+
+                cell.RemoveChild(child);
+                Reclaim(pointer);
+                return true;
+            }
+
+            return false;
         }
 
         public void Reclaim(HintPointer pointer)
