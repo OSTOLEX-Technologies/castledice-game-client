@@ -36,10 +36,18 @@ namespace Src.Components.UI
             var time = 0f;
             var startColor = _image.color;
             var endColor = new Color(startColor.r, startColor.g, startColor.b, targetAlpha);
-            while (time < seconds)
+            while (time < seconds/3)
             {
                 time += Time.deltaTime;
-                _image.color = Color.Lerp(startColor, endColor, time / seconds);
+                _image.color = Color.Lerp(startColor, endColor, time*3 / seconds);
+                yield return null;
+            }
+            yield return new WaitForSeconds(seconds/3);
+            time = 0f;
+            while (time < seconds/3)
+            {
+                time += Time.deltaTime;
+                _image.color = Color.Lerp(endColor, startColor, time*3 / seconds);
                 yield return null;
             }
         }

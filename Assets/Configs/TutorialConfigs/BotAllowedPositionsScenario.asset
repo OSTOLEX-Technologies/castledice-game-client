@@ -29,6 +29,7 @@ MonoBehaviour:
     - {x: 1, y: 0}
     AllowedPositions:
     - {x: 2, y: 2}
+    - {x: 1, y: 2}
   - EnemyPositions:
     - {x: 0, y: 0}
     - {x: 1, y: 1}
@@ -36,7 +37,8 @@ MonoBehaviour:
     - {x: 1, y: 0}
     - {x: 2, y: 2}
     AllowedPositions:
-    - {x: 1, y: 3}
+    - {x: 2, y: 3}
+    - {x: 1, y: 2}
   - EnemyPositions:
     - {x: 0, y: 0}
     - {x: 1, y: 1}
