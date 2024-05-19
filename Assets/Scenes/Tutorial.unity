@@ -1091,6 +1091,7 @@ GameObject:
   - component: {fileID: 153251011}
   - component: {fileID: 153251014}
   - component: {fileID: 153251015}
+  - component: {fileID: 153251016}
   m_Layer: 0
   m_Name: Frame 0
   m_TagString: Untagged
@@ -1131,6 +1132,12 @@ MonoBehaviour:
   - {fileID: 153251011}
   - {fileID: 153251014}
   - {fileID: 153251015}
+  - {fileID: 153251016}
+  - {fileID: 153251016}
+  - {fileID: 153251016}
+  - {fileID: 153251016}
+  - {fileID: 153251016}
+  - {fileID: 153251016}
 --- !u!114 &153251011
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1201,6 +1208,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   animationComponent: {fileID: 2090333713}
+--- !u!114 &153251016
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153251006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd5767a0d0f64319be997c48db695ccf, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  botMoveTrigger: {fileID: 1297154578}
 --- !u!1 &179664888
 GameObject:
   m_ObjectHideFlags: 0
@@ -12322,6 +12342,7 @@ MonoBehaviour:
   gameUI: {fileID: 8674514081866498140}
   botMoveDelayMilliseconds: 500
   allowedPositionsScenariosConfig: {fileID: 11400000, guid: 76b8a50489aae0b4a9440753acd45856, type: 2}
+  botMoveTrigger: {fileID: 1297154578}
   blueCastleHeathBar: {fileID: 98995022}
   redCastleHeathBar: {fileID: 1901779080}
   raycasterHandler: {fileID: 1455130336}

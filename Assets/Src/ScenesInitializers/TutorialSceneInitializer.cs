@@ -183,6 +183,7 @@ namespace Src.ScenesInitializers
         [Header("Bot configuration")]
         [SerializeField] private int botMoveDelayMilliseconds;
         [SerializeField] private AllowedPositionsScenariosConfig allowedPositionsScenariosConfig;
+        [SerializeField] private MonoBehaviourBotMoveTrigger botMoveTrigger;
         private Bot _bot;
         
         [Header("Castles health bars")]
@@ -424,17 +425,7 @@ namespace Src.ScenesInitializers
 
 
             
-            _bot = new Bot(localMoveApplier, bestMoveSearcher, _enemy,
-                new OpportunityDelayedBotMoveTrigger(_game, _enemy, 
-                    new IntSequence(new List<int>
-                    {
-                        1,
-                        1,
-                        1,
-                        1,
-                        1,
-                        1
-                    }, 600)));
+            _bot = new Bot(localMoveApplier, bestMoveSearcher, _enemy, botMoveTrigger);
         }
         
         private void SetUpPlacedUnitsHighlights()
