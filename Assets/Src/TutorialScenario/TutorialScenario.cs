@@ -21,7 +21,7 @@ namespace Src.TutorialScenario
         
         private void OnNextFrameRequested()
         {
-            Debug.Log("Next frame (" + _frameIndex + ") started");
+            Debug.Log("Next frame (" + frames[_frameIndex].command.gameObject.name + ") started");
             
             frames[_frameIndex].frameChangeTrigger.NextFrameRequested -= OnNextFrameRequested;
             

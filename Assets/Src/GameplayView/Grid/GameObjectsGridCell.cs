@@ -1,5 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
+using Src.Tutorial.HintPointer;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -40,6 +41,13 @@ namespace Src.GameplayView.Grid
             if (!_children.Contains(child)) return false;
             _children.Remove(child);
             return true;
+        }
+
+        public HintPointer RemoveHintPointerIfAny()
+        {
+            var hintPointer = transform.GetComponentInChildren<HintPointer>();
+            RemoveChild(hintPointer.gameObject);
+            return hintPointer;
         }
     }
 }

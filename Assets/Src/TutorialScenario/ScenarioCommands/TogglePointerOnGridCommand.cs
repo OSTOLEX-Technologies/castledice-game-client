@@ -18,17 +18,26 @@ namespace Src.TutorialScenario.ScenarioCommands
         [SerializeField] private HintPointerPool pointerPool;
         [SerializeField] private PointerAction pointerAction;
         
-        private HintPointer _cachedPointer;
         private IGridCell _gridCell;
 
         private void Awake()
         {
+            if (gridGenerator.TryGetGeneratedGrid(out var generatedGrid))
+            {
+                CacheGridCell(generatedGrid);
+                return;
+            }
             gridGenerator.GridGenerated += OnGridGenerated;
         }
 
         private void OnGridGenerated(IGrid grid)
         {
             gridGenerator.GridGenerated -= OnGridGenerated;
+            CacheGridCell(grid);
+        }
+
+        private void CacheGridCell(IGrid grid)
+        {
             _gridCell = grid.GetCell((position.x, position.y));
         }
 
@@ -58,14 +67,17 @@ namespace Src.TutorialScenario.ScenarioCommands
 
         private void AddPointer()
         {
-            _cachedPointer = pointerPool.Obtain();
-            _gridCell.AddChild(_cachedPointer.gameObject);
+            var pointer = pointerPool.Obtain();
+            _gridCell.AddChild(pointer.gameObject);
         }
         
         private void RemovePointer()
         {
-            _gridCell.RemoveChild(_cachedPointer.gameObject);
-            pointerPool.Reclaim(_cachedPointer);
+            var pointer = _gridCell.RemoveHintPointerIfAny();
+            if (pointer is not null)
+            {
+                pointerPool.Reclaim(pointer);
+            }
         }
     }
 }

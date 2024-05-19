@@ -8,6 +8,8 @@ namespace Src.GameplayView.Grid.GridGeneration
         [SerializeField] private GameObjectsGrid grid;
         [SerializeField] private SquareGridGenerationConfig config;
 
+        public bool IsGenerated { get; private set; }
+
         public void GenerateGrid(bool[,] cellsPresenceMatrix)
         {
             var startPos = config.StartPosition;
@@ -21,7 +23,21 @@ namespace Src.GameplayView.Grid.GridGeneration
                     grid.AddCell((i, j), position);
                 }
             }
+
+            IsGenerated = true;
             GridGenerated?.Invoke(grid);
+        }
+
+        public bool TryGetGeneratedGrid(out GameObjectsGrid generatedGrid)
+        {
+            if (!IsGenerated)
+            {
+                generatedGrid = null;
+                return false;
+            }
+
+            generatedGrid = grid;
+            return true;
         }
 
         public event Action<IGrid> GridGenerated;

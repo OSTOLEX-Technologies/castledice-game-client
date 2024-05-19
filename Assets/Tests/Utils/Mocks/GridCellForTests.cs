@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using Src.GameplayView.Grid;
+using Src.Tutorial.HintPointer;
 using UnityEngine;
 using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
@@ -33,6 +34,11 @@ namespace Tests.Utils.Mocks
         public bool RemoveChild(GameObject child)
         {
             return Children.Remove(child);
+        }
+
+        public HintPointer RemoveHintPointerIfAny()
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
