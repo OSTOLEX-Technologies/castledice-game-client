@@ -15,7 +15,6 @@ namespace Src.Components.UI
     
         private void Start()
         {
-            shadow.gameObject.SetActive(false);
             _elementsOriginalParents = new Transform[elementsToHighlight.Count];
             for (int i = 0; i < elementsToHighlight.Count; i++)
             {
@@ -26,7 +25,6 @@ namespace Src.Components.UI
         
         public void HighlightElementsForSeconds(float appearSeconds, float disappearDelay)
         {
-            shadow.gameObject.SetActive(true);
             ParentElements();
             shadow.AppearInSeconds(appearSeconds);
             Invoke(nameof(UnparentElements), appearSeconds + disappearDelay);
@@ -48,7 +46,7 @@ namespace Src.Components.UI
             {
                 elementsToHighlight[i].SetParent(_elementsOriginalParents[i], true);
             }
-            shadow.gameObject.SetActive(false);
+            shadow.Reset();
             RequestNextFrame();
         }
     }

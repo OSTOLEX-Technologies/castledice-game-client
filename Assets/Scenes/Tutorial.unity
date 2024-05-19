@@ -5540,7 +5540,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighter: {fileID: 1063502073}
-  highlightTimeInSeconds: 1.5
+  highlightTimeInSeconds: 0.8
   disappearDelayInSeconds: 1
 --- !u!1 &668188971
 GameObject:
@@ -5643,7 +5643,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013085728527062925, guid: e6f8c9ce36dae324e8199d481696e85d, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7013085728527062925, guid: e6f8c9ce36dae324e8199d481696e85d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -9004,7 +9004,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8674514081866498112}
-  m_RootOrder: 1
+  m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -9038,7 +9038,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d68858130fc540d58becac28daddc0d1, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  targetAlpha: 0.4
+  startAlpha: 0
+  targetAlpha: 0.78
 --- !u!114 &1063502075
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -12108,7 +12109,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighter: {fileID: 1063502073}
-  highlightTimeInSeconds: 1
+  highlightTimeInSeconds: 0.8
   disappearDelayInSeconds: 0.5
 --- !u!1 &1403020957
 GameObject:
@@ -13692,7 +13693,6 @@ GameObject:
   - component: {fileID: 1583493644}
   - component: {fileID: 1583493643}
   - component: {fileID: 1583493646}
-  - component: {fileID: 1583493645}
   m_Layer: 5
   m_Name: ButtonBack
   m_TagString: Untagged
@@ -13758,18 +13758,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1583493641}
   m_CullTransparentMesh: 1
---- !u!114 &1583493645
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1583493641}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3f1d8c7d7a9a4504ad322a7ff2ac2114, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &1583493646
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -13814,10 +13802,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1583493645}
-        m_TargetAssemblyTypeName: Src.TutorialScenario.FrameChangeTrigger.ExternalUnityFrameChangeTrigger,
-          Src
-        m_MethodName: GoToNextFrame
+      - m_Target: {fileID: 1705111113}
+        m_TargetAssemblyTypeName: Src.TutorialScenario.TutorialScenario, Src
+        m_MethodName: Undo
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -15054,7 +15041,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   highlighter: {fileID: 1063502073}
-  highlightTimeInSeconds: 1
+  highlightTimeInSeconds: 0.8
   disappearDelayInSeconds: 0.5
 --- !u!114 &1730260088
 MonoBehaviour:
@@ -17833,7 +17820,7 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 8674514081866498112}
-  m_RootOrder: 5
+  m_RootOrder: 4
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 1, y: 1}
@@ -18518,7 +18505,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7013085728527062925, guid: e6f8c9ce36dae324e8199d481696e85d, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7013085728527062925, guid: e6f8c9ce36dae324e8199d481696e85d, type: 3}
       propertyPath: m_AnchorMax.x
@@ -21001,7 +20988,7 @@ RectTransform:
   - {fileID: 8674514082431352866}
   - {fileID: 2014856650}
   m_Father: {fileID: 8674514081866498112}
-  m_RootOrder: 2
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 1, y: 1}
   m_AnchorMax: {x: 1, y: 1}
@@ -21037,11 +21024,11 @@ RectTransform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 8674514083705535936}
-  - {fileID: 1063502072}
   - {fileID: 8674514081672276669}
   - {fileID: 7013085729349448139}
   - {fileID: 669943076}
   - {fileID: 2090333709}
+  - {fileID: 1063502072}
   m_Father: {fileID: 0}
   m_RootOrder: 16
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

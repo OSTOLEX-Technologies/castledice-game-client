@@ -7,16 +7,26 @@ namespace Src.Components.UI
     [RequireComponent(typeof(Image))]
     public class AppearingImage : MonoBehaviour
     {
+        [SerializeField] [Range(0, 1)] private float startAlpha = 0f;
         [SerializeField] [Range(0, 1)] private float targetAlpha = 0.5f;
         private Image _image;
 
         private void Awake()
         {
             _image = GetComponent<Image>();
+            Reset();
+        }
+
+        public void Reset()
+        {
+            var color = _image.color;
+            var defaultColor = new Color(color.r, color.g, color.b, startAlpha);
+            _image.color = defaultColor;
         }
 
         public void AppearInSeconds(float seconds)
         {
+            Reset();
             StartCoroutine(Show(seconds));
         }
         

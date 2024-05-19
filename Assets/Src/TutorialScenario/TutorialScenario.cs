@@ -18,6 +18,21 @@ namespace Src.TutorialScenario
             frames[_frameIndex].frameChangeTrigger.NextFrameRequested += OnNextFrameRequested;
             frames[_frameIndex].command.Do();
         }
+
+        public void Undo()
+        {
+            if (_frameIndex == 0)
+            {
+                Debug.LogError("Trying to undo the first one frame in a sequence");
+                return;
+            }
+            
+            frames[_frameIndex].frameChangeTrigger.NextFrameRequested -= OnNextFrameRequested;
+            
+            frames[_frameIndex--].command.Undo();
+            frames[_frameIndex].frameChangeTrigger.NextFrameRequested += OnNextFrameRequested;
+            Debug.Log("Undo frame to " + frames[_frameIndex].command.gameObject.name);
+        }
         
         private void OnNextFrameRequested()
         {
