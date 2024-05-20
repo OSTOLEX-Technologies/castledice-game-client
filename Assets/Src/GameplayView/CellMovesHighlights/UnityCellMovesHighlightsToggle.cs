@@ -1,23 +1,29 @@
 ﻿using System.Collections.Generic;
 using UnityEngine;
+using Vector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.GameplayView.CellMovesHighlights
 {
     public class UnityCellMovesHighlightsToggle : MonoBehaviour
     {
-        private List<UnityCellMoveHighlight> _highlights;
+        private Dictionary<Vector2Int, UnityCellMoveHighlight> _highlights;
         
-        public void Init(List<UnityCellMoveHighlight> highlights)
+        public void Init(Dictionary<Vector2Int, UnityCellMoveHighlight> highlights)
         {
             _highlights = highlights;
         }
         
-        public void SetHighlightsActive(bool value)
+        public void ToggleAllHighlights(bool active)
         {
-            foreach (var highlight in _highlights)
+            foreach (var highlight in _highlights.Values)
             {
-                highlight.gameObject.SetActive(value);
+                highlight.gameObject.SetActive(active);
             }
+        }
+        
+        public void ToggleHighlight(Vector2Int position, bool active)
+        {
+            _highlights[position].gameObject.SetActive(active);
         }
     }
 }

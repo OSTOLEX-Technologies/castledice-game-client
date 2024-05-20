@@ -3,19 +3,19 @@ using UnityEngine;
 
 namespace Src.TutorialScenario.ScenarioCommands
 {
-    public class ToggleCellMovesHighlightsCommand : TutorialScenarioCommand
+    public class ToggleAllCellMovesHighlightsCommand : TutorialScenarioCommand
     {
         [SerializeField] private UnityCellMovesHighlightsToggle toggle;
         [SerializeField] private bool active;
         
         public override void Do()
         {
-            toggle.SetHighlightsActive(active);
+            toggle.ToggleAllHighlights(active);
         }
 
         public override void Undo()
         {
-            toggle.SetHighlightsActive(!active);
+            toggle.ToggleAllHighlights(!active);
         }
     }
 }

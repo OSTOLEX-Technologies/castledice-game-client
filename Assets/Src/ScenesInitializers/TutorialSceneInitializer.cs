@@ -450,10 +450,14 @@ namespace Src.ScenesInitializers
          {
              cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
              var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
-             highlightsPlacer.HighlightsPlaced += cellMovesHighlightsToggle.Init;
              var highlights = highlightsPlacer.PlaceHighlights();
+             var unityHighlights = new Dictionary<Vector2Int, UnityCellMoveHighlight>();
+             foreach (var (key, value) in highlights)
+             {
+                 unityHighlights.Add(key, value as UnityCellMoveHighlight);
+             }
+             cellMovesHighlightsToggle.Init(unityHighlights);
              _cellMovesHighlightView = new CellMovesHighlightView(highlights);
-             highlightsPlacer.HighlightsPlaced -= cellMovesHighlightsToggle.Init;
              cellMovesHighlightsAnimation.Init(highlights);
              var cellMovesListProvider = new CellMovesListProvider(_game);
              var observer = new CellMovesHighlightObserver(_game, _player);
