@@ -42,16 +42,12 @@ namespace Src.Components
             while (_isPlaying)
             {
                 var current = sequence[_currentIndex];
-                switch (current.moveType)
-                {
-                    case MoveType.Place or MoveType.Upgrade:
-                        HighlightCell(current);
-                        break;
-                    case MoveType.Remove or MoveType.Replace or MoveType.Capture:
-                        UnhighlightCell(current);
-                        break;
-                }
                 
+                if (current.moveType == MoveType.Remove)
+                    UnhighlightCell(current);
+                else
+                    HighlightCell(current);
+
                 var elapsedTime = 0f;
                 while (elapsedTime < oneCellHighlightDuration)
                 {

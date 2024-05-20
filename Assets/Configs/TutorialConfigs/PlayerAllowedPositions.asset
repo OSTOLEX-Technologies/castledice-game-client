@@ -17,9 +17,7 @@ MonoBehaviour:
     - {x: 1, y: 1}
   - Positions:
     - {x: 1, y: 0}
-    - {x: 0, y: 1}
   - Positions:
-    - {x: 1, y: 0}
     - {x: 0, y: 1}
   - Positions:
     - {x: 2, y: 2}
@@ -30,9 +28,9 @@ MonoBehaviour:
   - Positions:
     - {x: 5, y: 4}
   - Positions:
-    - {x: 6, y: 5}
+    - {x: 5, y: 5}
   - Positions:
-    - {x: 6, y: 6}
+    - {x: 5, y: 6}
   - Positions:
     - {x: 6, y: 7}
   - Positions:
