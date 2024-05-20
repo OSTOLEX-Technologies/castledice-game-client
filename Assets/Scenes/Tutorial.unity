@@ -1290,7 +1290,7 @@ GameObject:
   m_Component:
   - component: {fileID: 153251007}
   - component: {fileID: 153251010}
-  - component: {fileID: 153251013}
+  - component: {fileID: 153251022}
   - component: {fileID: 153251012}
   - component: {fileID: 153251011}
   - component: {fileID: 153251014}
@@ -1336,7 +1336,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   commands:
-  - {fileID: 153251013}
+  - {fileID: 153251022}
   - {fileID: 153251012}
   - {fileID: 153251011}
   - {fileID: 153251014}
@@ -1376,20 +1376,6 @@ MonoBehaviour:
   mixer: {fileID: 24100000, guid: bd4c6a9a98af14feb9fe74d4d035cb87, type: 2}
   parameterName: KnightsVolume
   targetVolume: 0
---- !u!114 &153251013
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 153251006}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31fe79e4b7a44c8c853b034eb657d702, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  toggle: {fileID: 1295104327}
-  active: 0
 --- !u!114 &153251014
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1495,6 +1481,20 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   botMoveTrigger: {fileID: 1297154578}
+--- !u!114 &153251022
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 153251006}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 31fe79e4b7a44c8c853b034eb657d702, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  toggle: {fileID: 1295104327}
+  active: 0
 --- !u!1 &174191743
 GameObject:
   m_ObjectHideFlags: 0
@@ -1508,6 +1508,7 @@ GameObject:
   - component: {fileID: 174191746}
   - component: {fileID: 174191745}
   - component: {fileID: 174191749}
+  - component: {fileID: 174191751}
   - component: {fileID: 174191750}
   - component: {fileID: 174191748}
   m_Layer: 0
@@ -1576,6 +1577,7 @@ MonoBehaviour:
   - {fileID: 174191746}
   - {fileID: 174191745}
   - {fileID: 174191749}
+  - {fileID: 174191751}
   - {fileID: 174191750}
   - {fileID: 174191748}
 --- !u!114 &174191748
@@ -1622,6 +1624,21 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   toggle: {fileID: 1295104327}
   active: 1
+--- !u!114 &174191751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 174191743}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5496e2b55dc94686981b1827f8feefec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 4, y: 3}
+  active: 1
+  toggle: {fileID: 1295104327}
 --- !u!1 &179664888
 GameObject:
   m_ObjectHideFlags: 0
@@ -5596,13 +5613,11 @@ MonoBehaviour:
     moveType: 0
   - position: {x: 5, y: 4}
     moveType: 0
-  - position: {x: 6, y: 5}
-    moveType: 0
-  - position: {x: 6, y: 6}
+  - position: {x: 5, y: 5}
     moveType: 2
-  - position: {x: 6, y: 6}
+  - position: {x: 5, y: 5}
     moveType: 3
-  - position: {x: 6, y: 6}
+  - position: {x: 5, y: 5}
     moveType: 2
   oneCellHighlightDuration: 0.3
 --- !u!4 &622690652
@@ -6169,8 +6184,10 @@ GameObject:
   - component: {fileID: 654041412}
   - component: {fileID: 654041411}
   - component: {fileID: 654041410}
-  - component: {fileID: 654041409}
+  - component: {fileID: 654041419}
+  - component: {fileID: 654041418}
   - component: {fileID: 654041417}
+  - component: {fileID: 654041409}
   - component: {fileID: 654041408}
   - component: {fileID: 654041415}
   - component: {fileID: 654041416}
@@ -6297,8 +6314,10 @@ MonoBehaviour:
   - {fileID: 654041412}
   - {fileID: 654041411}
   - {fileID: 654041410}
-  - {fileID: 654041409}
+  - {fileID: 654041419}
+  - {fileID: 654041418}
   - {fileID: 654041417}
+  - {fileID: 654041409}
   - {fileID: 654041408}
   - {fileID: 654041415}
 --- !u!114 &654041415
@@ -6336,11 +6355,42 @@ MonoBehaviour:
   m_GameObject: {fileID: 654041406}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 31fe79e4b7a44c8c853b034eb657d702, type: 3}
+  m_Script: {fileID: 11500000, guid: 5496e2b55dc94686981b1827f8feefec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  toggle: {fileID: 1295104327}
+  position: {x: 5, y: 5}
   active: 1
+  toggle: {fileID: 1295104327}
+--- !u!114 &654041418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654041406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5496e2b55dc94686981b1827f8feefec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 5, y: 4}
+  active: 1
+  toggle: {fileID: 1295104327}
+--- !u!114 &654041419
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 654041406}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5496e2b55dc94686981b1827f8feefec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  position: {x: 4, y: 3}
+  active: 1
+  toggle: {fileID: 1295104327}
 --- !u!1 &654954832
 GameObject:
   m_ObjectHideFlags: 0
