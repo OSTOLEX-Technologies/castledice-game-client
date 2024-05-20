@@ -213,7 +213,6 @@ namespace Src.ScenesInitializers
             SetUpPlacedUnitsHighlights();
             SetUpNewUnitsHighlights();
             SetUpCellMovesHighlights();
-            SetUpGameOver();
             HandleGameOver();
 
             GiveActionPointsToCurrentPlayer();
@@ -461,12 +460,6 @@ namespace Src.ScenesInitializers
              _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_player, cellMovesListProvider, observer, _cellMovesHighlightView);
          }
         
-        private void SetUpGameOver()
-        {
-            _gameOverView = new GameOverView(_playerColorProvider,
-                blueWinnerScreen, redWinnerScreen, drawScreen);
-            _gameOverPresenter = new GameOverPresenter(_game, _gameOverView);
-        }
 
         private void HandleGameOver()
         {
