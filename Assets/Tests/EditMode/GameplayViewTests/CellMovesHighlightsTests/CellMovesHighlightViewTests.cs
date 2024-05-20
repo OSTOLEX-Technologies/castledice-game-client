@@ -26,7 +26,7 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
 
             var cellHighlightsPlacerMock = new Mock<ICellHighlightsPlacer>();
             cellHighlightsPlacerMock.Setup(c => c.PlaceHighlights()).Returns(dictionary);
-            var cellMovesHighlightView = new CellMovesHighlightView(cellHighlightsPlacerMock.Object);
+            var cellMovesHighlightView = new CellMovesHighlightView(cellHighlightsPlacerMock.Object.PlaceHighlights());
 
             cellMovesHighlightView.HighlightCellMoves(cellMoves);
 
@@ -42,7 +42,7 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
         {
             var cellHighlightsPlacerMock = new Mock<ICellHighlightsPlacer>();
             cellHighlightsPlacerMock.Setup(c => c.PlaceHighlights()).Returns(new Dictionary<Vector2Int, ICellMoveHighlight>());
-            var cellMovesHighlightView = new CellMovesHighlightView(cellHighlightsPlacerMock.Object);
+            var cellMovesHighlightView = new CellMovesHighlightView(cellHighlightsPlacerMock.Object.PlaceHighlights());
             var list = new List<CellMove> {new CellMove(new Cell((1, 1)), MoveType.Capture)};
             
             Assert.Throws<ArgumentException>(() => cellMovesHighlightView.HighlightCellMoves(list));
@@ -61,7 +61,7 @@ namespace Tests.EditMode.GameplayViewTests.CellMovesHighlightsTests
             }
             var cellHighlightsPlacerMock = new Mock<ICellHighlightsPlacer>();
             cellHighlightsPlacerMock.Setup(c => c.PlaceHighlights()).Returns(dictionary);
-            var cellMovesHighlightView = new CellMovesHighlightView(cellHighlightsPlacerMock.Object);
+            var cellMovesHighlightView = new CellMovesHighlightView(cellHighlightsPlacerMock.Object.PlaceHighlights());
             
             cellMovesHighlightView.HideHighlights();
             

@@ -292,7 +292,8 @@ public class PVESceneInitializer : MonoBehaviour
     {
         cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
         var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
-        _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
+        var highlightsDictionary = highlightsPlacer.PlaceHighlights();
+        _cellMovesHighlightView = new CellMovesHighlightView(highlightsDictionary);
         _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_player,
             new CellMovesListProvider(_game), new CellMovesHighlightObserver(_game, _player), _cellMovesHighlightView);
     }

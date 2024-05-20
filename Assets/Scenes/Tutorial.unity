@@ -5027,6 +5027,52 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 620908756}
   m_CullTransparentMesh: 1
+--- !u!1 &622690650
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 622690652}
+  - component: {fileID: 622690651}
+  m_Layer: 0
+  m_Name: CellMovesHighlightsAnimation
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &622690651
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622690650}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ab1790b9afa04d1284daa3b6f068344e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  sequence: []
+  oneCellHighlightDuration: 0.5
+--- !u!4 &622690652
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 622690650}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1364.7239, y: 617.14606, z: -5.1732993}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 20
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &635134180
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -12668,6 +12714,7 @@ MonoBehaviour:
   cellMoveHighlightsConfig: {fileID: 11400000, guid: 299796ff4d01cc74384058d8e2af43d5, type: 2}
   cellMoveHighlightsFactory: {fileID: 2095275312}
   cellMovesHighlightsToggle: {fileID: 1295104327}
+  cellMovesHighlightsAnimation: {fileID: 622690651}
   blueWinnerScreen: {fileID: 8317343790580066247}
   redWinnerScreen: {fileID: 8317343790085242007}
   drawScreen: {fileID: 8317343789972965597}

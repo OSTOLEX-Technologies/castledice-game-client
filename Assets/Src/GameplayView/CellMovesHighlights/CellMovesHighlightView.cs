@@ -7,12 +7,10 @@ namespace Src.GameplayView.CellMovesHighlights
     public class CellMovesHighlightView : ICellMovesHighlightView
     {
         private readonly Dictionary<Vector2Int, ICellMoveHighlight> _cellHighlights;
-        private readonly ICellHighlightsPlacer _cellHighlightsPlacer;
         
-        public CellMovesHighlightView(ICellHighlightsPlacer cellHighlightsPlacer)
+        public CellMovesHighlightView(Dictionary<Vector2Int, ICellMoveHighlight> cellHighlights)
         {
-            _cellHighlightsPlacer = cellHighlightsPlacer;
-            _cellHighlights = _cellHighlightsPlacer.PlaceHighlights();
+            _cellHighlights = cellHighlights;
         }
         
         public void HighlightCellMoves(List<CellMove> cellMoves)

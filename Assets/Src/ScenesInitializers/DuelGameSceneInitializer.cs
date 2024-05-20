@@ -275,7 +275,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
         var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
-        _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
+        var highlights = highlightsPlacer.PlaceHighlights();
+        _cellMovesHighlightView = new CellMovesHighlightView(highlights);
         _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_localPlayer,
             new CellMovesListProvider(_game), new CellMovesHighlightObserver(_game, _localPlayer), _cellMovesHighlightView);
     }
