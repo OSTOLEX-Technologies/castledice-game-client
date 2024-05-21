@@ -4,8 +4,8 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskRestRequestsAdapter.Back
 {
     public class MetamaskBackendUrlProvider : IMetamaskBackendUrlProvider 
     {
-        public string GetNonceUrl => $"{MetamaskAuthConfig.GlobalUrl}/{MetamaskAuthConfig.NonceGetterEndpoint}";
-        public string GetAuthUrl => $"{MetamaskAuthConfig.GlobalUrl}/{MetamaskAuthConfig.AuthEndpoint}";
-        public string GetRefreshUrl => $"{MetamaskAuthConfig.GlobalUrl}/{MetamaskAuthConfig.RefreshEndpoint}";
+        public string GetNonceUrl => $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.NonceGetterEndpoint}";
+        public string GetAuthUrl => $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.AuthEndpoint}";
+        public string GetRefreshUrl => $"{MetamaskAuthConfig.GlobalUrl}{MetamaskAuthConfig.RefreshEndpoint}";
     }
 }

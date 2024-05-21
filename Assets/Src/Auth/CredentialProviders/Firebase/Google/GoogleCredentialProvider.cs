@@ -1,11 +1,9 @@
-﻿using System;
-using System.Threading.Tasks;
+﻿using System.Threading.Tasks;
 using Src.Auth.AuthKeys;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.JwtManagement;
 using Src.Auth.JwtManagement.Converters.Google;
-using Src.Auth.JwtManagement.DtoConverters.Google;
 using Src.Auth.REST.PortListener;
 using Src.Auth.REST.REST_Request_Proxies.Firebase.Google;
 using Src.Auth.REST.REST_Response_DTOs.Firebase.Google;
@@ -46,27 +44,25 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
         {
             if (TokenIsStored && _tokenStore.accessToken.Valid)
             {
-                Debug.Log("GOOGLE TOKEN IS VALID");
+                Debug.Log("Google token is VALID");
                 return _tokenStore;
             }
 
             if (!TokenIsStored)
             {
-                Debug.Log("GOOGLE TOKENS AREN'T STORED");
+                Debug.Log("Google tokens ARE NOT STORED");
                 var authResponse = await GetAuthData();
-                ;
 
                 _tokenStore = _jwtConverter.FromGoogleAuthResponse(authResponse);
-
                 _authTokenSaver.SaveAuthTokens(_tokenStore, AuthType.Google);
-
+                
                 PrintTokens();
                 return _tokenStore;
             }
 
             PrintTokens();
 
-            Debug.Log("GOOGLE ACCESS TOKEN IS INVALID");
+            Debug.Log("Google token is INVALID");
             var refreshResponse = await RefreshAccessToken();
 
             _tokenStore = _jwtConverter.FromGoogleRefreshResponse(_tokenStore, refreshResponse);
@@ -87,7 +83,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
             
             _localHttpPortListener.StartListening(authCode => 
             {
-                Debug.Log("<GOOGLE AUTH CODE RECEIVING CALLBACK>, code: " + authCode);
+                Debug.Log("Received Google auth code: " + authCode);
                 ExchangeAuthCodeWithIdToken(idResponseTcs, authCode);
             });
             
@@ -124,7 +120,7 @@ namespace Src.Auth.CredentialProviders.Firebase.Google
 
         private void PrintTokens()
         {
-            Debug.Log($"TOKENS:\n " +
+            Debug.Log($"Google tokens:\n " +
                       $"ID: {_tokenStore.idToken.Token}\n " +
                       $"Access: {_tokenStore.accessToken.Token}\n " +
                       $"Refresh: {_tokenStore.refreshToken.Token}");

@@ -1,6 +1,8 @@
 ﻿using System.Threading.Tasks;
+using Firebase;
 using Firebase.Auth;
 using Src.Auth.CredentialProviders.Firebase;
+using Src.Auth.Exceptions.Authorization;
 
 namespace Src.Auth.TokenProviders.TokenProvidersFactory
 {
@@ -16,9 +18,26 @@ namespace Src.Auth.TokenProviders.TokenProvidersFactory
         
         public async Task<FirebaseTokenProvider> GetTokenProviderAsync(AuthType authProviderType)
         {
-            var credentials = await _firebaseCredentialProvider.GetCredentialAsync(authProviderType);
-            var user = await _auth.SignInAndRetrieveDataWithCredentialAsync(credentials); 
-            return new FirebaseTokenProvider(user.User);
+            //FirebaseUser could be cached by Firebase SDK
+            if (_auth.CurrentUser != null)
+            {
+                if (!_auth.CurrentUser.IsValid())
+                {
+                    throw new AuthFailedException();
+                }
+                return new FirebaseTokenProvider(_auth.CurrentUser);
+            }
+
+            try
+            {
+                var credentials = await _firebaseCredentialProvider.GetCredentialAsync(authProviderType);
+                var user = await _auth.SignInAndRetrieveDataWithCredentialAsync(credentials);
+                return new FirebaseTokenProvider(user.User);
+            }
+            catch(FirebaseException e)
+            {
+                throw new AuthUnhandledException(e.Message);
+            }
         }
     }
 }
