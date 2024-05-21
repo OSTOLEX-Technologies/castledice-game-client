@@ -70,7 +70,7 @@ namespace MetaMask.Unity.Contracts
             return CurrentContract.Allowance(owner, spender);
         }
 
-        public string Address
+        public EvmAddress Address
         {
             get => CurrentContract.Address;
         }

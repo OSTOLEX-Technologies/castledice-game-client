@@ -3,7 +3,7 @@ using Src.Auth.AuthKeys;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.JwtManagement;
-using Src.Auth.JwtManagement.Converters.Google;
+using Src.Auth.JwtManagement.DtoConverters.Google;
 using Src.Auth.REST.PortListener;
 using Src.Auth.REST.REST_Request_Proxies.Firebase.Google;
 using Src.Auth.REST.REST_Response_DTOs.Firebase.Google;

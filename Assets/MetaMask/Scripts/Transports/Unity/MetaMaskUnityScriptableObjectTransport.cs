@@ -3,6 +3,7 @@ using System;
 using System.Runtime.InteropServices;
 #endif
 using MetaMask.Models;
+using MetaMask.Unity;
 using UnityEngine;
 
 namespace MetaMask.Transports.Unity
@@ -10,21 +11,17 @@ namespace MetaMask.Transports.Unity
 
     public abstract class MetaMaskUnityScriptableObjectTransport : ScriptableObject, IMetaMaskTransport
     {
-        public bool isWebGL
-        {
-            get
-            {
-#if UNITY_WEBGL
-                return true;
-#else
-                return false;
-
-#endif
-            }
-        }
         public abstract event EventHandler<MetaMaskUnityRequestEventArgs> Requesting;
 
-        public abstract void Initialize();
+        public void Initialize()
+        {
+            DoInitialize();
+            
+            // if we are on mobile, set the connection mode to deeplink
+            ConnectionMode = IsMobile ? TransportMode.Deeplink : TransportMode.QRCode;
+        }
+        
+        public abstract void DoInitialize();
 
         public abstract void UpdateUrls(string universalLink, string deepLink);
 
@@ -38,35 +35,16 @@ namespace MetaMask.Transports.Unity
         public abstract void OnSessionRequest(MetaMaskSessionData session);
 
         public abstract void OnSuccess();
-        
-#if UNITY_WEBGL && !UNITY_EDITOR
-        [DllImport("__Internal")]
-        public static extern void OpenMetaMaskDeeplink(string url);
-        
-        [DllImport("__Internal")]
-        public static extern bool WebGLIsMobile();
-#endif
 
-        public bool IsMobile
-        {
-            get
-            {
-                #if UNITY_WEBGL && !UNITY_EDITOR
-                    return WebGLIsMobile();
-                #else
-                    return Application.isMobilePlatform;
-                #endif
-            }
-        }
+        public bool IsMobile => MetaMaskSDK.IsMobile;
+        
         public abstract void OnDisconnect();
+
+        public virtual TransportMode ConnectionMode { get; set; }
 
         protected void OpenDeeplinkURL(string url)
         {
-#if UNITY_WEBGL && !UNITY_EDITOR
-            OpenMetaMaskDeeplink(url);
-#else
-            Application.OpenURL(url);
-#endif
+            MetaMaskSDK.OpenDeeplinkURL(url);
         }
 
     }

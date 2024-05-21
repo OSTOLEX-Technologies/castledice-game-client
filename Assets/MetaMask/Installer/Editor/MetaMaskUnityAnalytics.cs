@@ -1,7 +1,7 @@
 using System;
 using System.IO;
 
-namespace MetaMask.Installer.Editor
+namespace MetaMask.Unity
 {
 
     public static class MetaMaskUnityAnalytics
@@ -22,7 +22,7 @@ namespace MetaMask.Installer.Editor
         {
             try
             {
-                VspAttribution.SendAttributionEvent(data, PartnerName, Guid.ToString());
+                UnityEngine.VspAttribution.MetaMask.VspAttribution.SendAttributionEvent(data, PartnerName, Guid.ToString());
             }
             catch (Exception)
             {

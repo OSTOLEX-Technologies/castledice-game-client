@@ -1,15 +1,18 @@
 using System.Collections.Generic;
+
+using MetaMask.Unity;
+
 using UnityEditor;
 using UnityEditor.PackageManager;
 using UnityEditor.PackageManager.Requests;
+
 using UnityEngine;
 
-namespace MetaMask.Installer.Editor
+namespace MetaMask
 {
 
     public class MetaMaskInstallerWindow : EditorWindow
     {
-
         private static MetaMaskInstallerWindow instance;
 
         private const string showOnStartupKey = "metamask.installer.showOnStartup";
@@ -32,7 +35,7 @@ namespace MetaMask.Installer.Editor
         private AddRequest addRequest;
         private Vector2 scrollPosition;
 
-        [MenuItem("Tools/MetaMask/Install")]
+        [MenuItem("MetaMask/Install")]
         public static void Initialize()
         {
             instance = GetWindow<MetaMaskInstallerWindow>();
@@ -40,6 +43,11 @@ namespace MetaMask.Installer.Editor
             instance.minSize = new Vector2(440, 292);
             instance.UpdateDependencies();
             instance.Show();
+        }
+
+        public static void ResetStartupBool()
+        {
+            EditorPrefs.SetBool(showOnStartupKey, true);
         }
 
         [InitializeOnLoadMethod]
@@ -237,19 +245,20 @@ namespace MetaMask.Installer.Editor
             GUILayout.FlexibleSpace();
 
             EditorGUILayout.BeginHorizontal();
-            string installLabel = "Install MetaMask";
+            var isUpdate = MetaMaskGettingStartedWindow.UpdateQueued;
+            string installLabel = isUpdate ? "Update MetaMask" : "Install MetaMask";
             bool metaMaskInstallReady = this.listRequest == null && allInstalled;
             if (!metaMaskInstallReady)
             {
-                installLabel = "Install Anyway";
+                installLabel = isUpdate ? "Update Anyway" : "Install Anyway";
             }
             else if (isMetaMaskInstalled)
             {
-                installLabel = "Reinstall";
+                installLabel = isUpdate ? "Update Again" : "Reinstall";
             }
             if (isMetaMaskInstalled)
             {
-                installLabel = "Already Installed";
+                installLabel = isUpdate ? "Updated" : "Already Installed";
             }
             if (this.listRequest != null)
             {
@@ -276,6 +285,7 @@ namespace MetaMask.Installer.Editor
         {
             AssetDatabase.ImportPackage(MainPackage, true);
             MetaMaskUnityAnalytics.LogEvent("Install Main");
+            MetaMaskGettingStartedWindow.SetupCompleted = true;
         }
 
         public void UpdateDependencies()

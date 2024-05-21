@@ -5,13 +5,13 @@ using Src.Auth.CredentialProviders.Firebase.Google.GoogleRestRequestsAdapter;
 using Src.Auth.DeepLinking.DeepLinkTextInjector;
 using Src.Auth.DeepLinking.LinkResolver.LinkFormatter;
 using Src.Auth.Exceptions.Authorization;
-using Src.Auth.JwtManagement.Converters.Google;
 using Src.Auth.REST;
 using Src.Auth.REST.PortListener;
 using Src.Auth.REST.PortListener.ListenerContextInterpretation;
 using Src.Auth.REST.PortListener.ListenerContextResponse;
 using Src.Auth.UrlOpening;
 using Src.Auth.AuthKeys;
+using Src.Auth.JwtManagement.DtoConverters.Google;
 using Src.Components;
 using GoogleAuthConfig = Src.Auth.AuthKeys.GoogleAuthConfig;
 

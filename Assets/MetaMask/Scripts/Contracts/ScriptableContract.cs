@@ -1,26 +1,22 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using evm.net;
+using evm.net.Factory;
 using evm.net.Models;
+using MetaMask.Models;
 
 namespace MetaMask.Unity.Contracts
 {
     public abstract class ScriptableContract<T> : ScriptableObject where T : class, IContract
     {
-        [Serializable]
-        public enum ChainId : int
+        #if ENABLE_MONO
+        static ScriptableContract()
         {
-            Ethereum = 1,
-            Polygon = 137,
-            Bsc = 56,
-            Avalanche = 43114,
-            Arbitrum = 42161,
-            Optimism = 10,
-            zkSyncEra = 324,
-            LineaTestnet = 59140,
-            Goerli = 5,
+            Contract.ContractFactory = new ImpromptuContractFactory();
         }
+        #endif
         
         [Serializable]
         public class AddressByChain
@@ -32,7 +28,7 @@ namespace MetaMask.Unity.Contracts
         public List<AddressByChain> ContractAddresses = new List<AddressByChain>();
 
         private MetaMaskWallet connectedProvider;
-        private Dictionary<int, T> contractInstances = new Dictionary<int, T>();
+        private Dictionary<long, T> contractInstances = new Dictionary<long, T>();
 
         public T CurrentContract
         {
@@ -42,13 +38,15 @@ namespace MetaMask.Unity.Contracts
                 {
                     // We need to setup
                     var success = Setup();
-                    if (!success)
+                    if (!success || connectedProvider == null)
                         throw new InvalidOperationException("MetaMask is not currently connected");
                 }
 
-                var chainId = Convert.ToInt32(connectedProvider.SelectedChainId, 16);
+                var chainId = Convert.ToInt64(connectedProvider.SelectedChainId, 16);
                 if (!contractInstances.ContainsKey(chainId))
-                    throw new InvalidOperationException($"There is no contract instance setup for chainId {chainId}");
+                    throw new InvalidOperationException(
+                        $"There is no contract instance setup for chainId {chainId}. " +
+                        $"Chains available: {string.Join(',', contractInstances.Keys.Select(cid => $"0x{cid:X}"))}");
 
                 return contractInstances[chainId];
             }
@@ -66,7 +64,7 @@ namespace MetaMask.Unity.Contracts
                         throw new InvalidOperationException("MetaMask is not currently connected");
                 }
 
-                var chainId = Convert.ToInt32(connectedProvider.SelectedChainId, 16);
+                var chainId = Convert.ToInt64(connectedProvider.SelectedChainId, 16);
 
                 return contractInstances.ContainsKey(chainId);
             }
@@ -86,7 +84,7 @@ namespace MetaMask.Unity.Contracts
             }
             else
             {
-                metaMask.Wallet.Events.WalletAuthorized += (_, _) => SetupContract(metaMask.Wallet);
+                metaMask.Wallet.Events.WalletAuthorized += (_, __) => SetupContract(metaMask.Wallet);
                 return false;
             }
         }
@@ -128,13 +126,19 @@ namespace MetaMask.Unity.Contracts
 
         private void SetupContract(MetaMaskWallet provider)
         {
-            connectedProvider = provider;
-            
-            foreach (var addressDetails in ContractAddresses)
+            try
             {
-                var instance = Contract.Attach<T>(connectedProvider, addressDetails.Address);
-                
-                contractInstances.Add((int)addressDetails.ChainId, instance);
+                connectedProvider = provider;
+                foreach (var addressDetails in ContractAddresses)
+                {
+                    var instance = Contract.Attach<T>(connectedProvider, addressDetails.Address);
+                    contractInstances.Add((long)addressDetails.ChainId, instance);
+                }
+            }
+            catch (Exception e)
+            {
+                Debug.LogError("Could not create contract instances");
+                Debug.LogException(e);
             }
         }
     }

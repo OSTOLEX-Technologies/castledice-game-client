@@ -608,6 +608,7 @@ MonoBehaviour:
   otpPanel: {fileID: 4990485137583038978}
   background: {fileID: 2203544183764163577}
   fadeDuration: 0.5
+  description: {fileID: 5504587220700742623}
 --- !u!1 &8801738631881413888
 GameObject:
   m_ObjectHideFlags: 0

@@ -29,7 +29,7 @@ namespace Src.Auth.Scripts
 
         private void Start()
         {
-            if (_bFlowInProgress) return;
+            if (_flowInProgress) return;
             
             ControlAuthButtons(false);
             

@@ -27,8 +27,14 @@ namespace Src.Auth.REST
             
             var request = new HttpRequestMessage(requestMethodType, parametrizedUri);
 
-            return await SendResponse<T>(request);
+            return await SendMessage<T>(request);
         }
+
+        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+        {
+            return await SendAsync(request);
+        }
+
         public async Task<T> Request<T>(
             HttpMethod requestMethodType, 
             string uri,
@@ -42,10 +48,10 @@ namespace Src.Auth.REST
             var encodedContent = new FormUrlEncodedContent(requestBodyContent);
             request.Content = encodedContent;
 
-            return await SendResponse<T>(request);
+            return await SendMessage<T>(request);
         }
 
-        private async Task<T> SendResponse<T>(HttpRequestMessage request)
+        private async Task<T> SendMessage<T>(HttpRequestMessage request)
         {
             Debug.LogWarning("Sending to: " + request.RequestUri);
             var response = await _httpClient.SendAsync(request);

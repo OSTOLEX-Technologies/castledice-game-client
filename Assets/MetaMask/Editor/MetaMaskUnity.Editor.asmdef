@@ -2,8 +2,8 @@
     "name": "MetaMaskUnity.Editor",
     "rootNamespace": "",
     "references": [
-        "GUID:537c66ab619ea034fb67f703efea6bd4",
-        "GUID:9160cf3ea7468fb4289a9f2ab3d51131"
+        "GUID:9160cf3ea7468fb4289a9f2ab3d51131",
+        "GUID:6880a053aab14ed6adafd165b81dd4a4"
     ],
     "includePlatforms": [
         "Editor"

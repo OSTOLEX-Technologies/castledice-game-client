@@ -1,8 +1,10 @@
 using System;
+
 using UnityEditor;
+
 using UnityEngine.Analytics;
 
-namespace MetaMask.Installer.Editor
+namespace UnityEngine.VspAttribution.MetaMask
 {
     public static class VspAttribution
     {

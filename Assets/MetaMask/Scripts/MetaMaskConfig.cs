@@ -30,17 +30,22 @@ namespace MetaMask.Unity
         /// <summary>The name of the application.</summary>
         [Header("App Details")]
         [SerializeField]
-        protected string appName = "example";
+        protected string appName = "";
 
         /// <summary>The URL of the app.</summary>
         /// <remarks>This is used to determine whether the app is running in the foreground.</remarks>
         [SerializeField]
         protected string appUrl = "example.com";
         
+        /// <summary>The base64 encoded version of the app icon.</summary>
+        /// <remarks>This is used to display the app icon.</remarks>
+        [SerializeField]
+        protected string appIcon = "";
+        
         /// <summary>The URL of the app icon.</summary>
         /// <remarks>This is used to determine where the app icon should be fetched from.</remarks>
         [SerializeField]
-        protected string appIcon = "";
+        protected string appIconUrl = "";
 
         /// <summary>The user agent to use when making requests.</summary>
         /// <remarks>This is used to identify the application when making requests.</remarks>
@@ -55,11 +60,6 @@ namespace MetaMask.Unity
         /// <summary>The password used to encrypt the persistent data.</summary>
         [SerializeField]
         protected string encryptionPassword = MetaMaskDataManager.RandomString(12);
-
-        /// <summary>The session identifier.</summary>
-        /// <remarks>This is used to store the session data in the local storage.</remarks>
-        [SerializeField]
-        protected string sessionIdentifier = "metamask.session.data";
 
         /// <summary>The URL of the socket server.</summary>
         /// <remarks>This is an advanced property.</remarks>
@@ -91,7 +91,7 @@ namespace MetaMask.Unity
 
         /// <summary>Gets the name of the application.</summary>
         /// <returns>The name of the application.</returns>
-        public virtual string AppName => this.appName;
+        public virtual string AppName => string.IsNullOrWhiteSpace(this.appName) ? Application.productName : this.appName;
 
         /// <summary>Gets the URL of the app.</summary>
         /// <returns>The URL of the app.</returns>
@@ -100,6 +100,8 @@ namespace MetaMask.Unity
         /// <summary>Gets the URL of the app.</summary>
         /// <returns>The URL of the app.</returns>
         public virtual string AppIcon => this.appIcon;
+
+        public string AppIconUrl => this.appIconUrl;
 
         /// <summary>The user agent to use when making requests.</summary>
         /// <remarks>This is used to identify the application when making requests.</remarks>
@@ -113,16 +115,15 @@ namespace MetaMask.Unity
         /// <returns>The password used to encrypt the data.</returns>
         public virtual string EncryptionPassword => this.encryptionPassword;
 
-        /// <summary>Gets the session identifier.</summary>
-        /// <returns>The session identifier.</returns>
-        public virtual string SessionIdentifier => this.sessionIdentifier;
-
         /// <summary>Gets the URL of the socket.</summary>
         /// <returns>The URL of the socket.</returns>
-        public virtual string SocketUrl => this.socketUrl;
+        public virtual string SocketUrl
+        {
+            get { return this.socketUrl; }
+            internal set { this.socketUrl = value; }
+        }
 
         #endregion
-
     }
 
 }

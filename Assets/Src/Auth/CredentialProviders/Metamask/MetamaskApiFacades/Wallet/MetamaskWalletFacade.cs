@@ -1,6 +1,7 @@
 using System;
 using MetaMask;
 using MetaMask.Unity;
+using UnityEngine;
 using Object = UnityEngine.Object;
 
 namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
@@ -21,8 +22,8 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
                 return;
             }
             
-            _wallet.WalletConnectedHandler += OnWalletConnected;
-            _wallet.WalletAuthorizedHandler += OnWalletAuthorized;
+            _wallet.WalletConnected += OnWalletConnected;
+            _wallet.WalletAuthorized += OnWalletAuthorized;
             _wallet.Connect();
         }
 
@@ -34,7 +35,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
                 return;
             }
             
-            _wallet.WalletDisconnectedHandler += OnWalletDisconnected;
+            _wallet.WalletDisconnected += OnWalletDisconnected;
             _wallet.Dispose();
         }
         
@@ -45,7 +46,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         
         private void OnWalletConnected(object sender, EventArgs args)
         {
-            _wallet.WalletConnectedHandler -= OnWalletConnected;
+            _wallet.WalletConnected -= OnWalletConnected;
             
             IMetamaskWalletFacade.WalletConnected = true;
             Connected?.Invoke();
@@ -53,13 +54,13 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
 
         private void OnWalletDisconnected(object sender, EventArgs args)
         {
-            _wallet.WalletDisconnectedHandler -= OnWalletDisconnected;
+            _wallet.WalletDisconnected -= OnWalletDisconnected;
             
             IMetamaskWalletFacade.WalletConnected = false;
             
             MetaMaskUnity.Instance.EndSession();
             
-            var metamaskUnityComponentGameObject = MetaMaskUnity.Instance.gameObject;
+            var metamaskUnityComponentGameObject = ((MonoBehaviour)MetaMaskUnity.Instance).gameObject;
             Object.Destroy(metamaskUnityComponentGameObject);
             GC.Collect();
 
@@ -68,7 +69,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         
         private void OnWalletAuthorized(object sender, EventArgs args)
         {
-            _wallet.WalletAuthorizedHandler -= OnWalletAuthorized;
+            _wallet.WalletAuthorized -= OnWalletAuthorized;
             
             IMetamaskWalletFacade.WalletAuthorized = true;
             Authorized?.Invoke();

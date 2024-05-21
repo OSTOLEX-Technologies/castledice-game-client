@@ -3,43 +3,99 @@ using System.Collections.Generic;
 using System.Linq;
 using evm.net;
 using System.Threading;
+using System.Threading.Tasks;
+using EventEmitter.NET;
+using evm.net.Models;
+using MetaMask.Contracts;
 using MetaMask.Cryptography;
 using MetaMask.IO;
 using MetaMask.Logging;
 using MetaMask.Models;
+using MetaMask.Providers;
 using MetaMask.SocketIOClient;
 using MetaMask.Sockets;
 using MetaMask.Transports;
 using MetaMask.Transports.Unity;
 using MetaMask.Transports.Unity.UI;
 using MetaMask.Unity.Utils;
+using MetaMask.Editor.NaughtyAttributes;
+using MetaMask.Scripts.Utilities;
+using MetaMask.Unity.Models;
 using UnityEngine;
 using UnityEngine.SceneManagement;
+using UnityEngine.Scripting;
 using UnityEngine.Serialization;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 namespace MetaMask.Unity
 {
     [RequireComponent(typeof(MetaMaskUnityEventHandler))]
     [RequireComponent(typeof(MetaMaskHttpService))]
-    public class MetaMaskUnity : MonoBehaviour, IMetaMaskEvents
+    public class MetaMaskUnity : MonoBehaviour, IMetaMaskSDK
     {
-        public static readonly string Version = MetaMaskWallet.Version;
-        public static readonly string Build = "8ea8c0b";
-        
-        #region Classes
-
-        [Serializable]
-        public class MetaMaskUnityRpcUrlConfig
+        [Button]
+        public void SwitchToNewPrefab()
         {
-            public long ChainId;
+            Debug.Log("Migrating MetaMaskUnity script to MetaMaskSDK prefab..");
+            
+            #if UNITY_EDITOR
+            // use Undo.AddComponent so action can be undone
+            var sdk = Undo.AddComponent<MetaMaskSDK>(gameObject);
+            #else
+            var sdk = gameObject.AddComponent<MetaMaskSDK>();
+            #endif
+            
+            // copy attributes
+            sdk.dappName = config.AppName;
+            sdk.dappUrl = config.AppUrl;
+            if (!string.IsNullOrWhiteSpace(config.AppIcon))
+                sdk.dappIcon = TextureBase64.Base64ToTexture(config.AppIcon);
 
-            public string RpcUrl;
+            var mmuuitransport = _transport as MetaMaskUnityUITransport;
+            if (mmuuitransport != null)
+            {
+                sdk.useLegacyUITransport = false;
+                sdk.spawnCanvas = mmuuitransport.spawnCanvas;
+                sdk.connectionCanvas = mmuuitransport.metaMaskCanvas;
+                
+                // still set the _transport, in case the dev enables UseLegacyUITransport
+                sdk.uiTransport = _transport;
+            }
+            else if (_transport != null)
+            {
+                sdk.useLegacyUITransport = true;
+                sdk.uiTransport = _transport;
+            }
+
+
+            sdk.useInfura = !string.IsNullOrWhiteSpace(_infuraProjectId);
+            sdk.infuraProjectId = _infuraProjectId;
+
+            sdk.rpcUrl = _rpcUrl;
+            
+            sdk.userAgent = config.UserAgent;
+            sdk.encrypt = config.Encrypt;
+            sdk.encryptionPassword = config.EncryptionPassword;
+            sdk.debugLogging = config.Log;
+            sdk.socketUrl = config.SocketUrl;
+            
+            #if UNITY_EDITOR
+            // now that we are setup, destroy this with undo history
+            Undo.DestroyObjectImmediate(this);
+            #else
+            DestroyImmediate(this);
+            #endif
+            
+            Debug.Log("Migration to MetaMaskSDK prefab complete. Please review the settings. You may safely ignore any errors logged during migration.");
         }
-
-        #endregion
+        
+        public static readonly string Version = MetaMaskWallet.Version;
+        
         #region Fields
 
-        protected static MetaMaskUnity instance;
+        protected static IMetaMaskSDK instance;
 
         /// <summary>The configuration for the MetaMask client.</summary>
         [SerializeField]
@@ -72,13 +128,33 @@ namespace MetaMask.Unity
         /// The Infura Project Id to use for connecting to an RPC endpoint. This can be used instead of
         /// RpcUrl
         /// </summary>
-        [SerializeField]
-        protected string InfuraProjectId;
+        [FormerlySerializedAs("InfuraProjectId")] [SerializeField]
+        protected string _infuraProjectId;
+
+        public string InfuraProjectId
+        {
+            get
+            {
+                return _infuraProjectId;
+            }
+        }
+        
         /// <summary>
         /// The RPC URL to use for web3 query requests when the MetaMask wallet is paused
         /// </summary>
-        [SerializeField]
-        protected List<MetaMaskUnityRpcUrlConfig> RpcUrl;
+        [FormerlySerializedAs("RpcUrl")] [SerializeField]
+        protected List<MetaMaskUnityRpcUrlConfig> _rpcUrl;
+
+        public string SDKVersion => Version;
+
+        public List<MetaMaskUnityRpcUrlConfig> RpcUrl
+        {
+            get
+            {
+                return _rpcUrl;
+            }
+        }
+        
         internal Thread unityThread;
 
         #endregion
@@ -92,6 +168,7 @@ namespace MetaMask.Unity
 
         public event EventHandler MetaMaskUnityBeforeInitialized;
         public event EventHandler MetaMaskUnityInitialized;
+        public event EventHandler<MetaMaskUnityRequestEventArgs> Requesting;
 
         #endregion
 
@@ -99,7 +176,7 @@ namespace MetaMask.Unity
 
         /// <summary>Gets the singleton instance of the <see cref="MetaMaskUnity"/> class.</summary>
         /// <returns>The singleton instance of the <see cref="MetaMaskUnity"/> class.</returns>
-        public static MetaMaskUnity Instance
+        public static IMetaMaskSDK Instance
         {
             get
             {
@@ -121,6 +198,23 @@ namespace MetaMask.Unity
                     {
                         instance = CreateNewInstance();
                     }*/
+                    
+                    var instances2 = FindObjectsOfType<MetaMaskSDK>();
+                    if (instances2.Length > 1)
+                    {
+                        Debug.LogError("There are more than 1 instances of " + nameof(MetaMaskSDK) + " inside the scene, there should be only one.");
+                        instance = instances2[0];
+                    }
+                    else if (instances2.Length == 1)
+                    {
+                        instance = instances2[0];
+                    }
+                    // Don't automatically create new instances
+                    /*
+                    else
+                    {
+                        instance = CreateNewInstance();
+                    }*/
                 }
                 return instance;
             }
@@ -128,7 +222,7 @@ namespace MetaMask.Unity
 
         /// <summary>Gets the configuration for the MetaMask client.</summary>
         /// <returns>The configuration for the MetaMask client.</returns>
-        public MetaMaskConfig Config
+        public IAppConfig Config
         {
             get
             {
@@ -139,6 +233,8 @@ namespace MetaMask.Unity
                 return this.config;
             }
         }
+
+        public MetaMaskConfig MetaMaskConfig => Config as MetaMaskConfig;
 
         /// <summary>The wallet associated with this instance.</summary>
         public MetaMaskWallet Wallet => this.wallet;
@@ -161,14 +257,14 @@ namespace MetaMask.Unity
             {
                 instance = this;
             }
-            else if (instance != this)
+            else if (instance as MetaMaskUnity != this)
             {
                 Debug.LogError("There are more than 1 instances of " + nameof(MetaMaskUnity) + " inside the scene, there should be only one.");
                 Destroy(gameObject);
             }
             if (this.initializeOnAwake)
             {
-                Initialize(Config);
+                Initialize(MetaMaskConfig);
             }
         }
 
@@ -192,7 +288,7 @@ namespace MetaMask.Unity
         {
             var transport = _transport ? _transport : Resources.Load<MetaMaskUnityUITransport>("MetaMask/Transports/UnityUI");
             var socket = new MetaMaskUnitySocketIO();
-            Initialize(Config, transport, socket);
+            Initialize(MetaMaskConfig, transport, socket);
         }
 
         /// <summary>Initializes the MetaMask client.</summary>
@@ -209,7 +305,7 @@ namespace MetaMask.Unity
         /// <param name="socket">The socket to use.</param>
         public void Initialize(IMetaMaskTransport transport, IMetaMaskSocketWrapper socket)
         {
-            Initialize(Config, transport, socket);
+            Initialize(MetaMaskConfig, transport, socket);
         }
 
         /// <summary>Initializes the MetaMask client.</summary>
@@ -228,6 +324,9 @@ namespace MetaMask.Unity
 
             this.transport = transport;
             this.socket = socket;
+            
+            // update log var
+            MetaMaskSDK.EnableLogging = config.Log;
             
             // Inject variables
             UnityBinder.Inject(this);
@@ -254,14 +353,26 @@ namespace MetaMask.Unity
                 
                 // Configure persistent data manager
                 this.dataManager = new MetaMaskDataManager(MetaMaskUnityStorage.Instance, this.config.Encrypt, this.config.EncryptionPassword);
-                
-                // Grab app name, app url and session id
-                var sessionId = this.config.SessionIdentifier;
 
+#pragma warning disable CS0612 // Type or member is obsolete
+                // use startsWith to catch any trailing / 
+                if (this.config.SocketUrl.StartsWith(MetaMaskWallet.DeprecatedSocketUrl))
+                {
+                    var newUrl = MetaMaskWallet.SocketUrl;
+                    MetaMaskDebug.LogWarning($"Upgrading to new socket server: {newUrl}");
+                    this.config.SocketUrl = newUrl;
+                }
+#pragma warning restore CS0612 // Type or member is obsolete
+
+                #if UNITY_WEBGL && !UNITY_EDITOR
+                var providerEngine = new MetaMask.Unity.Providers.JsSDKProvider(this);
+                this.wallet = new MetaMaskWallet(this.dataManager, transport, providerEngine);
+                #else
                 // Setup the wallet
                 this.wallet = new MetaMaskWallet(this.dataManager, this.config, 
-                    sessionId, UnityEciesProvider.Singleton, 
+                    UnityEciesProvider.Singleton, 
                     transport, socket, this.config.SocketUrl);
+                #endif
 
                 if (!string.IsNullOrWhiteSpace(this.config.UserAgent))
                     this.wallet.UserAgent = this.config.UserAgent;
@@ -270,28 +381,30 @@ namespace MetaMask.Unity
                 this.session = this.wallet.Session;
                 this.sessionData = this.wallet.Session.Data;
                 
-                this.wallet.AnalyticsPlatform = "unity";
+                this.wallet.ProviderEngine.AnalyticsPlatform = "unity";
+                
+                if (!string.IsNullOrWhiteSpace(_infuraProjectId))
+                {
+                    _rpcUrl ??= new List<MetaMaskUnityRpcUrlConfig>();
+
+                    foreach (var chainId in Infura.ChainIdToName.Keys)
+                    {
+                        var chainName = Infura.ChainIdToName[chainId];
+
+                        _rpcUrl = _rpcUrl.Where(r => !ChainInfo.ChainIdMatch(r.ChainId, chainId)).ToList();
+                        _rpcUrl.Add(new MetaMaskUnityRpcUrlConfig()
+                        {
+                            ChainId = ChainInfo.ChainIdToHex(chainId),
+                            RpcUrl = Infura.Url(_infuraProjectId, chainName)
+                        });
+                    }
+                }
                 
                 // Setup the fallback provider, if set
-                if (RpcUrl != null && RpcUrl.Count > 0)
+                if (_rpcUrl != null && _rpcUrl.Count > 0)
                 {
-                    if (!string.IsNullOrWhiteSpace(InfuraProjectId))
-                    {
-                        foreach (var chainId in Infura.ChainIdToName.Keys)
-                        {
-                            var chainName = Infura.ChainIdToName[chainId];
-
-                            RpcUrl = RpcUrl.Where(r => r.ChainId != chainId).ToList();
-                            RpcUrl.Add(new MetaMaskUnityRpcUrlConfig()
-                            {
-                                ChainId = chainId,
-                                RpcUrl = Infura.Url(InfuraProjectId, chainName)
-                            });
-                        }
-                    }
-                    
-                    var rpcUrlMap = RpcUrl.ToDictionary(
-                        c => c.ChainId,
+                    var rpcUrlMap = _rpcUrl.ToDictionary(
+                        c => ChainInfo.ChainToId(c.ChainId),
                         c => c.RpcUrl
                     );
                     
@@ -303,8 +416,11 @@ namespace MetaMask.Unity
                 
                 _eventHandler.SetupEvents();
                 
-                // Initialize the transport
                 transport.Initialize();
+
+                // Wrap Requesting event
+                MetaMaskUnityUITransport.DefaultInstance.Requesting +=
+                    (sender, args) => Requesting?.Invoke(sender, args);
 
                 this.initialized = true;
                 
@@ -328,14 +444,29 @@ namespace MetaMask.Unity
             this.wallet.Connect();
         }
 
+        public Task<string> ConnectAndSign(string message)
+        {
+            return this.wallet.ConnectAndSign(message);
+        }
+
+        public Task<TR> ConnectWith<TR>(string method, params object[] @params)
+        {
+            return this.wallet.ConnectWith<TR>(method, @params);
+        }
+
+        public Task ConnectAndBatch(BatchRequester requests)
+        {
+            return this.wallet.ConnectAndBatch(requests);
+        }
+
         /// <summary>Disconnects the wallet.</summary>
         public void Disconnect(bool endSession = false)
         {
-            if (this.wallet.IsConnected)
-                this.wallet.Disconnect();
-            
             if (endSession)
                 EndSession();
+            
+            if (this.wallet.IsConnected)
+                this.wallet.Disconnect();
         }
         
         public void EndSession()
@@ -360,15 +491,35 @@ namespace MetaMask.Unity
                 if (this.dataManager == null)
                     this.dataManager = new MetaMaskDataManager(MetaMaskUnityStorage.Instance, this.config.Encrypt, this.config.EncryptionPassword);
                     
-                this.dataManager.Delete(this.config.SessionIdentifier);
+                this.dataManager.Delete(EncryptedProvider.SessionId);
             }
+        }
+        
+        public object Request(string method, object[] parameters = null)
+        {
+            return this.wallet.Request(method, parameters);
+        }
+
+        public Task<TR> Request<TR>(string method, object[] parameters = null)
+        {
+            return this.wallet.Request<TR>(method, parameters);
+        }
+
+        public BatchRequester BatchRequests()
+        {
+            return this.wallet.BatchRequests();
+        }
+
+        public void SaveSession()
+        {
+            this.wallet.SaveSession();
         }
 
         /// <summary>Makes a request to the users connected wallet.</summary>
         /// <param name="request">The ethereum request to send to the user wallet.</param>
-        public void Request(MetaMaskEthereumRequest request)
+        public Task<object> Request(MetaMaskEthereumRequest request)
         {
-            this.wallet.Request(request);
+            return this.wallet.Request(request);
         }
 
         public bool clearSessionData = false;
@@ -381,10 +532,19 @@ namespace MetaMask.Unity
                 clearSessionData = false;
             }
 
-            if (RpcUrl != null && RpcUrl.Count > 0 && !string.IsNullOrWhiteSpace(InfuraProjectId))
+            if (_rpcUrl != null && _rpcUrl.Count > 0 && !string.IsNullOrWhiteSpace(_infuraProjectId))
             {
                 Debug.LogWarning("The InfuraProjectId will be used over the RpcUrl list if it can. Please set only one.");
             }
+        }
+
+        public bool IsWebGL()
+        {
+            #if UNITY_WEBGL && !UNITY_EDITOR
+            return true;
+            #else
+            return false;
+            #endif
         }
 
         #endregion
@@ -404,6 +564,54 @@ namespace MetaMask.Unity
         protected void Release()
         {
             this.wallet.Dispose();
+        }
+
+        [Preserve]
+        public void AotStopCodeStrip()
+        {
+            var eventDelegator = new EventDelegator();
+            eventDelegator.ListenFor<string>("test", (sender, @event) =>
+            {
+                Debug.Log(@event.EventData);
+            });
+            eventDelegator.Trigger("test", "hi");
+            
+            var obj = new JsonRpcPayload();
+            Debug.Log(obj.Id);
+            Debug.Log(obj.Method);
+
+            // we only need 1 generic type, in IL2CPP land, all reference types
+            // use the same type (smart pointer type) (MetaMaskTypedDataMessage<Ptr>)
+            var obj2 = new MetaMaskTypedDataMessage<string>();
+            Debug.Log(obj2.Data);
+            Debug.Log(obj2.Name);
+
+            var obj3 = new JsonRpcResult<string>();
+            Debug.Log(obj3.Result);
+            Debug.Log(obj3.Id);
+
+            var obj4 = new GenericError();
+            Debug.Log(obj4.Message);
+            Debug.Log(obj4.Code);
+
+            var obj5 = new JsonRpcError();
+            Debug.Log(obj5.Error);
+
+            var obj6 = new MetaMaskMessage<string>();
+            Debug.Log(obj6.Id);
+            Debug.Log(obj6.Message);
+            
+            
+            
+            // All contract types
+            Debug.Log(new ERC20Backing(null, null, null));
+            Debug.Log(new ERC721Backing(null, null, null));
+            Debug.Log(new ERC1155Backing(null, null, null));
+            Debug.Log(new ERC20PresetFixedSupplyBacking(null, null, null));
+            Debug.Log(new ERC20PresetMinterPauserBacking(null, null, null));
+            Debug.Log(new ERC721PresetMinterPauserAutoIdBacking(null, null, null));
+            
+            throw new Exception("This method should not be ran at runtime");
         }
 
         #endregion
