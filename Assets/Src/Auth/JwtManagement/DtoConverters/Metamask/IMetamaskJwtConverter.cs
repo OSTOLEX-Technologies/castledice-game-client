@@ -1,6 +1,6 @@
 using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
 
-namespace Src.Auth.JwtManagement.Converters.Metamask
+namespace Src.Auth.JwtManagement.DtoConverters.Metamask
 {
     public interface IMetamaskJwtConverter
     {

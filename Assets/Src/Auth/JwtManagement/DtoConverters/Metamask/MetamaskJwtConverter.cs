@@ -1,4 +1,5 @@
 using System;
+using Src.Auth.JwtManagement.DtoConverters.Metamask;
 using Src.Auth.JwtManagement.Tokens;
 using Src.Auth.REST.REST_Response_DTOs.MetamaskBackend;
 

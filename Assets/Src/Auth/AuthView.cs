@@ -117,11 +117,11 @@ namespace Src.Auth
             var disconnectTsc = new TaskCompletionSource<object>();
             void OnMetamaskUnityDisconnected()
             {
-                _metamaskWalletFacade.OnDisconnected -= OnMetamaskUnityDisconnected;
+                _metamaskWalletFacade.Disconnected -= OnMetamaskUnityDisconnected;
                 disconnectTsc.SetResult(new object());
             }
 
-            _metamaskWalletFacade.OnDisconnected += OnMetamaskUnityDisconnected;
+            _metamaskWalletFacade.Disconnected += OnMetamaskUnityDisconnected;
             _metamaskWalletFacade.Disconnect();
 
             await disconnectTsc.Task;

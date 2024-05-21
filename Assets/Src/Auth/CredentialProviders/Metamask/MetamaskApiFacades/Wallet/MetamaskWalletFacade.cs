@@ -1,7 +1,6 @@
 using System;
 using MetaMask;
 using MetaMask.Unity;
-using UnityEngine.Events;
 using Object = UnityEngine.Object;
 
 namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
@@ -13,6 +12,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         public void Connect()
         {
             MetaMaskUnity.Instance.Initialize();
+            MetaMaskUnity.Instance.EndSession();
             _wallet = MetaMaskUnity.Instance.Wallet;
 
             if (_wallet.IsConnected)
@@ -22,6 +22,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
             }
             
             _wallet.WalletConnectedHandler += OnWalletConnected;
+            _wallet.WalletAuthorizedHandler += OnWalletAuthorized;
             _wallet.Connect();
         }
 
@@ -29,7 +30,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         {
             if (_wallet is null || !_wallet.IsConnected)
             {
-                OnDisconnected?.Invoke();
+                Disconnected?.Invoke();
                 return;
             }
             
@@ -39,7 +40,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
         
         public string GetPublicAddress()
         {
-            return MetaMaskUnity.Instance.Wallet?.SelectedAddress;
+            return MetaMaskUnity.Instance.Wallet.ConnectedAddress;
         }
         
         private void OnWalletConnected(object sender, EventArgs args)
@@ -47,7 +48,7 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
             _wallet.WalletConnectedHandler -= OnWalletConnected;
             
             IMetamaskWalletFacade.WalletConnected = true;
-            OnConnected?.Invoke();
+            Connected?.Invoke();
         }
 
         private void OnWalletDisconnected(object sender, EventArgs args)
@@ -62,10 +63,19 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet
             Object.Destroy(metamaskUnityComponentGameObject);
             GC.Collect();
 
-            OnDisconnected?.Invoke();
+            Disconnected?.Invoke();
+        }
+        
+        private void OnWalletAuthorized(object sender, EventArgs args)
+        {
+            _wallet.WalletAuthorizedHandler -= OnWalletAuthorized;
+            
+            IMetamaskWalletFacade.WalletAuthorized = true;
+            Authorized?.Invoke();
         }
 
-        public event UnityAction OnConnected;
-        public event UnityAction OnDisconnected;
+        public event Action Connected;
+        public event Action Disconnected;
+        public event Action Authorized;
     }
 }

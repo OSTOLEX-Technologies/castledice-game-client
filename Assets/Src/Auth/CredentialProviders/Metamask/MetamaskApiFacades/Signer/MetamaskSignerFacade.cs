@@ -17,10 +17,11 @@ namespace Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Signer
                 Parameters = new object[]
                 {
                     message,
-                    MetaMaskUnity.Instance.Wallet.SelectedAddress,
+                    MetaMaskUnity.Instance.Wallet.ConnectedAddress,
                 }
             };
-            return await wallet.Request(request) as string;
+            
+            return (await wallet.Request(request)) as string;
         }
     }
 }
