@@ -10633,7 +10633,6 @@ GameObject:
   - component: {fileID: 1035802763}
   - component: {fileID: 1035802762}
   - component: {fileID: 1035802761}
-  - component: {fileID: 1035802760}
   - component: {fileID: 1035802759}
   - component: {fileID: 1035802758}
   - component: {fileID: 1035802765}
@@ -10687,20 +10686,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   target: {fileID: 1654733678}
   enable: 1
---- !u!114 &1035802760
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1035802756}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d091e82fe0714ca3a6590a7b4702a69d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  raycasterHandler: {fileID: 1455130336}
-  block: 1
 --- !u!114 &1035802761
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -10761,7 +10746,6 @@ MonoBehaviour:
   - {fileID: 1035802763}
   - {fileID: 1035802762}
   - {fileID: 1035802761}
-  - {fileID: 1035802760}
   - {fileID: 1035802759}
   - {fileID: 1035802758}
   - {fileID: 1035802765}
