@@ -24,14 +24,13 @@ namespace Src.Components.UI
             _image.color = defaultColor;
         }
 
-        public void AppearInSeconds(float seconds)
+        public void AppearInSeconds(float seconds, float delaySeconds)
         {
             Reset();
-            StartCoroutine(Show(seconds));
+            StartCoroutine(Show(seconds, delaySeconds));
         }
-        
-        
-        private IEnumerator Show(float seconds)
+
+        private IEnumerator Show(float seconds, float delaySeconds)
         {
             var time = 0f;
             var startColor = _image.color;
@@ -42,7 +41,7 @@ namespace Src.Components.UI
                 _image.color = Color.Lerp(startColor, endColor, time*3 / seconds);
                 yield return null;
             }
-            yield return new WaitForSeconds(seconds/3);
+            yield return new WaitForSeconds(delaySeconds);
             time = 0f;
             while (time < seconds/3)
             {

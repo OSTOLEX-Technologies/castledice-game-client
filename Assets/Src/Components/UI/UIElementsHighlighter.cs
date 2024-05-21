@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using Src.TutorialScenario.FrameChangeTrigger;
 using UnityEngine;
@@ -25,9 +26,15 @@ namespace Src.Components.UI
         
         public void HighlightElementsForSeconds(float appearSeconds, float disappearDelay)
         {
+            StartCoroutine(HighlightRoutine(appearSeconds, disappearDelay));
+        }
+
+        private IEnumerator HighlightRoutine(float appearSeconds, float disappearDelay)
+        {
             ParentElements();
-            shadow.AppearInSeconds(appearSeconds);
-            Invoke(nameof(UnparentElements), appearSeconds + disappearDelay);
+            shadow.AppearInSeconds(appearSeconds, disappearDelay);
+            yield return new WaitForSecondsRealtime(appearSeconds + disappearDelay);
+            UnparentElements();
         }
         
         private void ParentElements()
