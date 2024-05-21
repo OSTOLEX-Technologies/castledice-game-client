@@ -25,7 +25,7 @@ namespace Src.Auth.Scripts
         private IAuthTokenSaver _authTokenSaver;
         private SceneTransitionHandler _sceneTransitionHandler;
 
-        private bool _bFlowInProgress;
+        private bool _flowInProgress;
 
         private void Start()
         {
@@ -42,7 +42,7 @@ namespace Src.Auth.Scripts
             IAuthTokenSaver authTokenSaver,
             SceneTransitionHandler sceneTransitionHandler)
         {
-            _bFlowInProgress = true;
+            _flowInProgress = true;
             
             _authView = authView;
             _authTokenSaver = authTokenSaver;
@@ -51,7 +51,7 @@ namespace Src.Auth.Scripts
             processingCanvasLabel.SetText(LoadingLabelText);
             SubscribeOnAuthCompleted();
 
-            if (_authTokenSaver.TryGetLastLoginInfo(out var authType))
+            if (_authTokenSaver.TryGetLastAuthType(out var authType))
             {
                 processingCanvasLabel.SetText(ImmediateLoginFromSavedTokenLabelText);
                 processingCanvas.gameObject.SetActive(true);

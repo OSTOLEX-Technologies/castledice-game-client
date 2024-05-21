@@ -7,6 +7,11 @@ namespace Src.Auth.CredentialProviders.Firebase
     {
         public Task<Credential> GetCredentialAsync(AuthType authProviderType);
         
-        public void InterruptGoogleProviderInit();
+        /// <summary>
+        /// Interrupt init process (port listening, occupying threads etc.)
+        /// in case when unexpected scenario happens and other threads/OS modules
+        /// cannot handle initialization process unattainability on their own.
+        /// </summary>
+        public void InterruptProviderInit();
     }
 }

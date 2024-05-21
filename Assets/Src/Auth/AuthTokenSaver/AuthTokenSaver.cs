@@ -20,7 +20,7 @@ namespace Src.Auth.AuthTokenSaver
         
         #region Getting Store
         
-        public void TryGetTokenStoreByAuthType(out AbstractJwtStore store, AuthType providerType)
+        public bool TryGetTokenStoreByAuthType(out AbstractJwtStore store, AuthType providerType)
         {
             if (_saver.TryGetStringValue(
                     GetStorePrefNameByAuthType(providerType), 
@@ -29,10 +29,11 @@ namespace Src.Auth.AuthTokenSaver
                 var converter = new JwtStoreJsonConverter();
                 store = JsonConvert.DeserializeObject<AbstractJwtStore>(
                     storedValue, converter);
-                return;
+                return true;
             }
-
-            store = null;
+            
+            store = NullJwtStore.Instance;
+            return false;
         }
 
         #endregion
@@ -46,7 +47,7 @@ namespace Src.Auth.AuthTokenSaver
             _saver.SaveStringValue(
                 GetStorePrefNameByAuthType(providerType), 
                 serializedStore);
-            UpdateLastLoginInfo(providerType);
+            UpdateLastAuthType(providerType);
         }
 
 
@@ -72,7 +73,7 @@ namespace Src.Auth.AuthTokenSaver
 
         #region Last Login Info
 
-        public bool TryGetLastLoginInfo(out AuthType authType)
+        public bool TryGetLastAuthType(out AuthType authType)
         {
             authType = AuthType.Google;
             if (!_saver.TryGetStringValue(
@@ -84,7 +85,7 @@ namespace Src.Auth.AuthTokenSaver
 
         }
 
-        public void UpdateLastLoginInfo(AuthType authType)
+        private void UpdateLastAuthType(AuthType authType)
         {
             _saver.SaveStringValue(
                 LastLoginStoreInfoPrefName, 

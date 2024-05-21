@@ -7,7 +7,6 @@ using Src.Auth.AuthTokenSaver;
 using Src.Auth.JwtManagement;
 using Src.Auth.JwtManagement.Tokens;
 using Tests.Utils.Mocks;
-using UnityEngine;
 
 namespace Tests.EditMode.AuthTests.TokenSaving
 {
@@ -59,19 +58,17 @@ namespace Tests.EditMode.AuthTests.TokenSaving
         [TestCaseSource(nameof(GetAuthTypes))]
         public void UpdateLastLoginInfo_ShouldSaveGivenInfo(AuthType type)
         {
-            _tokenSaver.UpdateLastLoginInfo(type);
+            _tokenSaver.SaveAuthTokens(NullJwtStore.Instance, type);
             var storedValue = _saverMock.Values[LastLoginKey];
             _saverMock.Values.Remove(LastLoginKey);
-            Debug.Log(storedValue);
-            Debug.Log(type.ToString());
             Assert.IsTrue(storedValue == type.ToString());
         }
         [Test]
         [TestCaseSource(nameof(GetAuthTypes))]
         public void TryGetLastLoginInfo_ShouldReturnInfo_SavedPreviously(AuthType type)
         {
-            _tokenSaver.UpdateLastLoginInfo(type);
-            var success = _tokenSaver.TryGetLastLoginInfo(out var storedValue);
+            _tokenSaver.SaveAuthTokens(NullJwtStore.Instance, type);
+            var success = _tokenSaver.TryGetLastAuthType(out var storedValue);
             _saverMock.Values.Remove(LastLoginKey);
             
             Assert.IsTrue(success && storedValue == type);
@@ -79,7 +76,7 @@ namespace Tests.EditMode.AuthTests.TokenSaving
         [Test]
         public void TryGetLastLoginInfo_ShouldFail_LoadingUnsavedPreviouslyInfo()
         {
-            var success = _tokenSaver.TryGetLastLoginInfo(out var storedValue);
+            var success = _tokenSaver.TryGetLastAuthType(out var storedValue);
 
             Assert.IsTrue(!success);
         }
