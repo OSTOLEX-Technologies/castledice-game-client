@@ -168,6 +168,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
         [SerializeField] private UnityCellMovesHighlightsToggle cellMovesHighlightsToggle;
         [SerializeField] private CellMovesHighlightsAnimation cellMovesHighlightsAnimation;
+        [SerializeField] private ForcableCellMovesHighlightObserver forcableCellMovesHighlightObserver;
         private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
         private CellMovesHighlightView _cellMovesHighlightView;
         
@@ -448,6 +449,7 @@ namespace Src.ScenesInitializers
         
         private void SetUpCellMovesHighlights()
          {
+             forcableCellMovesHighlightObserver.Init(_game, _player);
              cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
              var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
              var highlights = highlightsPlacer.PlaceHighlights();
@@ -460,8 +462,7 @@ namespace Src.ScenesInitializers
              _cellMovesHighlightView = new CellMovesHighlightView(highlights);
              cellMovesHighlightsAnimation.Init(highlights);
              var cellMovesListProvider = new CellMovesListProvider(_game);
-             var observer = new CellMovesHighlightObserver(_game, _player);
-             _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_player, cellMovesListProvider, observer, _cellMovesHighlightView);
+             _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_player, cellMovesListProvider, forcableCellMovesHighlightObserver, _cellMovesHighlightView);
          }
         
 
