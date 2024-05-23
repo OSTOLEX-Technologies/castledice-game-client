@@ -35,6 +35,7 @@ using Src.GameplayView.CellsContent.ContentViewsCreation.KnightViewCreation;
 using Src.GameplayView.CellsContent.ContentViewsCreation.TreeViewCreation;
 using Src.GameplayView.ClickDetection;
 using Src.GameplayView.ClientMoves;
+using Src.GameplayView.ContentVisuals;
 using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation.CastleHP;
@@ -195,6 +196,10 @@ namespace Src.ScenesInitializers
         [Header("Raycast detection")]
         [SerializeField] private BlockableRaycasterHandler raycasterHandler;
 
+        [Header("3D Objects Highlight")] 
+        [SerializeField] private LayerMask highlightLayer;
+        
+        
         public event Action InitializationFinished; 
 
 
@@ -217,6 +222,8 @@ namespace Src.ScenesInitializers
             HandleGameOver();
 
             GiveActionPointsToCurrentPlayer();
+
+            Setup3DObjectsToHighlight();
             
             InitializationFinished?.Invoke();
         }
@@ -448,7 +455,7 @@ namespace Src.ScenesInitializers
         }
         
         private void SetUpCellMovesHighlights()
-         {
+        {
              forcableCellMovesHighlightObserver.Init(_game, _player);
              cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
              var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
@@ -463,8 +470,35 @@ namespace Src.ScenesInitializers
              cellMovesHighlightsAnimation.Init(highlights);
              var cellMovesListProvider = new CellMovesListProvider(_game);
              _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_player, cellMovesListProvider, forcableCellMovesHighlightObserver, _cellMovesHighlightView);
-         }
-        
+        }
+
+        private void Setup3DObjectsToHighlight()
+        {
+            SetEnemyCastleLayerToHighlighted();
+            SetEnemyShieldsLayerToHighlighted();
+        }
+
+        private void SetEnemyCastleLayerToHighlighted()
+        {
+            var enemyCastlePosition = gameStartDataConfig
+                .GetGameStartData(0, 0)
+                .BoardData.GeneratedContent[1].Position;
+            var enemyCastleCellChildren = grid.GetCell(enemyCastlePosition).Children;
+            foreach (var cellChild in enemyCastleCellChildren)
+            {
+                var castleVisual = cellChild.GetComponentInChildren<CastleVisual>();
+                if(castleVisual is null) continue;
+
+                castleVisual.gameObject.layer = highlightLayer;
+                break;
+            }
+        }
+
+        private void SetEnemyShieldsLayerToHighlighted()
+        {
+            redCastleHeathBar.gameObject.layer = highlightLayer;
+        }
+
 
         private void HandleGameOver()
         {
