@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using castledice_game_logic.MovesLogic;
 using Src.GameplayView.CellMovesHighlights;
 using UnityEngine;
+using UnityEngine.Events;
 using GameLogicVector2Int = castledice_game_logic.Math.Vector2Int;
 
 namespace Src.Components
@@ -19,6 +20,7 @@ namespace Src.Components
 
         [SerializeField] private List<PositionToMoveType> sequence;
         [SerializeField] private float oneCellHighlightDuration;
+        [SerializeField] private UnityEvent onAnimationStop;
         private Dictionary<GameLogicVector2Int, ICellMoveHighlight> _highlights;
         private bool _isPlaying;
         private int _currentIndex;
@@ -62,6 +64,7 @@ namespace Src.Components
                     _currentIndex = 0;
                 }
             }
+            onAnimationStop.Invoke();
         }
         
         [ContextMenu("Stop Animation")]
