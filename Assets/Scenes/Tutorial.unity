@@ -18203,11 +18203,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 1731325511}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 5d61d68a98a24572a65eede5a6ecb1b1, type: 3}
+  m_Script: {fileID: 11500000, guid: 54c413fd4316449cbbc714aed0a0407f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  delayInSeconds: 5
-  delayEndTrigger: {fileID: 1731325522}
+  materialToModify: {fileID: 2100000, guid: e72c7f9e028194fd5b08bf642033861d, type: 2}
+  propertyToModify: _BaseColor
+  startColor: {r: 0, g: 0, b: 0, a: 0}
+  endColor: {r: 0, g: 0, b: 0, a: 0.7294118}
+  curve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 2
+      outSlope: 2
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    - serializedVersion: 3
+      time: 1
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0
+      outWeight: 0
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  lerpTimeInSeconds: 0.9
+  afterWaitTimeInSeconds: 1.5
+  lerpBack: 1
+  lerpEndTrigger: {fileID: 1731325522}
 --- !u!1 &1735193865
 GameObject:
   m_ObjectHideFlags: 0
