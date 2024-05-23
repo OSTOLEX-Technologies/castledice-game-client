@@ -197,7 +197,8 @@ namespace Src.ScenesInitializers
         [SerializeField] private BlockableRaycasterHandler raycasterHandler;
 
         [Header("3D Objects Highlight")] 
-        [SerializeField] private LayerMask highlightLayer;
+        [SerializeField] private string highlightedLayerName;
+        [SerializeField] private string highlightedSpritesLayerName;
         
         
         public event Action InitializationFinished; 
@@ -475,7 +476,9 @@ namespace Src.ScenesInitializers
         private void Setup3DObjectsToHighlight()
         {
             SetEnemyCastleLayerToHighlighted();
-            SetEnemyShieldsLayerToHighlighted();
+            SetObjectWithChildrenToHighlightLayer(
+                redCastleHeathBar.gameObject, 
+                highlightedSpritesLayerName);
         }
 
         private void SetEnemyCastleLayerToHighlighted()
@@ -483,20 +486,27 @@ namespace Src.ScenesInitializers
             var enemyCastlePosition = gameStartDataConfig
                 .GetGameStartData(0, 0)
                 .BoardData.GeneratedContent[1].Position;
-            var enemyCastleCellChildren = grid.GetCell(enemyCastlePosition).Children;
-            foreach (var cellChild in enemyCastleCellChildren)
-            {
-                var castleVisual = cellChild.GetComponentInChildren<CastleVisual>();
-                if(castleVisual is null) continue;
+            var enemyCastleCell = grid.GetCell(enemyCastlePosition)
+                .Children.ElementAt(0)
+                .transform.parent;
+            var castleVisual = enemyCastleCell.GetComponentInChildren<CastleVisual>();
 
-                castleVisual.gameObject.layer = highlightLayer;
-                break;
-            }
+            SetObjectWithChildrenToHighlightLayer(
+                castleVisual.gameObject, 
+                highlightedLayerName);
         }
 
-        private void SetEnemyShieldsLayerToHighlighted()
+        private void SetObjectWithChildrenToHighlightLayer(GameObject modifyingGameObject, string layerName)
         {
-            redCastleHeathBar.gameObject.layer = highlightLayer;
+            var layer = LayerMask.NameToLayer(layerName);
+
+            modifyingGameObject.layer = layer;
+            var allChildren = modifyingGameObject.GetComponentsInChildren<Transform>();
+
+            foreach (var obj in allChildren)
+            {
+                obj.gameObject.layer = layer;
+            }
         }
 
 
