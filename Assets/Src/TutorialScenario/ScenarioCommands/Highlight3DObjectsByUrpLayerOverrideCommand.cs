@@ -10,17 +10,17 @@ namespace Src.TutorialScenario.ScenarioCommands
         [InspectorName("Highlight Render Pipeline Asset")]
         [SerializeField] private RenderPipelineAsset highlightRPAsset;
         [SerializeField] private bool highlight;
-        private bool _cachedHighlightState;
+        private RenderPipelineAsset _cachedPipeline;
 
         public override void Do()
         {
-            _cachedHighlightState = !QualitySettings.renderPipeline.Equals(defaultRPAsset);
+            _cachedPipeline = QualitySettings.renderPipeline;
             QualitySettings.renderPipeline = highlight ? highlightRPAsset : defaultRPAsset;
         }
 
         public override void Undo()
         {
-            QualitySettings.renderPipeline = _cachedHighlightState ? highlightRPAsset : defaultRPAsset;
+            QualitySettings.renderPipeline = _cachedPipeline;
         }
     }
 }
