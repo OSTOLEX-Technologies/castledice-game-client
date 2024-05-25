@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
@@ -66,6 +67,7 @@ using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
+using TMPro;
 using UnityEngine;
 
 public class DuelGameSceneInitializer : MonoBehaviour
@@ -135,12 +137,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
     private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
     private CellMovesHighlightView _cellMovesHighlightView;
-
-    [Header("Current player label")] 
-    [SerializeField] private GameObject bluePlayerLabel;
-    [SerializeField] private GameObject redPlayerLabel;
-    private CurrentPlayerPresenter _currentPlayerPresenter;
-    private CurrentPlayerView _currentPlayerView;
     
     [Header("Destroyed content")]
     [SerializeField] private TransparencyConfig destroyedContentTransparencyConfig;
@@ -148,10 +144,17 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private DestroyedContentPresenter _destroyedContentPresenter;
     
     [Header("Timers")]
-    [SerializeField] private TimeView redPlayerTimeView;
-    [SerializeField] private TimeView bluePlayerTimeView;
-    [SerializeField] private Highlighter redPlayerHighlighter;
-    [SerializeField] private Highlighter bluePlayerHighlighter;
+    [SerializeField] private TextMeshProUGUI redPlayerTimerTextActive;
+    [SerializeField] private TextMeshProUGUI redPlayerTimerTextInactive;
+    [SerializeField] private GameObject redPlayerTimerBackgroundActive;
+    [SerializeField] private GameObject redPlayerTimerBackgroundInactive;
+    [SerializeField] private GameObject redPlayerTimerGlow;
+    [SerializeField] private TextMeshProUGUI bluePlayerTimerTextActive;
+    [SerializeField] private TextMeshProUGUI bluePlayerTimerTextInactive;
+    [SerializeField] private GameObject bluePlayerTimerBackgroundActive;
+    [SerializeField] private GameObject bluePlayerTimerBackgroundInactive;
+    [SerializeField] private GameObject bluePlayerTimerGlow;
+    [SerializeField] private int glowTimeSeconds;
     private TimersPresenter _timersPresenter;
     private TimersView _timersView;
 
@@ -177,6 +180,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private Game _game;
     private GameStartData _gameStartData;
     private Player _localPlayer;
+    private Player _opponentPlayer;
     private DuelPlayerColorProvider _playerColorProvider;
     private PlayerIdProvider _playerIdProvider;
     private IAccessTokenProvider _accessTokenProvider;
@@ -187,6 +191,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
         _playerIdProvider = new PlayerIdProvider();
         _localPlayer = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
+        _opponentPlayer = _game.GetAllPlayers().Find(p => p.Id != _localPlayer.Id);
         
         SetUpUpdaters();
         SetUpInput();
@@ -201,8 +206,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpActionPointsGiving();
         SetUpCamera();
         SetUpCellMovesHighlights();
-        SetUpCurrentPlayerLabel();
-        SetUpCurrentPlayerLabel();
         SetUpGameOver();
         SetUpTimers();
         await NotifyPlayerIsReady();
@@ -216,13 +219,24 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpTimers()
     {
-        var playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
-        var highlighterForPlayerProvider = new PlayerColorHighlighterProvider(redPlayerHighlighter, bluePlayerHighlighter,
-            playerColorProvider);
-        var timeViewForPlayerProvider =
-            new PlayerColorTimeViewProvider(redPlayerTimeView, bluePlayerTimeView, playerColorProvider);
-        var playerTimerViewCreator = new PlayerTimerViewCreator(highlighterForPlayerProvider, timeViewForPlayerProvider);
-        var playerTimerViewsProvider = new CachingPlayerTimerViewProvider(playerTimerViewCreator);
+        var playerTimerViewsProvider = new PlayerTimerViewProvider(new Dictionary<PlayerColor, IPlayerTimerView>
+        {
+            {PlayerColor.Blue, new PlayerTimerView(bluePlayerTimerTextActive, 
+                bluePlayerTimerTextInactive, 
+                bluePlayerTimerBackgroundActive, 
+                bluePlayerTimerBackgroundInactive, 
+                bluePlayerTimerGlow,
+                _localPlayer.Timer,
+                TimeSpan.FromSeconds(glowTimeSeconds))},
+            {PlayerColor.Red, 
+                new PlayerTimerView(redPlayerTimerTextActive, 
+                    redPlayerTimerTextInactive, 
+                    redPlayerTimerBackgroundActive, 
+                    redPlayerTimerBackgroundInactive, 
+                    redPlayerTimerGlow, 
+                    _opponentPlayer.Timer,
+                    TimeSpan.FromSeconds(glowTimeSeconds))}
+        }, _playerColorProvider);
         _timersView = new TimersView(playerTimerViewsProvider, _updater);
         _timersPresenter = new TimersPresenter(_timersView, _game);
         var switchTimerDTOAccepter = new SwitchTimerAccepter(_timersPresenter);
@@ -392,13 +406,6 @@ public class DuelGameSceneInitializer : MonoBehaviour
         }
     }
     
-    private void SetUpCurrentPlayerLabel()
-    {
-        _currentPlayerView = new CurrentPlayerView(new DuelPlayerColorProvider(_localPlayer),
-            bluePlayerLabel, redPlayerLabel);
-        _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
-        _currentPlayerPresenter.ShowCurrentPlayer();
-    }
 
     private async Task NotifyPlayerIsReady()
     {
