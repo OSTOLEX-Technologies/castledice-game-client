@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
@@ -147,12 +148,19 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private TransparencyConfig destroyedContentTransparencyConfig;
     private DestroyedContentView _destroyedContentView;
     private DestroyedContentPresenter _destroyedContentPresenter;
-    
-    [Header("Timers")]
-    [SerializeField] private TimeView redPlayerTimeView;
-    [SerializeField] private TimeView bluePlayerTimeView;
-    [SerializeField] private Highlighter redPlayerHighlighter;
-    [SerializeField] private Highlighter bluePlayerHighlighter;
+
+    [Header("Timers")] 
+    [SerializeField] private TextMeshProUGUI redTimerTextActive;
+    [SerializeField] private TextMeshProUGUI redTimerTextInactive;
+    [SerializeField] private GameObject redTimerBackgroundActive;
+    [SerializeField] private GameObject redTimerBackgroundInactive;
+    [SerializeField] private GameObject redTimerGlow;
+    [SerializeField] private TextMeshProUGUI blueTimerTextActive;
+    [SerializeField] private TextMeshProUGUI blueTimerTextInactive;
+    [SerializeField] private GameObject blueTimerBackgroundActive;
+    [SerializeField] private GameObject blueTimerBackgroundInactive;
+    [SerializeField] private GameObject blueTimerGlow;
+    [SerializeField] private int glowTimeSeconds;
     private TimersPresenter _timersPresenter;
     private TimersView _timersView;
 
@@ -247,13 +255,28 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpTimers()
     {
-        var playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
-        var highlighterForPlayerProvider = new PlayerColorHighlighterProvider(redPlayerHighlighter, bluePlayerHighlighter,
-            playerColorProvider);
-        var timeViewForPlayerProvider =
-            new PlayerColorTimeViewProvider(redPlayerTimeView, bluePlayerTimeView, playerColorProvider);
-        var playerTimerViewCreator = new PlayerTimerViewCreator(highlighterForPlayerProvider, timeViewForPlayerProvider);
-        var playerTimerViewsProvider = new CachingPlayerTimerViewProvider(playerTimerViewCreator);
+        var bluePlayerTimerView = new PlayerTimerView(
+            blueTimerTextActive, 
+            blueTimerTextInactive, 
+            blueTimerBackgroundActive, 
+            blueTimerBackgroundInactive,
+            blueTimerGlow,
+            _localPlayer.Timer,
+            TimeSpan.FromSeconds(glowTimeSeconds));
+        var redPlayerTimerView = new PlayerTimerView(
+            redTimerTextActive, 
+            redTimerTextInactive, 
+            redTimerBackgroundActive, 
+            redTimerBackgroundInactive,
+            redTimerGlow,
+            _enemyPlayer.Timer,
+            TimeSpan.FromSeconds(glowTimeSeconds));
+        var timersDictionary = new Dictionary<PlayerColor, IPlayerTimerView>
+        {
+            {PlayerColor.Blue, bluePlayerTimerView},
+            {PlayerColor.Red, redPlayerTimerView}
+        };
+        var playerTimerViewsProvider = new PlayerTimerViewProvider(timersDictionary, _playerColorProvider);
         _timersView = new TimersView(playerTimerViewsProvider, _updater);
         _timersPresenter = new TimersPresenter(_timersView, _game);
         var switchTimerDTOAccepter = new SwitchTimerAccepter(_timersPresenter);
@@ -308,7 +331,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
     {
         cellMoveHighlightsFactory.Init(cellMoveHighlightsConfig);
         var highlightsPlacer = new CellMovesHighlightsPlacer(grid, cellMoveHighlightsFactory);
-        _cellMovesHighlightView = new CellMovesHighlightView(highlightsPlacer);
+        var highlights = highlightsPlacer.PlaceHighlights();
+        _cellMovesHighlightView = new CellMovesHighlightView(highlights);
         _cellMovesHighlightPresenter = new CellMovesHighlightPresenter(_localPlayer,
             new CellMovesListProvider(_game), new CellMovesHighlightObserver(_game, _localPlayer), _cellMovesHighlightView);
     }
