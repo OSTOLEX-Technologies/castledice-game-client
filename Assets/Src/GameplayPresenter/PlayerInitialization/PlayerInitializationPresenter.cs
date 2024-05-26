@@ -1,5 +1,6 @@
 using System;
 using System.Threading.Tasks;
+using Riptide;
 using Src.GameplayPresenter.PlayerInitialization.Caching;
 using Src.GameplayPresenter.PlayerInitialization.NetworkBridges;
 using Src.NetworkingModule;
@@ -7,7 +8,7 @@ using Src.NetworkingModule.DTOCreators;
 
 namespace Src.GameplayPresenter.PlayerInitialization
 {
-    public class PlayerInitializationPresenter : IPlayerInitializationPresenter
+    public class PlayerInitializationPresenter : IPlayerInitializationPresenter, IDisposable
     {
         private readonly IPlayerInitializationView _view;
         private readonly IInitializePlayerDtoSender _dtoSender;
@@ -26,10 +27,10 @@ namespace Src.GameplayPresenter.PlayerInitialization
             _dtoCreator = dtoCreator;
             _initializationSaver = initializationSaver;
             _disconnectedEventEmitter = disconnectedEventEmitter;
-            _disconnectedEventEmitter.Disconnected += (_, _) => OnDisconnected();
+            _disconnectedEventEmitter.Disconnected += OnDisconnected;
         }
 
-        private void OnDisconnected()
+        private void OnDisconnected(object sender, DisconnectedEventArgs disconnectedEventArgs)
         {
             _view.HideProcessMessage();
         }
@@ -54,6 +55,13 @@ namespace Src.GameplayPresenter.PlayerInitialization
             _view.ShowProcessMessage();
             var dto = await _dtoCreator.CreateAsync();
             _dtoSender.SendDto(dto);
+        }
+
+        public void Dispose()
+        {
+            _initializationResultEventsEmitter.InitializationSucceed -= OnInitializationFailed;
+            _initializationResultEventsEmitter.InitializationSucceed -= OnInitializationSucceed;
+            _disconnectedEventEmitter.Disconnected -= OnDisconnected;
         }
     }
 }

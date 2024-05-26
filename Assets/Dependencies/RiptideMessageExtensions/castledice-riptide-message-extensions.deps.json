@@ -10,7 +10,7 @@
       "castledice-riptide-message-extensions/1.0.0": {
         "dependencies": {
           "RiptideNetworking.Riptide": "2.1.0",
-          "castledice-events-logic": "0.0.1-dev4-initialization-result",
+          "castledice-events-logic": "0.0.1-dev5-player-disconnected-dto",
           "castledice-game-data-logic": "0.0.1-dev5",
           "castledice-game-logic": "0.0.1-dev5"
         },
@@ -18,7 +18,7 @@
           "castledice-riptide-message-extensions.dll": {}
         }
       },
-      "castledice-events-logic/0.0.1-dev4-initialization-result": {
+      "castledice-events-logic/0.0.1-dev5-player-disconnected-dto": {
         "dependencies": {
           "castledice-game-data-logic": "0.0.1-dev5",
           "castledice-game-logic": "0.0.1-dev5"
@@ -77,12 +77,12 @@
       "serviceable": false,
       "sha512": ""
     },
-    "castledice-events-logic/0.0.1-dev4-initialization-result": {
+    "castledice-events-logic/0.0.1-dev5-player-disconnected-dto": {
       "type": "package",
       "serviceable": true,
-      "sha512": "sha512-mTrB9pzesBvlRyZCoSiNrZ+q5nWNOJK5y5L/dNjo77pqOWTz2/dG9LBPKBYin2DAMXy2gr3PMKZkbRBcjhhv8g==",
-      "path": "castledice-events-logic/0.0.1-dev4-initialization-result",
-      "hashPath": "castledice-events-logic.0.0.1-dev4-initialization-result.nupkg.sha512"
+      "sha512": "sha512-paZ0rzu7L8NV58cjstOwAOtP8W3o+opXLjmHV6xDvWSpURqD2I8G05wSkJM9iJcHpOChHvohViRvKn1wa2Lj/A==",
+      "path": "castledice-events-logic/0.0.1-dev5-player-disconnected-dto",
+      "hashPath": "castledice-events-logic.0.0.1-dev5-player-disconnected-dto.nupkg.sha512"
     },
     "castledice-game-data-logic/0.0.1-dev5": {
       "type": "package",

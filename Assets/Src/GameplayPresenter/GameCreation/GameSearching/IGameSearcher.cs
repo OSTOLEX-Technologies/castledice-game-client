@@ -12,5 +12,6 @@ namespace Src.GameplayPresenter.GameCreation.GameSearching
         public event Action<GameStartData> GameFound;
         public event Action<SearchFailReason> SearchFailed;
         public event Action CancellationApproved;
+        public event Action CancellationFailed;
     }
 }
