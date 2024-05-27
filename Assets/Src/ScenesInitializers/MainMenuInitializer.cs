@@ -1,7 +1,8 @@
-using System;
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
+using Src.Auth.AuthTokenSaver;
+using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.TokenProviders;
 using Src.Components;
 using Src.GameplayPresenter.Errors;
@@ -82,8 +83,11 @@ namespace Src.ScenesInitializers
         [SerializeField] private Button initializeButton;
         private PlayerInitializationPresenter _playerInitializationPresenter;
         private PlayerInitializationView _playerInitializationView;
-        private InitializeButtonHandler _initializeButtonHandler; 
-    
+        private InitializeButtonHandler _initializeButtonHandler;
+
+        [Header("Firebase logout")] 
+        [SerializeField] private FirebaseLogout logoutComponent;
+
         private void Start()
         {
             RiptideLogger.Initialize(Debug.Log,Debug.Log,Debug.LogWarning, Debug.LogError, false);
@@ -177,6 +181,11 @@ namespace Src.ScenesInitializers
             settingsPopup.SettingsPopupController = settingsPopupController;
             settingsPopup.SettingsPopupView = settingsPopupView;
             settingsPopup.Init();
+            
+            logoutComponent.Init(
+                new AuthTokenSaver(
+                    new StringSaver()),
+                sceneLoader);
         }
     }
 }
