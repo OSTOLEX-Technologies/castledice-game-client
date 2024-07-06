@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: BranchData
   m_EditorClassIdentifier: 
   liveBranchKey: key_live_ctoVaK2Wa57bGew7DanxDjbhCqkYPUVU
-  liveBranchUri: castledice://
+  liveBranchUri: castledice
   liveAndroidPathPrefix: 
   liveAppLinks: []
   testBranchKey: key_test_pwbGaO18fZ2hVlEYAhdspdhiEyeWRJQw
-  testBranchUri: castledice://
+  testBranchUri: castledice
   testAndroidPathPrefix: 
   testAppLinks: []
   enableLogging: 1

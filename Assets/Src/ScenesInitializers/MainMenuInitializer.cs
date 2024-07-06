@@ -27,6 +27,7 @@ using Src.GameplayView.Errors;
 using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
+using Src.General.TimeRetriever;
 using Src.MainMenu.Controllers;
 using Src.MainMenu.Scripts;
 using Src.MainMenu.Views;
@@ -87,6 +88,8 @@ namespace Src.ScenesInitializers
 
         [Header("Firebase logout")] 
         [SerializeField] private FirebaseLogout logoutComponent;
+
+        private IDateTimeRetriever _dateTimeRetriever;
 
         private void Start()
         {
@@ -181,11 +184,13 @@ namespace Src.ScenesInitializers
             settingsPopup.SettingsPopupController = settingsPopupController;
             settingsPopup.SettingsPopupView = settingsPopupView;
             settingsPopup.Init();
-            
+
+            _dateTimeRetriever = new DateTimeRetriever();
             logoutComponent.Init(
                 new AuthTokenSaver(
                     new StringSaver()),
-                sceneLoader);
+                sceneLoader,
+                _dateTimeRetriever);
         }
     }
 }
