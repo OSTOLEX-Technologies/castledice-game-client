@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using Firebase.Auth;
 using Src.Analytics.Events;
+using Src.Analytics.Identity;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.TokenProviders;
 using Src.General.Caching;
@@ -14,25 +15,27 @@ namespace Src.Components
     {
         private const string LogoutTimestampParamName = "Timestamp";
         
+        [SerializeField] private SceneLoader sceneLoader;
+        
         private IAuthTokenSaver _saver;
-        private SceneLoader _sceneLoader;
         private IDateTimeRetriever _dateTimeRetriever;
+        private IBranchLogout _branchLogout;
 
         public void Init(
             IAuthTokenSaver saver,
-            SceneLoader sceneLoader,
-            IDateTimeRetriever dateTimeRetriever)
+            IDateTimeRetriever dateTimeRetriever,
+            IBranchLogout branchLogout)
         {
             _saver = saver;
-            _sceneLoader = sceneLoader;
             _dateTimeRetriever = dateTimeRetriever;
+            _branchLogout = branchLogout;
         }
 
         public void Logout()
         {
             Singleton<IAccessTokenProvider>.Unregister();
             _saver.DeleteAuthTokens();
-            _sceneLoader.LoadSceneWithTransition(SceneType.Auth);
+            sceneLoader.LoadSceneWithTransition(SceneType.Auth);
             FirebaseAuth.DefaultInstance.SignOut();
 
             var branchEventParams = new Dictionary<string, string>
@@ -45,6 +48,9 @@ namespace Src.Components
             BranchEventSender.SendCustomEvent(
                 BranchEventNames.Logout, 
                 branchEventParams);
+            
+            
+            _branchLogout.Logout();
         }
     }
 }

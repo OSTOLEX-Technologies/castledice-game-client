@@ -1,6 +1,7 @@
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
+using Src.Analytics.Identity;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.TokenProviders;
@@ -90,6 +91,7 @@ namespace Src.ScenesInitializers
         [SerializeField] private FirebaseLogout logoutComponent;
 
         private IDateTimeRetriever _dateTimeRetriever;
+        private IBranchLogout _branchLogout;
 
         private void Start()
         {
@@ -186,11 +188,12 @@ namespace Src.ScenesInitializers
             settingsPopup.Init();
 
             _dateTimeRetriever = new DateTimeRetriever();
+            _branchLogout = new BranchLogout();
             logoutComponent.Init(
                 new AuthTokenSaver(
                     new StringSaver()),
-                sceneLoader,
-                _dateTimeRetriever);
+                _dateTimeRetriever,
+                _branchLogout);
         }
     }
 }

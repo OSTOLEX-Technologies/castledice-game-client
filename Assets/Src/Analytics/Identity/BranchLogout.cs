@@ -1,4 +1,4 @@
-namespace Src.Analytics
+namespace Src.Analytics.Identity
 {
     public class BranchLogout : IBranchLogout
     {
