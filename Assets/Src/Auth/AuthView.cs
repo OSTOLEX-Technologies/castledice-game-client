@@ -1,10 +1,14 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using MetaMask.Transports.Unity.UI;
+using Src.Analytics.Events;
+using Src.Analytics.Identity;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
 using Src.Auth.TokenProviders;
 using Src.General.Caching;
+using Src.General.TimeRetriever;
 using TMPro;
 using UnityEngine;
 
@@ -12,6 +16,8 @@ namespace Src.Auth
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
+        private const string LoginTimestampParamName = "Login";
+        
         [SerializeField, InspectorName("Main Auth Canvas")]
         private Canvas mainAuthCanvas;
         
@@ -27,6 +33,9 @@ namespace Src.Auth
         private AuthController _authController;
         private IMetamaskWalletFacade _metamaskWalletFacade;
         private IFirebaseCredentialProvider _firebaseCredentialProvider;
+
+        private IDateTimeRetriever _dateTimeRetriever;
+        private IBranchLogin _branchLogin;
 
         private MetaMaskUnityUIHandler _qrCodeHandlerCanvas;
         
@@ -79,11 +88,15 @@ namespace Src.Auth
         public void Init(
             IMetamaskWalletFacade metamaskWalletFacade, 
             AuthController controller,
-            IFirebaseCredentialProvider firebaseCredentialProvider)
+            IFirebaseCredentialProvider firebaseCredentialProvider,
+            IDateTimeRetriever dateTimeRetriever,
+            IBranchLogin branchLogin)
         {
             _metamaskWalletFacade = metamaskWalletFacade;
             _authController = controller;
             _firebaseCredentialProvider = firebaseCredentialProvider;
+            _dateTimeRetriever = dateTimeRetriever;
+            _branchLogin = branchLogin;
 
             _authController.TokenProviderLoaded += OnTokenProviderLoaded;
         }
@@ -105,6 +118,18 @@ namespace Src.Auth
             await WaitUntilMetamaskDisconnects();
             
             HideAuthUI();
+            
+            var branchEventParams = new Dictionary<string, string>
+            {
+                {
+                    LoginTimestampParamName, 
+                    _dateTimeRetriever.GetFormattedDateTime()
+                }
+            };
+            BranchEventSender.SendCustomEvent(
+                BranchEventNames.Logout, 
+                branchEventParams);
+            _branchLogin.Login(token);
             
             AuthCompleted?.Invoke();
         }
