@@ -3147,7 +3147,7 @@ MonoBehaviour:
   connectionFailedMessage: {fileID: 8977001528294372651}
   connectionFailedReasonText: {fileID: 8977001527691485658}
   rejectReasonMessagesConfig: {fileID: 11400000, guid: 3f9b8e08bfa40fb458b04b3afeb3a7ac, type: 2}
-  serverConnectionConfig: {fileID: 11400000, guid: 50517627df54db7479ef951f5fc92837, type: 2}
+  serverConnectionConfig: {fileID: 11400000, guid: 4ea388fb64bfa9243b5954d565b07f05, type: 2}
   gameSearchTimeout: {fileID: 386566147}
   connectButton: {fileID: 65619409}
   processMessage: {fileID: 740634149}
