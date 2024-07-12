@@ -52,9 +52,9 @@ namespace Src.GameplayView.Timers.PlayerTimerViews
         public void Highlight()
         {
             _backgroundActive.SetActive(true);
-            _backgroundInactive.SetActive(true);
+            _backgroundInactive.SetActive(false);
             _textMeshActive.gameObject.SetActive(true);
-            _textMeshInactive.gameObject.SetActive(true);
+            _textMeshInactive.gameObject.SetActive(false);
             if (_isGlowing)
             {
                 _glow.SetActive(true);
@@ -64,9 +64,9 @@ namespace Src.GameplayView.Timers.PlayerTimerViews
         public void Obscure()
         {
             _backgroundActive.SetActive(false);
-            _backgroundInactive.SetActive(false);
+            _backgroundInactive.SetActive(true);
             _textMeshActive.gameObject.SetActive(false);
-            _textMeshInactive.gameObject.SetActive(false);
+            _textMeshInactive.gameObject.SetActive(true);
             _glow.SetActive(false);
         }
     }

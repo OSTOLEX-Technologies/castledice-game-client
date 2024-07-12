@@ -1,4 +1,5 @@
 using System;
+using System.Threading.Tasks;
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
@@ -100,13 +101,13 @@ namespace Src.ScenesInitializers
         private IClientWrapper _clientWrapper;
         private IPlayerInitializationProvider _playerInitializationProvider;
     
-        private void Start()
+        private async void Start()
         {
             SetUpLogger();
             SetUpAccessTokenProvider();
             SetUpClientWrapper();
             SetUpServerConnection();
-            SetUpPlayerInitialization();
+            await SetUpPlayerInitialization();
             SetUpGameCreation();
             SetUpErrorHandling();
             SetUpSettingsPopup();
@@ -179,7 +180,7 @@ namespace Src.ScenesInitializers
                     sceneLoader);
         }
 
-        private void SetUpPlayerInitialization()
+        private async Task SetUpPlayerInitialization()
         {
             var playerInitializationView = new PlayerInitializationView(processMessage, initializationFailureMessage);
             _playerInitializationView = playerInitializationView;
@@ -200,6 +201,10 @@ namespace Src.ScenesInitializers
                 playerInitializationResultDtoAccepter,
                 initializeButton);
             _clientWrapper.Connected += OnConnected;
+            if (_clientWrapper.IsConnected && !_playerInitializationProvider.Initialized)
+            {
+                await _playerInitializationPresenter.StartInitializationAsync();
+            }
         }
 
         private async void OnConnected(object sender, EventArgs e)

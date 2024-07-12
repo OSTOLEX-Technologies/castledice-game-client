@@ -18,12 +18,14 @@ namespace Src.GameplayView.Timers
         public void StartTimer(Player player)
         {
             var playerTimerView = _playerTimerViewProvider.GetTimerViewForPlayer(player);
+            playerTimerView.Highlight();
             _updater.AddUpdatable(playerTimerView);
         }
 
         public void StopTimer(Player player)
         {
             var playerTimerView = _playerTimerViewProvider.GetTimerViewForPlayer(player);
+            playerTimerView.Obscure();
             _updater.RemoveUpdatable(playerTimerView);
         }
     }

@@ -212,6 +212,7 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _playerIdProvider = new PlayerIdProvider();
         _localPlayer = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
         _enemyPlayer = _game.GetAllPlayers().Find(p => p != _localPlayer);
+        _playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
         SetUpInput();
         SetUpGrid();
         SetUpContent();

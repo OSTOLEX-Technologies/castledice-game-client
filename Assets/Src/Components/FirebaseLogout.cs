@@ -1,3 +1,5 @@
+using Firebase;
+using Firebase.Auth;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.TokenProviders;
 using Src.General.Caching;
@@ -22,6 +24,7 @@ namespace Src.Components
         public void Logout()
         {
             Singleton<IAccessTokenProvider>.Unregister();
+            FirebaseAuth.DefaultInstance.SignOut();
             _saver.DeleteAuthTokens();
             _authSceneTransitionHandler.HandleTransitionCommand();
         }

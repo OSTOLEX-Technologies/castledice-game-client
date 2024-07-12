@@ -533,6 +533,11 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 5
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &330804786 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 946681268427538099, guid: f2f326e7eae87cf4db227518c52b7ea9, type: 3}
+  m_PrefabInstance: {fileID: 1669019156}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &358107309
 GameObject:
   m_ObjectHideFlags: 0
@@ -1699,16 +1704,16 @@ MonoBehaviour:
   cellMoveHighlightsConfig: {fileID: 11400000, guid: 299796ff4d01cc74384058d8e2af43d5, type: 2}
   cellMoveHighlightsFactory: {fileID: 2095275312}
   destroyedContentTransparencyConfig: {fileID: 11400000, guid: 2fd7fa23a869bc444af0e322e630c70f, type: 2}
-  redTimerTextActive: {fileID: 1669019158}
-  redTimerTextInactive: {fileID: 1669019159}
-  redTimerBackgroundActive: {fileID: 1669019161}
-  redTimerBackgroundInactive: {fileID: 1669019162}
-  redTimerGlow: {fileID: 1669019160}
-  blueTimerTextActive: {fileID: 1238634604}
-  blueTimerTextInactive: {fileID: 1238634605}
-  blueTimerBackgroundActive: {fileID: 1238634607}
-  blueTimerBackgroundInactive: {fileID: 1238634608}
-  blueTimerGlow: {fileID: 1238634606}
+  redTimerTextActive: {fileID: 1238634604}
+  redTimerTextInactive: {fileID: 1238634605}
+  redTimerBackgroundActive: {fileID: 1238634607}
+  redTimerBackgroundInactive: {fileID: 1238634608}
+  redTimerGlow: {fileID: 1238634606}
+  blueTimerTextActive: {fileID: 1669019158}
+  blueTimerTextInactive: {fileID: 1669019159}
+  blueTimerBackgroundActive: {fileID: 1669019161}
+  blueTimerBackgroundInactive: {fileID: 330804786}
+  blueTimerGlow: {fileID: 1669019160}
   glowTimeSeconds: 10
   coloredHighlightPrefabConfig: {fileID: 11400000, guid: b3f5d408d9be7094daf39ea825a93ad7, type: 2}
   placedUnitsHighlightsColorConfig: {fileID: 11400000, guid: be9e8af516dc9474ebbf6b5f4fb5ec56, type: 2}
@@ -2068,11 +2073,6 @@ GameObject:
 --- !u!1 &1669019161 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 946681268412855521, guid: f2f326e7eae87cf4db227518c52b7ea9, type: 3}
-  m_PrefabInstance: {fileID: 1669019156}
-  m_PrefabAsset: {fileID: 0}
---- !u!1 &1669019162 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 946681269458423680, guid: f2f326e7eae87cf4db227518c52b7ea9, type: 3}
   m_PrefabInstance: {fileID: 1669019156}
   m_PrefabAsset: {fileID: 0}
 --- !u!1 &1716280181
