@@ -2,6 +2,8 @@ using System;
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
+using Src.Auth.AuthTokenSaver;
+using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.TokenProviders;
 using Src.Components;
 using Src.GameplayPresenter.Errors;
@@ -28,6 +30,7 @@ using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
 using Src.General.PlayerInitialization;
+using Src.General.SceneTransitionCommands;
 using Src.MainMenu.Controllers;
 using Src.MainMenu.Scripts;
 using Src.MainMenu.Views;
@@ -87,6 +90,11 @@ namespace Src.ScenesInitializers
         private PlayerInitializationView _playerInitializationView;
         private InitializeButtonHandler _initializeButtonHandler; 
         
+        [Header("Logout")]
+        [SerializeField] private FirebaseLogout firebaseLogout;
+        private IAuthTokenSaver _authTokenSaver;
+        private ISceneTransitionHandler _logoutSceneTransitionHandler;
+        
         //Common dependencies
         private IAccessTokenProvider _accessTokenProvider;
         private IClientWrapper _clientWrapper;
@@ -102,6 +110,14 @@ namespace Src.ScenesInitializers
             SetUpGameCreation();
             SetUpErrorHandling();
             SetUpSettingsPopup();
+            SetUpLogout();
+        }
+
+        private void SetUpLogout()
+        {
+            _authTokenSaver = new AuthTokenSaver(new StringSaver());
+            _logoutSceneTransitionHandler = new SceneTransitionHandler(sceneLoader, SceneType.Auth);
+            firebaseLogout.Init(_authTokenSaver, _logoutSceneTransitionHandler);
         }
 
         private void SetUpSettingsPopup()

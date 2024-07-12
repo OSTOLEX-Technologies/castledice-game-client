@@ -32,7 +32,7 @@ namespace Src.Auth.REST
 
         public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
         {
-            return await SendAsync(request);
+            return await _httpClient.SendAsync(request);
         }
 
         public async Task<T> Request<T>(

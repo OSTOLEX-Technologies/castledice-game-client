@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 303853028}
-  m_IndirectSpecularColor: {r: 0.18252397, g: 0.22820571, b: 0.30719048, a: 1}
+  m_IndirectSpecularColor: {r: 0.18254378, g: 0.22825451, b: 0.30721018, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -3147,7 +3147,7 @@ MonoBehaviour:
   connectionFailedMessage: {fileID: 8977001528294372651}
   connectionFailedReasonText: {fileID: 8977001527691485658}
   rejectReasonMessagesConfig: {fileID: 11400000, guid: 3f9b8e08bfa40fb458b04b3afeb3a7ac, type: 2}
-  serverConnectionConfig: {fileID: 11400000, guid: 50517627df54db7479ef951f5fc92837, type: 2}
+  serverConnectionConfig: {fileID: 11400000, guid: 9dfc325aa1f979f4e8ceed6254d0ba3a, type: 2}
   gameSearchTimeout: {fileID: 386566147}
   connectButton: {fileID: 65619409}
   processMessage: {fileID: 740634149}
