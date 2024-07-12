@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using System.Threading.Tasks;
 using castledice_game_data_logic;
@@ -5,13 +6,15 @@ using castledice_game_data_logic.MoveConverters;
 using castledice_game_logic;
 using castledice_game_logic.Math;
 using Src.Auth.TokenProviders;
+using Src.Components;
 using Src.GameplayPresenter.ActionPointsGiving;
 using Src.GameplayPresenter.CellMovesHighlights;
 using Src.GameplayPresenter.Cells.SquareCellsGeneration;
 using Src.GameplayPresenter.CellsContent;
 using Src.GameplayPresenter.ClientMoves;
-using Src.GameplayPresenter.CurrentPlayer;
 using Src.GameplayPresenter.DestroyedContent;
+using Src.GameplayPresenter.EnemyDisconnect;
+using Src.GameplayPresenter.EnemyDisconnect.NetworkBridges;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.CellsGeneratorCreators;
 using Src.GameplayPresenter.GameCreation.Creators.BoardConfigCreators.ContentSpawnersCreators;
@@ -21,12 +24,12 @@ using Src.GameplayPresenter.GameCreation.Creators.PlayersListCreators;
 using Src.GameplayPresenter.GameCreation.Creators.TscConfigCreators;
 using Src.GameplayPresenter.GameOver;
 using Src.GameplayPresenter.GameWrappers;
+using Src.GameplayPresenter.InGameDisconnectHandling;
 using Src.GameplayPresenter.NewUnitsHighlights;
 using Src.GameplayPresenter.PlacedUnitsHighlights;
 using Src.GameplayPresenter.ServerMoves;
 using Src.GameplayPresenter.Timers;
 using Src.GameplayView;
-using Src.GameplayView.ActionPointsCount;
 using Src.GameplayView.ActionPointsGiving;
 using Src.GameplayView.CellMovesHighlights;
 using Src.GameplayView.Cells;
@@ -44,7 +47,6 @@ using Src.GameplayView.ContentVisuals.VisualsCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.CastleVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.KnightVisualCreation;
 using Src.GameplayView.ContentVisuals.VisualsCreation.TreeVisualCreation;
-using Src.GameplayView.CurrentPlayer;
 using Src.GameplayView.DestroyedContent;
 using Src.GameplayView.GameOver;
 using Src.GameplayView.Grid;
@@ -60,13 +62,16 @@ using Src.GameplayView.Timers;
 using Src.GameplayView.Timers.PlayerTimerViews;
 using Src.GameplayView.Updatables;
 using Src.General.Caching;
+using Src.General.LoadingScenes;
 using Src.General.TimeManagement;
 using Src.HttpUtils;
 using Src.NetworkingModule;
 using Src.NetworkingModule.MessageHandlers;
 using Src.NetworkingModule.Moves;
 using Src.PlayerInput;
+using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class DuelGameSceneInitializer : MonoBehaviour
 {
@@ -122,36 +127,40 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private MovesView _clientMovesView;
     private ClientMovesPresenter _clientMovesPresenter;
     private ServerMovesPresenter _serverMovesPresenter;
-    
-    [Header("Action points giving")]
-    [SerializeField] private int popupDisappearTimeMilliseconds;
-    [SerializeField] private UnityActionPointsPopup redActionPointsPopup;
-    [SerializeField] private UnityActionPointsPopup blueActionPointsPopup;
-    private ActionPointsGivingPresenter _actionPointsGivingPresenter;
-    private ActionPointsGivingView _actionPointsGivingView;
+
+    [Header("Action points")] 
+    [SerializeField] private GameObject blueBanner;
+    [SerializeField] private TextMeshProUGUI blueActionPointsText;
+    [SerializeField] private GameObject redBanner;
+    [SerializeField] private TextMeshProUGUI redActionPointsText;
+    private ActionPointsUI _blueActionPointsUI;
+    private ActionPointsUI _redActionPointsUI;
+    private IActionPointsGivingPresenter _actionPointsGivingPresenter;
+    private IActionPointsGivingView _actionPointsGivingView;
     
     [Header("Move highlights")]
     [SerializeField] private UnityCellMoveHighlightsConfig cellMoveHighlightsConfig;
     [SerializeField] private UnityCellMoveHighlightsFactory cellMoveHighlightsFactory;
     private CellMovesHighlightPresenter _cellMovesHighlightPresenter;
     private CellMovesHighlightView _cellMovesHighlightView;
-
-    [Header("Current player label")] 
-    [SerializeField] private GameObject bluePlayerLabel;
-    [SerializeField] private GameObject redPlayerLabel;
-    private CurrentPlayerPresenter _currentPlayerPresenter;
-    private CurrentPlayerView _currentPlayerView;
     
     [Header("Destroyed content")]
     [SerializeField] private TransparencyConfig destroyedContentTransparencyConfig;
     private DestroyedContentView _destroyedContentView;
     private DestroyedContentPresenter _destroyedContentPresenter;
-    
-    [Header("Timers")]
-    [SerializeField] private TimeView redPlayerTimeView;
-    [SerializeField] private TimeView bluePlayerTimeView;
-    [SerializeField] private Highlighter redPlayerHighlighter;
-    [SerializeField] private Highlighter bluePlayerHighlighter;
+
+    [Header("Timers")] 
+    [SerializeField] private TextMeshProUGUI redTimerTextActive;
+    [SerializeField] private TextMeshProUGUI redTimerTextInactive;
+    [SerializeField] private GameObject redTimerBackgroundActive;
+    [SerializeField] private GameObject redTimerBackgroundInactive;
+    [SerializeField] private GameObject redTimerGlow;
+    [SerializeField] private TextMeshProUGUI blueTimerTextActive;
+    [SerializeField] private TextMeshProUGUI blueTimerTextInactive;
+    [SerializeField] private GameObject blueTimerBackgroundActive;
+    [SerializeField] private GameObject blueTimerBackgroundInactive;
+    [SerializeField] private GameObject blueTimerGlow;
+    [SerializeField] private int glowTimeSeconds;
     private TimersPresenter _timersPresenter;
     private TimersView _timersView;
 
@@ -172,23 +181,38 @@ public class DuelGameSceneInitializer : MonoBehaviour
     [SerializeField] private UpdaterBehaviour updaterBehaviour;
     private readonly Updater _updater = new();
     private readonly Updater _fixedUpdater = new();
+
+    [Header("Disconnect handling")] 
+    [SerializeField] private GameObject _disconnectedPopup;
+    [SerializeField] private Button _disconnectedPopupButton;
+    private InGameDisconnectHandler _disconnectHandler;
     
+    [Header("Enemy disconnect handling")]
+    [SerializeField] private GameObject _enemyDisconnectedPopup;
+    [SerializeField] private Button _enemyDisconnectedPopupButton;
+    private EnemyDisconnectPresenter _enemyDisconnectPresenter;
+    private IEnemyDisconnectView _enemyDisconnectView;
+
+    [Header("Scene loading")]
+    [SerializeField] private SceneLoader _sceneLoader;
     
     private Game _game;
     private GameStartData _gameStartData;
     private Player _localPlayer;
+    private Player _enemyPlayer;
     private DuelPlayerColorProvider _playerColorProvider;
     private PlayerIdProvider _playerIdProvider;
     private IAccessTokenProvider _accessTokenProvider;
     
     private async void Start()
     {
+        SetUpUpdaters();
         SetUpGame();
         _accessTokenProvider = Singleton<IAccessTokenProvider>.Instance;
         _playerIdProvider = new PlayerIdProvider();
         _localPlayer = _game.GetPlayer(await _playerIdProvider.GetLocalPlayerId());
-        
-        SetUpUpdaters();
+        _enemyPlayer = _game.GetAllPlayers().Find(p => p != _localPlayer);
+        _playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
         SetUpInput();
         SetUpGrid();
         SetUpContent();
@@ -199,15 +223,31 @@ public class DuelGameSceneInitializer : MonoBehaviour
         SetUpPlacedUnitsHighlights();
         SetUpNewUnitsHighlights();
         SetUpActionPointsGiving();
+        SetUpActionPointsCountUI();
         SetUpCamera();
         SetUpCellMovesHighlights();
-        SetUpCurrentPlayerLabel();
-        SetUpCurrentPlayerLabel();
         SetUpGameOver();
         SetUpTimers();
+        SetUpDisconnectHandling();
+        SetUpEnemyDisconnectHandling();
         await NotifyPlayerIsReady();
     }
-    
+
+    private void SetUpEnemyDisconnectHandling()
+    {
+        var view = new EnemyDisconnectView(_enemyDisconnectedPopup, _enemyDisconnectedPopupButton);
+        _enemyDisconnectView = view;
+        var eventEmmiter = new DuelPlayerDisconnectedDTOAccepter();
+        PlayerDisconnectedMessageHandler.SetDTOAccepter(eventEmmiter);
+        _enemyDisconnectPresenter = new EnemyDisconnectPresenter(view, eventEmmiter, _sceneLoader);
+    }
+
+    private void SetUpDisconnectHandling()
+    {
+        _disconnectHandler = new InGameDisconnectHandler(ClientsHolder.GetClient(ClientType.GameServerClient),
+            _disconnectedPopup, _disconnectedPopupButton, _sceneLoader, SceneType.MainMenu);
+    }
+
     private void SetUpUpdaters()
     {
         updaterBehaviour.Init(_updater);
@@ -216,13 +256,28 @@ public class DuelGameSceneInitializer : MonoBehaviour
 
     private void SetUpTimers()
     {
-        var playerColorProvider = new DuelPlayerColorProvider(_localPlayer);
-        var highlighterForPlayerProvider = new PlayerColorHighlighterProvider(redPlayerHighlighter, bluePlayerHighlighter,
-            playerColorProvider);
-        var timeViewForPlayerProvider =
-            new PlayerColorTimeViewProvider(redPlayerTimeView, bluePlayerTimeView, playerColorProvider);
-        var playerTimerViewCreator = new PlayerTimerViewCreator(highlighterForPlayerProvider, timeViewForPlayerProvider);
-        var playerTimerViewsProvider = new CachingPlayerTimerViewProvider(playerTimerViewCreator);
+        var bluePlayerTimerView = new PlayerTimerView(
+            blueTimerTextActive, 
+            blueTimerTextInactive, 
+            blueTimerBackgroundActive, 
+            blueTimerBackgroundInactive,
+            blueTimerGlow,
+            _localPlayer.Timer,
+            TimeSpan.FromSeconds(glowTimeSeconds));
+        var redPlayerTimerView = new PlayerTimerView(
+            redTimerTextActive, 
+            redTimerTextInactive, 
+            redTimerBackgroundActive, 
+            redTimerBackgroundInactive,
+            redTimerGlow,
+            _enemyPlayer.Timer,
+            TimeSpan.FromSeconds(glowTimeSeconds));
+        var timersDictionary = new Dictionary<PlayerColor, IPlayerTimerView>
+        {
+            {PlayerColor.Blue, bluePlayerTimerView},
+            {PlayerColor.Red, redPlayerTimerView}
+        };
+        var playerTimerViewsProvider = new PlayerTimerViewProvider(timersDictionary, _playerColorProvider);
         _timersView = new TimersView(playerTimerViewsProvider, _updater);
         _timersPresenter = new TimersPresenter(_timersView, _game);
         var switchTimerDTOAccepter = new SwitchTimerAccepter(_timersPresenter);
@@ -262,6 +317,8 @@ public class DuelGameSceneInitializer : MonoBehaviour
     private void OnDestroy()
     {
         _inputReader.Disable();
+        _disconnectHandler.Dispose();
+        _enemyDisconnectPresenter.Dispose();
     }
 
 
@@ -366,18 +423,27 @@ public class DuelGameSceneInitializer : MonoBehaviour
         _newUnitsHighlightsView = new NewUnitsHighlightsView(grid, underlineCreator, objectsColorProvider);
         _newUnitsHighlightsPresenter = new NewUnitsHighlightsPresenter(_game, _newUnitsHighlightsView);
     }
+
+
+    public class ActionPointsGivingViewStub : IActionPointsGivingView
+    {
+        public void ShowActionPointsForPlayer(Player player, int amount)
+        {
+        }
+    }
     
     private void SetUpActionPointsGiving()
     {
-        var popupsCreator = new ActionPointsPopupsHolder(blueActionPointsPopup, redActionPointsPopup);
-        var popupDemonstrator = new ActionPointsPopupDemonstrator(popupsCreator, popupDisappearTimeMilliseconds);
-        _actionPointsGivingView =
-            new ActionPointsGivingView(new DuelPlayerColorProvider(_localPlayer),
-                popupDemonstrator);
+        _actionPointsGivingView = new ActionPointsGivingViewStub();
         _actionPointsGivingPresenter = new ActionPointsGivingPresenter(new PlayerProvider(_game),
             new ActionPointsGiver(_game), _actionPointsGivingView);
-        var actionPointsGivingAccepter = new GiveActionPointsAccepter(_actionPointsGivingPresenter);
-        GiveActionPointsMessageHandler.SetAccepter(actionPointsGivingAccepter);
+        GiveActionPointsMessageHandler.SetAccepter(new GiveActionPointsAccepter(_actionPointsGivingPresenter));
+    }
+    
+    private void SetUpActionPointsCountUI()
+    {
+        _blueActionPointsUI = new ActionPointsUI(blueActionPointsText, blueBanner, _localPlayer);
+        _redActionPointsUI = new ActionPointsUI(redActionPointsText, redBanner, _enemyPlayer);
     }
 
     private void SetUpCamera()
@@ -391,18 +457,11 @@ public class DuelGameSceneInitializer : MonoBehaviour
             camera.transform.localEulerAngles = Vector3.zero;
         }
     }
-    
-    private void SetUpCurrentPlayerLabel()
-    {
-        _currentPlayerView = new CurrentPlayerView(new DuelPlayerColorProvider(_localPlayer),
-            bluePlayerLabel, redPlayerLabel);
-        _currentPlayerPresenter = new CurrentPlayerPresenter(_game, _currentPlayerView);
-        _currentPlayerPresenter.ShowCurrentPlayer();
-    }
 
     private async Task NotifyPlayerIsReady()
     {
         var playerReadinessSender = new ReadinessSender(ClientsHolder.GetClient(ClientType.GameServerClient));
         playerReadinessSender.SendPlayerReadiness(await _accessTokenProvider.GetAccessTokenAsync());
     }
+    
 }

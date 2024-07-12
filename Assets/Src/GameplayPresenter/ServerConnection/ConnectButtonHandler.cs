@@ -5,7 +5,8 @@ using UnityEngine.UI;
 
 namespace Src.GameplayPresenter.ServerConnection
 {
-    public class ConnectButtonHandler
+    public class ConnectButtonHandler : IDisposable
+    
     {
         private readonly Button _button;
         private readonly IServerConnectionPresenter _serverConnectionPresenter;
@@ -40,6 +41,13 @@ namespace Src.GameplayPresenter.ServerConnection
         private void OnButtonClicked()
         {
             _serverConnectionPresenter.ConnectToServer();
+        }
+
+        public void Dispose()
+        {
+            _clientWrapper.Connected -= OnConnected;
+            _clientWrapper.ConnectionFailed -= OnConnectionFailed;
+            _clientWrapper.Disconnected -= OnDisconnected;
         }
     }
 }

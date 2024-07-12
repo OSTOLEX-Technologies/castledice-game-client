@@ -6,7 +6,7 @@ using UnityEngine.UI;
 
 namespace Src.GameplayPresenter.PlayerInitialization
 {
-    public class InitializeButtonHandler
+    public class InitializeButtonHandler : IDisposable
     {
         private readonly IPlayerInitializationPresenter _presenter;
         private readonly IClientWrapper _clientWrapper;
@@ -44,6 +44,13 @@ namespace Src.GameplayPresenter.PlayerInitialization
         {
             _presenter.StartInitializationAsync();
             _button.gameObject.SetActive(false);
+        }
+
+        public void Dispose()
+        {
+            _eventsEmitter.InitializationSucceed -= OnInitializationSucceed;
+            _eventsEmitter.InitializationFailed -= OnInitializationFailed;
+            _clientWrapper.Disconnected -= OnDisconnected;
         }
     }
 }

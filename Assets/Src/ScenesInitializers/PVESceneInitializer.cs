@@ -145,14 +145,6 @@ public class PVESceneInitializer : MonoBehaviour
     [SerializeField] private TransparencyConfig destroyedContentTransparencyConfig;
     private DestroyedContentView _destroyedContentView;
     private DestroyedContentPresenter _destroyedContentPresenter;
-    
-    [Header("Timers")]
-    [SerializeField] private TimeView redPlayerTimeView;
-    [SerializeField] private TimeView bluePlayerTimeView;
-    [SerializeField] private Highlighter redPlayerHighlighter;
-    [SerializeField] private Highlighter bluePlayerHighlighter;
-    private TimersPresenter _timersPresenter;
-    private TimersView _timersView;
 
     [Header("Placed units highlights")]
     [SerializeField] private ColoredHighlightPrefabConfig coloredHighlightPrefabConfig;

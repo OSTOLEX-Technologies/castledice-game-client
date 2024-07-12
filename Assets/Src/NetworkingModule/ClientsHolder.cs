@@ -6,11 +6,11 @@ namespace Src.NetworkingModule
 {
     public static class ClientsHolder
     {
-        private static readonly Dictionary<ClientType, ClientWrapper> Clients = new();
+        private static readonly Dictionary<ClientType, IClientWrapper> Clients = new();
         
         public static bool HasClient(ClientType type) => Clients.ContainsKey(type);
         
-        public static ClientWrapper GetClient(ClientType type)
+        public static IClientWrapper GetClient(ClientType type)
         {
             if (Clients.TryGetValue(type, out var client))
             {
@@ -20,7 +20,7 @@ namespace Src.NetworkingModule
             throw new InvalidOperationException("Client for type " + type + " is absent.");
         }
 
-        public static void AddClient(ClientType type, ClientWrapper client)
+        public static void AddClient(ClientType type, IClientWrapper client)
         {
             if (Clients.ContainsKey(type))
                 throw new InvalidOperationException("Client for type " + type + " already exists.");

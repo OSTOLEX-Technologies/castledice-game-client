@@ -38,7 +38,7 @@ RenderSettings:
   m_ReflectionIntensity: 1
   m_CustomReflection: {fileID: 0}
   m_Sun: {fileID: 303853028}
-  m_IndirectSpecularColor: {r: 0.18252397, g: 0.22820571, b: 0.30719048, a: 1}
+  m_IndirectSpecularColor: {r: 0.18254378, g: 0.22825451, b: 0.30721018, a: 1}
   m_UseRadianceAmbientProbe: 0
 --- !u!157 &3
 LightmapSettings:
@@ -748,6 +748,51 @@ MonoBehaviour:
   m_ShadowLayerMask: 1
   m_LightCookieSize: {x: 1, y: 1}
   m_LightCookieOffset: {x: 0, y: 0}
+--- !u!1 &386566145
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 386566146}
+  - component: {fileID: 386566147}
+  m_Layer: 0
+  m_Name: GameSearchTimeout
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &386566146
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386566145}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 11
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &386566147
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 386566145}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: dd8e334a33004f93b7cc6b28412471af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  seconds: 10
 --- !u!1001 &468774803
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -899,7 +944,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   textMesh: {fileID: 468774806}
-  stringsListConfig: {fileID: 11400000, guid: abda8cdec464fcd47867a8a78a56cde3, type: 2}
+  stringsListConfig: {fileID: 11400000, guid: 7c48e96ecf603c24da08a044bcdf7ce3, type: 2}
   intervalConfig: {fileID: 11400000, guid: 49963a3a59143fa4797a6682d9a3a0a6, type: 2}
 --- !u!1 &468774808 stripped
 GameObject:
@@ -3102,12 +3147,13 @@ MonoBehaviour:
   connectionFailedMessage: {fileID: 8977001528294372651}
   connectionFailedReasonText: {fileID: 8977001527691485658}
   rejectReasonMessagesConfig: {fileID: 11400000, guid: 3f9b8e08bfa40fb458b04b3afeb3a7ac, type: 2}
-  serverConnectionConfig: {fileID: 11400000, guid: 9dfc325aa1f979f4e8ceed6254d0ba3a, type: 2}
+  serverConnectionConfig: {fileID: 11400000, guid: 50517627df54db7479ef951f5fc92837, type: 2}
+  gameSearchTimeout: {fileID: 386566147}
   connectButton: {fileID: 65619409}
   processMessage: {fileID: 740634149}
   initializationFailureMessage: {fileID: 1309826212}
   initializeButton: {fileID: 722633430}
-  logoutComponent: {fileID: 1721403676}
+  firebaseLogout: {fileID: 1721403676}
 --- !u!4 &1386543723
 Transform:
   m_ObjectHideFlags: 0
