@@ -17,7 +17,20 @@ namespace Src.GameplayPresenter.CellMovesHighlights
             _game = game;
             _player = player;
             _game.MoveApplied += (sender, move) => OnMoveApplied(move);
+            _game.TurnSwitched += (sender, g) => OnTurnSwitched(g);
             _player.ActionPoints.ActionPointsIncreased += (sender, amount) => OnActionPointsIncreased();
+        }
+
+        private void OnTurnSwitched(Game game)
+        {
+            if (game.GetCurrentPlayer() == _player)
+            {
+                TimeToHighlight?.Invoke();
+            }
+            else
+            {
+                TimeToHide?.Invoke();
+            }
         }
 
         public void OnMoveApplied(AbstractMove move)
