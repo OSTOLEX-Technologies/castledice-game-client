@@ -127,9 +127,10 @@ namespace Src.Auth
                 }
             };
             BranchEventSender.SendCustomEvent(
-                BranchEventNames.Logout, 
+                BranchEventNames.Login, 
                 branchEventParams);
             _branchLogin.Login(token);
+            Debug.Log("Logging in");
             
             AuthCompleted?.Invoke();
         }

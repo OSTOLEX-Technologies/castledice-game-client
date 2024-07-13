@@ -1,5 +1,5 @@
 {
   "enableLogging": true,
-  "deferInitForPluginRuntime": false,
-  "useTestInstance": true
+  "deferInitForPluginRuntime": true,
+  "useTestInstance": false
 }

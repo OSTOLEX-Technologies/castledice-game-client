@@ -5,8 +5,14 @@ namespace Src.Analytics.BranchInit
 {
     public class BranchInitializer : MonoBehaviour
     {
+        [SerializeField] private bool enableLogging;
+        
         private void Awake()
         {
+            if (enableLogging)
+            {
+                Branch.enableLogging();
+            }
             Branch.initSession(InitCallback);
         }
 

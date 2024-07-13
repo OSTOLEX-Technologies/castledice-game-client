@@ -11,8 +11,13 @@
       <meta-data android:name="unityplayer.UnityActivity" android:value="true" />
       <meta-data android:name="unityplayer.ForwardNativeEventsToDalvik" android:value="true" />
       <intent-filter>
-        <data android:host="open" android:scheme="castledice" />
         <data android:host="google-auth-redirect" android:scheme="castledice" />
+        <action android:name="android.intent.action.VIEW" />
+        <category android:name="android.intent.category.DEFAULT" />
+        <category android:name="android.intent.category.BROWSABLE" />
+      </intent-filter>
+      <intent-filter>
+        <data android:host="open" android:scheme="castledice" />
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
@@ -21,10 +26,9 @@
     <!-- Optional. Set to true to disable auto deep link feature-->
     <meta-data android:name="io.branch.sdk.auto_link_disable" android:value="false" />
     <!--Set true to simulate fresh installs -->
-    <meta-data android:name="io.branch.sdk.TestMode" android:value="true" />
+    <meta-data android:name="io.branch.sdk.TestMode" android:value="false" />
     <!--Branch key-->
     <meta-data android:name="io.branch.sdk.BranchKey" android:value="key_live_ctoVaK2Wa57bGew7DanxDjbhCqkYPUVU" />
-
     <!--This was added by the AnalyticsFixPropertyRemover. If you want to prevent the generation of this, have "AnalyticsFixPropertyRemover" included in a comment-->
     <property tools:node="removeAll" />
   </application>

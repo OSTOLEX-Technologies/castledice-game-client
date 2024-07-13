@@ -48,7 +48,7 @@ namespace Src.Components
             BranchEventSender.SendCustomEvent(
                 BranchEventNames.Logout, 
                 branchEventParams);
-            
+            Debug.Log("Log out");
             
             _branchLogout.Logout();
         }
