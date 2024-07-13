@@ -12,12 +12,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ac695c03334d64ebd95c3ab403d74540, type: 3}
   m_Name: BranchData
   m_EditorClassIdentifier: 
-  liveBranchKey: key_live_ctoVaK2Wa57bGew7DanxDjbhCqkYPUVU
-  liveBranchUri: castledice
+  liveBranchKey: 
+  liveBranchUri: 
   liveAndroidPathPrefix: 
   liveAppLinks: []
-  testBranchKey: key_test_pwbGaO18fZ2hVlEYAhdspdhiEyeWRJQw
-  testBranchUri: castledice
+  testBranchKey: 
+  testBranchUri: 
   testAndroidPathPrefix: 
   testAppLinks: []
   enableLogging: 1
