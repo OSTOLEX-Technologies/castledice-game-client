@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.unity3d.player" xmlns:tools="http://schemas.android.com/tools">
+<manifest xmlns:android="http://schemas.android.com/apk/res/android" package="com.ostolex.castledice">
   <uses-permission android:name="android.permission.INTERNET" />
   <uses-permission android:name="android.permission.POST_NOTIFICATIONS" />
   <application android:theme="@style/UnityThemeSelector" android:icon="@drawable/app_icon" android:label="@string/app_name" android:name="io.branch.unity.BranchUnityApp">
-    <activity android:name="io.branch.unity.BranchUnityActivity" android:theme="@style/UnityThemeSelector" android:launchMode="singleTask">
+    <activity android:name="io.branch.unity.BranchUnityActivity" android:launchMode="singleTask">
       <intent-filter>
         <action android:name="android.intent.action.MAIN" />
         <category android:name="android.intent.category.LAUNCHER" />
@@ -17,7 +17,7 @@
         <category android:name="android.intent.category.BROWSABLE" />
       </intent-filter>
       <intent-filter>
-        <data android:host="open" android:scheme="castledice-analytics" />
+        <data android:host="open" android:scheme="castledice" />
         <action android:name="android.intent.action.VIEW" />
         <category android:name="android.intent.category.DEFAULT" />
         <category android:name="android.intent.category.BROWSABLE" />
