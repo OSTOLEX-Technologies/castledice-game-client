@@ -15,10 +15,12 @@ MonoBehaviour:
   liveBranchKey: key_live_ctoVaK2Wa57bGew7DanxDjbhCqkYPUVU
   liveBranchUri: castledice
   liveAndroidPathPrefix: 
-  liveAppLinks: []
+  liveAppLinks:
+  - beop4.app.link
   testBranchKey: key_test_pwbGaO18fZ2hVlEYAhdspdhiEyeWRJQw
   testBranchUri: castledice
   testAndroidPathPrefix: 
-  testAppLinks: []
+  testAppLinks:
+  - beop4.test-app.link
   enableLogging: 1
   testMode: 0

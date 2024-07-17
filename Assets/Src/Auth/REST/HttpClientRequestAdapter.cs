@@ -27,12 +27,12 @@ namespace Src.Auth.REST
             
             var request = new HttpRequestMessage(requestMethodType, parametrizedUri);
 
-            return await SendMessage<T>(request);
+            return await SendMessageAndRetrieveObject<T>(request);
         }
 
-        public async Task<HttpResponseMessage> SendAsync(HttpRequestMessage request)
+        public async Task<string> SendAsync(HttpRequestMessage request)
         {
-            return await SendAsync(request);
+            return await SendMessage(request);
         }
 
         public async Task<T> Request<T>(
@@ -48,10 +48,18 @@ namespace Src.Auth.REST
             var encodedContent = new FormUrlEncodedContent(requestBodyContent);
             request.Content = encodedContent;
 
-            return await SendMessage<T>(request);
+            return await SendMessageAndRetrieveObject<T>(request);
         }
 
-        private async Task<T> SendMessage<T>(HttpRequestMessage request)
+        private async Task<T> SendMessageAndRetrieveObject<T>(HttpRequestMessage request)
+        {
+            var responseContent = await SendMessage(request);
+            Debug.LogWarning("Response: " + responseContent);
+            var data = JsonConvert.DeserializeObject<T>(responseContent);
+            return data;
+        }
+
+        private async Task<string> SendMessage(HttpRequestMessage request)
         {
             Debug.LogWarning("Sending to: " + request.RequestUri);
             var response = await _httpClient.SendAsync(request);
@@ -60,8 +68,7 @@ namespace Src.Auth.REST
             
             var responseContent = await response.Content.ReadAsStringAsync();
             Debug.LogWarning("Response: " + responseContent);
-            var data = JsonConvert.DeserializeObject<T>(responseContent);
-            return data;
+            return responseContent;
         }
         
 

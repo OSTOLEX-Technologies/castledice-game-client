@@ -1,8 +1,6 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.Threading.Tasks;
 using MetaMask.Transports.Unity.UI;
-using Src.Analytics.Events;
 using Src.Analytics.Identity;
 using Src.Auth.CredentialProviders.Firebase;
 using Src.Auth.CredentialProviders.Metamask.MetamaskApiFacades.Wallet;
@@ -16,8 +14,6 @@ namespace Src.Auth
 {
     public class AuthView : MonoBehaviour, IAuthView
     {
-        private const string LoginTimestampParamName = "Login";
-        
         [SerializeField, InspectorName("Main Auth Canvas")]
         private Canvas mainAuthCanvas;
         
@@ -118,20 +114,7 @@ namespace Src.Auth
             await WaitUntilMetamaskDisconnects();
             
             HideAuthUI();
-            
-            var branchEventParams = new Dictionary<string, string>
-            {
-                {
-                    LoginTimestampParamName, 
-                    _dateTimeRetriever.GetFormattedDateTime()
-                }
-            };
-            BranchEventSender.SendCustomEvent(
-                BranchEventNames.Login, 
-                branchEventParams);
-            _branchLogin.Login(token);
-            Debug.Log("Logging in");
-            
+
             AuthCompleted?.Invoke();
         }
         #endregion

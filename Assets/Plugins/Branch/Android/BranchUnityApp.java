@@ -17,8 +17,8 @@ public class BranchUnityApp extends Application {
         // Some early lifecycle events occur prior to C# runtime startup, which prevents the C# APIs from working properly
 
         // Enables logging for install/open on app launch
-        //Log.i(TAG, "BranchUnityApp.onCreate()");
-        //Branch.enableLogging();
+        Log.i(TAG, "BranchUnityApp.onCreate()");
+        Branch.enableLogging();
 
         // Set plugin version
         Branch.registerPlugin("Unity", "2.0.0");

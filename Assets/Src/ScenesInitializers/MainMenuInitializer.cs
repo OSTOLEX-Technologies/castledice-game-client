@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
+using Src.Analytics.Events;
 using Src.Analytics.Identity;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
@@ -29,6 +32,7 @@ using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
 using Src.General.TimeRetriever;
+using Src.HttpUtils;
 using Src.MainMenu.Controllers;
 using Src.MainMenu.Scripts;
 using Src.MainMenu.Views;
@@ -45,6 +49,7 @@ namespace Src.ScenesInitializers
 {
     public class MainMenuInitializer : MonoBehaviour
     {
+        private const string LoginTimestampParamName = "Login";
         
         [SerializeField] private SceneLoader sceneLoader;
         [SerializeField] private UnityPeerUpdater peerUpdater;
@@ -86,15 +91,19 @@ namespace Src.ScenesInitializers
         private PlayerInitializationPresenter _playerInitializationPresenter;
         private PlayerInitializationView _playerInitializationView;
         private InitializeButtonHandler _initializeButtonHandler;
+        private IPlayerIdProvider _playerIdProvider;
 
         [Header("Firebase logout")] 
         [SerializeField] private FirebaseLogout logoutComponent;
 
         private IDateTimeRetriever _dateTimeRetriever;
+        private IBranchLogin _branchLogin; 
         private IBranchLogout _branchLogout;
 
-        private void Start()
+        private async void Start()
         {
+            Debug.Log("Main menu loaded");
+
             RiptideLogger.Initialize(Debug.Log,Debug.Log,Debug.LogWarning, Debug.LogError, false);
         
             //Setting up access token provider
@@ -194,6 +203,27 @@ namespace Src.ScenesInitializers
                     new StringSaver()),
                 _dateTimeRetriever,
                 _branchLogout);
+            
+            SendBranchLoginEventAsync();
+        }
+
+        private async void SendBranchLoginEventAsync()
+        {
+            _playerIdProvider = new PlayerIdProvider();
+            var playerID = await _playerIdProvider.GetLocalPlayerId();
+            _branchLogin = new BranchLogin();
+            _branchLogin.Login($"{playerID}");
+
+            var branchEventParams = new Dictionary<string, string>
+            {
+                {
+                    LoginTimestampParamName, 
+                    _dateTimeRetriever.GetFormattedDateTime()
+                }
+            };
+            BranchEventSender.SendCustomEvent(
+                BranchEventNames.Login, 
+                branchEventParams);
         }
     }
 }
