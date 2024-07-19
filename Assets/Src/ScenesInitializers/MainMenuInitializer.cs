@@ -34,7 +34,6 @@ using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
 using Src.General.PlayerInitialization;
-using Src.General.SceneTransitionCommands;
 using Src.General.TimeRetriever;
 using Src.HttpUtils;
 using Src.MainMenu.Controllers;
@@ -105,8 +104,7 @@ namespace Src.ScenesInitializers
         private IBranchLogin _branchLogin; 
         private IBranchLogout _branchLogout;
         private IAuthTokenSaver _authTokenSaver;
-        private ISceneTransitionHandler _logoutSceneTransitionHandler;
-        
+
         //Common dependencies
         private IAccessTokenProvider _accessTokenProvider;
         private IClientWrapper _clientWrapper;
@@ -122,14 +120,9 @@ namespace Src.ScenesInitializers
             SetUpGameCreation();
             SetUpErrorHandling();
             SetUpSettingsPopup();
-            SetUpLogout();
-        }
 
-        private void SetUpLogout()
-        {
-            _authTokenSaver = new AuthTokenSaver(new StringSaver());
-            _logoutSceneTransitionHandler = new SceneTransitionHandler(sceneLoader, SceneType.Auth);
-            firebaseLogout.Init(_authTokenSaver, _logoutSceneTransitionHandler);
+            SendBranchLoginEventAsync();
+            SetUpLogout();
         }
 
         private void SetUpSettingsPopup()
@@ -282,16 +275,6 @@ namespace Src.ScenesInitializers
             settingsPopup.SettingsPopupController = settingsPopupController;
             settingsPopup.SettingsPopupView = settingsPopupView;
             settingsPopup.Init();
-
-            _dateTimeRetriever = new DateTimeRetriever();
-            _branchLogout = new BranchLogout();
-            logoutComponent.Init(
-                new AuthTokenSaver(
-                    new StringSaver()),
-                _dateTimeRetriever,
-                _branchLogout);
-            
-            SendBranchLoginEventAsync();
         }
 
         private async void SendBranchLoginEventAsync()
@@ -311,6 +294,19 @@ namespace Src.ScenesInitializers
             BranchEventSender.SendCustomEvent(
                 BranchEventNames.Login, 
                 branchEventParams);
+        }
+        
+        private void SetUpLogout()
+        {
+            _authTokenSaver = new AuthTokenSaver(
+                new StringSaver());
+
+            _dateTimeRetriever = new DateTimeRetriever();
+            _branchLogout = new BranchLogout();
+            firebaseLogout.Init(
+                _authTokenSaver, 
+                _dateTimeRetriever,
+                _branchLogout);
         }
     }
 }
