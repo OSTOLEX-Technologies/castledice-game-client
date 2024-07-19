@@ -17,6 +17,6 @@ namespace Src.Auth.REST
             string uri, 
             IEnumerable<KeyValuePair<string, string>> requestParams);
 
-        public Task<HttpResponseMessage> SendAsync(HttpRequestMessage request);
+        public Task<string> SendAsync(HttpRequestMessage request);
     }
 }
