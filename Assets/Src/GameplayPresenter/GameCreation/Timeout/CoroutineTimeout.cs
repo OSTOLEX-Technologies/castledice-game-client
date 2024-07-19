@@ -13,6 +13,11 @@ namespace Src.GameplayPresenter.GameCreation.Timeout
             StartCoroutine(Countdown());
         }
 
+        public void CancelCountdown()
+        {
+            StopAllCoroutines();
+        }
+
         private IEnumerator Countdown()
         {
             yield return new WaitForSecondsRealtime(seconds);
