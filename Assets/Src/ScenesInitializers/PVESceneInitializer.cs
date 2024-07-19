@@ -66,6 +66,8 @@ using Src.GameplayView.Timers;
 using Src.GameplayView.Timers.PlayerTimerViews;
 using Src.GameplayView.Updatables;
 using Src.General.TimeManagement;
+using Src.NetworkingModule;
+using Src.NetworkingModule.MessageHandlers;
 using Src.PlayerInput;
 using Src.OLDPVE;
 using Src.OLDPVE.MoveSearchers;
@@ -126,6 +128,22 @@ public class PVESceneInitializer : MonoBehaviour
     [SerializeField] private PlayerObjectsColorConfig castleColorConfig;
     private CellsContentPresenter _cellContentPresenter;
     private CellsContentView _contentView;
+
+    [Header("Timers")] 
+    [SerializeField] private TextMeshProUGUI redTimerTextActive;
+    [SerializeField] private TextMeshProUGUI redTimerTextInactive;
+    [SerializeField] private GameObject redTimerBackgroundActive;
+    [SerializeField] private GameObject redTimerBackgroundInactive;
+    [SerializeField] private GameObject redTimerGlow;
+    [SerializeField] private TextMeshProUGUI blueTimerTextActive;
+    [SerializeField] private TextMeshProUGUI blueTimerTextInactive;
+    [SerializeField] private GameObject blueTimerBackgroundActive;
+    [SerializeField] private GameObject blueTimerBackgroundInactive;
+    [SerializeField] private GameObject blueTimerGlow;
+    [SerializeField] private int glowTimeSeconds;
+    private TimersPresenter _timersPresenter;
+    private TimersView _timersView;
+    [SerializeField] private int onePlayerTimeMinutes = 10; 
     
     //Moves
     private MovesView _clientMovesView;
@@ -176,6 +194,7 @@ public class PVESceneInitializer : MonoBehaviour
     private ActionPointsUI _playerActionPointsUI;
     private ActionPointsUI _enemyActionPointsUI;
     
+    private DuelPlayerColorProvider _playerColorProvider;
     private Game _game;
     private GameStartData _gameStartData;
     private Bot _bot;
@@ -191,7 +210,6 @@ public class PVESceneInitializer : MonoBehaviour
     
     private void Start()
     {
-        
         SetUpGame();
         SetUpInput();
         SetUpGrid();
@@ -207,6 +225,7 @@ public class PVESceneInitializer : MonoBehaviour
         SetUpActionPointsUI();
         SetUpCellMovesHighlights();
         SetUpGameOver();
+        SetUpTimers();
         GiveActionPointsToCurrentPlayer();
     }
     
@@ -235,8 +254,8 @@ public class PVESceneInitializer : MonoBehaviour
         var turnSwitchConditionsConfigData = new TscConfigData(new List<TscType> { TscType.SwitchByActionPoints });
         var playersData = new List<PlayerData>
         {
-            new PlayerData(1, new List<PlacementType> { PlacementType.Knight }, TimeSpan.FromMinutes(50)),
-            new PlayerData(2, new List<PlacementType> { PlacementType.Knight }, TimeSpan.FromMinutes(50)),
+            new PlayerData(1, new List<PlacementType> { PlacementType.Knight }, TimeSpan.FromMinutes(onePlayerTimeMinutes)),
+            new PlayerData(2, new List<PlacementType> { PlacementType.Knight }, TimeSpan.FromMinutes(onePlayerTimeMinutes)),
         };
         _gameStartData = new GameStartData("1.0.0", boardData, placeablesConfigData, turnSwitchConditionsConfigData, playersData);
         var playersListCreator = new PlayersListCreator(new PlayerCreator(new UpdatablePlayerTimerCreator(new FixedTimeDeltaProvider(), _fixedUpdater)));
@@ -250,6 +269,7 @@ public class PVESceneInitializer : MonoBehaviour
         _game = gameCreator.CreateGame(_gameStartData);
         _player = _game.GetAllPlayers()[0];
         _botPlayer = _game.GetAllPlayers()[1];
+        _playerColorProvider = new DuelPlayerColorProvider(_player);
     }
 
     private void SetUpGameOver()
@@ -380,7 +400,47 @@ public class PVESceneInitializer : MonoBehaviour
             localMovesApplier, new MoveToDataConverter(), _clientMovesView);
     }
     
-        private void SetUpBot()
+    private void SetUpTimers()
+    {
+        var bluePlayerTimerView = new PlayerTimerView(
+            blueTimerTextActive, 
+            blueTimerTextInactive, 
+            blueTimerBackgroundActive, 
+            blueTimerBackgroundInactive,
+            blueTimerGlow,
+            _player.Timer,
+            TimeSpan.FromSeconds(glowTimeSeconds));
+        var redPlayerTimerView = new PlayerTimerView(
+            redTimerTextActive, 
+            redTimerTextInactive, 
+            redTimerBackgroundActive, 
+            redTimerBackgroundInactive,
+            redTimerGlow,
+            _botPlayer.Timer,
+            TimeSpan.FromSeconds(glowTimeSeconds));
+        var timersDictionary = new Dictionary<PlayerColor, IPlayerTimerView>
+        {
+            {PlayerColor.Blue, bluePlayerTimerView},
+            {PlayerColor.Red, redPlayerTimerView}
+        };
+        var playerTimerViewsProvider = new PlayerTimerViewProvider(timersDictionary, _playerColorProvider);
+        _timersView = new TimersView(playerTimerViewsProvider, _updater);
+        _timersPresenter = new TimersPresenter(_timersView, _game);
+        _timersPresenter.SwitchTimerForPlayer(_player.Id, _player.Timer.GetTimeLeft(), true);
+        _game.TurnSwitched += OnTurnSwitch;
+    }
+
+    private void OnTurnSwitch(object sender, Game e)
+    {
+        var currentPlayer = e.GetCurrentPlayer();
+        var previousPlayer = e.GetPreviousPlayer();
+        var currentPlayerTimeLeft = currentPlayer.Timer.GetTimeLeft();
+        var previousPlayerTimeLeft = previousPlayer.Timer.GetTimeLeft();
+        _timersPresenter.SwitchTimerForPlayer(previousPlayer.Id, previousPlayerTimeLeft, false);
+        _timersPresenter.SwitchTimerForPlayer(currentPlayer.Id, currentPlayerTimeLeft, true);
+    }
+    
+    private void SetUpBot()
     {
         var botPlayer = _game.GetPlayer(2);
         var botBasePosition = new Vector2Int(9, 9);
