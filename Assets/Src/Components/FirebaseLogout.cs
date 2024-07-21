@@ -33,7 +33,10 @@ namespace Src.Components
 
         public void Logout()
         {
-            Singleton<IAccessTokenProvider>.Unregister();
+            if (Singleton<IAccessTokenProvider>.Registered)
+            {
+                Singleton<IAccessTokenProvider>.Unregister();
+            }
             _saver.DeleteAuthTokens();
             sceneLoader.LoadSceneWithTransition(SceneType.Auth);
             FirebaseAuth.DefaultInstance.SignOut();
