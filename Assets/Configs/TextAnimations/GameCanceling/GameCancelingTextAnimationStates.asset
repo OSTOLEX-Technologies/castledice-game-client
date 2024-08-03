@@ -13,7 +13,7 @@ MonoBehaviour:
   m_Name: GameCancelingTextAnimationStates
   m_EditorClassIdentifier: 
   strings:
-  - Canceling game...
-  - Canceling game..
-  - Canceling game.
   - Canceling game
+  - Canceling game.
+  - Canceling game..
+  - Canceling game...
