@@ -1,0 +1,6 @@
+{
+  "enableLogging": true,
+  "deferInitForPluginRuntime": false,
+  "useTestInstance": false,
+  "apiUrl": "https://api2.branch.io"
+}

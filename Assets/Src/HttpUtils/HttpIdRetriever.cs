@@ -20,12 +20,10 @@ namespace Src.HttpUtils
 
         public async Task<int> RetrievePlayerIdAsync(string playerToken)
         {
-            using var requestMessage = new HttpRequestMessage(HttpMethod.Get, _authServiceUrl);
+            var requestMessage = new HttpRequestMessage(HttpMethod.Get, _authServiceUrl);
             requestMessage.Headers.Authorization = new AuthenticationHeaderValue("Bearer", playerToken);
-            using var response = await _messageSender.SendAsync(requestMessage);
-            response.EnsureSuccessStatusCode();
-            var responseBody = await response.Content.ReadAsStringAsync();
-            return GetIdFromJson(responseBody);
+            var response = await _messageSender.SendAsync(requestMessage);
+            return GetIdFromJson(response);
         }
 
         private static int GetIdFromJson(string json)

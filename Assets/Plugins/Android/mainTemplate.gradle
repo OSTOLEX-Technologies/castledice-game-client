@@ -1,30 +1,10 @@
-// Android Resolver Repos Start
-([rootProject] + (rootProject.subprojects as List)).each { project ->
-    project.repositories {
-        def unityProjectPath = $/file:///**DIR_UNITYPROJECT**/$.replace("\\", "/")
-        maven {
-            url "https://maven.google.com"
-        }
-        maven {
-            url "https://repo.maven.apache.org/maven2" // Assets/MetaMask/Editor/MetaMaskDependencies.xml:12
-        }
-        maven {
-            url (unityProjectPath + "/Assets/GeneratedLocalRepo/Firebase/m2repository") // Assets/Firebase/Editor/AppDependencies.xml:22, Assets/Firebase/Editor/AuthDependencies.xml:20, Assets/Firebase/Editor/MessagingDependencies.xml:24
-        }
-        maven {
-            url "https://maven.google.com" // Assets/MetaMask/Editor/MetaMaskDependencies.xml:41
-        }
-        mavenLocal()
-        mavenCentral()
-    }
-}
-// Android Resolver Repos End
 apply plugin: 'com.android.library'
 **APPLY_PLUGINS**
 
 dependencies {
     implementation fileTree(dir: 'libs', include: ['*.jar'])
 // Android Resolver Dependencies Start
+    implementation 'com.google.android.gms:play-services-ads-identifier:18+' // Assets/Branch/Editor/BranchDependencies.xml:4
     implementation 'com.google.android.gms:play-services-base:18.3.0' // Assets/Firebase/Editor/AppDependencies.xml:17
     implementation 'com.google.firebase:firebase-analytics:21.5.0' // Assets/Firebase/Editor/MessagingDependencies.xml:15
     implementation 'com.google.firebase:firebase-app-unity:11.7.0' // Assets/Firebase/Editor/AppDependencies.xml:22
@@ -36,6 +16,7 @@ dependencies {
     implementation 'com.google.firebase:firebase-messaging-unity:11.7.0' // Assets/Firebase/Editor/MessagingDependencies.xml:24
     implementation 'com.google.flatbuffers:flatbuffers-java:1.12.0' // Assets/Firebase/Editor/MessagingDependencies.xml:19
     implementation 'com.squareup.okhttp3:okhttp:4.10.0' // Assets/MetaMask/Editor/MetaMaskDependencies.xml:41
+    implementation 'io.branch.sdk.android:library:5.12.0' // Assets/Branch/Editor/BranchDependencies.xml:3
 // Android Resolver Dependencies End
 **DEPS**}
 
@@ -51,12 +32,14 @@ android {
 }
 // Android Resolver Exclusions End
 android {
+    ndkPath "**NDKPATH**"
+
     compileSdkVersion **APIVERSION**
     buildToolsVersion '**BUILDTOOLS**'
 
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 
     defaultConfig {
@@ -76,9 +59,9 @@ android {
 
     aaptOptions {
         noCompress = **BUILTIN_NOCOMPRESS** + unityStreamingAssets.tokenize(', ')
-        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:.*:!CVS:!thumbs.db:!picasa.ini:!*~"
+        ignoreAssetsPattern = "!.svn:!.git:!.ds_store:!*.scc:!CVS:!thumbs.db:!picasa.ini:!*~"
     }**PACKAGING_OPTIONS**
-}**REPOSITORIES**
+}
 **IL_CPP_BUILD_SETUP**
 **SOURCE_BUILD_SETUP**
 **EXTERNAL_SOURCES**

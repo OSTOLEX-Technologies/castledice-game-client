@@ -1,3 +1,4 @@
+using Src.Analytics.Identity;
 using Src.Auth;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
@@ -10,6 +11,7 @@ using Src.Components;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
 using Src.General.SceneTransitionCommands;
+using Src.General.TimeRetriever;
 using UnityEngine;
 
 namespace Src.ScenesInitializers
@@ -35,6 +37,9 @@ namespace Src.ScenesInitializers
         
         private AuthController _authController;
         private SceneTransitionHandler _transitionHandler;
+        
+        private IDateTimeRetriever _dateTimeRetriever;
+        private IBranchLogin _branchLogin;
 
         private void Awake()
         {
@@ -58,7 +63,15 @@ namespace Src.ScenesInitializers
 
             _transitionHandler = new SceneTransitionHandler(sceneLoader, SceneType.MainMenu);
 
-            authView.Init(_metamaskWalletFacade, _authController, _firebaseCredentialProvider);
+            _dateTimeRetriever = new DateTimeRetriever();
+            _branchLogin = new BranchLogin();
+            
+            authView.Init(
+                _metamaskWalletFacade, 
+                _authController, 
+                _firebaseCredentialProvider,
+                _dateTimeRetriever,
+                _branchLogin);
             
             authSceneFlow.StartSceneFlow(
                 authView,

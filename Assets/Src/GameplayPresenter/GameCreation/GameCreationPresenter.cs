@@ -63,6 +63,7 @@ namespace Src.GameplayPresenter.GameCreation
         private async void OnCancelChosen()
         {
             if (_timeIsOut) return;
+            _timeout.CancelCountdown();
             _view.ShowCancellationScreen();
             await _gameSearcher.CancelAsync();
         }

@@ -1,8 +1,11 @@
 using System;
 using System.Threading.Tasks;
+using System.Collections.Generic;
 using Riptide;
 using Riptide.Transports.Tcp;
 using Riptide.Utils;
+using Src.Analytics.Events;
+using Src.Analytics.Identity;
 using Src.Auth.AuthTokenSaver;
 using Src.Auth.AuthTokenSaver.PlayerPrefsStringSaver;
 using Src.Auth.TokenProviders;
@@ -31,7 +34,8 @@ using Src.GameplayView.ServerConnection;
 using Src.General.Caching;
 using Src.General.LoadingScenes;
 using Src.General.PlayerInitialization;
-using Src.General.SceneTransitionCommands;
+using Src.General.TimeRetriever;
+using Src.HttpUtils;
 using Src.MainMenu.Controllers;
 using Src.MainMenu.Scripts;
 using Src.MainMenu.Views;
@@ -48,6 +52,7 @@ namespace Src.ScenesInitializers
 {
     public class MainMenuInitializer : MonoBehaviour
     {
+        private const string LoginTimestampParamName = "Login";
         
         [SerializeField] private SceneLoader sceneLoader;
         [SerializeField] private UnityPeerUpdater peerUpdater;
@@ -90,12 +95,16 @@ namespace Src.ScenesInitializers
         private PlayerInitializationPresenter _playerInitializationPresenter;
         private PlayerInitializationView _playerInitializationView;
         private InitializeButtonHandler _initializeButtonHandler; 
+        private IPlayerIdProvider _playerIdProvider;
         
-        [Header("Logout")]
+        [Header("Firebase logout")]
         [SerializeField] private FirebaseLogout firebaseLogout;
+
+        private IDateTimeRetriever _dateTimeRetriever;
+        private IBranchLogin _branchLogin; 
+        private IBranchLogout _branchLogout;
         private IAuthTokenSaver _authTokenSaver;
-        private ISceneTransitionHandler _logoutSceneTransitionHandler;
-        
+
         //Common dependencies
         private IAccessTokenProvider _accessTokenProvider;
         private IClientWrapper _clientWrapper;
@@ -111,14 +120,9 @@ namespace Src.ScenesInitializers
             SetUpGameCreation();
             SetUpErrorHandling();
             SetUpSettingsPopup();
-            SetUpLogout();
-        }
 
-        private void SetUpLogout()
-        {
-            _authTokenSaver = new AuthTokenSaver(new StringSaver());
-            _logoutSceneTransitionHandler = new SceneTransitionHandler(sceneLoader, SceneType.Auth);
-            firebaseLogout.Init(_authTokenSaver, _logoutSceneTransitionHandler);
+            SendBranchLoginEventAsync();
+            SetUpLogout();
         }
 
         private void SetUpSettingsPopup()
@@ -258,6 +262,51 @@ namespace Src.ScenesInitializers
             _initializeButtonHandler.Dispose();
             _serverConnectionPresenter.Dispose();
             _gameCreationPresenter.Dispose();
+            //Setting up error handling
+            _gameNotSavedErrorView = new GameNotSavedErrorView(errorPopup, matchmakingScreen);
+            _gameNotSavedErrorPresenter = new GameNotSavedErrorPresenter(_gameNotSavedErrorView);
+            var errorPresentersProvider = new ErrorPresentersProvider(_gameNotSavedErrorPresenter);
+            var serverErrorsRouter = new ServerErrorsRouter(errorPresentersProvider);
+            ServerErrorMessageHandler.SetAccepter(serverErrorsRouter);
+            
+            //Setting up settings popup
+            var settingsPopupView = new SettingsPopupView();
+            var settingsPopupController = new SettingsPopupController(settingsPopupView);
+            settingsPopup.SettingsPopupController = settingsPopupController;
+            settingsPopup.SettingsPopupView = settingsPopupView;
+            settingsPopup.Init();
+        }
+
+        private async void SendBranchLoginEventAsync()
+        {
+            _playerIdProvider = new PlayerIdProvider();
+            var playerID = await _playerIdProvider.GetLocalPlayerId();
+            _branchLogin = new BranchLogin();
+            _branchLogin.Login($"{playerID}");
+
+            var branchEventParams = new Dictionary<string, string>
+            {
+                {
+                    LoginTimestampParamName, 
+                    _dateTimeRetriever.GetFormattedDateTime()
+                }
+            };
+            BranchEventSender.SendCustomEvent(
+                BranchEventNames.Login, 
+                branchEventParams);
+        }
+        
+        private void SetUpLogout()
+        {
+            _authTokenSaver = new AuthTokenSaver(
+                new StringSaver());
+
+            _dateTimeRetriever = new DateTimeRetriever();
+            _branchLogout = new BranchLogout();
+            firebaseLogout.Init(
+                _authTokenSaver, 
+                _dateTimeRetriever,
+                _branchLogout);
         }
     }
 }
